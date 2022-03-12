@@ -1,27 +1,35 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import styles from './layout.module.css'
+import { Box, Divider } from '@mui/material';
+import Head from 'next/head';
+import Link from 'next/link';
+import Navigation from "./navigation";
 
 export default function Layout({ children, isIndex, title }) {
-  return <div className={styles.container}>
+  return (
+    <Box sx={{ flexGrow: 1 }}>
 
-    <Head>
-      <title>{title ? title : "YourJustice"}</title>
-      <meta name="description" content="Decentralized Reputation & Justice System for Web3 & Real World Issues" />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+      <Head>
+        <title>{title ? title : "YourJustice"}</title>
+        <meta name="description" content="Decentralized Reputation & Justice System for Web3 & Real World Issues" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    <main>
-      {children}
-    </main>
+      <Navigation />
 
-    {!isIndex && (
-      <div className={styles.backToHome}>
-        <Link href="/">
-          <a>← Back to home</a>
-        </Link>
-      </div>
-    )}
+      <Box sx={{ padding: '2.5rem' }}>
+        {children}
+      </Box>
 
-  </div>
+      {
+        !isIndex && (
+          <Box sx={{ padding: '0rem 2.5rem' }}>
+            <Divider sx={{ marginBottom: '1rem' }} />
+            <Link href="/">
+              <a>← Back to home</a>
+            </Link>
+          </Box>
+        )
+      }
+    </Box >
+  )
 }
