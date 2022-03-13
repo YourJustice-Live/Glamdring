@@ -8,3 +8,9 @@
 ## Links
 
 - Next.js docs - https://nextjs.org/docs/getting-started
+
+## Template for `.env.local`
+
+```
+NEXT_PUBLIC_INFURA_KEY=
+```

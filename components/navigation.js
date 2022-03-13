@@ -1,8 +1,12 @@
-import { AppBar, Box, Button, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAccount, useNetwork } from "../hooks/web3";
 
 export default function Navigation() {
+
+  const [account, connectWallet, disconectWallet] = useAccount();
+  const [network] = useNetwork();
 
   return (
     <AppBar color='inherit' position='static'>
@@ -14,7 +18,16 @@ export default function Navigation() {
             </a>
           </Link>
         </Box>
-        <Button variant='outlined'>Connect Wallet</Button>
+        {!account && (
+          <Button variant='outlined' onClick={connectWallet}>Connect Wallet</Button>
+        )}
+        {account && network && (
+          <>
+            <Typography sx={{ marginRight: "1rem" }}>Account: {account}</Typography>
+            <Typography sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
+            <Button variant='outlined' onClick={disconectWallet}>Disconnect Wallet</Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   )
