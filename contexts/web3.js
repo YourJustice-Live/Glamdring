@@ -19,8 +19,6 @@ export function Web3Provider({ children }) {
 
       console.log("connectWallet");
 
-      console.log(web3ModalRef.current)
-
       const instance = await web3ModalRef.current.connect();
       const provider = new ethers.providers.Web3Provider(instance);
       const accounts = await provider.listAccounts();

@@ -1,7 +1,14 @@
-import '../styles/globals.css'
+import { Web3Provider } from "../contexts/web3";
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function App({ Component, pageProps }) {
+
+  return (
+    <Web3Provider>
+      <Component {...pageProps} />
+    </Web3Provider>
+  )
+
 }
 
-export default MyApp
+export default App;

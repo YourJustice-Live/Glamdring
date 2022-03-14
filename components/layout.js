@@ -1,9 +1,8 @@
-import { Box, Divider } from '@mui/material';
+import { Box } from '@mui/material';
 import Head from 'next/head';
-import Link from 'next/link';
 import Navigation from "./navigation";
 
-export default function Layout({ children, isIndex, title }) {
+export default function Layout({ children, title }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
 
@@ -20,16 +19,6 @@ export default function Layout({ children, isIndex, title }) {
         {children}
       </Box>
 
-      {
-        !isIndex && (
-          <Box sx={{ padding: '0rem 2.5rem' }}>
-            <Divider sx={{ marginBottom: '1rem' }} />
-            <Link href="/">
-              <a>← Back to home</a>
-            </Link>
-          </Box>
-        )
-      }
     </Box >
   )
 }

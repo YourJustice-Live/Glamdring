@@ -24,8 +24,8 @@ export default function Navigation() {
         )}
         {account && network && (
           <>
-            <Typography sx={{ marginRight: "1rem" }}>Account: {account}</Typography>
-            <Typography sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
+            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Account: {account}</Typography>
+            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
             <Button variant='outlined' onClick={disconectWallet}>Disconnect Wallet</Button>
           </>
         )}
