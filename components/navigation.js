@@ -1,7 +1,8 @@
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAccount, useNetwork } from "../hooks/web3";
+import useNetwork from "../hooks/useNetwork";
+import useAccount from "../hooks/useAccount";
 
 export default function Navigation() {
 
