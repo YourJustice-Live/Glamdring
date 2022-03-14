@@ -1,12 +1,11 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 import Head from 'next/head';
 import Navigation from "./navigation";
 
 export default function Layout({ children, title }) {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-
+    <>
       <Head>
         <title>{title ? title : "YourJustice"}</title>
         <meta name="description" content="Decentralized Reputation & Justice System for Web3 & Real World Issues" />
@@ -17,10 +16,9 @@ export default function Layout({ children, title }) {
 
       <Navigation />
 
-      <Box sx={{ padding: '2.5rem' }}>
+      <Container sx={{ padding: '2.5rem' }}>
         {children}
-      </Box>
-
-    </Box >
+      </Container>
+    </>
   )
 }
