@@ -1,6 +1,7 @@
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import useAccount from "../hooks/useAccount";
 
@@ -8,6 +9,8 @@ export default function Home() {
 
   const router = useRouter();
   const [account] = useAccount();
+
+  const [isAccountHasProfile, setIsAccountHasProfile] = useState(false);
 
   useEffect(() => {
     // Redirect to index page if account not connected
@@ -20,7 +23,14 @@ export default function Home() {
   return (
     <Layout title={"YourJustice / Home"}>
       {account && (
-        <Typography>Account: {account}</Typography>
+        <>
+          <Typography gutterBottom>Account: {account}</Typography>
+          {!isAccountHasProfile && (
+            <Link href='/profile/create' passHref>
+              <Button variant="outlined">Create Own Profile</Button>
+            </Link>
+          )}
+        </>
       )}
     </Layout>
   )
