@@ -1,8 +1,8 @@
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import useNetwork from "../hooks/useNetwork";
-import useAccount from "../hooks/useAccount";
+import useNetwork from "hooks/useNetwork";
+import useAccount from "hooks/useAccount";
 
 export default function Navigation() {
 
