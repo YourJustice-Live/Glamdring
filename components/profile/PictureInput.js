@@ -44,7 +44,7 @@ export default function PictureInput({ file, setFile, disabled, size = 128 }) {
   return (
     <>
       <label htmlFor="input" style={{ width: size, height: size }}>
-        <Avatar sx={{ cursor: !disabled ? 'pointer' : null, width: size, height: size }} src={!!file && URL.createObjectURL(file)}>
+        <Avatar sx={{ cursor: !disabled ? 'pointer' : null, width: size, height: size }} src={file ? URL.createObjectURL(file) : ""}>
           <InsertPhotoOutlined />
         </Avatar>
         <Input
