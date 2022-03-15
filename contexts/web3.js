@@ -1,3 +1,4 @@
+import { Backdrop, CircularProgress } from "@mui/material";
 import WalletConnect from "@walletconnect/web3-provider";
 import { ethers } from "ethers";
 import { createContext, useEffect, useRef, useState } from 'react';
@@ -9,6 +10,7 @@ export function Web3Provider({ children }) {
 
   const web3ModalRef = useRef();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [instance, setInstance] = useState();
   const [provider, setProvider] = useState();
   const [account, setAccount] = useState();
@@ -33,6 +35,8 @@ export function Web3Provider({ children }) {
 
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -73,6 +77,8 @@ export function Web3Provider({ children }) {
 
       if (web3ModalRef.current.cachedProvider) {
         connectWallet();
+      } else {
+        setIsLoading(false);
       }
     }
 
@@ -89,7 +95,12 @@ export function Web3Provider({ children }) {
 
   return (
     <Web3Context.Provider value={value}>
-      {children}
+      {!isLoading && children}
+      {isLoading && (
+        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </Web3Context.Provider>
   )
 
