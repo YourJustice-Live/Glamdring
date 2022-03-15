@@ -17,7 +17,7 @@ export function Web3Provider({ children }) {
   async function connectWallet() {
     try {
 
-      console.log("connectWallet");
+      console.log("[Dev] connectWallet");
 
       const instance = await web3ModalRef.current.connect();
       const provider = new ethers.providers.Web3Provider(instance);
@@ -39,7 +39,7 @@ export function Web3Provider({ children }) {
   async function disconnectWallet() {
     try {
 
-      console.log("disconnectWallet");
+      console.log("[Dev] disconnectWallet");
 
       await web3ModalRef.current.clearCachedProvider();
 
