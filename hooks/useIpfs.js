@@ -10,8 +10,17 @@ export default function useIpfs() {
     const cid = created.path;
     const url = `https://ipfs.infura.io/ipfs/${cid}`;
 
-    return [cid, url];
+    return { cid, url };
   };
 
-  return [uploadFileToIPFS];
+  let uploadJsonToIPFS = async function (json) {
+
+    const created = await client.add(JSON.stringify(json));
+    const cid = created.path;
+    const url = `https://ipfs.infura.io/ipfs/${cid}`;
+
+    return { cid, url };
+  }
+
+  return { uploadFileToIPFS, uploadJsonToIPFS };
 }
