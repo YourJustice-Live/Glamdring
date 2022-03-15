@@ -1,14 +1,10 @@
 import { Container } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
-// import purple from '@material-ui/core/colors/purple';
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Footer from "components/layout/Footer";
+import Header from "components/layout/Header";
 import Head from 'next/head';
-import Header from "components/Layout/Header";
-import Footer from "components/Layout/Footer";
 
-
-//TODO: Add Custom Font: 'Manrope'
+// TODO: Add Custom Font: 'Manrope'
 const fontFamily = ['Manrope', 'monospace'].join(',');
 const theme = createTheme({
   palette: {
@@ -17,31 +13,31 @@ const theme = createTheme({
   },
   typography: {
     fontFamily,
-    h1:{
+    h1: {
       fontSize: '2rem',
       fontFamily,
     },
-    h2:{
+    h2: {
       fontSize: '1.8rem',
       fontFamily,
     },
-    h3:{
+    h3: {
       fontSize: '1.6rem',
       fontFamily,
     },
-    h4:{
+    h4: {
       fontSize: '1.4rem',
       fontFamily,
     },
-    h5:{
+    h5: {
       fontSize: '1.2rem',
       fontFamily,
     },
-    h6:{
+    h6: {
       fontSize: '1.1rem',
       fontFamily,
     },
-   }
+  }
 });
 
 /**

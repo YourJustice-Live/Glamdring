@@ -1,8 +1,11 @@
 import { Add } from '@mui/icons-material';
 import { Avatar, CircularProgress, Input } from '@mui/material';
 import { useState } from 'react';
-import useIpfs from "../hooks/useIpfs";
+import useIpfs from "hooks/useIpfs";
 
+/**
+ * Component: AvatarInput
+ */
 export default function AvatarInput({ avatarUrl, setAvatarUrl }) {
 
   const [isAvatarLoading, setIsAvatarLoading] = useState(false);

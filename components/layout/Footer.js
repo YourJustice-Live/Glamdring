@@ -1,4 +1,4 @@
-import { Box, Link, Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 /**
  * Component: Footer

@@ -1,10 +1,10 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
+import Layout from 'components/layout/Layout';
+import AvatarInput from "components/profile/AvatarInput";
+import useAccount from "hooks/useAccount";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
-import AvatarInput from "../../components/avatarInput";
-import Layout from '../../components/layout';
-import useAccount from "../../hooks/useAccount";
 
 export default function ProfileCreate() {
 

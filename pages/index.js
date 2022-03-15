@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material';
+import Layout from 'components/layout/Layout';
+import useAccount from "hooks/useAccount";
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Layout from '../components/layout';
-import useAccount from "../hooks/useAccount";
 
 export default function Index() {
 
@@ -19,7 +19,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <Typography variant='h5' align='center' gutterBottom>Check reputation of the person, you are interested in.</Typography>
+      <Typography variant='h4' align='center' gutterBottom>Check reputation of the person, you are interested in.</Typography>
       <Typography variant='h6' align='center'>Or check yourself!</Typography>
     </Layout>
   )

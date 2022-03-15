@@ -1,9 +1,9 @@
 import { Button, Typography } from '@mui/material';
+import Layout from 'components/layout/Layout';
+import useAccount from "hooks/useAccount";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Layout from '../components/layout';
-import useAccount from "../hooks/useAccount";
 
 export default function Home() {
 

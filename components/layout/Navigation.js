@@ -4,6 +4,9 @@ import Link from 'next/link';
 import useNetwork from "hooks/useNetwork";
 import useAccount from "hooks/useAccount";
 
+/**
+ * Component: Navigation
+ */
 export default function Navigation() {
 
   const [account, connectWallet, disconectWallet] = useAccount();

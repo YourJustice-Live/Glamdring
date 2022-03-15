@@ -1,5 +1,5 @@
-import { Box, Link, Container } from "@mui/material";
-import Navigation from "components/Layout/navigation";
+import { Box } from "@mui/material";
+import Navigation from "components/layout/Navigation";
 
 /**
  * Component: Header
