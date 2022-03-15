@@ -4,7 +4,6 @@ import Footer from "components/layout/Footer";
 import Header from "components/layout/Header";
 import Head from 'next/head';
 
-// TODO: Add Custom Font: 'Manrope'
 const fontFamily = ['Manrope', 'monospace'].join(',');
 const theme = createTheme({
   palette: {
