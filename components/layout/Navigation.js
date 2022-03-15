@@ -9,8 +9,8 @@ import useAccount from "hooks/useAccount";
  */
 export default function Navigation() {
 
-  const [account, connectWallet, disconectWallet] = useAccount();
-  const [network] = useNetwork();
+  const { account, connectWallet, disconnectWallet } = useAccount();
+  const { network } = useNetwork();
 
   return (
     <AppBar color='inherit' position='static'>
@@ -29,7 +29,7 @@ export default function Navigation() {
           <>
             <Typography variant="body2" sx={{ marginRight: "1rem" }}>Account: {account}</Typography>
             <Typography variant="body2" sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
-            <Button variant='outlined' onClick={disconectWallet}>Disconnect Wallet</Button>
+            <Button variant='outlined' onClick={disconnectWallet}>Disconnect Wallet</Button>
           </>
         )}
       </Toolbar>

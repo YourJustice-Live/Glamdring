@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 export default function Home() {
 
   const router = useRouter();
-  const [account] = useAccount();
+  const { account } = useAccount();
 
   const [isAccountHasProfile, setIsAccountHasProfile] = useState(false);
 

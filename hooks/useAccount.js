@@ -8,5 +8,5 @@ export default function useAccount() {
   const connectWallet = web3contextValue.connectWallet;
   const disconnectWallet = web3contextValue.disconnectWallet;
 
-  return [account, connectWallet, disconnectWallet];
+  return { account, connectWallet, disconnectWallet };
 }

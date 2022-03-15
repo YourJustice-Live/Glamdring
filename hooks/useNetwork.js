@@ -6,5 +6,5 @@ export default function useNetwork() {
   const web3contextValue = useContext(Web3Context);
   const network = web3contextValue.state.network;
 
-  return [network];
+  return { network };
 }

@@ -16,7 +16,7 @@ export default function ProfileCreate() {
   const { enqueueSnackbar } = useSnackbar();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { uploadFileToIPFS, uploadJsonToIPFS } = useIpfs();
-  const [account] = useAccount();
+  const { account } = useAccount();
   const [pictureFile, setPictureFile] = useState(null);
   const [stage, setStage] = useState("NOT_BUSY");
 

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 export default function Index() {
 
   const router = useRouter();
-  const [account] = useAccount();
+  const { account } = useAccount();
 
   useEffect(() => {
     // Redirect to index page if account not connected
