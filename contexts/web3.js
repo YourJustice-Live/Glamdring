@@ -11,7 +11,6 @@ export function Web3Provider({ children }) {
   const web3ModalRef = useRef();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [instance, setInstance] = useState();
   const [provider, setProvider] = useState();
   const [account, setAccount] = useState();
   const [network, setNetwork] = useState();
@@ -26,7 +25,6 @@ export function Web3Provider({ children }) {
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
 
-      setInstance(instance);
       setProvider(provider);
       if (accounts) {
         setAccount(accounts[0])
@@ -47,6 +45,7 @@ export function Web3Provider({ children }) {
 
       await web3ModalRef.current.clearCachedProvider();
 
+      setProvider(null);
       setAccount(null);
       setNetwork(null);
 
@@ -86,6 +85,7 @@ export function Web3Provider({ children }) {
 
   const value = {
     state: {
+      provider: provider,
       account: account,
       network: network,
     },
