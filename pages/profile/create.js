@@ -66,6 +66,7 @@ export default function ProfileCreate() {
       // Wait for transaction to complete
       await mintTransaction.wait();
       enqueueSnackbar("Your NFT is minted!", { variant: 'success' });
+      router.push('/home');
 
     } catch (error) {
       console.error(error);
