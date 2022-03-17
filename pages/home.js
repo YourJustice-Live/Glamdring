@@ -12,7 +12,6 @@ export default function Home() {
   const { account } = useAccount();
   const { getBalance } = useAvatarNftContract();
 
-  const [isAccountHasProfile, setIsAccountHasProfile] = useState(false);
   const [accountAvatarNftBalance, setAccountAvatarNftBalance] = useState(null);
 
   async function loadData() {
@@ -32,15 +31,19 @@ export default function Home() {
 
   return (
     <Layout title={"YourJustice / Home"}>
-      {account && (
+      {account && accountAvatarNftBalance && (
         <>
-          <Typography gutterBottom>Account: {account}</Typography>
-          {accountAvatarNftBalance && (
-            <Typography gutterBottom>Account Avatar NFT Balance: {accountAvatarNftBalance}</Typography>
-          )}
-          {!isAccountHasProfile && (
+          <Typography gutterBottom><b>Account:</b> {account}</Typography>
+          <Typography gutterBottom><b>Account Avatar NFT balance:</b> {accountAvatarNftBalance}</Typography>
+          <Typography gutterBottom><b>Account has Avatar NFT:</b> {accountAvatarNftBalance !== "0" ? "yes" : "no"}</Typography>
+          {accountAvatarNftBalance === "0" && (
             <Link href='/profile/create' passHref>
               <Button variant="outlined">Create Own Profile</Button>
+            </Link>
+          )}
+          {accountAvatarNftBalance !== "0" && (
+            <Link href='/profile/edit' passHref>
+              <Button variant="outlined">Edit Own Profile</Button>
             </Link>
           )}
         </>
