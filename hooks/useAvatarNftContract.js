@@ -2,6 +2,10 @@ import contractJson from "contracts/AvatarNFT.json";
 import { Contract, ethers } from 'ethers';
 import useProvider from "hooks/useProvider";
 
+/**
+ * Hook for AvatarNFT Contract
+ * @todo: Validate correct chain before call
+ */
 export default function useAvatarNftContract() {
 
   const { provider } = useProvider();
