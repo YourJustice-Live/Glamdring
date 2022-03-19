@@ -43,7 +43,7 @@ function App({ Component, pageProps }) {
   return (
     <Web3Provider>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={1}>
+        <SnackbarProvider maxSnack={3}>
           <Component {...pageProps} />
         </SnackbarProvider>
       </ThemeProvider>
