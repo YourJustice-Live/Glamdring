@@ -5,6 +5,8 @@ import ProfilePictureInput from "components/profile/ProfilePictureInput";
  * Component: ProfilePictureInput
  * 
  * TODO: Move configs to separate files
+ * 
+ * TODO: Check that account uploaded picture before submit form
  */
 export default function ProfileForm({ children, disabled, initData, onSubmit }) {
 
