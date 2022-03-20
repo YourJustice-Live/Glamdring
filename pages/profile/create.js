@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 /**
  * Page where account inputs personal data and mints Avatar NFT
  * 
- * TODO: Merge with the edit profile page and update the form depending on whether the account has a profile
+ * TODO: Move to manager.js
  */
 export default function ProfileCreate() {
 

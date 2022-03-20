@@ -37,14 +37,20 @@ export default function Home() {
           <Typography gutterBottom><b>Account Avatar NFT balance:</b> {accountAvatarNftBalance}</Typography>
           <Typography gutterBottom><b>Account has Avatar NFT:</b> {accountAvatarNftBalance !== "0" ? "yes" : "no"}</Typography>
           {accountAvatarNftBalance === "0" && (
-            <Link href='/profile/create' passHref>
+            <Link href='/profile/manager' passHref>
               <Button variant="outlined">Create Own Profile</Button>
             </Link>
           )}
           {accountAvatarNftBalance !== "0" && (
-            <Link href='/profile/edit' passHref>
-              <Button variant="outlined">Edit Own Profile</Button>
-            </Link>
+            <>
+              <Link href='/profile' passHref>
+                <Button variant="outlined">Open Own Profile</Button>
+              </Link>
+              {" "}
+              <Link href='/profile/manager' passHref>
+                <Button variant="outlined">Edit Own Profile</Button>
+              </Link>
+            </>
           )}
         </>
       )}
