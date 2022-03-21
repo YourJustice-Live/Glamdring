@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 
 /**
  * Page that redirects the user to the page for their account
- * 
  */
 export default function Profile() {
 

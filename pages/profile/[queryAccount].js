@@ -7,6 +7,9 @@ import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
+/**
+ * Page with profile data.
+ */
 export default function Profile() {
 
   const router = useRouter()

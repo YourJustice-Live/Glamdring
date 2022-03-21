@@ -3,8 +3,9 @@ import { Contract, ethers } from 'ethers';
 import useProvider from "hooks/useProvider";
 
 /**
- * Hook for AvatarNFT Contract
- * @todo: Validate correct chain before call
+ * Hook for AvatarNFT Contract.
+ * 
+ * TODO: Validate correct chain before call
  */
 export default function useAvatarNftContract() {
 
@@ -19,29 +20,26 @@ export default function useAvatarNftContract() {
   );
 
   /**
-   * Get count of tokens for specified address
+   * Mint Avatar NFT for current account.
    * 
-   * @param string address 
-   * @returns 
-   */
-  async function getBalance(address) {
-
-    const balance = await contract.balanceOf(address);
-    const balanceString = balance.toString();
-
-    return balanceString;
-  }
-
-  /**
-   * Mint avatar for current account
-   * 
-   * @param string tokenUrl ipsf
-   * @returns mint transaction
+   * @param {string} tokenUrl URL to token metadata.
+   * @returns Transaction.
    */
   async function mint(tokenUrl) {
     return await contract.mint(tokenUrl);
   }
 
-  return { getBalance, mint }
+  /**
+   * Update URL to Avatar NFT metadata for specified token of current account.
+   * 
+   * @param {number} tokenId Token ID.
+   * @param {string} tokenUrl New URL to token metadata.
+   * @returns Transaction.
+   */
+  async function update(tokenId, tokenUrl) {
+    return await contract.update(tokenId, tokenUrl);
+  }
+
+  return { mint, update }
 
 };
