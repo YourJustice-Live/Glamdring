@@ -8,7 +8,10 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
-export default function ProfileNavigation() {
+/**
+ * A component with a navigation for account.
+ */
+export default function AccountNavigation() {
 
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useAccount();

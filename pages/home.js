@@ -1,7 +1,5 @@
-import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
-import ProfileNavigation from 'components/profile/ProfileNavigation';
 import useAccount from "hooks/useAccount";
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -20,11 +18,8 @@ export default function Home() {
   }, [account])
 
   return (
-    <Layout title={"YourJustice / Home"}>
-      <ProfileNavigation />
-      <Box sx={{ flexGrow: 1 }}>
-        <ProfileList />
-      </Box>
+    <Layout title={"YourJustice / Home"} showAccountNavigation={true}>
+      <ProfileList />
     </Layout >
   )
 }

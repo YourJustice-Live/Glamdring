@@ -2,11 +2,12 @@ import { Box, Container, Toolbar } from '@mui/material';
 import Footer from "components/layout/Footer";
 import Header from "components/layout/Header";
 import Head from 'next/head';
+import AccountNavigation from './AccountNavigation';
 
 /**
  * Component: Layout
  */
-export default function Layout({ children, title }) {
+export default function Layout({ children, title, showAccountNavigation }) {
   return (
     <>
       <Head>
@@ -18,7 +19,10 @@ export default function Layout({ children, title }) {
       <Container>
         <Toolbar />
         <Box sx={{ display: 'flex', paddingTop: '24px' }}>
-          {children}
+          {showAccountNavigation && <AccountNavigation />}
+          <Box sx={{ flexGrow: 1 }}>
+            {children}
+          </Box>
         </Box>
       </Container>
       <Footer>
