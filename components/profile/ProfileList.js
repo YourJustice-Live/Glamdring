@@ -4,6 +4,7 @@ import useProfile from 'hooks/useProfile';
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
+import { formatAccount } from 'utils/formatters';
 
 /**
  * A component with a list of profiles.
@@ -43,8 +44,8 @@ export default function ProfileList() {
                       <Avatar sx={{ width: 82, height: 82, marginBottom: '1rem' }} src={profile.avatarNftMetadata?.profilePicture}>
                         <InsertPhotoOutlined />
                       </Avatar>
-                      <Typography variant="h4" sx={{ marginBottom: '1rem' }}>{profile.avatarNftMetadata?.publicProfile?.firstName || "None"} {profile.avatarNftMetadata?.publicProfile?.firstName || "None"}</Typography>
-                      <Typography><b>Account:</b> {profile.account}</Typography>
+                      <Typography variant="h4" sx={{ marginBottom: '1rem' }}>{profile.avatarNftMetadata?.publicProfile?.firstName || "None"} {profile.avatarNftMetadata?.publicProfile?.lastName || "None"}</Typography>
+                      <Typography><b>Account:</b> {formatAccount(profile.account)}</Typography>
                       <Typography><b>Email:</b> {profile.avatarNftMetadata?.publicContacts?.email || "none"}</Typography>
                       <Typography><b>Twitter:</b> {profile.avatarNftMetadata?.links?.twitter || "none"}</Typography>
                     </CardContent>

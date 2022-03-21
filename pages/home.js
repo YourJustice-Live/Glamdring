@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
+import { formatAccount } from 'utils/formatters';
 
 export default function Home() {
 
@@ -51,7 +52,7 @@ export default function Home() {
           <Box sx={{ marginBottom: '3rem' }}>
             <Typography variant='h4' gutterBottom>Your Profile</Typography>
             <Divider sx={{ marginBottom: '1.5rem' }} />
-            <Typography gutterBottom><b>Account:</b> {account || "none"}</Typography>
+            <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
             <Typography gutterBottom><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
             {profile && (
               <>

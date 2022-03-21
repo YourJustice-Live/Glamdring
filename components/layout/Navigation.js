@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useNetwork from "hooks/useNetwork";
 import useAccount from "hooks/useAccount";
+import { formatAccount } from 'utils/formatters';
 
 /**
  * Component: Navigation
@@ -27,7 +28,7 @@ export default function Navigation() {
         )}
         {account && network && (
           <>
-            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Account: {account}</Typography>
+            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Account: {formatAccount(account)}</Typography>
             <Typography variant="body2" sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
             <Button variant='outlined' onClick={disconnectWallet}>Disconnect Wallet</Button>
           </>

@@ -6,6 +6,7 @@ import useProfile from "hooks/useProfile";
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
+import { formatAccount } from 'utils/formatters';
 
 /**
  * Page with profile data.
@@ -46,6 +47,7 @@ export default function Profile() {
           <Avatar sx={{ width: 128, height: 128, margin: '1.5rem 0rem' }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
             <InsertPhotoOutlined />
           </Avatar>
+          <Typography gutterBottom><b>Account: </b>{formatAccount(profile?.account) || "none"}</Typography>
           <Typography gutterBottom><b>First Name: </b>{profile?.avatarNftMetadata?.publicProfile?.firstName || "none"}</Typography>
           <Typography gutterBottom><b>Last Name:</b> {profile?.avatarNftMetadata?.publicProfile?.lastName || "none"}</Typography>
           <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.publicContacts?.email || "none"}</Typography>
