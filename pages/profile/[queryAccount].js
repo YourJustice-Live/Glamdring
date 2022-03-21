@@ -43,12 +43,13 @@ export default function Profile() {
         <>
           <Typography variant='h4' gutterBottom>Profile</Typography>
           <Divider />
-          <Avatar sx={{ width: 128, height: 128, margin: '1.5rem 0rem' }} src={profile?.avatarNftMetadata?.pictureIpfsUrl ? profile.avatarNftMetadata.pictureIpfsUrl : null}>
+          <Avatar sx={{ width: 128, height: 128, margin: '1.5rem 0rem' }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
             <InsertPhotoOutlined />
           </Avatar>
-          <Typography gutterBottom><b>First Name: </b>{profile?.avatarNftMetadata?.firstName || "none"}</Typography>
-          <Typography gutterBottom><b>Second Name:</b> {profile?.avatarNftMetadata?.secondName || "none"}</Typography>
-          <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.email || "none"}</Typography>
+          <Typography gutterBottom><b>First Name: </b>{profile?.avatarNftMetadata?.publicProfile?.firstName || "none"}</Typography>
+          <Typography gutterBottom><b>Last Name:</b> {profile?.avatarNftMetadata?.publicProfile?.lastName || "none"}</Typography>
+          <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.publicContacts?.email || "none"}</Typography>
+          <Typography gutterBottom><b>Twitter: </b> {profile?.avatarNftMetadata?.links?.twitter || "none"}</Typography>
         </>
       )}
       {isLoading && <LoadingBackdrop />}
