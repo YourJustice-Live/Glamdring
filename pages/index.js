@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Layout from 'components/layout/Layout';
 import useAccount from "hooks/useAccount";
 import { useRouter } from 'next/router';
@@ -19,8 +19,10 @@ export default function Index() {
 
   return (
     <Layout>
-      <Typography variant='h4' align='center' gutterBottom>Check reputation of the person, you are interested in.</Typography>
-      <Typography variant='h6' align='center'>Or check yourself!</Typography>
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography variant='h4' align='center' gutterBottom>Check reputation of the person, you are interested in.</Typography>
+        <Typography variant='h6' align='center'>Or check yourself!</Typography>
+      </Box>
     </Layout>
   )
 

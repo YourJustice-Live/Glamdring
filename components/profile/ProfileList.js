@@ -35,7 +35,7 @@ export default function ProfileList() {
       <Divider sx={{ marginBottom: '1.5rem' }} />
       <Grid container spacing={2}>
         {profiles.map((profile, index) =>
-          profile ? (
+          profile && (
             <Grid key={index} item xs={4}>
               <Card variant="outlined">
                 {profile.account ? (
@@ -63,8 +63,6 @@ export default function ProfileList() {
                 )}
               </Card>
             </Grid>
-          ) : (
-            <></>
           )
         )}
       </Grid>

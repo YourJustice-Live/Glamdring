@@ -14,7 +14,7 @@ export default function Navigation() {
   const { network } = useNetwork();
 
   return (
-    <AppBar color='inherit' position='static'>
+    <AppBar color='inherit' position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Toolbar>
         <Box sx={{ flexGrow: 1 }}>
           <Link href='/'>

@@ -1,7 +1,8 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Divider, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
+import ProfileNavigation from 'components/profile/ProfileNavigation';
 import useProfile from "hooks/useProfile";
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -40,8 +41,9 @@ export default function Profile() {
 
   return (
     <Layout title={"YourJustice / Profile"}>
-      {!isLoading && (
-        <>
+      <ProfileNavigation />
+      {!isLoading ? (
+        <Box component="main" sx={{ flexGrow: 1 }}>
           <Typography variant='h4' gutterBottom>Profile</Typography>
           <Divider />
           <Avatar sx={{ width: 128, height: 128, margin: '1.5rem 0rem' }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
@@ -52,10 +54,11 @@ export default function Profile() {
           <Typography gutterBottom><b>Last Name:</b> {profile?.avatarNftMetadata?.publicProfile?.lastName || "none"}</Typography>
           <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.publicContacts?.email || "none"}</Typography>
           <Typography gutterBottom><b>Twitter: </b> {profile?.avatarNftMetadata?.links?.twitter || "none"}</Typography>
-        </>
+        </Box>
+      ) : (
+        <LoadingBackdrop />
       )}
-      {isLoading && <LoadingBackdrop />}
-    </Layout>
+    </Layout >
   )
 
 }

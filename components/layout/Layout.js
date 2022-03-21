@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Box, Container, Toolbar } from '@mui/material';
 import Footer from "components/layout/Footer";
 import Header from "components/layout/Header";
 import Head from 'next/head';
@@ -15,8 +15,11 @@ export default function Layout({ children, title }) {
       </Head>
       <Header>
       </Header>
-      <Container sx={{ padding: '2.5rem' }}>
-        {children}
+      <Container>
+        <Toolbar />
+        <Box sx={{ display: 'flex', paddingTop: '24px' }}>
+          {children}
+        </Box>
       </Container>
       <Footer>
         {/* [FOOTER] */}

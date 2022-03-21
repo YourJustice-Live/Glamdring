@@ -1,9 +1,10 @@
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Divider, Typography } from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import ProfileForm from 'components/profile/ProfileForm';
+import ProfileNavigation from 'components/profile/ProfileNavigation';
 import useAccount from 'hooks/useAccount';
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
@@ -98,10 +99,11 @@ export default function ProfileManager() {
 
   return (
     <Layout title={"YourJustice / Profile Manager"}>
+      <ProfileNavigation />
       {status !== statuses.isLoading && (
-        <>
+        <Box sx={{ flexGrow: 1 }}>
           <Typography variant='h4' gutterBottom>{profile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
-          <Divider sx={{ marginBottom: '1.5rem' }} />
+          <Divider sx={{ marginBottom: '0.5rem' }} />
           <ProfileForm
             initData={formData}
             onSubmit={onSubmit}
@@ -120,7 +122,7 @@ export default function ProfileManager() {
               <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Updating NFT</LoadingButton>
             )}
           </ProfileForm>
-        </>
+        </Box>
       )}
       {status === statuses.isLoading && <LoadingBackdrop />}
     </Layout>
