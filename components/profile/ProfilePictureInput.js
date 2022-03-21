@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
 /**
- * Component: ProfilePictureInput
+ * A component for selecting a profile picture.
  */
 export default function ProfilePictureInput(props) {
 

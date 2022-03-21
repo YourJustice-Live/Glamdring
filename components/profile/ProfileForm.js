@@ -2,7 +2,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import ProfilePictureInput from "components/profile/ProfilePictureInput";
 
 /**
- * Component: ProfilePictureInput
+ * A component with a form for creating or editing a profile.
  * 
  * TODO: Move configs to separate files
  * 
