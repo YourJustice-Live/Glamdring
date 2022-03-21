@@ -2,18 +2,20 @@ import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
+import ProfileList from 'components/profile/ProfileList';
 import useAccount from "hooks/useAccount";
 import useProfile from 'hooks/useProfile';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
 
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const { account } = useAccount();
   const { getProfile, getProfiles } = useProfile();
-
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [profiles, setProfiles] = useState([]);
@@ -68,28 +70,10 @@ export default function Home() {
               </Link>
             )}
           </Box>
-          {/* All profiles */}
-          <Box>
-            <Typography variant='h4' gutterBottom>All profiles</Typography>
-            <Divider sx={{ marginBottom: '1.5rem' }} />
-            {profiles.map((profile, index) => {
-              if (profile) {
-                return (
-                  <Box key={index} sx={{ marginBottom: '1.0rem' }}>
-                    <Typography><b>Account {index}: </b></Typography>
-                    <Link href={`/profile/${profile.account}`}>
-                      <a>{profile.account}</a>
-                    </Link>
-                  </Box>
-                )
-              } else {
-                return null;
-              }
-            })}
-          </Box>
         </>
       )}
       {isLoading && <LoadingBackdrop />}
+      <ProfileList />
     </Layout >
   )
 }

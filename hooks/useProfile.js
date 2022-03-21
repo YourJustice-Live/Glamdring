@@ -32,9 +32,9 @@ export default function useProfile() {
     const avatarNftEntities = await findAvatarNftEntites();
     const profiles = await Promise.all(avatarNftEntities.map(async avatarNftEntity => {
       try {
-        return new Profile(avatarNftEntity.owner, await loadJsonFromIPFS(avatarNftEntity.tokenUri));
+        return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.tokenUri));
       } catch (error) {
-        console.error(error);
+        return null;
       }
     }));
     return profiles;
