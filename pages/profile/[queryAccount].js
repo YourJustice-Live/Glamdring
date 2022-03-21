@@ -1,5 +1,6 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Backdrop, CircularProgress, Divider, Typography } from '@mui/material';
+import { Avatar, Divider, Typography } from '@mui/material';
+import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import useProfile from "hooks/useProfile";
 import { useRouter } from 'next/router';
@@ -47,11 +48,7 @@ export default function Profile() {
           <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.email || "none"}</Typography>
         </>
       )}
-      {isLoading && (
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
-          <CircularProgress />
-        </Backdrop>
-      )}
+      {isLoading && <LoadingBackdrop />}
     </Layout>
   )
 

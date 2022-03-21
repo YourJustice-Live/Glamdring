@@ -1,5 +1,5 @@
-import { Backdrop, CircularProgress } from "@mui/material";
 import WalletConnect from "@walletconnect/web3-provider";
+import LoadingBackdrop from "components/extra/LoadingBackdrop";
 import { ethers } from "ethers";
 import { createContext, useEffect, useRef, useState } from 'react';
 import Web3Modal from "web3modal";
@@ -96,11 +96,7 @@ export function Web3Provider({ children }) {
   return (
     <Web3Context.Provider value={value}>
       {!isLoading && children}
-      {isLoading && (
-        <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open>
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {isLoading && <LoadingBackdrop />}
     </Web3Context.Provider>
   )
 
