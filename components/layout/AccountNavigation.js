@@ -57,7 +57,7 @@ export default function AccountNavigation() {
           </>
         ) : (
           <>
-            <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
+            <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
               <InsertPhotoOutlined />
             </Avatar>
             <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>

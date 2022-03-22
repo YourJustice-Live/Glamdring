@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
+import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
  * Page with profile data.
@@ -46,14 +47,14 @@ export default function Profile() {
         <>
           <Typography variant='h4' gutterBottom>Profile</Typography>
           <Divider />
-          <Avatar sx={{ width: 128, height: 128, my: 3 }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
+          <Avatar sx={{ width: 128, height: 128, my: 3 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
             <InsertPhotoOutlined />
           </Avatar>
           <Typography gutterBottom><b>Account: </b>{formatAccount(profile?.account) || "none"}</Typography>
-          <Typography gutterBottom><b>First Name: </b>{profile?.avatarNftMetadata?.publicProfile?.firstName || "none"}</Typography>
-          <Typography gutterBottom><b>Last Name:</b> {profile?.avatarNftMetadata?.publicProfile?.lastName || "none"}</Typography>
-          <Typography gutterBottom><b>Email: </b> {profile?.avatarNftMetadata?.publicContacts?.email || "none"}</Typography>
-          <Typography gutterBottom><b>Twitter: </b> {profile?.avatarNftMetadata?.links?.twitter || "none"}</Typography>
+          <Typography gutterBottom><b>First Name: </b>{getTraitValue(profile?.avatarNftMetadata, traitTypes.firstName) || "none"}</Typography>
+          <Typography gutterBottom><b>Last Name:</b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.lastName) || "none"}</Typography>
+          <Typography gutterBottom><b>Email: </b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.email) || "none"}</Typography>
+          <Typography gutterBottom><b>Twitter: </b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.twitter) || "none"}</Typography>
         </>
       )}
     </Layout >

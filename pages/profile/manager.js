@@ -52,9 +52,12 @@ export default function ProfileManager() {
     try {
       // Update form data
       setFormData(formData);
-      // Upload form data to IPFS
+      // Upload cleared form data to IPFS
       setStatus(statuses.isUploadingToIpfs);
-      const { url } = await uploadJsonToIPFS(formData);
+      const { url } = await uploadJsonToIPFS({
+        image: formData.image,
+        attributes: formData.attributes,
+      });
       // Show snackbar
       enqueueSnackbar("Your data uploaded to IPFS!", {
         action: (<Button onClick={() => window.open(url, '_blank').focus()} color="inherit">Open</Button>),

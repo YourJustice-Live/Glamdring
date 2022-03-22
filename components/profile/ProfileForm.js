@@ -1,5 +1,6 @@
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import ProfilePictureInput from "components/profile/ProfilePictureInput";
+import ProfileAttributesInput from 'components/profile/ProfileAttributesInput';
 
 /**
  * A component with a form for creating or editing a profile.
@@ -13,59 +14,33 @@ export default function ProfileForm({ children, disabled, initData, onSubmit }) 
   const schema = {
     type: "object",
     properties: {
-      profilePicture: {
+      image: {
         type: "string",
         title: "Profile Picture",
       },
-      publicProfile: {
-        type: "object",
-        title: "Public Profile",
-        required: ["firstName", "lastName"],
-        properties: {
-          firstName: {
-            type: "string",
-            title: "First Name",
-          },
-          lastName: {
-            type: "string",
-            title: "Last Name",
-          },
-        }
-      },
-      publicContacts: {
-        type: "object",
-        title: "Public Contacts",
-        properties: {
-          email: {
-            type: "string",
-            title: "Email (optional)",
-          },
-        }
-      },
-      links: {
-        type: "object",
-        title: "Links",
-        properties: {
-          twitter: {
-            type: "string",
-            title: "Twitter (optional)",
-          }
-        }
+      attributes: {
+        type: "array",
+        title: "Profile Attributes",
+        items: [{}],
       }
     }
   }
 
   const uiSchema = {
-    "profilePicture": {
+    image: {
       "ui:widget": "ProfilePictureInput",
       "ui:options": {
         size: 128
       }
     },
+    attributes: {
+      "ui:widget": "ProfileAttributesInput",
+    }
   };
 
   const widgets = {
-    ProfilePictureInput: ProfilePictureInput
+    ProfilePictureInput: ProfilePictureInput,
+    ProfileAttributesInput: ProfileAttributesInput
   }
 
   return (
