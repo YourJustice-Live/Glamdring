@@ -1,26 +1,22 @@
 import { Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
+import ProfileList from 'components/profile/ProfileList';
 import useAccount from "hooks/useAccount";
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 export default function Index() {
 
-  const router = useRouter();
   const { account } = useAccount();
 
-  useEffect(() => {
-    // Redirect to index page if account not connected
-    if (account) {
-      router.push('/home');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
-
   return (
-    <Layout>
-      <Typography variant='h4' align='center' gutterBottom>Check reputation of the person, you are interested in.</Typography>
-      <Typography variant='h6' align='center'>Or check yourself!</Typography>
+    <Layout showAccountNavigation={!!account}>
+      {!account && (
+        <Box sx={{ p: 18, textAlign: 'center' }}>
+          <Typography variant='h2' gutterBottom>Check or impact reputation of crypto people!</Typography>
+          <Typography variant='h5'>who was involved in the activities that made you uncomfortable?</Typography>
+        </Box>
+      )}
+      <ProfileList />
     </Layout>
   )
 

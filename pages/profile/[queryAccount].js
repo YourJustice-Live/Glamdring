@@ -2,6 +2,7 @@ import { InsertPhotoOutlined } from '@mui/icons-material';
 import { Avatar, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
+import useAccount from 'hooks/useAccount';
 import useProfile from "hooks/useProfile";
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -17,6 +18,7 @@ export default function Profile() {
   const { queryAccount } = router.query;
   const { enqueueSnackbar } = useSnackbar();
   const { getProfile } = useProfile();
+  const { account } = useAccount();
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
@@ -39,7 +41,7 @@ export default function Profile() {
   }, [queryAccount])
 
   return (
-    <Layout title={"YourJustice / Profile"} showAccountNavigation={true}>
+    <Layout title={"YourJustice / Profile"} showAccountNavigation={!!account}>
       {isLoading ? (<LoadingBackdrop />) : (
         <>
           <Typography variant='h4' gutterBottom>Profile</Typography>
