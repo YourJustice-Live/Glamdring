@@ -28,8 +28,8 @@ export default function Navigation() {
         )}
         {account && network && (
           <>
-            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Account: {formatAccount(account)}</Typography>
-            <Typography variant="body2" sx={{ marginRight: "1rem" }}>Chain ID: {network.chainId}</Typography>
+            <Typography variant="body2" sx={{ mr: 3 }}>Account: {formatAccount(account)}</Typography>
+            <Typography variant="body2" sx={{ mr: 3 }}>Chain ID: {network.chainId}</Typography>
             <Button variant='outlined' onClick={disconnectWallet}>Disconnect Wallet</Button>
           </>
         )}

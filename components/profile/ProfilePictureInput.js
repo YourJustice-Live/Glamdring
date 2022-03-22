@@ -65,7 +65,7 @@ export default function ProfilePictureInput(props) {
   return (
     <>
       <Typography variant='h5'>Profile Picture</Typography>
-      <Divider sx={{ marginBottom: '1.5rem' }} />
+      <Divider sx={{ mb: 2 }} />
       <label htmlFor="input" style={{ width: propsSize, height: propsSize }}>
         <Avatar
           sx={{ cursor: !isLoading && !propsDisabled ? 'pointer' : null, width: propsSize, height: propsSize }}

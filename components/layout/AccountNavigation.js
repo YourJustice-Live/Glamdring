@@ -48,21 +48,21 @@ export default function AccountNavigation() {
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto', padding: '24px' }}>
+      <Box sx={{ overflow: 'auto', p: 2.5 }}>
         {isLoading ? (
           <>
-            <Skeleton variant="circular" sx={{ marginBottom: '1rem' }} width={82} height={82} />
-            <Skeleton variant="rectangular" sx={{ marginBottom: '1rem' }} height={64} />
+            <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
+            <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
             <Skeleton variant="rectangular" height={32} />
           </>
         ) : (
           <>
-            <Avatar sx={{ width: 82, height: 82, marginBottom: '12px' }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
+            <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
               <InsertPhotoOutlined />
             </Avatar>
             <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
             <Typography gutterBottom><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-            <Divider sx={{ marginBottom: '1.5rem' }} />
+            <Divider sx={{ mb: 3 }} />
             {profile && (
               <Stack spacing={1} direction="column">
                 <Link href='/profile' passHref>

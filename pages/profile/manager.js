@@ -101,7 +101,7 @@ export default function ProfileManager() {
       {status === statuses.isLoading ? (<LoadingBackdrop />) : (
         <>
           <Typography variant='h4' gutterBottom>{profile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
-          <Divider sx={{ marginBottom: '0.5rem' }} />
+          <Divider sx={{ mb: 1 }} />
           <ProfileForm
             initData={formData}
             onSubmit={onSubmit}

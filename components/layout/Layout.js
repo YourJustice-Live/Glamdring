@@ -18,7 +18,7 @@ export default function Layout({ children, title, showAccountNavigation }) {
       </Header>
       <Container>
         <Toolbar />
-        <Box sx={{ display: 'flex', py: '24px' }}>
+        <Box sx={{ display: 'flex', py: 4 }}>
           {showAccountNavigation && <AccountNavigation />}
           <Box sx={{ flexGrow: 1 }}>
             {children}

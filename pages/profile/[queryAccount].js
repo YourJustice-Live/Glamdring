@@ -46,7 +46,7 @@ export default function Profile() {
         <>
           <Typography variant='h4' gutterBottom>Profile</Typography>
           <Divider />
-          <Avatar sx={{ width: 128, height: 128, margin: '1.5rem 0rem' }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
+          <Avatar sx={{ width: 128, height: 128, my: 3 }} src={profile?.avatarNftMetadata?.profilePicture ? profile.avatarNftMetadata.profilePicture : null}>
             <InsertPhotoOutlined />
           </Avatar>
           <Typography gutterBottom><b>Account: </b>{formatAccount(profile?.account) || "none"}</Typography>
