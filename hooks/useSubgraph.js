@@ -2,16 +2,33 @@ import axios from "axios";
 
 export default function useSubgraph() {
 
+  /**
+   * Find the Avatar NFT for the specified account.
+   * 
+   * @param {string} account The account for which you need to find the Avatar NFT.
+   * @returns {Promise.<{id: number, owner: string, tokenUri: string}>} Avatar NFT with token ID, token owner and token URI.
+   */
   let findAvatarNftEntity = async function (account) {
     const response = await makeSubgraphQuery(getFindAvatarNftEntity(account));
     return response.avatarNftEntities[0];
   }
 
-  let findAvatarNftEntites = async function () {
-    const response = await makeSubgraphQuery(getFindAvatarNftEntitiesQuery());
+  /**
+   * Find the Avatar NFTs for all or only for the specified accounts.
+   * 
+   * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
+   * @returns {Promise.<Array.<{id: number, owner: string, tokenUri: string}>>} Avatar NFTs with token ID, token owner and token URI.
+   */
+  let findAvatarNftEntites = async function (accounts) {
+    const response = await makeSubgraphQuery(getFindAvatarNftEntitiesQuery(accounts));
     return response.avatarNftEntities;
   }
 
+  /**
+   * Find the members of jurisdiction.
+   * 
+   * @returns {Promise.<Array.<{id: string}>>} Array with accounts of members.
+   */
   let findJurisdictionMembers = async function () {
     const response = await makeSubgraphQuery(getFindJurisdictionMembersQuery());
     return response.jurisdictionParticipantEntities;
@@ -48,14 +65,25 @@ function getFindAvatarNftEntity(account) {
   }`;
 }
 
-function getFindAvatarNftEntitiesQuery() {
-  return `{
-    avatarNftEntities(first: 100) {
-      id
-      owner
-      tokenUri
-    }
-  }`;
+function getFindAvatarNftEntitiesQuery(accounts) {
+  if (accounts) {
+    return `{
+      avatarNftEntities(first: 100, where: {owner_in: ["${accounts.join('","')}"]}) {
+        id
+        owner
+        tokenUri
+      }
+    }`
+  } else {
+    return `{
+      avatarNftEntities(first: 100) {
+        id
+        owner
+        tokenUri
+      }
+    }`;
+  }
+
 }
 
 function getFindJurisdictionMembersQuery() {

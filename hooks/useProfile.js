@@ -24,12 +24,13 @@ export default function useProfile() {
   }
 
   /**
-   * Get all profiles.
+   * Get profiles.
    * 
+   * @param {Array.<string>} accounts If not null, then the function returns the profiles for the specified accounts.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
-  let getProfiles = async function () {
-    const avatarNftEntities = await findAvatarNftEntites();
+  let getProfiles = async function (accounts) {
+    const avatarNftEntities = await findAvatarNftEntites(accounts);
     const profiles = await Promise.all(avatarNftEntities.map(async avatarNftEntity => {
       try {
         return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.tokenUri));

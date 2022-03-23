@@ -2,8 +2,10 @@ import { Button, Divider, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
+import ProfileList from 'components/profile/ProfileList';
 import useAccount from 'hooks/useAccount';
 import useJuridictionContract from 'hooks/useJurisdictionContract';
+import useProfile from 'hooks/useProfile';
 import useSubgraph from 'hooks/useSubgraph';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
@@ -18,13 +20,14 @@ export default function Jurisdiction() {
   const { account } = useAccount();
   const { getName, getOwner, isHasRole, join, leave } = useJuridictionContract();
   const { findJurisdictionMembers } = useSubgraph();
+  const { getProfiles } = useProfile();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState(null);
   const [owner, setOwner] = useState(null);
   const [isMember, setIsMember] = useState(null);
   const [isJudge, setIsJudge] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
-  const [members, setMembers] = useState(null);
+  const [memberProfiles, setMemberProfiles] = useState(null);
 
   async function loadData() {
     try {
@@ -36,7 +39,9 @@ export default function Jurisdiction() {
         setIsJudge(await isHasRole(account, "judge"));
         setIsAdmin(await isHasRole(account, "admin"));
       }
-      setMembers(await findJurisdictionMembers());
+      const members = await findJurisdictionMembers();
+      const memberProfiles = await getProfiles(members.map((member) => member.id));
+      setMemberProfiles(memberProfiles);
     } catch (error) {
       console.error(error);
       enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
@@ -98,9 +103,9 @@ export default function Jurisdiction() {
             <Typography gutterBottom><b>Owner: </b>{formatAccount(owner) || "None"}</Typography>
             {account && (
               <>
-                <Typography gutterBottom><b>Account is member: </b>{isMember ? "Yes" : "No"}</Typography>
-                <Typography gutterBottom><b>Account is judge: </b>{isJudge ? "Yes" : "No"}</Typography>
-                <Typography gutterBottom><b>Account is admin: </b>{isAdmin ? "Yes" : "No"}</Typography>
+                <Typography gutterBottom><b>Account is member: </b>{isMember ? "yes" : "no"}</Typography>
+                <Typography gutterBottom><b>Account is judge: </b>{isJudge ? "yes" : "no"}</Typography>
+                <Typography gutterBottom><b>Account is admin: </b>{isAdmin ? "yes" : "no"}</Typography>
               </>
             )}
           </Box>
@@ -119,9 +124,7 @@ export default function Jurisdiction() {
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Members</Typography>
             <Divider sx={{ mb: 2.5 }} />
-            {members.map((member, index) => (
-              <Typography key={index}><b>Member #{index + 1}: </b>{member.id}</Typography>
-            ))}
+            <ProfileList profiles={memberProfiles} />
           </Box>
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Judges</Typography>
