@@ -1,5 +1,5 @@
 import contractJson from "contracts/AvatarNFT.json";
-import { Contract, ethers } from 'ethers';
+import { Contract } from 'ethers';
 import useProvider from "hooks/useProvider";
 
 /**
@@ -9,9 +9,7 @@ import useProvider from "hooks/useProvider";
  */
 export default function useAvatarNftContract() {
 
-  const { provider } = useProvider();
-
-  const defaultProvider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_CONNECTION_URL);
+  const { provider, defaultProvider } = useProvider();
 
   const contract = new Contract(
     process.env.NEXT_PUBLIC_AVATAR_NFT_CONTRACT_ADDRESS,

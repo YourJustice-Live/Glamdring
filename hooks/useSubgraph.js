@@ -12,9 +12,15 @@ export default function useSubgraph() {
     return response.avatarNftEntities;
   }
 
+  let findJurisdictionMembers = async function () {
+    const response = await makeSubgraphQuery(getFindJurisdictionMembersQuery());
+    return response.jurisdictionParticipantEntities;
+  }
+
   return {
     findAvatarNftEntity,
-    findAvatarNftEntites
+    findAvatarNftEntites,
+    findJurisdictionMembers,
   };
 }
 
@@ -48,6 +54,14 @@ function getFindAvatarNftEntitiesQuery() {
       id
       owner
       tokenUri
+    }
+  }`;
+}
+
+function getFindJurisdictionMembersQuery() {
+  return `{
+    jurisdictionParticipantEntities(where: {isMember: true}) {
+      id
     }
   }`;
 }

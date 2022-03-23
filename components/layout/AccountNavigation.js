@@ -61,8 +61,8 @@ export default function AccountNavigation() {
               <InsertPhotoOutlined />
             </Avatar>
             <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-            <Typography gutterBottom><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-            <Divider sx={{ mb: 3 }} />
+            <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
+            <Divider sx={{ mt: 3, mb: 3 }} />
             {profile && (
               <Stack spacing={1} direction="column">
                 <Link href='/profile' passHref>
@@ -74,10 +74,18 @@ export default function AccountNavigation() {
               </Stack>
             )}
             {!profile && (
-              <Link href='/profile/manager' passHref>
-                <Button variant="outlined">Create Own Profile</Button>
-              </Link>
+              <Stack>
+                <Link href='/profile/manager' passHref>
+                  <Button variant="outlined">Create Own Profile</Button>
+                </Link>
+              </Stack>
             )}
+            <Divider sx={{ mt: 3, mb: 3 }} />
+            <Stack>
+              <Link href='/jurisdiction' passHref>
+                <Button variant="outlined">Open Jurisdiction</Button>
+              </Link>
+            </Stack>
           </>
         )}
       </Box>
