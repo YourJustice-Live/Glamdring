@@ -1,21 +1,22 @@
 import contractJson from "contracts/AvatarNFT.json";
+import WrongNetworkError from "errors/WrongNetworkError";
 import { Contract } from 'ethers';
 import useProvider from "hooks/useProvider";
 
 /**
  * Hook for AvatarNFT Contract.
- * 
- * TODO: Validate correct chain before call
  */
 export default function useAvatarNftContract() {
 
   const { provider, defaultProvider } = useProvider();
 
-  const contract = new Contract(
-    process.env.NEXT_PUBLIC_AVATAR_NFT_CONTRACT_ADDRESS,
-    contractJson.abi,
-    provider?.getSigner() || defaultProvider
-  );
+  function getContract(signerOrProvider) {
+    return new Contract(
+      process.env.NEXT_PUBLIC_AVATAR_NFT_CONTRACT_ADDRESS,
+      contractJson.abi,
+      signerOrProvider
+    );
+  }
 
   /**
    * Mint Avatar NFT for current account.
@@ -24,7 +25,10 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function mint(tokenUrl) {
-    return await contract.mint(tokenUrl);
+    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).mint(tokenUrl);
   }
 
   /**
@@ -35,7 +39,10 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function update(tokenId, tokenUrl) {
-    return await contract.update(tokenId, tokenUrl);
+    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).update(tokenId, tokenUrl);
   }
 
   return { mint, update }
