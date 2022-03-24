@@ -17,7 +17,7 @@ export default function useProfile() {
   let getProfile = async function (account) {
     const avatarNftEntity = await findAvatarNftEntity(account);
     if (avatarNftEntity) {
-      return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.tokenUri));
+      return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.uri));
     } else {
       return null;
     }
@@ -33,7 +33,7 @@ export default function useProfile() {
     const avatarNftEntities = await findAvatarNftEntites(accounts);
     const profiles = await Promise.all(avatarNftEntities.map(async avatarNftEntity => {
       try {
-        return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.tokenUri));
+        return new Profile(avatarNftEntity.owner, avatarNftEntity.id, await loadJsonFromIPFS(avatarNftEntity.uri));
       } catch (error) {
         return null;
       }
