@@ -52,7 +52,7 @@ export default function useAvatarNftContract() {
    * @param {number} domainId Domain. "0" is a environment domain.
    * @param {number} ratingId Rating. "0" is a negative rating, "1" is a positive rating.
    * @param {number} amount Amount.
-   * @returns 
+   * @returns Transaction.
    */
   async function addReputation(tokenId, domainId, ratingId, amount) {
     if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
