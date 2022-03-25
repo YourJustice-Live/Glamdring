@@ -3,23 +3,12 @@ import axios from "axios";
 export default function useSubgraph() {
 
   /**
-   * Find the Avatar NFT for the specified account.
-   * 
-   * @param {string} account The account for which you need to find the Avatar NFT.
-   * @returns {Promise.<{id: number, owner: string, uri: string}>} Avatar NFT with token ID, token owner and token URI.
-   */
-  let findAvatarNftEntity = async function (account) {
-    const response = await makeSubgraphQuery(getFindAvatarNftEntity(account));
-    return response.avatarNftEntities[0];
-  }
-
-  /**
    * Find the Avatar NFTs for all or only for the specified accounts.
    * 
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
-   * @returns {Promise.<Array.<{id: number, owner: string, uri: string}>>} Avatar NFTs with token ID, token owner and token URI.
+   * @returns {Promise.<Array.<{id: number, owner: string, uri: string, reputations: Array<object>}>>} Avatar NFTs with token ID, token owner and token URI.
    */
-  let findAvatarNftEntites = async function (accounts) {
+  let findAvatarNftEntities = async function (accounts) {
     const response = await makeSubgraphQuery(getFindAvatarNftEntitiesQuery(accounts));
     return response.avatarNftEntities;
   }
@@ -35,8 +24,7 @@ export default function useSubgraph() {
   }
 
   return {
-    findAvatarNftEntity,
-    findAvatarNftEntites,
+    findAvatarNftEntities,
     findJurisdictionMembers,
   };
 }
@@ -55,35 +43,31 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-function getFindAvatarNftEntity(account) {
-  return `{
-    avatarNftEntities(where: {owner: "${account}"}) {
-      id
-      owner
-      uri
-    }
-  }`;
-}
-
+/**
+ * 
+ * @param {Array<string>} accounts Arrays with accounts.
+ */
 function getFindAvatarNftEntitiesQuery(accounts) {
-  if (accounts) {
-    return `{
-      avatarNftEntities(first: 100, where: {owner_in: ["${accounts.join('","')}"]}) {
+  let queryParams = `first: 100`;
+  if (accounts && accounts.length == 1) {
+    queryParams = `where: {owner: "${accounts[0]}"}`;
+  }
+  if (accounts && accounts.length > 1) {
+    queryParams = `first: 100, where: {owner_in: ["${accounts.join('","')}"]}`;
+  }
+  return `{
+      avatarNftEntities(${queryParams}) {
         id
         owner
         uri
+        reputations {
+          id
+          domain
+          positiveRating
+          negativeRating
+        }
       }
     }`
-  } else {
-    return `{
-      avatarNftEntities(first: 100) {
-        id
-        owner
-        uri
-      }
-    }`;
-  }
-
 }
 
 function getFindJurisdictionMembersQuery() {
