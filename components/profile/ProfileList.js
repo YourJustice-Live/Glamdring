@@ -1,46 +1,53 @@
-import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Button, Card, CardActions, CardContent, Grid, Skeleton, Typography } from '@mui/material';
-import Link from 'next/link';
-import { formatAccount } from 'utils/formatters';
-import { getTraitValue, traitTypes } from "utils/metadata";
+import { Grid } from '@mui/material';
+import LoadingBackdrop from 'components/extra/LoadingBackdrop';
+import useAvatarNftContract from 'hooks/useAvatarNftContract';
+import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+import ProfileCard from './ProfileCard';
 
 /**
  * A component with a list of profiles.
  */
-export default function ProfileList({ profiles }) {
+export default function ProfileList({ profiles, onUpdateProfiles }) {
 
+  const { enqueueSnackbar } = useSnackbar();
+  const { addReputation } = useAvatarNftContract();
+  const [isLoading, setIsLoading] = useState(false);
   const defaultProfiles = [{}, {}, {}];
+
+  /**
+   * Add positive or negative reputation to the environment domain for specified profile.
+   */
+  async function addScore(profile, isNegative) {
+    try {
+      setIsLoading(true);
+      const domainId = 0; // Environment domain
+      const ratingId = isNegative ? 0 : 1;
+      const amount = 1;
+      const transaction = await addReputation(profile.avatarNftId, domainId, ratingId, amount);
+      await transaction.wait();
+      enqueueSnackbar("Success!", { variant: 'success' });
+      onUpdateProfiles();
+    }
+    catch (error) {
+      console.error(error);
+      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Grid container spacing={2}>
+      {isLoading && <LoadingBackdrop />}
       {(profiles || defaultProfiles).map((profile, index) =>
         profile && (
           <Grid key={index} item xs={4}>
-            <Card variant="outlined">
-              {profile.account ? (
-                <>
-                  <CardContent>
-                    <Avatar sx={{ width: 82, height: 82, mb: 2 }} src={profile.avatarNftMetadata?.image}>
-                      <InsertPhotoOutlined />
-                    </Avatar>
-                    <Typography variant="h4" sx={{ mb: 2 }}>{getTraitValue(profile.avatarNftMetadata, traitTypes.firstName) || "None"} {getTraitValue(profile.avatarNftMetadata, traitTypes.lastName) || "None"}</Typography>
-                    <Typography><b>Account:</b> {formatAccount(profile.account)}</Typography>
-                    <Typography><b>Email:</b> {getTraitValue(profile.avatarNftMetadata, traitTypes.email) || "none"}</Typography>
-                    <Typography><b>Twitter:</b> {getTraitValue(profile.avatarNftMetadata, traitTypes.twitter) || "none"}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Link href={`/profile/${profile.account}`} passHref>
-                      <Button size="small">Open Profile</Button>
-                    </Link>
-                  </CardActions>
-                </>
-              ) : (
-                <CardContent>
-                  <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-                  <Skeleton variant="rectangular" height={64} />
-                </CardContent>
-              )}
-            </Card>
+            <ProfileCard
+              profile={profile}
+              onAddNegativeScore={(profile) => addScore(profile, true)}
+              onAddPositiveScore={(profile) => addScore(profile, false)}
+            />
           </Grid>
         )
       )}

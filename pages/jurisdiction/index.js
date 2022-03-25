@@ -124,7 +124,10 @@ export default function Jurisdiction() {
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Members</Typography>
             <Divider sx={{ mb: 2.5 }} />
-            <ProfileList profiles={memberProfiles} />
+            <ProfileList profiles={memberProfiles} onUpdateProfiles={() => {
+              setMemberProfiles(null);
+              loadData();
+            }} />
           </Box>
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Judges</Typography>

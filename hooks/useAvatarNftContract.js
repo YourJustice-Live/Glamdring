@@ -45,6 +45,26 @@ export default function useAvatarNftContract() {
     return await getContract(provider?.getSigner()).update(tokenId, tokenUrl);
   }
 
-  return { mint, update }
+  /**
+   * Add positive or negative reputation to Avatar NFT.
+   * 
+   * @param {number} tokenId Token ID.
+   * @param {number} domainId Domain. "0" is a environment domain.
+   * @param {number} ratingId Rating. "0" is a negative rating, "1" is a positive rating.
+   * @param {number} amount Amount.
+   * @returns 
+   */
+  async function addReputation(tokenId, domainId, ratingId, amount) {
+    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).repAdd(tokenId, domainId, ratingId, amount);
+  }
+
+  return {
+    mint,
+    update,
+    addReputation
+  }
 
 };

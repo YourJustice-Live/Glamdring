@@ -40,7 +40,12 @@ export default function Index() {
       <Box>
         <Typography variant='h4' gutterBottom>Profiles</Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <ProfileList profiles={profiles} />
+        <ProfileList
+          profiles={profiles}
+          onUpdateProfiles={() => {
+            setProfiles(null);
+            loadData();
+          }} />
       </Box>
     </Layout>
   )
