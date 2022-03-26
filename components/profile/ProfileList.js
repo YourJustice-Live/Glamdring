@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
+import { DEFAULT_ADD_REPUTATION_AMOUNT, REPUTATION_DOMAIN_ID, REPUTATION_RATING_ID } from "constants/contracts";
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -21,10 +22,12 @@ export default function ProfileList({ profiles, onUpdateProfiles }) {
   async function addScore(profile, isNegative) {
     try {
       setIsLoading(true);
-      const domainId = 0; // Environment domain
-      const ratingId = isNegative ? 0 : 1;
-      const amount = 1;
-      const transaction = await addReputation(profile.avatarNftId, domainId, ratingId, amount);
+      const transaction = await addReputation(
+        profile.avatarNftId,
+        REPUTATION_DOMAIN_ID.environment,
+        isNegative ? REPUTATION_RATING_ID.negative : REPUTATION_RATING_ID.positive,
+        DEFAULT_ADD_REPUTATION_AMOUNT
+      );
       await transaction.wait();
       enqueueSnackbar("Success!", { variant: 'success' });
       onUpdateProfiles();

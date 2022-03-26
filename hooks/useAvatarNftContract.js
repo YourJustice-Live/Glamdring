@@ -49,8 +49,8 @@ export default function useAvatarNftContract() {
    * Add positive or negative reputation to Avatar NFT.
    * 
    * @param {number} tokenId Token ID.
-   * @param {number} domainId Domain. "0" is a environment domain.
-   * @param {number} ratingId Rating. "0" is a negative rating, "1" is a positive rating.
+   * @param {number} domainId Domain ID.
+   * @param {number} ratingId Rating ID.
    * @param {number} amount Amount.
    * @returns Transaction.
    */

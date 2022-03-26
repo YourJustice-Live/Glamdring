@@ -1,9 +1,10 @@
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, InsertPhotoOutlined } from '@mui/icons-material';
 import { Avatar, Box, Button, Card, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { REPUTATION_DOMAIN_ID, REPUTATION_RATING_ID } from 'constants/contracts';
 import Link from 'next/link';
 import { formatAccount } from 'utils/formatters';
 import { getTraitValue, traitTypes } from "utils/metadata";
-import { domainIds, getRating, ratingIds } from 'utils/reputation';
+import { getRating } from 'utils/reputation';
 
 /**
  * A component with a card with profile.
@@ -24,8 +25,8 @@ export default function ProfileCard({ profile, onAddPositiveScore, onAddNegative
             <Typography><b>Twitter:</b> {getTraitValue(profile.avatarNftMetadata, traitTypes.twitter) || "none"}</Typography>
             <Box>
               <Box sx={{ fontWeight: 'bold', display: 'inline', mr: 1 }}>Reputation:</Box>
-              <Box sx={{ color: 'success.main', display: 'inline', mr: 1 }}>+{getRating(profile, domainIds.environment, ratingIds.positive)}</Box>
-              <Box sx={{ color: 'danger.main', display: 'inline' }}>-{getRating(profile, domainIds.environment, ratingIds.negative)}</Box>
+              <Box sx={{ color: 'success.main', display: 'inline', mr: 1 }}>+{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.positive)}</Box>
+              <Box sx={{ color: 'danger.main', display: 'inline' }}>-{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.negative)}</Box>
             </Box>
             <Divider sx={{ my: 2 }} />
             <Stack direction='row' spacing={1}>
