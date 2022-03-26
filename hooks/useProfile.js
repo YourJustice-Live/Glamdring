@@ -26,18 +26,18 @@ export default function useProfile() {
    */
   let getProfiles = async function (accounts) {
     const avatarNftEntities = await findAvatarNftEntities(accounts);
-    const profiles = await Promise.all(avatarNftEntities.map(async avatarNftEntity => {
+    let profiles = [];
+    for (const avatarNftEntity of avatarNftEntities) {
       try {
-        return new Profile(
+        const profile = new Profile(
           avatarNftEntity.owner,
           avatarNftEntity.id,
           avatarNftEntity.reputations,
           await loadJsonFromIPFS(avatarNftEntity.uri)
         );
-      } catch (error) {
-        return null;
-      }
-    }));
+        profiles.push(profile);
+      } catch (error) { }
+    }
     return profiles;
   }
 

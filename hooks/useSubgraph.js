@@ -16,16 +16,16 @@ export default function useSubgraph() {
   /**
    * Find the members of jurisdiction.
    * 
-   * @returns {Promise.<Array.<{id: string}>>} Array with accounts of members.
+   * @returns {Promise.<Array.<{id: string, isAdmin: boolean, isMember: boolean, isJudge: boolean}>>} Array with accounts of members.
    */
-  let findJurisdictionMembers = async function () {
-    const response = await makeSubgraphQuery(getFindJurisdictionMembersQuery());
+  let findJurisdictionParticipantEntities = async function () {
+    const response = await makeSubgraphQuery(getFindJurisdictionParticipantEntitiesQuery());
     return response.jurisdictionParticipantEntities;
   }
 
   return {
     findAvatarNftEntities,
-    findJurisdictionMembers,
+    findJurisdictionParticipantEntities
   };
 }
 
@@ -70,10 +70,13 @@ function getFindAvatarNftEntitiesQuery(accounts) {
     }`
 }
 
-function getFindJurisdictionMembersQuery() {
+function getFindJurisdictionParticipantEntitiesQuery() {
   return `{
-    jurisdictionParticipantEntities(where: {isMember: true}) {
+    jurisdictionParticipantEntities(first: 100) {
       id
+      isAdmin
+      isMember
+      isJudge
     }
   }`;
 }

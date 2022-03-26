@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import useAccount from 'hooks/useAccount';
 import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useProfile from 'hooks/useProfile';
@@ -19,7 +20,7 @@ export default function Jurisdiction() {
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useAccount();
   const { getName, getOwner, isHasRole, join, leave } = useJuridictionContract();
-  const { findJurisdictionMembers } = useSubgraph();
+  const { findJurisdictionParticipantEntities } = useSubgraph();
   const { getProfiles } = useProfile();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState(null);
@@ -28,6 +29,8 @@ export default function Jurisdiction() {
   const [isJudge, setIsJudge] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [memberProfiles, setMemberProfiles] = useState(null);
+  const [judgeProfiles, setJudgeProfiles] = useState(null);
+  const [adminProfiles, setAdminProfiles] = useState(null);
 
   async function loadData() {
     try {
@@ -35,13 +38,17 @@ export default function Jurisdiction() {
       setName(await getName());
       setOwner(await getOwner());
       if (account) {
-        setIsMember(await isHasRole(account, "member"));
-        setIsJudge(await isHasRole(account, "judge"));
-        setIsAdmin(await isHasRole(account, "admin"));
+        setIsMember(await isHasRole(account, JURISDICTION_ROLE.member));
+        setIsJudge(await isHasRole(account, JURISDICTION_ROLE.judge));
+        setIsAdmin(await isHasRole(account, JURISDICTION_ROLE.admin));
       }
-      const members = await findJurisdictionMembers();
-      const memberProfiles = await getProfiles(members.map((member) => member.id));
+      const participants = await findJurisdictionParticipantEntities();
+      const memberProfiles = await getProfiles(participants.filter(participant => participant?.isMember).map(participant => participant?.id));
+      const judgeProfiles = await getProfiles(participants.filter(participant => participant?.isJudge).map(participant => participant?.id));
+      const adminProfiles = await getProfiles(participants.filter(participant => participant?.isAdmin).map(participant => participant?.id));
       setMemberProfiles(memberProfiles);
+      setJudgeProfiles(judgeProfiles);
+      setAdminProfiles(adminProfiles);
     } catch (error) {
       console.error(error);
       enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
@@ -124,20 +131,35 @@ export default function Jurisdiction() {
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Members</Typography>
             <Divider sx={{ mb: 2.5 }} />
-            <ProfileList profiles={memberProfiles} onUpdateProfiles={() => {
-              setMemberProfiles(null);
-              loadData();
-            }} />
+            <ProfileList
+              profiles={memberProfiles}
+              onUpdateProfiles={() => {
+                setMemberProfiles(null);
+                loadData();
+              }}
+            />
           </Box>
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Judges</Typography>
             <Divider sx={{ mb: 2.5 }} />
-            <Typography><b></b>Unknown</Typography>
+            <ProfileList
+              profiles={judgeProfiles}
+              onUpdateProfiles={() => {
+                setJudgeProfiles(null);
+                loadData();
+              }}
+            />
           </Box>
           <Box sx={{ mt: 6 }}>
             <Typography variant='h4' gutterBottom>Admins</Typography>
             <Divider sx={{ mb: 2.5 }} />
-            <Typography><b></b>Unknown</Typography>
+            <ProfileList
+              profiles={adminProfiles}
+              onUpdateProfiles={() => {
+                setAdminProfiles(null);
+                loadData();
+              }}
+            />
           </Box>
         </>
       )}

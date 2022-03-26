@@ -11,3 +11,9 @@ export const REPUTATION_RATING_ID = {
 }
 
 export const DEFAULT_ADD_REPUTATION_AMOUNT = 1;
+
+export const JURISDICTION_ROLE = {
+  member: "member",
+  judge: "judge",
+  admin: "admin",
+}
