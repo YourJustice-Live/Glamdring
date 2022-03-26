@@ -102,7 +102,7 @@ export default function AccountNavigation({ variant = "drawer" }) {
       {variant === "top" && (
         <Box>
           <Toolbar />
-          <Paper elevation={6} sx={{ p: 3 }}>
+          <Paper elevation={6} sx={{ p: 3, mb: 6 }}>
             {isLoading ? (
               <>
                 <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
