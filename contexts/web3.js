@@ -17,20 +17,17 @@ export function Web3Provider({ children }) {
 
   async function connectWallet() {
     try {
-
-      console.log("[Dev] connectWallet");
-
+      // Connect account
       const instance = await web3ModalRef.current.connect();
       const provider = new ethers.providers.Web3Provider(instance);
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
-
+      // Update states
       setProvider(provider);
       if (accounts) {
         setAccount(accounts[0])
       };
       setNetwork(network);
-
     } catch (error) {
       console.error(error);
     } finally {
@@ -40,24 +37,21 @@ export function Web3Provider({ children }) {
 
   async function disconnectWallet() {
     try {
-
-      console.log("[Dev] disconnectWallet");
-
+      // Clear providers
       await web3ModalRef.current.clearCachedProvider();
-
+      localStorage.removeItem("walletconnect");
+      // Clear states
       setProvider(null);
       setAccount(null);
       setNetwork(null);
-
     } catch (error) {
       console.error(error);
     }
   }
 
   useEffect(() => {
-
     if (!web3ModalRef.current) {
-
+      // Confing Web3Modal
       const providerOptions = {
         walletconnect: {
           package: WalletConnect,
@@ -66,21 +60,18 @@ export function Web3Provider({ children }) {
           }
         }
       };
-
       const web3Modal = new Web3Modal({
         cacheProvider: true,
         providerOptions,
       });
-
       web3ModalRef.current = web3Modal;
-
+      // Connect wallet if cached provider exists
       if (web3ModalRef.current.cachedProvider) {
         connectWallet();
       } else {
         setIsLoading(false);
       }
     }
-
   }, [])
 
   const value = {
