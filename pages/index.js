@@ -32,9 +32,9 @@ export default function Index() {
   return (
     <Layout showAccountNavigation={!!account}>
       {!account && (
-        <Box sx={{ p: 18, textAlign: 'center' }}>
-          <Typography variant='h2' gutterBottom>Check or impact reputation of crypto people!</Typography>
-          <Typography variant='h5'>who was involved in the activities that made you uncomfortable?</Typography>
+        <Box sx={{ px: 4, py: 18, textAlign: 'center' }}>
+          <Typography variant='h1' gutterBottom>Check or impact reputation of crypto people!</Typography>
+          <Typography>who was involved in the activities that made you uncomfortable?</Typography>
         </Box>
       )}
       <Box>

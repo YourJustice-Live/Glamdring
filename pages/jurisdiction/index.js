@@ -90,9 +90,9 @@ export default function Jurisdiction() {
       {isLoading ? (
         <>
           <LoadingBackdrop />
-          <Skeleton variant="rectangular" height={32} width={512} />
-          <Skeleton variant="rectangular" height={18} width={396} sx={{ mt: 1 }} />
-          <Skeleton variant="rectangular" height={18} width={128} sx={{ mt: 1 }} />
+          <Skeleton variant="rectangular" height={32} width={256} />
+          <Skeleton variant="rectangular" height={18} width={198} sx={{ mt: 1 }} />
+          <Skeleton variant="rectangular" height={18} width={64} sx={{ mt: 1 }} />
         </>
       ) : (
         <>

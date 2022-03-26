@@ -1,5 +1,5 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Button, Divider, Drawer, Skeleton, Stack, Toolbar, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, Paper, Skeleton, Stack, Toolbar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import useAccount from "hooks/useAccount";
 import useProfile from 'hooks/useProfile';
@@ -10,8 +10,10 @@ import { formatAccount } from 'utils/formatters';
 
 /**
  * A component with a navigation for account.
+ * 
+ * @param {{variant: 'drawer'|'top'}} props Props.
  */
-export default function AccountNavigation() {
+export default function AccountNavigation({ variant = "drawer" }) {
 
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useAccount();
@@ -39,57 +41,111 @@ export default function AccountNavigation() {
   }, [account])
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto', p: 2.5 }}>
-        {isLoading ? (
-          <>
-            <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-            <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
-            <Skeleton variant="rectangular" height={32} />
-          </>
-        ) : (
-          <>
-            <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
-              <InsertPhotoOutlined />
-            </Avatar>
-            <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-            <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-            <Divider sx={{ mt: 3, mb: 3 }} />
-            {profile && (
-              <Stack spacing={1} direction="column">
-                <Link href='/profile' passHref>
-                  <Button variant="outlined">Open Own Profile</Button>
-                </Link>
-                <Link href='/profile/manager' passHref>
-                  <Button variant="outlined">Edit Own Profile</Button>
-                </Link>
-              </Stack>
+    <>
+
+      {/* Drawer variant */}
+      {variant === "drawer" && (
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: 'auto', p: 2.5 }}>
+            {isLoading ? (
+              <>
+                <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
+                <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
+                <Skeleton variant="rectangular" height={32} />
+              </>
+            ) : (
+              <>
+                <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
+                  <InsertPhotoOutlined />
+                </Avatar>
+                <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
+                <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
+                <Divider sx={{ mt: 3, mb: 3 }} />
+                {profile && (
+                  <Stack spacing={1} direction="column">
+                    <Link href='/profile' passHref>
+                      <Button variant="outlined">Open Profile</Button>
+                    </Link>
+                    <Link href='/profile/manager' passHref>
+                      <Button variant="outlined">Edit Profile</Button>
+                    </Link>
+                  </Stack>
+                )}
+                {!profile && (
+                  <Stack>
+                    <Link href='/profile/manager' passHref>
+                      <Button variant="outlined">Create Profile</Button>
+                    </Link>
+                  </Stack>
+                )}
+                <Divider sx={{ mt: 3, mb: 3 }} />
+                <Stack>
+                  <Link href='/jurisdiction' passHref>
+                    <Button variant="outlined">Open Jurisdiction</Button>
+                  </Link>
+                </Stack>
+              </>
             )}
-            {!profile && (
-              <Stack>
-                <Link href='/profile/manager' passHref>
-                  <Button variant="outlined">Create Own Profile</Button>
-                </Link>
-              </Stack>
+          </Box>
+        </Drawer>
+      )}
+
+      {/* Top variant */}
+      {variant === "top" && (
+        <Box>
+          <Toolbar />
+          <Paper elevation={6} sx={{ p: 3 }}>
+            {isLoading ? (
+              <>
+                <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
+                <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
+                <Skeleton variant="rectangular" height={32} />
+              </>
+            ) : (
+              <>
+                <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
+                  <InsertPhotoOutlined />
+                </Avatar>
+                <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
+                <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
+                <Divider sx={{ mt: 2, mb: 2 }} />
+                {profile && (
+                  <Stack spacing={1} direction="column">
+                    <Link href='/profile' passHref>
+                      <Button variant="outlined">Open Profile</Button>
+                    </Link>
+                    <Link href='/profile/manager' passHref>
+                      <Button variant="outlined">Edit Profile</Button>
+                    </Link>
+                  </Stack>
+                )}
+                {!profile && (
+                  <Stack>
+                    <Link href='/profile/manager' passHref>
+                      <Button variant="outlined">Create Profile</Button>
+                    </Link>
+                  </Stack>
+                )}
+                <Divider sx={{ mt: 2, mb: 2 }} />
+                <Stack>
+                  <Link href='/jurisdiction' passHref>
+                    <Button variant="outlined">Open Jurisdiction</Button>
+                  </Link>
+                </Stack>
+              </>
             )}
-            <Divider sx={{ mt: 3, mb: 3 }} />
-            <Stack>
-              <Link href='/jurisdiction' passHref>
-                <Button variant="outlined">Open Jurisdiction</Button>
-              </Link>
-            </Stack>
-          </>
-        )}
-      </Box>
-    </Drawer>
+          </Paper>
+        </Box>
+      )}
+    </>
   )
 
 }

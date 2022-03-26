@@ -1,8 +1,8 @@
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material';
+import useAccount from "hooks/useAccount";
+import useNetwork from "hooks/useNetwork";
 import Image from 'next/image';
 import Link from 'next/link';
-import useNetwork from "hooks/useNetwork";
-import useAccount from "hooks/useAccount";
 import { formatAccount } from 'utils/formatters';
 
 /**
@@ -27,14 +27,14 @@ export default function Navigation() {
           <Button variant='outlined' onClick={connectWallet}>Connect Wallet</Button>
         )}
         {account && network && (
-          <>
-            <Typography variant="body2" sx={{ mr: 3 }}>Account: {formatAccount(account)}</Typography>
-            <Typography variant="body2" sx={{ mr: 3 }}>Chain ID: {network.chainId}</Typography>
+          <Stack direction='row' alignItems="center" spacing={4}>
+            <Typography variant="body2" sx={{ display: { xs: 'none', md: 'block' } }}>Account: {formatAccount(account)}</Typography>
+            <Typography variant="body2" sx={{ display: { xs: 'none', md: 'inline' } }}>Chain ID: {network.chainId}</Typography>
             <Button variant='outlined' onClick={disconnectWallet}>Disconnect Wallet</Button>
-          </>
+          </Stack>
         )}
       </Toolbar>
-    </AppBar>
+    </AppBar >
   )
 
 }

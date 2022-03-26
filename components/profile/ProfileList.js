@@ -45,7 +45,7 @@ export default function ProfileList({ profiles, onUpdateProfiles }) {
       {isLoading && <LoadingBackdrop />}
       {(profiles || defaultProfiles).map((profile, index) =>
         profile && (
-          <Grid key={index} item xs={4}>
+          <Grid key={index} item xs={12} md={4}>
             <ProfileCard
               profile={profile}
               onAddNegativeScore={(profile) => addScore(profile, true)}
