@@ -67,7 +67,7 @@ export default function ProfileList({ profiles, onUpdateProfiles }) {
           )}
         </>
       )}
-      {(!profiles || profiles.length === 0) && (
+      {profiles && profiles.length === 0 && (
         <Grid item xs={12} md={4}>
           <Typography>None</Typography>
         </Grid>
