@@ -1,6 +1,7 @@
-import { Button, Divider, Skeleton, Typography } from '@mui/material';
+import { Button, Divider, Skeleton, Typography, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
+import RoleManager from 'components/jurisdiction/RoleManager';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
@@ -120,12 +121,17 @@ export default function Jurisdiction() {
             <Box sx={{ mt: 6 }}>
               <Typography variant='h4' gutterBottom>Actions</Typography>
               <Divider sx={{ mb: 2.5 }} />
-              {!isMember && (
-                <Button variant="outlined" type="submit" onClick={joinJurisdiction}>Join</Button>
-              )}
-              {isMember && (
-                <Button variant="outlined" type="submit" onClick={leaveJurisdiction}>Leave</Button>
-              )}
+              <Stack direction="row" spacing={1}>
+                {!isMember && (
+                  <Button variant="contained" type="submit" onClick={joinJurisdiction}>Join</Button>
+                )}
+                {isMember && (
+                  <Button variant="contained" type="submit" onClick={leaveJurisdiction}>Leave</Button>
+                )}
+                {isAdmin && (
+                  <RoleManager />
+                )}
+              </Stack>
             </Box>
           )}
           <Box sx={{ mt: 6 }}>

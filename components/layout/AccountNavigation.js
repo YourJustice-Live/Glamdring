@@ -8,8 +8,12 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
+
 /**
+ * 
  * A component with a navigation for account.
+ * 
+ * TODO: Fix this warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
  * 
  * @param {{variant: 'drawer'|'top'}} props Props.
  */

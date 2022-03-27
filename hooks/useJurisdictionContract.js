@@ -44,6 +44,21 @@ export default function useJuridictionContract() {
     return await getContract(provider?.getSigner()).leave();
   }
 
-  return { getName, getOwner, isHasRole, join, leave }
+  async function assignRole(account, role) {
+    console.log("[Dev] assignRole", account, role)
+    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).roleAssign(account, role);
+  }
+
+  async function removeRole(account, role) {
+    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).roleRemove(account, role);
+  }
+
+  return { getName, getOwner, isHasRole, join, leave, assignRole, removeRole }
 
 }
