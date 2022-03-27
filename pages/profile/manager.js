@@ -48,7 +48,7 @@ export default function ProfileManager() {
     }
   }
 
-  async function onSubmit(formData) {
+  async function submit(formData) {
     try {
       // Update form data
       setFormData(formData);
@@ -107,7 +107,7 @@ export default function ProfileManager() {
           <Divider sx={{ mb: 1 }} />
           <ProfileForm
             initData={formData}
-            onSubmit={onSubmit}
+            onSubmit={submit}
             disabled={status !== statuses.isAvailable ? true : false}
           >
             {status === statuses.isAvailable && (
