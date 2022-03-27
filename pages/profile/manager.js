@@ -76,7 +76,7 @@ export default function ProfileManager() {
       // Mint token if account has no profile
       else {
         // Start mint
-        setStatus(status.isMintingNft);
+        setStatus(statuses.isMintingNft);
         const transaction = await mint(url);
         enqueueSnackbar("Transaction is created!", { variant: 'success' });
         // Wait for transaction to complete
