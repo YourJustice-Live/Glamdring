@@ -8,23 +8,54 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
+/**
+ * A component with a drawer style account navigation .
+ */
+export function DrawerAccountNavigation({ sx }) {
+  const drawerWidth = 240;
+  return (
+    <Drawer
+      variant="permanent"
+      sx={{
+        ...sx,
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+      }}
+    >
+      <Toolbar />
+      <Box sx={{ overflow: 'auto', p: 2.5 }}>
+        <AccountNavigation />
+      </Box>
+    </Drawer>
+  )
+}
 
 /**
- * 
- * A component with a navigation for account.
- * 
- * TODO: Fix this warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
- * 
- * @param {{variant: 'drawer'|'top'}} props Props.
+ * A component with a paper style account navigation .
  */
-export default function AccountNavigation({ variant = "drawer" }) {
+export function PaperAccountNavigation({ sx }) {
+  return (
+    <Paper
+      elevation={6}
+      sx={{
+        ...sx,
+        p: 3,
+        mb: 6
+      }}
+    >
+      <AccountNavigation />
+    </Paper>
+  )
+}
+
+function AccountNavigation() {
 
   const { enqueueSnackbar } = useSnackbar();
   const { account } = useAccount();
   const { getProfile } = useProfile();
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
-  const drawerWidth = 240;
 
   async function loadData() {
     try {
@@ -46,110 +77,45 @@ export default function AccountNavigation({ variant = "drawer" }) {
 
   return (
     <>
-
-      {/* Drawer variant */}
-      {variant === "drawer" && (
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
-          }}
-        >
-          <Toolbar />
-          <Box sx={{ overflow: 'auto', p: 2.5 }}>
-            {isLoading ? (
-              <>
-                <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-                <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
-                <Skeleton variant="rectangular" height={32} />
-              </>
-            ) : (
-              <>
-                <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
-                  <InsertPhotoOutlined />
-                </Avatar>
-                <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-                <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-                <Divider sx={{ mt: 3, mb: 3 }} />
-                {profile && (
-                  <Stack spacing={1} direction="column">
-                    <Link href='/profile' passHref>
-                      <Button variant="outlined">Open Profile</Button>
-                    </Link>
-                    <Link href='/profile/manager' passHref>
-                      <Button variant="outlined">Edit Profile</Button>
-                    </Link>
-                  </Stack>
-                )}
-                {!profile && (
-                  <Stack>
-                    <Link href='/profile/manager' passHref>
-                      <Button variant="outlined">Create Profile</Button>
-                    </Link>
-                  </Stack>
-                )}
-                <Divider sx={{ mt: 3, mb: 3 }} />
-                <Stack>
-                  <Link href='/jurisdiction' passHref>
-                    <Button variant="outlined">Open Jurisdiction</Button>
-                  </Link>
-                </Stack>
-              </>
-            )}
-          </Box>
-        </Drawer>
-      )}
-
-      {/* Top variant */}
-      {variant === "top" && (
-        <Box>
-          <Toolbar />
-          <Paper elevation={6} sx={{ p: 3, mb: 6 }}>
-            {isLoading ? (
-              <>
-                <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-                <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
-                <Skeleton variant="rectangular" height={32} />
-              </>
-            ) : (
-              <>
-                <Avatar sx={{ width: 82, height: 82, mb: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
-                  <InsertPhotoOutlined />
-                </Avatar>
-                <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-                <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-                <Divider sx={{ mt: 2, mb: 2 }} />
-                {profile && (
-                  <Stack spacing={1} direction="column">
-                    <Link href='/profile' passHref>
-                      <Button variant="outlined">Open Profile</Button>
-                    </Link>
-                    <Link href='/profile/manager' passHref>
-                      <Button variant="outlined">Edit Profile</Button>
-                    </Link>
-                  </Stack>
-                )}
-                {!profile && (
-                  <Stack>
-                    <Link href='/profile/manager' passHref>
-                      <Button variant="outlined">Create Profile</Button>
-                    </Link>
-                  </Stack>
-                )}
-                <Divider sx={{ mt: 2, mb: 2 }} />
-                <Stack>
-                  <Link href='/jurisdiction' passHref>
-                    <Button variant="outlined">Open Jurisdiction</Button>
-                  </Link>
-                </Stack>
-              </>
-            )}
-          </Paper>
-        </Box>
+      {isLoading ? (
+        <>
+          <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
+          <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
+          <Skeleton variant="rectangular" height={32} />
+        </>
+      ) : (
+        <>
+          <Avatar sx={{ width: 82, height: 82, my: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
+            <InsertPhotoOutlined />
+          </Avatar>
+          <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
+          <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
+          <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
+          {profile && (
+            <Stack spacing={1} direction="column">
+              <Link href='/profile' passHref>
+                <Button variant="outlined">Open Profile</Button>
+              </Link>
+              <Link href='/profile/manager' passHref>
+                <Button variant="outlined">Edit Profile</Button>
+              </Link>
+            </Stack>
+          )}
+          {!profile && (
+            <Stack>
+              <Link href='/profile/manager' passHref>
+                <Button variant="outlined">Create Profile</Button>
+              </Link>
+            </Stack>
+          )}
+          <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
+          <Stack>
+            <Link href='/jurisdiction' passHref>
+              <Button variant="outlined">Open Jurisdiction</Button>
+            </Link>
+          </Stack>
+        </>
       )}
     </>
   )
-
 }

@@ -29,7 +29,7 @@ export default function Navigation() {
         {account && network && (
           <Stack direction='row' alignItems="center" spacing={4}>
             <Typography variant="body2" sx={{ display: { xs: 'none', md: 'block' } }}>Account: {formatAccount(account)}</Typography>
-            <Typography variant="body2" sx={{ display: { xs: 'none', md: 'inline' } }}>Chain ID: {network.chainId}</Typography>
+            <Typography variant="body2" sx={{ display: { xs: 'none', md: 'block' } }}>Chain ID: {network.chainId}</Typography>
             <Button variant='outlined' onClick={disconnectWallet}>Disconnect Wallet</Button>
           </Stack>
         )}
