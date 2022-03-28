@@ -4,14 +4,14 @@ import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import useAccount from "hooks/useAccount";
 import useProfile from 'hooks/useProfile';
-import { useSnackbar } from 'notistack';
+import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 export default function Index() {
 
   const { account } = useAccount();
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastError } = useToasts();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
 
@@ -19,8 +19,7 @@ export default function Index() {
     try {
       setProfiles(await getProfiles());
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     }
   }
 

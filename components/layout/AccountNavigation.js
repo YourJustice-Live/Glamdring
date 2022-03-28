@@ -3,8 +3,8 @@ import { Avatar, Button, Divider, Drawer, Paper, Skeleton, Stack, Toolbar, Typog
 import { Box } from '@mui/system';
 import useAccount from "hooks/useAccount";
 import useProfile from 'hooks/useProfile';
+import useToasts from "hooks/useToasts";
 import Link from 'next/link';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
@@ -51,7 +51,7 @@ export function PaperAccountNavigation({ sx }) {
 
 function AccountNavigation() {
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastError } = useToasts();
   const { account } = useAccount();
   const { getProfile } = useProfile();
   const [isLoading, setIsLoading] = useState(true);
@@ -61,8 +61,7 @@ function AccountNavigation() {
     try {
       setProfile(await getProfile(account));
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setIsLoading(false);
     }

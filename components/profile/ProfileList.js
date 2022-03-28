@@ -1,23 +1,24 @@
 import { Grid, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
+import ProfileCard from 'components/profile/ProfileCard';
 import { DEFAULT_ADD_REPUTATION_AMOUNT, REPUTATION_DOMAIN_ID, REPUTATION_RATING_ID } from "constants/contracts";
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
-import { useSnackbar } from 'notistack';
+import useToasts from "hooks/useToasts";
 import { useState } from 'react';
-import ProfileCard from './ProfileCard';
 
 /**
  * A component with a list of profiles.
  */
 export default function ProfileList({ profiles, onUpdateProfiles }) {
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastSuccess, showToastError } = useToasts();
   const { addReputation } = useAvatarNftContract();
   const [isLoading, setIsLoading] = useState(false);
-  const defaultProfiles = [{}, {}, {}];
 
   /**
    * Add positive or negative reputation to the environment domain for specified profile.
+   * 
+   * TODO: Move to the profile card
    */
   async function addScore(profile, isNegative) {
     try {
@@ -29,12 +30,11 @@ export default function ProfileList({ profiles, onUpdateProfiles }) {
         DEFAULT_ADD_REPUTATION_AMOUNT
       );
       await transaction.wait();
-      enqueueSnackbar("Success!", { variant: 'success' });
+      showToastSuccess("Success!");
       onUpdateProfiles();
     }
     catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setIsLoading(false);
     }

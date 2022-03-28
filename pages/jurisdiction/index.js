@@ -10,7 +10,7 @@ import useAccount from 'hooks/useAccount';
 import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useProfile from 'hooks/useProfile';
 import useSubgraph from 'hooks/useSubgraph';
-import { useSnackbar } from 'notistack';
+import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import { formatAccount } from "utils/formatters";
 
@@ -19,7 +19,7 @@ import { formatAccount } from "utils/formatters";
  */
 export default function Jurisdiction() {
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastSuccess, showToastError } = useToasts();
   const { getName, getOwner, isHasRole, join, leave } = useJuridictionContract();
   const { findJurisdictionParticipantEntities } = useSubgraph();
   const { getProfiles } = useProfile();
@@ -46,8 +46,7 @@ export default function Jurisdiction() {
         isAccountAdmin: isAccountAdmin
       });
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     }
   }
 
@@ -61,8 +60,7 @@ export default function Jurisdiction() {
       setJudgeProfiles(judgeProfiles);
       setAdminProfiles(adminProfiles);
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     }
   }
 
@@ -75,13 +73,12 @@ export default function Jurisdiction() {
       } else {
         transaction = await join();
       }
-      enqueueSnackbar("Success! Data will be updated soon.", { variant: 'success' });
+      showToastSuccess("Success! Data will be updated soon.");
       await transaction.wait();
       await loadBasicInformation();
     }
     catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setIsJoiningOrLeaving(false);
     }

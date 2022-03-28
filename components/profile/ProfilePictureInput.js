@@ -1,7 +1,7 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Button, CircularProgress, Divider, Input, Typography } from '@mui/material';
+import { Avatar, CircularProgress, Divider, Input, Typography } from '@mui/material';
 import useIpfs from 'hooks/useIpfs';
-import { useSnackbar } from 'notistack';
+import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
 /**
@@ -13,7 +13,7 @@ export default function ProfilePictureInput(props) {
   const propsDisabled = props.disabled;
   const propsPicture = props.value;
   const propsOnChange = props.onChange;
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastSuccessLink, showToastError } = useToasts();
   const { uploadFileToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,7 +42,7 @@ export default function ProfilePictureInput(props) {
     // Show error if file is not valid
     if (!isFileValid(file)) {
       event.target.value = null;
-      enqueueSnackbar("Sorry, only JPG/PNG/GIF files with size smaller than 2MB are currently supported!", { variant: 'error' });
+      showToastError("Sorry, only JPG/PNG/GIF files with size smaller than 2MB are currently supported!");
       return;
     }
     // Upload file to IPFS
@@ -50,13 +50,9 @@ export default function ProfilePictureInput(props) {
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
-      enqueueSnackbar("Your picture uploaded to IPFS!", {
-        action: (<Button onClick={() => window.open(url, '_blank').focus()} color="inherit">Open</Button>),
-        variant: 'success'
-      });
+      showToastSuccessLink("Your picture uploaded to IPFS!", url);
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setIsLoading(false);
     }

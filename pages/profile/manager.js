@@ -8,8 +8,8 @@ import useAccount from 'hooks/useAccount';
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useProfile from 'hooks/useProfile';
+import useToasts from 'hooks/useToasts';
 import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 
 /**
@@ -26,7 +26,7 @@ export default function ProfileManager() {
   }
 
   const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastSuccess, showToastSuccessLink, showToastError } = useToasts();
   const { account } = useAccount();
   const { getProfile } = useProfile();
   const { uploadJsonToIPFS } = useIpfs();
@@ -41,8 +41,7 @@ export default function ProfileManager() {
       setProfile(loadedProfile);
       setFormData(loadedProfile?.avatarNftMetadata ? loadedProfile.avatarNftMetadata : []);
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setStatus(statuses.isAvailable)
     }
@@ -58,37 +57,31 @@ export default function ProfileManager() {
         image: formData.image,
         attributes: formData.attributes,
       });
-      // Show snackbar
-      enqueueSnackbar("Your data uploaded to IPFS!", {
-        action: (<Button onClick={() => window.open(url, '_blank').focus()} color="inherit">Open</Button>),
-        variant: 'success'
-      });
+      showToastSuccessLink("Your data uploaded to IPFS!", url);
       // Update token if account has profile
       if (profile) {
         // Start update token
         setStatus(statuses.isUpdatingNft);
         const transaction = await update(profile.avatarNftId, url);
-        enqueueSnackbar("Transaction is created!", { variant: 'success' });
+        showToastSuccess("Transaction is created!");
         // Wait for transaction to complete
         await transaction.wait();
-        enqueueSnackbar("Your NFT is updated!", { variant: 'success' });
+        showToastSuccess("Your NFT is updated!");
       }
       // Mint token if account has no profile
       else {
         // Start mint
         setStatus(statuses.isMintingNft);
         const transaction = await mint(url);
-        enqueueSnackbar("Transaction is created!", { variant: 'success' });
+        showToastSuccess("Transaction is created!");
         // Wait for transaction to complete
         await transaction.wait();
-        enqueueSnackbar("Your NFT is minted!", { variant: 'success' });
+        showToastSuccess("Your NFT is minted!");
       }
       // Redirect to profile page
       router.push('/profile');
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
-      setStatus(statuses.isAvailable);
+      showToastError(error);
     }
   }
 

@@ -4,8 +4,8 @@ import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import useAccount from 'hooks/useAccount';
 import useProfile from "hooks/useProfile";
+import useToasts from 'hooks/useToasts';
 import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
@@ -17,7 +17,7 @@ export default function Profile() {
 
   const router = useRouter()
   const { queryAccount } = router.query;
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastError } = useToasts();
   const { getProfile } = useProfile();
   const { account } = useAccount();
   const [isLoading, setIsLoading] = useState(true);
@@ -27,8 +27,7 @@ export default function Profile() {
     try {
       setProfile(await getProfile(queryAccount));
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
     } finally {
       setIsLoading(false);
     }

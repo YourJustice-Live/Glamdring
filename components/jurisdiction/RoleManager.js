@@ -4,7 +4,7 @@ import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Stack } 
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import { JURISDICTION_ROLE } from "constants/contracts";
 import useJuridictionContract from 'hooks/useJurisdictionContract';
-import { useSnackbar } from 'notistack';
+import useToasts from "hooks/useToasts";
 import { useState } from 'react';
 
 /**
@@ -12,7 +12,7 @@ import { useState } from 'react';
  */
 export default function RoleManager() {
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { showToastSuccess, showToastError } = useToasts();
   const { assignRole, removeRole } = useJuridictionContract();
   const [formData, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
@@ -90,11 +90,10 @@ export default function RoleManager() {
       if (formData.action === action.remove) {
         await removeRole(formData.account, formData.role);
       }
-      enqueueSnackbar("Success! Data will be updated soon.", { variant: 'success' });
+      showToastSuccess("Success! Data will be updated soon.");
       close();
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar(`Oops, error: ${error}`, { variant: 'error' });
+      showToastError(error);
       setIsLoading(false);
     }
   }
