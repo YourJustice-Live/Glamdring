@@ -6,7 +6,7 @@ import RoleManager from 'components/jurisdiction/RoleManager';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import useAccount from 'hooks/useAccount';
+import useWeb3Context from 'hooks/useWeb3Context';
 import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useProfile from 'hooks/useProfile';
 import useSubgraph from 'hooks/useSubgraph';
@@ -23,7 +23,7 @@ export default function Jurisdiction() {
   const { getName, getOwner, isHasRole, join, leave } = useJuridictionContract();
   const { findJurisdictionParticipantEntities } = useSubgraph();
   const { getProfiles } = useProfile();
-  const { account } = useAccount();
+  const { account } = useWeb3Context();
 
   const [basicInformation, setBasicInformation] = useState(null);
   const [memberProfiles, setMemberProfiles] = useState(null);
@@ -142,7 +142,7 @@ export default function Jurisdiction() {
           profiles={memberProfiles}
           onUpdateProfiles={() => {
             setMemberProfiles(null);
-            loadData();
+            loadParticipants();
           }}
         />
       </Box>
@@ -153,7 +153,7 @@ export default function Jurisdiction() {
           profiles={judgeProfiles}
           onUpdateProfiles={() => {
             setJudgeProfiles(null);
-            loadData();
+            loadParticipants();
           }}
         />
       </Box>
@@ -164,7 +164,7 @@ export default function Jurisdiction() {
           profiles={adminProfiles}
           onUpdateProfiles={() => {
             setAdminProfiles(null);
-            loadData();
+            loadParticipants();
           }}
         />
       </Box>

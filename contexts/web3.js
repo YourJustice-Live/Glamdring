@@ -1,6 +1,7 @@
 import WalletConnect from "@walletconnect/web3-provider";
 import LoadingBackdrop from "components/extra/LoadingBackdrop";
 import { ethers } from "ethers";
+import useProfile from "hooks/useProfile";
 import { createContext, useEffect, useRef, useState } from 'react';
 import Web3Modal from "web3modal";
 
@@ -9,32 +10,38 @@ export const Web3Context = createContext();
 export function Web3Provider({ children }) {
 
   const web3ModalRef = useRef();
+  const defaultProvider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_CONNECTION_URL);
+
+  const { getProfile } = useProfile();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [instance, setInstance] = useState();
-  const [provider, setProvider] = useState();
-  const [account, setAccount] = useState();
-  const [network, setNetwork] = useState();
+  const [instance, setInstance] = useState(null);
+  const [provider, setProvider] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [network, setNetwork] = useState(null);
+  const [accountProfile, setAccountProfile] = useState(null);
 
-  async function connectWallet() {
+  async function loadContext() {
     try {
       // Connect account
       const instance = await web3ModalRef.current.connect();
+      setIsLoading(true);
       const provider = new ethers.providers.Web3Provider(instance);
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
       // Add listeners to reconnect the wallet if the user has changed the chain or account
       if (instance.listenerCount("chainChanged") === 0) {
-        instance.addListener("chainChanged", () => connectWallet());
+        instance.addListener("chainChanged", () => loadContext());
       }
       if (instance.listenerCount("accountsChanged") === 0) {
-        instance.addListener("accountsChanged", () => connectWallet());
+        instance.addListener("accountsChanged", () => loadContext());
       }
       // Update states
       setInstance(instance);
       setProvider(provider);
       if (accounts) {
         setAccount(accounts[0])
+        setAccountProfile(await getProfile(accounts[0]));
       };
       setNetwork(network);
     } catch (error) {
@@ -44,8 +51,9 @@ export function Web3Provider({ children }) {
     }
   }
 
-  async function disconnectWallet() {
+  async function clearContext() {
     try {
+      setIsLoading(true);
       // Remove listeners
       instance.removeAllListeners("chainChanged");
       instance.removeAllListeners("accountsChanged");
@@ -59,7 +67,17 @@ export function Web3Provider({ children }) {
       setNetwork(null);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  async function connectWallet() {
+    loadContext();
+  }
+
+  async function disconnectWallet() {
+    clearContext();
   }
 
   async function switchNetwork() {
@@ -115,7 +133,7 @@ export function Web3Provider({ children }) {
       web3ModalRef.current = web3Modal;
       // Connect wallet if cached provider exists
       if (web3ModalRef.current.cachedProvider) {
-        connectWallet();
+        loadContext();
       } else {
         setIsLoading(false);
       }
@@ -125,10 +143,13 @@ export function Web3Provider({ children }) {
 
   const value = {
     state: {
+      defaultProvider: defaultProvider,
       provider: provider,
       account: account,
       network: network,
+      accountProfile: accountProfile,
     },
+    loadContext,
     connectWallet,
     disconnectWallet,
     switchNetwork,

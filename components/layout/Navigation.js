@@ -1,6 +1,5 @@
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material';
-import useAccount from "hooks/useAccount";
-import useNetwork from "hooks/useNetwork";
+import useWeb3Context from "hooks/useWeb3Context";
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatAccount } from 'utils/formatters';
@@ -10,8 +9,7 @@ import { formatAccount } from 'utils/formatters';
  */
 export default function Navigation() {
 
-  const { account, connectWallet, disconnectWallet } = useAccount();
-  const { network } = useNetwork();
+  const { network, account, connectWallet, disconnectWallet } = useWeb3Context();
 
   return (
     <AppBar color='inherit' position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>

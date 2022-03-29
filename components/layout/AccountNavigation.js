@@ -1,11 +1,8 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Button, Divider, Drawer, Paper, Skeleton, Stack, Toolbar, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Drawer, Paper, Stack, Toolbar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import useAccount from "hooks/useAccount";
-import useProfile from 'hooks/useProfile';
-import useToasts from "hooks/useToasts";
+import useWeb3Context from "hooks/useWeb3Context";
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
 /**
@@ -51,70 +48,39 @@ export function PaperAccountNavigation({ sx }) {
 
 function AccountNavigation() {
 
-  const { showToastError } = useToasts();
-  const { account } = useAccount();
-  const { getProfile } = useProfile();
-  const [isLoading, setIsLoading] = useState(true);
-  const [profile, setProfile] = useState(null);
-
-  async function loadData() {
-    try {
-      setProfile(await getProfile(account));
-    } catch (error) {
-      showToastError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (account) {
-      loadData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  const { account, accountProfile } = useWeb3Context();
 
   return (
     <>
-      {isLoading ? (
-        <>
-          <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-          <Skeleton variant="rectangular" sx={{ mb: 1 }} height={64} />
-          <Skeleton variant="rectangular" height={32} />
-        </>
-      ) : (
-        <>
-          <Avatar sx={{ width: 82, height: 82, my: 1.5 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
-            <InsertPhotoOutlined />
-          </Avatar>
-          <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-          <Typography><b>Account has profile:</b> {profile ? "yes" : "no"}</Typography>
-          <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
-          {profile && (
-            <Stack spacing={1} direction="column">
-              <Link href='/profile' passHref>
-                <Button variant="outlined">Open Profile</Button>
-              </Link>
-              <Link href='/profile/manager' passHref>
-                <Button variant="outlined">Edit Profile</Button>
-              </Link>
-            </Stack>
-          )}
-          {!profile && (
-            <Stack>
-              <Link href='/profile/manager' passHref>
-                <Button variant="outlined">Create Profile</Button>
-              </Link>
-            </Stack>
-          )}
-          <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
-          <Stack>
-            <Link href='/jurisdiction' passHref>
-              <Button variant="outlined">Open Jurisdiction</Button>
-            </Link>
-          </Stack>
-        </>
+      <Avatar sx={{ width: 82, height: 82, my: 1.5 }} src={accountProfile?.avatarNftMetadata?.image ? accountProfile.avatarNftMetadata.image : null}>
+        <InsertPhotoOutlined />
+      </Avatar>
+      <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
+      <Typography><b>Account has profile:</b> {accountProfile ? "yes" : "no"}</Typography>
+      <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
+      {accountProfile && (
+        <Stack spacing={1} direction="column">
+          <Link href='/profile' passHref>
+            <Button variant="outlined">Open Profile</Button>
+          </Link>
+          <Link href='/profile/manager' passHref>
+            <Button variant="outlined">Edit Profile</Button>
+          </Link>
+        </Stack>
       )}
+      {!accountProfile && (
+        <Stack>
+          <Link href='/profile/manager' passHref>
+            <Button variant="outlined">Create Profile</Button>
+          </Link>
+        </Stack>
+      )}
+      <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
+      <Stack>
+        <Link href='/jurisdiction' passHref>
+          <Button variant="outlined">Open Jurisdiction</Button>
+        </Link>
+      </Stack>
     </>
   )
 }

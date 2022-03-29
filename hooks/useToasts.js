@@ -1,12 +1,12 @@
 import { Button } from '@mui/material';
 import WrongNetworkError from 'errors/WrongNetworkError';
-import useNetwork from 'hooks/useNetwork';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { useSnackbar } from 'notistack';
 
 export default function useToasts() {
 
   const { enqueueSnackbar } = useSnackbar();
-  const { switchNetwork } = useNetwork();
+  const { switchNetwork } = useWeb3Context();
 
   let showToast = function (message) {
     enqueueSnackbar(message);

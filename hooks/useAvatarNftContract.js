@@ -1,14 +1,14 @@
 import contractJson from "contracts/AvatarNFT.json";
 import WrongNetworkError from "errors/WrongNetworkError";
 import { Contract } from 'ethers';
-import useProvider from "hooks/useProvider";
+import useWeb3Context from "./useWeb3Context";
 
 /**
  * Hook for AvatarNFT Contract.
  */
 export default function useAvatarNftContract() {
 
-  const { provider, defaultProvider } = useProvider();
+  const { provider, network } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -25,7 +25,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function mint(tokenUrl) {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).mint(tokenUrl);
@@ -39,7 +39,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function update(tokenId, tokenUrl) {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).update(tokenId, tokenUrl);
@@ -55,7 +55,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function addReputation(tokenId, domainId, ratingId, amount) {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).repAdd(tokenId, domainId, ratingId, amount);

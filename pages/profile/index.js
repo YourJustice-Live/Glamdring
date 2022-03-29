@@ -1,4 +1,4 @@
-import useAccount from "hooks/useAccount";
+import useWeb3Context from "hooks/useWeb3Context";
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 export default function Profile() {
 
   const router = useRouter();
-  const { account } = useAccount();
+  const { account } = useWeb3Context();
 
   useEffect(() => {
     if (account) {

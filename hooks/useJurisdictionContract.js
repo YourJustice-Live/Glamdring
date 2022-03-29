@@ -1,14 +1,14 @@
 import contractJson from "contracts/Jurisdiction.json";
 import WrongNetworkError from "errors/WrongNetworkError";
 import { Contract } from 'ethers';
-import useProvider from "hooks/useProvider";
+import useWeb3Context from "./useWeb3Context";
 
 /**
  * Hook for Juridiction Contract.
  */
 export default function useJuridictionContract() {
 
-  const { provider, defaultProvider } = useProvider();
+  const { defaultProvider, provider, network } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -31,29 +31,28 @@ export default function useJuridictionContract() {
   }
 
   async function join() {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).join();
   }
 
   async function leave() {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).leave();
   }
 
   async function assignRole(account, role) {
-    console.log("[Dev] assignRole", account, role)
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).roleAssign(account, role);
   }
 
   async function removeRole(account, role) {
-    if ((await provider?.getNetwork())?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).roleRemove(account, role);

@@ -2,16 +2,15 @@ import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
-import useAccount from "hooks/useAccount";
+import useWeb3Context from "hooks/useWeb3Context";
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 export default function Index() {
 
-  const { account } = useAccount();
-
   const { showToastError } = useToasts();
+  const { account } = useWeb3Context();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
 

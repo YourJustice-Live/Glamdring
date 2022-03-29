@@ -2,7 +2,7 @@ import { InsertPhotoOutlined } from '@mui/icons-material';
 import { Avatar, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
-import useAccount from 'hooks/useAccount';
+import useWeb3Context from 'hooks/useWeb3Context';
 import useProfile from "hooks/useProfile";
 import useToasts from 'hooks/useToasts';
 import { useRouter } from 'next/router';
@@ -18,8 +18,8 @@ export default function Profile() {
   const router = useRouter()
   const { queryAccount } = router.query;
   const { showToastError } = useToasts();
+  const { account } = useWeb3Context();
   const { getProfile } = useProfile();
-  const { account } = useAccount();
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 

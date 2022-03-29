@@ -4,11 +4,10 @@ import { Button, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import ProfileForm from 'components/profile/ProfileForm';
-import useAccount from 'hooks/useAccount';
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
-import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -27,25 +26,11 @@ export default function ProfileManager() {
 
   const router = useRouter();
   const { showToastSuccess, showToastSuccessLink, showToastError } = useToasts();
-  const { account } = useAccount();
-  const { getProfile } = useProfile();
+  const { accountProfile } = useWeb3Context();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update } = useAvatarNftContract();
   const [status, setStatus] = useState(statuses.isLoading);
-  const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState(true);
-
-  async function loadData() {
-    try {
-      const loadedProfile = await getProfile(account);
-      setProfile(loadedProfile);
-      setFormData(loadedProfile?.avatarNftMetadata ? loadedProfile.avatarNftMetadata : []);
-    } catch (error) {
-      showToastError(error);
-    } finally {
-      setStatus(statuses.isAvailable)
-    }
-  }
 
   async function submit(formData) {
     try {
@@ -59,10 +44,10 @@ export default function ProfileManager() {
       });
       showToastSuccessLink("Your data uploaded to IPFS!", url);
       // Update token if account has profile
-      if (profile) {
+      if (accountProfile) {
         // Start update token
         setStatus(statuses.isUpdatingNft);
-        const transaction = await update(profile.avatarNftId, url);
+        const transaction = await update(accountProfile.avatarNftId, url);
         showToastSuccess("Transaction is created!");
         // Wait for transaction to complete
         await transaction.wait();
@@ -86,17 +71,18 @@ export default function ProfileManager() {
   }
 
   useEffect(() => {
-    if (account) {
-      loadData();
+    if (accountProfile) {
+      setFormData(accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : []);
+      setStatus(statuses.isAvailable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  }, [accountProfile])
 
   return (
     <Layout title={"YourJustice / Profile Manager"} showAccountNavigation={true}>
       {status === statuses.isLoading ? (<LoadingBackdrop />) : (
         <>
-          <Typography variant='h4' gutterBottom>{profile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
+          <Typography variant='h4' gutterBottom>{accountProfile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
           <Divider sx={{ mb: 1 }} />
           <ProfileForm
             initData={formData}
@@ -104,7 +90,7 @@ export default function ProfileManager() {
             disabled={status !== statuses.isAvailable ? true : false}
           >
             {status === statuses.isAvailable && (
-              <Button variant="outlined" type="submit">{profile ? "Save" : "Create Profile"}</Button>
+              <Button variant="outlined" type="submit">{accountProfile ? "Save" : "Create Profile"}</Button>
             )}
             {status === statuses.isUploadingToIpfs && (
               <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Uploading to IPFS</LoadingButton>
