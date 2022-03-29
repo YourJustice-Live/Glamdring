@@ -8,7 +8,7 @@ import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 /**
@@ -17,70 +17,57 @@ import { useEffect, useState } from 'react';
 export default function ProfileManager() {
 
   const statuses = {
-    isLoading: "isLoading",
     isAvailable: "isAvailable",
     isUploadingToIpfs: "isUploadingToIpfs",
-    isMintingNft: "isMintingNft",
-    isUpdatingNft: "isUpdatingNft",
+    isMintingOrUpdating: "isMintingOrUpdating",
+    isMintingOrUpdatingSuccessed: "isMintingOrUpdatingSuccessed"
   }
 
-  const router = useRouter();
-  const { showToastSuccess, showToastSuccessLink, showToastError } = useToasts();
-  const { accountProfile } = useWeb3Context();
+  const { showToastSuccessLink, showToastError } = useToasts();
+  const { accountProfile, runProfileUpdater } = useWeb3Context();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update } = useAvatarNftContract();
-  const [status, setStatus] = useState(statuses.isLoading);
-  const [formData, setFormData] = useState(true);
+  const [status, setStatus] = useState(statuses.isAvailable);
+  const [formData, setFormData] = useState(null);
 
   async function submit(formData) {
     try {
       // Update form data
       setFormData(formData);
-      // Upload cleared form data to IPFS
+      // Upload json with form data to IPFS
       setStatus(statuses.isUploadingToIpfs);
       const { url } = await uploadJsonToIPFS({
         image: formData.image,
         attributes: formData.attributes,
+        lastUpdatedTime: new Date().getTime()
       });
       showToastSuccessLink("Your data uploaded to IPFS!", url);
-      // Update token if account has profile
+      setStatus(statuses.isMintingOrUpdating);
+      // Update token if account has profile otherwise mint token
       if (accountProfile) {
-        // Start update token
-        setStatus(statuses.isUpdatingNft);
-        const transaction = await update(accountProfile.avatarNftId, url);
-        showToastSuccess("Transaction is created!");
-        // Wait for transaction to complete
-        await transaction.wait();
-        showToastSuccess("Your NFT is updated!");
+        await update(accountProfile.avatarNftId, url);
       }
-      // Mint token if account has no profile
       else {
-        // Start mint
-        setStatus(statuses.isMintingNft);
-        const transaction = await mint(url);
-        showToastSuccess("Transaction is created!");
-        // Wait for transaction to complete
-        await transaction.wait();
-        showToastSuccess("Your NFT is minted!");
+        await mint(url);
       }
-      // Redirect to profile page
-      router.push('/profile');
+      // Show sucess message and run worker for update profile
+      setStatus(statuses.isMintingOrUpdatingSuccessed);
+      runProfileUpdater();
     } catch (error) {
       showToastError(error);
     }
   }
 
   useEffect(() => {
-    if (accountProfile) {
-      setFormData(accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : []);
-      setStatus(statuses.isAvailable);
-    }
+    setFormData(accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountProfile])
+  }, [])
 
   return (
     <Layout title={"YourJustice / Profile Manager"} showAccountNavigation={true}>
-      {status === statuses.isLoading ? (<LoadingBackdrop />) : (
+
+      {/* Form for mint or update profile */}
+      {formData && status !== statuses.isMintingOrUpdatingSuccessed && (
         <>
           <Typography variant='h4' gutterBottom>{accountProfile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
           <Divider sx={{ mb: 1 }} />
@@ -95,15 +82,31 @@ export default function ProfileManager() {
             {status === statuses.isUploadingToIpfs && (
               <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Uploading to IPFS</LoadingButton>
             )}
-            {status === statuses.isMintingNft && (
-              <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Minting NFT</LoadingButton>
-            )}
-            {status === statuses.isUpdatingNft && (
-              <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Updating NFT</LoadingButton>
+            {status === statuses.isMintingOrUpdating && (
+              <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">
+                {accountProfile ? "Updating NFT" : "Minting NFT"}
+              </LoadingButton>
             )}
           </ProfileForm>
         </>
       )}
+
+      {/* Message that the minting or updating was successful */}
+      {formData && status === statuses.isMintingOrUpdatingSuccessed && (
+        <>
+          <Typography variant='h4' gutterBottom>Transaction is created!</Typography>
+          <Typography gutterBottom>
+            {accountProfile ? "Your profile will be updated soon." : "Your profile will be minted soon."}
+          </Typography>
+          <Link href='/' passHref>
+            <Button variant="contained" type="submit" sx={{ mt: 2 }}>Go to Home</Button>
+          </Link>
+        </>
+      )}
+
+      {/* Loading if form data is not already defined */}
+      {!formData && (<LoadingBackdrop />)}
+
     </Layout >
   )
 }

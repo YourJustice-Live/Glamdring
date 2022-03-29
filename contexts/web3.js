@@ -10,6 +10,8 @@ export const Web3Context = createContext();
 export function Web3Provider({ children }) {
 
   const web3ModalRef = useRef();
+  const profileWorkerRef = useRef();
+
   const defaultProvider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_CONNECTION_URL);
 
   const { getProfile } = useProfile();
@@ -78,6 +80,18 @@ export function Web3Provider({ children }) {
 
   async function disconnectWallet() {
     clearContext();
+  }
+
+  async function runProfileUpdater() {
+    profileWorkerRef.current = new Worker(new URL('../workers/profileUpdater.js', import.meta.url))
+    profileWorkerRef.current.onmessage = (event) => {
+      setAccountProfile(event.data);
+      profileWorkerRef.current.terminate();
+    }
+    profileWorkerRef.current.postMessage({
+      account: account,
+      accountProfile: accountProfile
+    });
   }
 
   async function switchNetwork() {
@@ -153,6 +167,7 @@ export function Web3Provider({ children }) {
     connectWallet,
     disconnectWallet,
     switchNetwork,
+    runProfileUpdater,
   }
 
   return (

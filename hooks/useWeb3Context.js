@@ -15,6 +15,7 @@ export default function useWeb3Context() {
   const connectWallet = web3Context.connectWallet;
   const disconnectWallet = web3Context.disconnectWallet;
   const switchNetwork = web3Context.switchNetwork;
+  const runProfileUpdater = web3Context.runProfileUpdater;
 
   return {
     defaultProvider,
@@ -25,6 +26,7 @@ export default function useWeb3Context() {
     loadContext,
     connectWallet,
     disconnectWallet,
-    switchNetwork
+    switchNetwork,
+    runProfileUpdater,
   };
 }

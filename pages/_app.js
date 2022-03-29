@@ -55,13 +55,13 @@ const theme = createTheme({
 function App({ Component, pageProps }) {
 
   return (
-    <Web3Provider>
-      <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={3}>
+    <ThemeProvider theme={theme}>
+      <SnackbarProvider maxSnack={3}>
+        <Web3Provider>
           <Component {...pageProps} />
-        </SnackbarProvider>
-      </ThemeProvider>
-    </Web3Provider>
+        </Web3Provider>
+      </SnackbarProvider>
+    </ThemeProvider>
   )
 
 }
