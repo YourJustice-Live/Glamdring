@@ -1,6 +1,6 @@
 ## dApp
 
-https://your-justice-dapp.vercel.app/
+https://yj.life/
 
 ## Commands
 
