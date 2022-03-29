@@ -138,35 +138,17 @@ export default function Jurisdiction() {
       <Box sx={{ mt: 6 }}>
         <Typography variant='h4' gutterBottom>Members</Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <ProfileList
-          profiles={memberProfiles}
-          onUpdateProfiles={() => {
-            setMemberProfiles(null);
-            loadParticipants();
-          }}
-        />
+        <ProfileList profiles={memberProfiles} />
       </Box>
       <Box sx={{ mt: 6 }}>
         <Typography variant='h4' gutterBottom>Judges</Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <ProfileList
-          profiles={judgeProfiles}
-          onUpdateProfiles={() => {
-            setJudgeProfiles(null);
-            loadParticipants();
-          }}
-        />
+        <ProfileList profiles={judgeProfiles} />
       </Box>
       <Box sx={{ mt: 6 }}>
         <Typography variant='h4' gutterBottom>Admins</Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <ProfileList
-          profiles={adminProfiles}
-          onUpdateProfiles={() => {
-            setAdminProfiles(null);
-            loadParticipants();
-          }}
-        />
+        <ProfileList profiles={adminProfiles} />
       </Box>
     </Layout >
   )
