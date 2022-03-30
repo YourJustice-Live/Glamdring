@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
-import Navigation from "components/layout/Navigation";
+import { Box } from '@mui/material';
+import Navigation from 'components/layout/Navigation';
 
 /**
  * Component: Header
@@ -12,5 +12,5 @@ export default function Header({ children }) {
         {children}
       </div>
     </Box>
-  )
+  );
 }
