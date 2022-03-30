@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.73",
     "@mui/material": "^5.5.0",
+    "@mui/x-data-grid": "^5.7.0",
     "@rjsf/core": "^4.1.0",
     "@rjsf/material-ui": "^4.1.0",
     "@walletconnect/web3-provider": "^1.7.4",

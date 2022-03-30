@@ -23,9 +23,20 @@ export default function useSubgraph() {
     return response.jurisdictionParticipantEntities;
   }
 
+  /**
+   * Find the action entities.
+   * 
+   * @returns {Promise.<Array.<{object}>>} Array with action entities.
+   */
+  let findActionEntities = async function () {
+    const response = await makeSubgraphQuery(getFindActionEntitiesQuery());
+    return response.actionEntities;
+  }
+
   return {
     findAvatarNftEntities,
-    findJurisdictionParticipantEntities
+    findJurisdictionParticipantEntities,
+    findActionEntities,
   };
 }
 
@@ -79,4 +90,22 @@ function getFindJurisdictionParticipantEntitiesQuery() {
       isJudge
     }
   }`;
+}
+
+function getFindActionEntitiesQuery() {
+  return `{
+    actionEntities(first: 100) {
+      id
+      guid
+      subject
+      verb
+      object
+      tool
+      affected
+      confirmationRuling
+      confirmationEvidence
+      confirmationWitness
+      uri
+    }
+  }`
 }
