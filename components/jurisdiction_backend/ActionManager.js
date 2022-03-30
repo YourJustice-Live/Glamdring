@@ -7,7 +7,7 @@ import useToasts from "hooks/useToasts";
 import { useState } from 'react';
 
 /**
- * A component with a button and dialog for manage jurisdiction roles.
+ * A component with a button and dialog for manage actions.
  */
 export default function ActionManager() {
 
