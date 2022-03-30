@@ -100,7 +100,7 @@ export default function RoleManager() {
 
   return (
     <>
-      <Button variant="outlined" type="submit" onClick={open}>Manage Roles</Button>
+      <Button variant="outlined" onClick={open}>Manage Roles</Button>
       <Dialog open={isOpen} onClose={isLoading ? null : close}>
         <DialogTitle>Role Manager</DialogTitle>
         <DialogContent>
