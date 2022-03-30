@@ -2,7 +2,6 @@ import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import RoleManager from 'components/jurisdiction/RoleManager';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
@@ -128,9 +127,6 @@ export default function Jurisdiction() {
               <Button variant="contained" type="submit" onClick={joinOrLeave}>
                 {basicInformation.isAccountMember ? "Leave" : "Join"}
               </Button>
-            )}
-            {basicInformation.isAccountAdmin && (
-              <RoleManager />
             )}
           </Stack>
         </Box>
