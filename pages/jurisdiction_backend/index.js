@@ -33,8 +33,7 @@ export default function JurisdictionBackend() {
   }, [])
 
   const actionColumns = [
-    { field: 'id', headerName: 'ID' },
-    { field: 'guid', headerName: 'GUID' },
+    { field: 'id', headerName: 'ID (GUID)' },
     { field: 'subject', headerName: 'Subject' },
     { field: 'verb', headerName: 'Verb' },
     { field: 'object', headerName: 'Object' },
@@ -62,7 +61,7 @@ export default function JurisdictionBackend() {
         <Divider sx={{ mb: 2.5 }} />
         <Stack direction='row' spacing={2}>
           <ActionManager />
-          <Button variant="outlined" onClick={() => { setActions([]); loadActions(); }}>Update data</Button>
+          <Button variant='outlined' onClick={() => { setActions([]); loadActions(); }}>Reload data</Button>
         </Stack>
         <Box sx={{ height: 400, mt: 2.5 }}>
           <DataGrid rows={actions} columns={actionColumns} />

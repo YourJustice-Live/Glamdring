@@ -96,7 +96,6 @@ function getFindActionEntitiesQuery() {
   return `{
     actionEntities(first: 100) {
       id
-      guid
       subject
       verb
       object
