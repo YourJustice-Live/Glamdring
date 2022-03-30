@@ -1,7 +1,7 @@
-import contractJson from "contracts/Jurisdiction.json";
-import WrongNetworkError from "errors/WrongNetworkError";
+import contractJson from 'contracts/Jurisdiction.json';
+import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
-import useWeb3Context from "./useWeb3Context";
+import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
  * Hook for Juridiction Contract.
@@ -58,6 +58,22 @@ export default function useJuridictionContract() {
     return await getContract(provider?.getSigner()).roleRemove(account, role);
   }
 
-  return { getName, getOwner, isHasRole, join, leave, assignRole, removeRole }
+  async function addRule(rule) {
+    if (network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).ruleAdd(rule);
+  }
+
+  return {
+    getName,
+    getOwner,
+    isHasRole,
+    join,
+    leave,
+    assignRole,
+    removeRole,
+    addRule
+  }
 
 }

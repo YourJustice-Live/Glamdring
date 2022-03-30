@@ -2,6 +2,7 @@ import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import ActionManager from 'components/jurisdiction_backend/ActionManager';
 import RoleManager from 'components/jurisdiction_backend/RoleManager';
+import RuleManager from 'components/jurisdiction_backend/RuleManager';
 import Layout from 'components/layout/Layout';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
@@ -70,7 +71,9 @@ export default function JurisdictionBackend() {
       <Box sx={{ mb: 5 }}>
         <Typography variant='h4' gutterBottom>Rules</Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <Typography variant='h4'>...</Typography>
+        <Stack direction='row' spacing={2}>
+          <RuleManager />
+        </Stack>
       </Box>
     </Layout >
   )
