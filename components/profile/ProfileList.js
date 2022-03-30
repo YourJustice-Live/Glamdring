@@ -7,7 +7,7 @@ import ProfileCard from 'components/profile/ProfileCard';
 export default function ProfileList({ profiles }) {
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       {!profiles && (
         <>
           {[{}, {}, {}].map((_, index) =>

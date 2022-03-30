@@ -1,10 +1,10 @@
 import { AddBoxOutlined, IndeterminateCheckBoxOutlined, InsertPhotoOutlined, Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Box, Button, Card, CardContent, Divider, Skeleton, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, Link, Skeleton, Stack, Typography } from '@mui/material';
 import { DEFAULT_ADD_REPUTATION_AMOUNT, REPUTATION_DOMAIN_ID, REPUTATION_RATING_ID } from 'constants/contracts';
 import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useToasts from 'hooks/useToasts';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 import { getTraitValue, traitTypes } from "utils/metadata";
@@ -41,24 +41,39 @@ export default function ProfileCard({ profile }) {
   }
 
   return (
-    <Card variant="outlined">
+    <Card elevation={3} >
       {profile?.account ? (
         <>
           <CardContent>
-            <Avatar sx={{ width: 82, height: 82, mb: 2 }} src={profile.avatarNftMetadata?.image}>
-              <InsertPhotoOutlined />
-            </Avatar>
-            <Typography variant="h4" sx={{ mb: 2 }}>{getTraitValue(profile.avatarNftMetadata, traitTypes.firstName) || "None"} {getTraitValue(profile.avatarNftMetadata, traitTypes.lastName) || "None"}</Typography>
-            <Typography><b>Account:</b> {formatAccount(profile.account)}</Typography>
-            <Typography><b>Email:</b> {getTraitValue(profile.avatarNftMetadata, traitTypes.email) || "none"}</Typography>
-            <Typography><b>Twitter:</b> {getTraitValue(profile.avatarNftMetadata, traitTypes.twitter) || "none"}</Typography>
-            <Box>
-              <Box sx={{ fontWeight: 'bold', display: 'inline', mr: 1 }}>Reputation:</Box>
-              <Box sx={{ color: 'success.main', display: 'inline', mr: 1 }}>+{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.positive)}</Box>
-              <Box sx={{ color: 'danger.main', display: 'inline' }}>-{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.negative)}</Box>
+
+            {/* Image and details */}
+            <Box sx={{ display: 'flex', flexDirection: 'row', }}>
+              {/* Image */}
+              <Box sx={{ mr: 2 }}>
+                <Avatar sx={{ width: 82, height: 82 }} src={profile.avatarNftMetadata?.image}>
+                  <InsertPhotoOutlined />
+                </Avatar>
+              </Box>
+              {/* Details */}
+              <Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', }}>
+                  <Typography sx={{ mr: 1 }}>Case:</Typography>
+                  <Typography sx={{ color: 'success.main', mr: 1 }}>+{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.positive)}</Typography>
+                  <Typography sx={{ color: 'danger.main', mr: 1 }}>-{getRating(profile, REPUTATION_DOMAIN_ID.environment, REPUTATION_RATING_ID.negative)}</Typography>
+                </Box>
+                <NextLink href={`/profile/${profile.account}`} passHref>
+                  <Link variant="h6" sx={{ mb: 2 }} underline="none">
+                    {getTraitValue(profile.avatarNftMetadata, traitTypes.firstName) || "None"} {getTraitValue(profile.avatarNftMetadata, traitTypes.lastName) || "None"}
+                  </Link>
+                </NextLink>
+                <Box>
+                  <Typography>{formatAccount(profile.account)}</Typography>
+                </Box>
+              </Box>
             </Box>
-            <Divider sx={{ my: 2 }} />
-            <Stack direction='row' spacing={1} sx={{ height: 36 }}>
+
+            {/* Actions */}
+            <Stack direction='row' spacing={1} sx={{ height: 36, mt: 2, minWidth: "100%" }}>
               {isProcessing ? (
                 <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Processing</LoadingButton>
               ) : (
@@ -68,10 +83,7 @@ export default function ProfileCard({ profile }) {
                 </>
               )}
             </Stack>
-            <Divider sx={{ my: 2 }} />
-            <Link href={`/profile/${profile.account}`} passHref>
-              <Button size="small">Open Profile</Button>
-            </Link>
+
           </CardContent>
         </>
       ) : (
