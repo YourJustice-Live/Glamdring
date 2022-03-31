@@ -18,7 +18,7 @@
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off",
     "import/no-unresolved": "off",
-    "import/extensions": ["error", "never"],
+    "import/extensions": ["error", "never", { "scss": "always" }],
     "import/no-extraneous-dependencies": "off",
     "no-underscore-dangle": "off",
     "react/self-closing-comp": ["error"]

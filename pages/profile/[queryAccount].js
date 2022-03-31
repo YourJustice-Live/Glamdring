@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { InsertPhotoOutlined } from '@mui/icons-material';
 import { Avatar, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
@@ -5,8 +7,6 @@ import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 
@@ -22,17 +22,17 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
-  async function loadData() {
-    try {
-      setProfile(await getProfile(queryAccount));
-    } catch (error) {
-      showToastError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function loadData() {
+      try {
+        setProfile(await getProfile(queryAccount));
+      } catch (error) {
+        showToastError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     if (queryAccount) {
       loadData();
     }

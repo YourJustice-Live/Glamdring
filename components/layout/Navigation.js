@@ -1,7 +1,7 @@
-import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material';
-import useWeb3Context from 'hooks/useWeb3Context';
 import Image from 'next/image';
 import Link from 'next/link';
+import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { formatAccount } from 'utils/formatters';
 
 /**
