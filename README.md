@@ -12,7 +12,7 @@ https://yj.life/
 ## Branch and commits convention
 
 - Branch example: `1a41b-integrate-new-contracts`
-- Commit example: `Add new hooks for the jurisdiction contract (1a41b)`
+- Commit example: `[1a41b] Add new hooks for the jurisdiction contract`
 
 ## Environment variables for Polygon Mainnet
 
