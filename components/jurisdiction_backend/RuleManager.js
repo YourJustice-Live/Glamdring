@@ -41,7 +41,7 @@ export default function RuleManager() {
           social: {
             type: "integer",
             title: "Social",
-            default: -5,
+            default: 5,
           },
           personal: {
             type: "integer",
