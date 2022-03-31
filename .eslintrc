@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended", // disables conflicting rules (eslint vs prettier) and sets up eslint-plugin-prettier
+    "plugin:react/jsx-runtime"
+  ],
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true }],
+    "import/prefer-default-export": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-filename-extension": "off",
+    "react/prop-types": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": ["error", "never"],
+    "import/no-extraneous-dependencies": "off",
+    "no-underscore-dangle": "off",
+    "react/self-closing-comp": ["error"]
+  }
+}
