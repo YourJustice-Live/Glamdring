@@ -9,6 +9,11 @@ https://yj.life/
 - Deploy to Vercel (dev) - `vercel`
 - Deploy to Vercel (production) - `vercel --prod`
 
+## Branch and commits convention
+
+- Branch example: `1a41b-integrate-new-contracts`
+- Commit example: `Add new hooks for the jurisdiction contract (1a41b)`
+
 ## Environment variables for Polygon Mainnet
 
 ```
