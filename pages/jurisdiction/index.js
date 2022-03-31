@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Skeleton, Stack, Typography } from '@mui/material';
@@ -10,7 +11,6 @@ import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useProfile from 'hooks/useProfile';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
-import { useEffect, useState } from 'react';
 import { formatAccount } from 'utils/formatters';
 
 /**

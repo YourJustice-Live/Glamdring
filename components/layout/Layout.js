@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { Box, Container, Toolbar } from '@mui/material';
 import {
   DrawerAccountNavigation,
@@ -5,7 +6,6 @@ import {
 } from 'components/layout/AccountNavigation';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
-import Head from 'next/head';
 
 /**
  * Component: Layout

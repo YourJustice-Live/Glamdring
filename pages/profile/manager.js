@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Typography } from '@mui/material';
@@ -8,8 +10,6 @@ import useAvatarNftContract from 'hooks/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 /**
  * Page where account can create (mint) or edit profile (Avatar NFT).
