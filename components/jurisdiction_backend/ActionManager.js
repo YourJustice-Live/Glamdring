@@ -1,16 +1,22 @@
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Stack,
+} from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useActionRepoContract from 'hooks/useActionRepoContract';
-import useToasts from "hooks/useToasts";
+import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
 /**
  * A component with a button and dialog for manage actions.
  */
 export default function ActionManager() {
-
   const { showToastSuccess, showToastError } = useToasts();
   const { addAction } = useActionRepoContract();
   const [formData, setFormData] = useState({});
@@ -18,82 +24,82 @@ export default function ActionManager() {
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = {
-    type: "object",
+    type: 'object',
     properties: {
       action: {
-        type: "object",
-        title: "Action",
+        type: 'object',
+        title: 'Action',
         properties: {
           subject: {
-            type: "string",
-            title: "Subject",
-            default: "founder",
+            type: 'string',
+            title: 'Subject',
+            default: 'founder',
           },
           verb: {
-            type: "string",
-            title: "Verb",
-            default: "breach",
+            type: 'string',
+            title: 'Verb',
+            default: 'breach',
           },
           object: {
-            type: "string",
-            title: "Object",
-            default: "contract",
+            type: 'string',
+            title: 'Object',
+            default: 'contract',
           },
           tool: {
-            type: "string",
-            title: "Tool",
-            default: "",
+            type: 'string',
+            title: 'Tool',
+            default: '',
           },
           affected: {
-            type: "string",
-            title: "Affected",
-            default: "investor",
+            type: 'string',
+            title: 'Affected',
+            default: 'investor',
           },
-        }
+        },
       },
       confirmation: {
-        type: "object",
-        title: "Confirmation",
+        type: 'object',
+        title: 'Confirmation',
         properties: {
           ruling: {
-            type: "string",
-            title: "Ruling",
-            default: "judge",
+            type: 'string',
+            title: 'Ruling',
+            default: 'judge',
           },
           evidence: {
-            type: "boolean",
-            title: "Evidence",
+            type: 'boolean',
+            title: 'Evidence',
             default: true,
           },
           witness: {
-            type: "integer",
-            title: "Witness",
+            type: 'integer',
+            title: 'Witness',
             default: 1,
           },
-        }
+        },
       },
       uri: {
-        type: "string",
-        title: "URI",
-        default: "TEST_URI",
-      }
-    }
-  }
+        type: 'string',
+        title: 'URI',
+        default: 'TEST_URI',
+      },
+    },
+  };
 
   const uiSchema = {
     action: {
-      subject: { "ui:emptyValue": "" },
-      verb: { "ui:emptyValue": "" },
-      object: { "ui:emptyValue": "" },
-      tool: { "ui:emptyValue": "" },
-      affected: { "ui:emptyValue": "" },
+      subject: { 'ui:emptyValue': '' },
+      verb: { 'ui:emptyValue': '' },
+      object: { 'ui:emptyValue': '' },
+      tool: { 'ui:emptyValue': '' },
+      affected: { 'ui:emptyValue': '' },
     },
     confirmation: {
-      ruling: { "ui:emptyValue": "" },
-      witness: { "ui:widget": "updown" },
+      ruling: { 'ui:emptyValue': '' },
+      witness: { 'ui:widget': 'updown' },
     },
-    uri: { "ui:emptyValue": "" },
-  }
+    uri: { 'ui:emptyValue': '' },
+  };
 
   function open() {
     setIsOpen(true);
@@ -112,7 +118,7 @@ export default function ActionManager() {
       setIsLoading(true);
       // Use contract
       await addAction(formData.action, formData.confirmation, formData.uri);
-      showToastSuccess("Success! Data will be updated soon.");
+      showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
       showToastError(error);
@@ -122,7 +128,9 @@ export default function ActionManager() {
 
   return (
     <>
-      <Button variant="outlined" onClick={open}>Manage Actions</Button>
+      <Button variant="outlined" onClick={open}>
+        Manage Actions
+      </Button>
       <Dialog open={isOpen} onClose={isLoading ? null : close}>
         <DialogTitle>Action Manager</DialogTitle>
         <DialogContent>
@@ -136,11 +144,22 @@ export default function ActionManager() {
           >
             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
               {isLoading ? (
-                <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Processing</LoadingButton>
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<Save />}
+                  variant="outlined"
+                >
+                  Processing
+                </LoadingButton>
               ) : (
                 <>
-                  <Button variant="contained" type="submit">Submit</Button>
-                  <Button variant="outlined" onClick={close}>Cancel</Button>
+                  <Button variant="contained" type="submit">
+                    Submit
+                  </Button>
+                  <Button variant="outlined" onClick={close}>
+                    Cancel
+                  </Button>
                 </>
               )}
             </Stack>
@@ -148,5 +167,5 @@ export default function ActionManager() {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

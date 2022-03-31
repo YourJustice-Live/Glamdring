@@ -3,7 +3,7 @@ import { Avatar, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
-import useProfile from "hooks/useProfile";
+import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -14,8 +14,7 @@ import { getTraitValue, traitTypes } from 'utils/metadata';
  * Page with profile data.
  */
 export default function Profile() {
-
-  const router = useRouter()
+  const router = useRouter();
   const { queryAccount } = router.query;
   const { showToastError } = useToasts();
   const { account } = useWeb3Context();
@@ -38,25 +37,54 @@ export default function Profile() {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryAccount])
+  }, [queryAccount]);
 
   return (
-    <Layout title={"YourJustice / Profile"} showAccountNavigation={!!account}>
-      {isLoading ? (<LoadingBackdrop />) : (
+    <Layout title={'YourJustice / Profile'} showAccountNavigation={!!account}>
+      {isLoading ? (
+        <LoadingBackdrop />
+      ) : (
         <>
-          <Typography variant='h4' gutterBottom>Profile</Typography>
+          <Typography variant="h4" gutterBottom>
+            Profile
+          </Typography>
           <Divider />
-          <Avatar sx={{ width: 128, height: 128, my: 3 }} src={profile?.avatarNftMetadata?.image ? profile.avatarNftMetadata.image : null}>
+          <Avatar
+            sx={{ width: 128, height: 128, my: 3 }}
+            src={
+              profile?.avatarNftMetadata?.image
+                ? profile.avatarNftMetadata.image
+                : null
+            }
+          >
             <InsertPhotoOutlined />
           </Avatar>
-          <Typography gutterBottom><b>Account: </b>{formatAccount(profile?.account) || "none"}</Typography>
-          <Typography gutterBottom><b>First Name: </b>{getTraitValue(profile?.avatarNftMetadata, traitTypes.firstName) || "none"}</Typography>
-          <Typography gutterBottom><b>Last Name:</b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.lastName) || "none"}</Typography>
-          <Typography gutterBottom><b>Email: </b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.email) || "none"}</Typography>
-          <Typography gutterBottom><b>Twitter: </b> {getTraitValue(profile?.avatarNftMetadata, traitTypes.twitter) || "none"}</Typography>
+          <Typography gutterBottom>
+            <b>Account: </b>
+            {formatAccount(profile?.account) || 'none'}
+          </Typography>
+          <Typography gutterBottom>
+            <b>First Name: </b>
+            {getTraitValue(profile?.avatarNftMetadata, traitTypes.firstName) ||
+              'none'}
+          </Typography>
+          <Typography gutterBottom>
+            <b>Last Name:</b>{' '}
+            {getTraitValue(profile?.avatarNftMetadata, traitTypes.lastName) ||
+              'none'}
+          </Typography>
+          <Typography gutterBottom>
+            <b>Email: </b>{' '}
+            {getTraitValue(profile?.avatarNftMetadata, traitTypes.email) ||
+              'none'}
+          </Typography>
+          <Typography gutterBottom>
+            <b>Twitter: </b>{' '}
+            {getTraitValue(profile?.avatarNftMetadata, traitTypes.twitter) ||
+              'none'}
+          </Typography>
         </>
       )}
-    </Layout >
-  )
-
+    </Layout>
+  );
 }

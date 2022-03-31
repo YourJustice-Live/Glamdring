@@ -1,7 +1,16 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Button, Divider, Drawer, Paper, Stack, Toolbar, Typography } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Drawer,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
-import useWeb3Context from "hooks/useWeb3Context";
+import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
 import { formatAccount } from 'utils/formatters';
 
@@ -17,7 +26,7 @@ export function DrawerAccountNavigation({ sx }) {
         ...sx,
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
       }}
     >
       <Toolbar />
@@ -25,7 +34,7 @@ export function DrawerAccountNavigation({ sx }) {
         <AccountNavigation />
       </Box>
     </Drawer>
-  )
+  );
 }
 
 /**
@@ -38,55 +47,65 @@ export function PaperAccountNavigation({ sx }) {
       sx={{
         ...sx,
         p: 3,
-        mb: 6
+        mb: 6,
       }}
     >
       <AccountNavigation />
     </Paper>
-  )
+  );
 }
 
 function AccountNavigation() {
-
   const { account, accountProfile } = useWeb3Context();
 
   return (
     <>
-      <Avatar sx={{ width: 82, height: 82, my: 1.5 }} src={accountProfile?.avatarNftMetadata?.image ? accountProfile.avatarNftMetadata.image : null}>
+      <Avatar
+        sx={{ width: 82, height: 82, my: 1.5 }}
+        src={
+          accountProfile?.avatarNftMetadata?.image
+            ? accountProfile.avatarNftMetadata.image
+            : null
+        }
+      >
         <InsertPhotoOutlined />
       </Avatar>
-      <Typography gutterBottom><b>Account:</b> {formatAccount(account) || "none"}</Typography>
-      <Typography><b>Account has profile:</b> {accountProfile ? "yes" : "no"}</Typography>
+      <Typography gutterBottom>
+        <b>Account:</b> {formatAccount(account) || 'none'}
+      </Typography>
+      <Typography>
+        <b>Account has profile:</b> {accountProfile ? 'yes' : 'no'}
+      </Typography>
       <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
       {accountProfile && (
         <Stack spacing={1} direction="column">
-          <Link href='/profile' passHref>
+          <Link href="/profile" passHref>
             <Button variant="outlined">Open Profile</Button>
           </Link>
-          <Link href='/profile/manager' passHref>
+          <Link href="/profile/manager" passHref>
             <Button variant="outlined">Edit Profile</Button>
           </Link>
         </Stack>
       )}
       {!accountProfile && (
         <Stack>
-          <Link href='/profile/manager' passHref>
+          <Link href="/profile/manager" passHref>
             <Button variant="outlined">Create Profile</Button>
           </Link>
         </Stack>
       )}
       <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
       <Stack>
-        <Link href='/jurisdiction' passHref>
+        <Link href="/jurisdiction" passHref>
           <Button variant="outlined">Jurisdiction</Button>
         </Link>
       </Stack>
       <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
       <Stack>
-        <Link href='/jurisdiction_backend' passHref>
+        <Link href="/jurisdiction_backend" passHref>
           <Button variant="outlined">Jurisdiction Backend</Button>
         </Link>
       </Stack>
     </>
-  )
+  );
 }

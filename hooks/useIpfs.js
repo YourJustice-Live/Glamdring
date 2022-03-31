@@ -1,10 +1,9 @@
-import axios from "axios";
-import { create } from "ipfs-http-client";
+import axios from 'axios';
+import { create } from 'ipfs-http-client';
 
 const client = create(process.env.NEXT_PUBLIC_INFURA_IPFS_API);
 
 export default function useIpfs() {
-
   let uploadFileToIPFS = async function (file) {
     const created = await client.add(file);
     const cid = created.path;
@@ -17,7 +16,7 @@ export default function useIpfs() {
     const cid = created.path;
     const url = `https://ipfs.infura.io/ipfs/${cid}`;
     return { cid, url };
-  }
+  };
 
   let loadJsonFromIPFS = async function (url) {
     const response = await axios.get(url);
@@ -26,7 +25,7 @@ export default function useIpfs() {
       throw new Error(`Error loading json from IPFS: ${response.data.errors}`);
     }
     return response.data;
-  }
+  };
 
   return { uploadFileToIPFS, uploadJsonToIPFS, loadJsonFromIPFS };
 }

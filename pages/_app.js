@@ -1,13 +1,13 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Web3Provider } from "contexts/web3";
+import { Web3Provider } from 'contexts/web3';
 import { SnackbarProvider } from 'notistack';
 import 'styles/globals.scss';
 
 const fontFamily = ['Manrope', 'monospace'].join(',');
 const theme = createTheme({
   palette: {
-    primary: { main: '#5E42CC', },
-    secondary: { main: '#05B5A1', },
+    primary: { main: '#5E42CC' },
+    secondary: { main: '#05B5A1' },
     success: {
       main: '#05B5A1',
       primary: '#05B5A1',
@@ -49,11 +49,10 @@ const theme = createTheme({
       fontSize: '1.1rem',
       fontFamily,
     },
-  }
+  },
 });
 
 function App({ Component, pageProps }) {
-
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider maxSnack={3}>
@@ -62,8 +61,7 @@ function App({ Component, pageProps }) {
         </Web3Provider>
       </SnackbarProvider>
     </ThemeProvider>
-  )
-
+  );
 }
 
 export default App;

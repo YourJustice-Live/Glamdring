@@ -1,10 +1,9 @@
-import useProfile from "hooks/useProfile";
+import useProfile from 'hooks/useProfile';
 
 /**
  * Web worker to check if the account profile in the blockchain has been changed.
  */
 addEventListener('message', (event) => {
-
   const { getProfile } = useProfile();
   const interval = 5 * 1000;
 
@@ -13,14 +12,15 @@ addEventListener('message', (event) => {
   let accountLoadedProfile = event.data.accountProfile;
 
   setInterval(async function () {
-
     // Post message if last update times of loaded profile is different
-    if (accountInitProfile?.avatarNftMetadata?.lastUpdatedTime !== accountLoadedProfile?.avatarNftMetadata?.lastUpdatedTime) {
+    if (
+      accountInitProfile?.avatarNftMetadata?.lastUpdatedTime !==
+      accountLoadedProfile?.avatarNftMetadata?.lastUpdatedTime
+    ) {
       postMessage(accountLoadedProfile);
     }
 
     // Load profile from blockchain
     accountLoadedProfile = await getProfile(account);
-
   }, interval);
-})
+});

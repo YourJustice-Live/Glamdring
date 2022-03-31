@@ -5,26 +5,26 @@ import ProfileCard from 'components/profile/ProfileCard';
  * A component with a list of profiles.
  */
 export default function ProfileList({ profiles }) {
-
   return (
     <Grid container spacing={3}>
       {!profiles && (
         <>
-          {[{}, {}, {}].map((_, index) =>
+          {[{}, {}, {}].map((_, index) => (
             <Grid key={index} item xs={12} md={4}>
               <ProfileCard />
             </Grid>
-          )}
+          ))}
         </>
       )}
       {profiles && profiles.length > 0 && (
         <>
-          {(profiles).map((profile, index) =>
-            profile && (
-              <Grid key={index} item xs={12} md={4}>
-                <ProfileCard profile={profile} />
-              </Grid>
-            )
+          {profiles.map(
+            (profile, index) =>
+              profile && (
+                <Grid key={index} item xs={12} md={4}>
+                  <ProfileCard profile={profile} />
+                </Grid>
+              ),
           )}
         </>
       )}
@@ -34,5 +34,5 @@ export default function ProfileList({ profiles }) {
         </Grid>
       )}
     </Grid>
-  )
+  );
 }
