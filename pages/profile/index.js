@@ -1,4 +1,4 @@
-import useWeb3Context from "hooks/useWeb3Context";
+import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -6,7 +6,6 @@ import { useEffect } from 'react';
  * Page that redirects the user to the page for their account
  */
 export default function Profile() {
-
   const router = useRouter();
   const { account } = useWeb3Context();
 
@@ -15,8 +14,7 @@ export default function Profile() {
       router.push(`/profile/${account}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  }, [account]);
 
   return <></>;
-
 }

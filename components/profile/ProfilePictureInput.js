@@ -1,5 +1,11 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, CircularProgress, Divider, Input, Typography } from '@mui/material';
+import {
+  Avatar,
+  CircularProgress,
+  Divider,
+  Input,
+  Typography,
+} from '@mui/material';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
@@ -8,7 +14,6 @@ import { useState } from 'react';
  * A component for selecting a profile picture.
  */
 export default function ProfilePictureInput(props) {
-
   const propsSize = props.options.size || 128;
   const propsDisabled = props.disabled;
   const propsPicture = props.value;
@@ -21,7 +26,11 @@ export default function ProfilePictureInput(props) {
     if (!file) {
       return false;
     }
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/svg+xml';
+    const isJpgOrPng =
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/gif' ||
+      file.type === 'image/svg+xml';
     if (!isJpgOrPng) {
       return false;
     }
@@ -42,7 +51,9 @@ export default function ProfilePictureInput(props) {
     // Show error if file is not valid
     if (!isFileValid(file)) {
       event.target.value = null;
-      showToastError("Sorry, only JPG/PNG/GIF files with size smaller than 2MB are currently supported!");
+      showToastError(
+        'Sorry, only JPG/PNG/GIF files with size smaller than 2MB are currently supported!',
+      );
       return;
     }
     // Upload file to IPFS
@@ -50,7 +61,7 @@ export default function ProfilePictureInput(props) {
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
-      showToastSuccessLink("Your picture uploaded to IPFS!", url);
+      showToastSuccessLink('Your picture uploaded to IPFS!', url);
     } catch (error) {
       showToastError(error);
     } finally {
@@ -60,11 +71,15 @@ export default function ProfilePictureInput(props) {
 
   return (
     <>
-      <Typography variant='h5'>Profile Picture</Typography>
+      <Typography variant="h5">Profile Picture</Typography>
       <Divider sx={{ mb: 2 }} />
       <label htmlFor="input" style={{ width: propsSize, height: propsSize }}>
         <Avatar
-          sx={{ cursor: !isLoading && !propsDisabled ? 'pointer' : null, width: propsSize, height: propsSize }}
+          sx={{
+            cursor: !isLoading && !propsDisabled ? 'pointer' : null,
+            width: propsSize,
+            height: propsSize,
+          }}
           src={!isLoading ? propsPicture : null}
         >
           {isLoading ? <CircularProgress /> : <InsertPhotoOutlined />}
@@ -79,6 +94,5 @@ export default function ProfilePictureInput(props) {
         />
       </label>
     </>
-  )
-
+  );
 }

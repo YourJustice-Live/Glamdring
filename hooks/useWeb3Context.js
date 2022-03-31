@@ -1,8 +1,7 @@
-import { Web3Context } from "contexts/web3";
+import { Web3Context } from 'contexts/web3';
 import { useContext } from 'react';
 
 export default function useWeb3Context() {
-
   const web3Context = useContext(Web3Context);
 
   const defaultProvider = web3Context.state.defaultProvider;

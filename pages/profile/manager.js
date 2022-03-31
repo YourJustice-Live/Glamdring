@@ -15,13 +15,12 @@ import { useEffect, useState } from 'react';
  * Page where account can create (mint) or edit profile (Avatar NFT).
  */
 export default function ProfileManager() {
-
   const statuses = {
-    isAvailable: "isAvailable",
-    isUploadingToIpfs: "isUploadingToIpfs",
-    isMintingOrUpdating: "isMintingOrUpdating",
-    isMintingOrUpdatingSuccessed: "isMintingOrUpdatingSuccessed"
-  }
+    isAvailable: 'isAvailable',
+    isUploadingToIpfs: 'isUploadingToIpfs',
+    isMintingOrUpdating: 'isMintingOrUpdating',
+    isMintingOrUpdatingSuccessed: 'isMintingOrUpdatingSuccessed',
+  };
 
   const { showToastSuccessLink, showToastError } = useToasts();
   const { accountProfile, runProfileUpdater } = useWeb3Context();
@@ -39,15 +38,14 @@ export default function ProfileManager() {
       const { url } = await uploadJsonToIPFS({
         image: formData.image,
         attributes: formData.attributes,
-        lastUpdatedTime: new Date().getTime()
+        lastUpdatedTime: new Date().getTime(),
       });
-      showToastSuccessLink("Your data uploaded to IPFS!", url);
+      showToastSuccessLink('Your data uploaded to IPFS!', url);
       setStatus(statuses.isMintingOrUpdating);
       // Update token if account has profile otherwise mint token
       if (accountProfile) {
         await update(accountProfile.avatarNftId, url);
-      }
-      else {
+      } else {
         await mint(url);
       }
       // Show sucess message and run worker for update profile
@@ -59,17 +57,23 @@ export default function ProfileManager() {
   }
 
   useEffect(() => {
-    setFormData(accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : []);
+    setFormData(
+      accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : [],
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
-    <Layout title={"YourJustice / Profile Manager"} showAccountNavigation={true}>
-
+    <Layout
+      title={'YourJustice / Profile Manager'}
+      showAccountNavigation={true}
+    >
       {/* Form for mint or update profile */}
       {formData && status !== statuses.isMintingOrUpdatingSuccessed && (
         <>
-          <Typography variant='h4' gutterBottom>{accountProfile ? "Editing Own Profile" : "Creating Own Profile"}</Typography>
+          <Typography variant="h4" gutterBottom>
+            {accountProfile ? 'Editing Own Profile' : 'Creating Own Profile'}
+          </Typography>
           <Divider sx={{ mb: 1 }} />
           <ProfileForm
             initData={formData}
@@ -77,14 +81,28 @@ export default function ProfileManager() {
             disabled={status !== statuses.isAvailable ? true : false}
           >
             {status === statuses.isAvailable && (
-              <Button variant="outlined" type="submit">{accountProfile ? "Save" : "Create Profile"}</Button>
+              <Button variant="outlined" type="submit">
+                {accountProfile ? 'Save' : 'Create Profile'}
+              </Button>
             )}
             {status === statuses.isUploadingToIpfs && (
-              <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">Uploading to IPFS</LoadingButton>
+              <LoadingButton
+                loading
+                loadingPosition="start"
+                startIcon={<Save />}
+                variant="outlined"
+              >
+                Uploading to IPFS
+              </LoadingButton>
             )}
             {status === statuses.isMintingOrUpdating && (
-              <LoadingButton loading loadingPosition="start" startIcon={<Save />} variant="outlined">
-                {accountProfile ? "Updating NFT" : "Minting NFT"}
+              <LoadingButton
+                loading
+                loadingPosition="start"
+                startIcon={<Save />}
+                variant="outlined"
+              >
+                {accountProfile ? 'Updating NFT' : 'Minting NFT'}
               </LoadingButton>
             )}
           </ProfileForm>
@@ -94,19 +112,24 @@ export default function ProfileManager() {
       {/* Message that the minting or updating was successful */}
       {formData && status === statuses.isMintingOrUpdatingSuccessed && (
         <>
-          <Typography variant='h4' gutterBottom>Transaction is created!</Typography>
-          <Typography gutterBottom>
-            {accountProfile ? "Your profile will be updated soon." : "Your profile will be minted soon."}
+          <Typography variant="h4" gutterBottom>
+            Transaction is created!
           </Typography>
-          <Link href='/' passHref>
-            <Button variant="contained" type="submit" sx={{ mt: 2 }}>Go to Home</Button>
+          <Typography gutterBottom>
+            {accountProfile
+              ? 'Your profile will be updated soon.'
+              : 'Your profile will be minted soon.'}
+          </Typography>
+          <Link href="/" passHref>
+            <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+              Go to Home
+            </Button>
           </Link>
         </>
       )}
 
       {/* Loading if form data is not already defined */}
-      {!formData && (<LoadingBackdrop />)}
-
-    </Layout >
-  )
+      {!formData && <LoadingBackdrop />}
+    </Layout>
+  );
 }

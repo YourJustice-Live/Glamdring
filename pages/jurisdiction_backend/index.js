@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
  * Page with a backend of the jurisdiction.
  */
 export default function JurisdictionBackend() {
-
   const { showToastError } = useToasts();
   const { findActionEntities, findJurisdictionRuleEntities } = useSubgraph();
   const { account } = useWeb3Context();
@@ -31,7 +30,7 @@ export default function JurisdictionBackend() {
 
   async function loadRules() {
     try {
-      setRules(await findJurisdictionRuleEntities())
+      setRules(await findJurisdictionRuleEntities());
     } catch (error) {
       showToastError(error);
     }
@@ -41,7 +40,7 @@ export default function JurisdictionBackend() {
     loadActions();
     loadRules();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const actionColumns = [
     { field: 'id', headerName: 'ID (GUID)' },
@@ -64,42 +63,68 @@ export default function JurisdictionBackend() {
     { field: 'effectsSocial', headerName: 'Effects Social' },
     { field: 'effectsPersonal', headerName: 'Effects Personal' },
     { field: 'negation', headerName: 'Negation' },
-  ]
+  ];
 
   return (
-    <Layout title={"YourJustice / Jurisdiction Backend"} showAccountNavigation={!!account}>
+    <Layout
+      title={'YourJustice / Jurisdiction Backend'}
+      showAccountNavigation={!!account}
+    >
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h1' gutterBottom>Jurisdiction Backend</Typography>
+        <Typography variant="h1" gutterBottom>
+          Jurisdiction Backend
+        </Typography>
         <Divider />
       </Box>
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h4' gutterBottom>Roles</Typography>
+        <Typography variant="h4" gutterBottom>
+          Roles
+        </Typography>
         <Divider sx={{ mb: 2.5 }} />
         <RoleManager />
       </Box>
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h4' gutterBottom>Actions</Typography>
+        <Typography variant="h4" gutterBottom>
+          Actions
+        </Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <Stack direction='row' spacing={2}>
+        <Stack direction="row" spacing={2}>
           <ActionManager />
-          <Button variant='outlined' onClick={() => { setActions([]); loadActions(); }}>Reload data</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setActions([]);
+              loadActions();
+            }}
+          >
+            Reload data
+          </Button>
         </Stack>
         <Box sx={{ height: 400, mt: 2.5 }}>
           <DataGrid rows={actions} columns={actionColumns} />
         </Box>
       </Box>
       <Box sx={{ mb: 5 }}>
-        <Typography variant='h4' gutterBottom>Rules</Typography>
+        <Typography variant="h4" gutterBottom>
+          Rules
+        </Typography>
         <Divider sx={{ mb: 2.5 }} />
-        <Stack direction='row' spacing={2}>
+        <Stack direction="row" spacing={2}>
           <RuleManager />
-          <Button variant='outlined' onClick={() => { setRules([]); loadRules(); }}>Reload data</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setRules([]);
+              loadRules();
+            }}
+          >
+            Reload data
+          </Button>
         </Stack>
         <Box sx={{ height: 400, mt: 2.5 }}>
           <DataGrid rows={rules} columns={ruleColumns} />
         </Box>
       </Box>
-    </Layout >
-  )
-
+    </Layout>
+  );
 }

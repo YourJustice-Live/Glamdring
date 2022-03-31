@@ -1,26 +1,25 @@
-import useSubgraph from "hooks/useSubgraph";
-import useIpfs from "hooks/useIpfs";
+import useSubgraph from 'hooks/useSubgraph';
+import useIpfs from 'hooks/useIpfs';
 
 /**
  * Hook for work with profiles.
  */
 export default function useProfile() {
-
   const { findAvatarNftEntities } = useSubgraph();
   const { loadJsonFromIPFS } = useIpfs();
 
   /**
    * Get profile for specified account.
-   * 
+   *
    * @returns {Promise.<Profile>} A profile or null if profile not found.
    */
   let getProfile = async function (account) {
     return (await getProfiles([account]))[0];
-  }
+  };
 
   /**
    * Get profiles.
-   * 
+   *
    * @param {Array.<string>} accounts If not null, then the function returns the profiles for the specified accounts.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
@@ -33,28 +32,33 @@ export default function useProfile() {
           avatarNftEntity.owner,
           avatarNftEntity.id,
           avatarNftEntity.reputations,
-          await loadJsonFromIPFS(avatarNftEntity.uri)
+          await loadJsonFromIPFS(avatarNftEntity.uri),
         );
         profiles.push(profile);
-      } catch (error) { }
+      } catch (error) {}
     }
     return profiles;
-  }
+  };
 
   return {
     getProfile,
-    getProfiles
+    getProfiles,
   };
 }
 
 /**
  * Function that returns profile object.
  */
-function Profile(account, avatarNftId, avatarNftReputations, avatarNftMetadata) {
+function Profile(
+  account,
+  avatarNftId,
+  avatarNftReputations,
+  avatarNftMetadata,
+) {
   return {
     account: account,
     avatarNftId: avatarNftId,
     avatarNftReputations: avatarNftReputations,
-    avatarNftMetadata: avatarNftMetadata
+    avatarNftMetadata: avatarNftMetadata,
   };
 }
