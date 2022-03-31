@@ -67,10 +67,20 @@ async function makeSubgraphQuery(query) {
 
 /**
  * 
+ * Get query for find avatar nft entities.
+ * 
+ * If "accounts" is null, then return a query for get all entities.
+ * 
+ * If "accounts" is empty array, then return a query for get empty list of entities.
+ * 
  * @param {Array<string>} accounts Arrays with accounts.
+ * @returns Query for subgraph.
  */
 function getFindAvatarNftEntitiesQuery(accounts) {
   let queryParams = `first: 100`;
+  if (accounts && accounts.length == 0) {
+    queryParams = `where: {owner: ""}`;
+  }
   if (accounts && accounts.length == 1) {
     queryParams = `where: {owner: "${accounts[0]}"}`;
   }
