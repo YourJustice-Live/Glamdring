@@ -15,10 +15,11 @@ import { useEffect, useState } from 'react';
 export default function JurisdictionBackend() {
 
   const { showToastError } = useToasts();
-  const { findActionEntities } = useSubgraph();
+  const { findActionEntities, findJurisdictionRuleEntities } = useSubgraph();
   const { account } = useWeb3Context();
 
   const [actions, setActions] = useState([]);
+  const [rules, setRules] = useState([]);
 
   async function loadActions() {
     try {
@@ -28,8 +29,17 @@ export default function JurisdictionBackend() {
     }
   }
 
+  async function loadRules() {
+    try {
+      setRules(await findJurisdictionRuleEntities())
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
   useEffect(() => {
     loadActions();
+    loadRules();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -45,6 +55,16 @@ export default function JurisdictionBackend() {
     { field: 'confirmationWitness', headerName: 'Confirmation Witness' },
     { field: 'uri', headerName: 'URI' },
   ];
+
+  const ruleColumns = [
+    { field: 'id', headerName: 'ID' },
+    { field: 'about', headerName: 'About (Action GUID)' },
+    { field: 'uri', headerName: 'URI' },
+    { field: 'effectsProfessional', headerName: 'Effects Professional' },
+    { field: 'effectsSocial', headerName: 'Effects Social' },
+    { field: 'effectsPersonal', headerName: 'Effects Personal' },
+    { field: 'negation', headerName: 'Negation' },
+  ]
 
   return (
     <Layout title={"YourJustice / Jurisdiction Backend"} showAccountNavigation={!!account}>
@@ -73,7 +93,11 @@ export default function JurisdictionBackend() {
         <Divider sx={{ mb: 2.5 }} />
         <Stack direction='row' spacing={2}>
           <RuleManager />
+          <Button variant='outlined' onClick={() => { setRules([]); loadRules(); }}>Reload data</Button>
         </Stack>
+        <Box sx={{ height: 400, mt: 2.5 }}>
+          <DataGrid rows={rules} columns={ruleColumns} />
+        </Box>
       </Box>
     </Layout >
   )

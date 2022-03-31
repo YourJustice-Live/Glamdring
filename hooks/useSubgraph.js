@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default function useSubgraph() {
 
@@ -24,6 +24,16 @@ export default function useSubgraph() {
   }
 
   /**
+   * Find the jurisdiction rule entities.
+   * 
+   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
+   */
+  let findJurisdictionRuleEntities = async function () {
+    const response = await makeSubgraphQuery(getFindJurisdictionRuleEntitiesQuery());
+    return response.jurisdictionRuleEntities;
+  }
+
+  /**
    * Find the action entities.
    * 
    * @returns {Promise.<Array.<{object}>>} Array with action entities.
@@ -36,6 +46,7 @@ export default function useSubgraph() {
   return {
     findAvatarNftEntities,
     findJurisdictionParticipantEntities,
+    findJurisdictionRuleEntities,
     findActionEntities,
   };
 }
@@ -88,6 +99,20 @@ function getFindJurisdictionParticipantEntitiesQuery() {
       isAdmin
       isMember
       isJudge
+    }
+  }`;
+}
+
+function getFindJurisdictionRuleEntitiesQuery() {
+  return `{
+    jurisdictionRuleEntities(first: 100) {
+      id
+      about
+      uri
+      effectsProfessional
+      effectsSocial
+      effectsPersonal
+      negation
     }
   }`;
 }
