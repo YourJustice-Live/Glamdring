@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -9,96 +10,67 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import useActionRepoContract from 'hooks/useActionRepoContract';
+import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
 
 /**
- * A component with a button and dialog for manage actions.
+ * A component with a button and dialog for manage jurisdiction rules.
  */
-export default function ActionManager() {
+export default function RuleManager() {
   const { showToastSuccess, showToastError } = useToasts();
-  const { addAction } = useActionRepoContract();
+  const { addRule } = useJuridictionContract();
   const [formData, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = {
     type: 'object',
+    required: ['about'],
     properties: {
-      action: {
-        type: 'object',
-        title: 'Action',
-        properties: {
-          subject: {
-            type: 'string',
-            title: 'Subject',
-            default: 'founder',
-          },
-          verb: {
-            type: 'string',
-            title: 'Verb',
-            default: 'breach',
-          },
-          object: {
-            type: 'string',
-            title: 'Object',
-            default: 'contract',
-          },
-          tool: {
-            type: 'string',
-            title: 'Tool',
-            default: '',
-          },
-          affected: {
-            type: 'string',
-            title: 'Affected',
-            default: 'investor',
-          },
-        },
-      },
-      confirmation: {
-        type: 'object',
-        title: 'Confirmation',
-        properties: {
-          ruling: {
-            type: 'string',
-            title: 'Ruling',
-            default: 'judge',
-          },
-          evidence: {
-            type: 'boolean',
-            title: 'Evidence',
-            default: true,
-          },
-          witness: {
-            type: 'integer',
-            title: 'Witness',
-            default: 1,
-          },
-        },
+      about: {
+        type: 'string',
+        title: 'About (Action GUID)',
       },
       uri: {
         type: 'string',
         title: 'URI',
         default: 'TEST_URI',
       },
+      effects: {
+        type: 'object',
+        properties: {
+          professional: {
+            type: 'integer',
+            title: 'Professional',
+            default: -5,
+          },
+          social: {
+            type: 'integer',
+            title: 'Social',
+            default: 5,
+          },
+          personal: {
+            type: 'integer',
+            title: 'Personal',
+            default: 0,
+          },
+        },
+      },
+      negation: {
+        type: 'boolean',
+        title: 'Negation',
+        default: false,
+      },
     },
   };
 
   const uiSchema = {
-    action: {
-      subject: { 'ui:emptyValue': '' },
-      verb: { 'ui:emptyValue': '' },
-      object: { 'ui:emptyValue': '' },
-      tool: { 'ui:emptyValue': '' },
-      affected: { 'ui:emptyValue': '' },
-    },
-    confirmation: {
-      ruling: { 'ui:emptyValue': '' },
-      witness: { 'ui:widget': 'updown' },
-    },
     uri: { 'ui:emptyValue': '' },
+    effects: {
+      professional: { 'ui:widget': 'updown' },
+      social: { 'ui:widget': 'updown' },
+      personal: { 'ui:widget': 'updown' },
+    },
   };
 
   function open() {
@@ -117,7 +89,7 @@ export default function ActionManager() {
       setFormData(formData);
       setIsLoading(true);
       // Use contract
-      await addAction(formData.action, formData.confirmation, formData.uri);
+      await addRule(formData);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -129,12 +101,12 @@ export default function ActionManager() {
   return (
     <>
       <Button variant="outlined" onClick={open}>
-        Manage Actions
+        Manage Rules
       </Button>
       <Dialog open={isOpen} onClose={isLoading ? null : close}>
-        <DialogTitle>Action Manager</DialogTitle>
+        <DialogTitle>Rule Manager</DialogTitle>
         <DialogContent>
-          <DialogContentText>Create a new action.</DialogContentText>
+          <DialogContentText>Create a new rule.</DialogContentText>
           <Form
             schema={schema}
             formData={formData}

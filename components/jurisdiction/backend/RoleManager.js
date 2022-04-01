@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -12,7 +13,6 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
 
 /**
  * A component with a button and dialog for manage jurisdiction roles.

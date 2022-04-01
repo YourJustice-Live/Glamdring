@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import ActionManager from 'components/jurisdiction_backend/ActionManager';
-import RoleManager from 'components/jurisdiction_backend/RoleManager';
-import RuleManager from 'components/jurisdiction_backend/RuleManager';
 import Layout from 'components/layout/Layout';
+import ActionManager from 'components/jurisdiction/backend/ActionManager';
+import RoleManager from 'components/jurisdiction/backend/RoleManager';
+import RuleManager from 'components/jurisdiction/backend/RuleManager';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { useEffect, useState } from 'react';
 
 /**
  * Page with a backend of the jurisdiction.
