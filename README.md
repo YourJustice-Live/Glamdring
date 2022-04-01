@@ -9,10 +9,10 @@ https://yj.life/
 - Deploy to Vercel (dev) - `vercel`
 - Deploy to Vercel (production) - `vercel --prod`
 
-## Branch and commits convention
+## Naming Convention
 
-- Branch example: `1a41b-integrate-new-contracts`
-- Commit example: `[1a41b] Add new hooks for the jurisdiction contract`
+- Branch: '{Notion ID}-{task-name}' example: `1a41b-integrate-new-contracts`
+- Commit Message: '[{Notion ID}]-{Task name}' example: `[1a41b] Add new hooks for the jurisdiction contract`
 
 ## Environment variables for Polygon Mainnet
 
