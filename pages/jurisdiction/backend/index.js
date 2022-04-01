@@ -43,7 +43,7 @@ export default function JurisdictionBackend() {
   }, []);
 
   const actionColumns = [
-    { field: 'id', headerName: 'ID (GUID)' },
+    { field: 'id', headerName: 'ID (GUID)', minWidth: 640 },
     { field: 'subject', headerName: 'Subject' },
     { field: 'verb', headerName: 'Verb' },
     { field: 'object', headerName: 'Object' },
@@ -57,7 +57,12 @@ export default function JurisdictionBackend() {
 
   const ruleColumns = [
     { field: 'id', headerName: 'ID' },
-    { field: 'about', headerName: 'About (Action GUID)' },
+    {
+      field: 'about',
+      headerName: 'About (Action GUID)',
+      minWidth: 1200,
+      valueFormatter: ({ value }) => JSON.stringify(value),
+    },
     { field: 'uri', headerName: 'URI' },
     { field: 'effectsProfessional', headerName: 'Effects Professional' },
     { field: 'effectsSocial', headerName: 'Effects Social' },

@@ -124,7 +124,18 @@ function getFindJurisdictionRuleEntitiesQuery() {
   return `{
     jurisdictionRuleEntities(first: 100) {
       id
-      about
+      about {
+        id
+        subject
+        verb
+        object
+        tool
+        affected
+        confirmationRuling
+        confirmationEvidence
+        confirmationWitness
+        uri
+      }
       uri
       effectsProfessional
       effectsSocial
