@@ -1,6 +1,8 @@
 ## dApp
+YourJustice dApp: a on-chain meta-justice system for tracking and verifying reputation. 
 
-https://yj.life/
+dApp URL: https://yj.life/
+
 
 ## Commands
 
