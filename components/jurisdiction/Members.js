@@ -16,7 +16,7 @@ export default function Members() {
 
   const [memberProfiles, setMemberProfiles] = useState(null);
 
-  async function loadProfiles() {
+  async function loadData() {
     try {
       const participants = await findJurisdictionParticipantEntities();
       const memberProfiles = await getProfiles(
@@ -31,7 +31,7 @@ export default function Members() {
   }
 
   useEffect(() => {
-    loadProfiles();
+    loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

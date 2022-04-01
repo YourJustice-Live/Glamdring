@@ -17,7 +17,7 @@ export default function Officials() {
   const [judgeProfiles, setJudgeProfiles] = useState(null);
   const [adminProfiles, setAdminProfiles] = useState(null);
 
-  async function loadProfiles() {
+  async function loadData() {
     try {
       const participants = await findJurisdictionParticipantEntities();
       const judgeProfiles = await getProfiles(
@@ -38,7 +38,7 @@ export default function Officials() {
   }
 
   useEffect(() => {
-    loadProfiles();
+    loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
