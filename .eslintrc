@@ -12,7 +12,11 @@
     "plugin:react/jsx-runtime"
   ],
   "rules": {
-    "prettier/prettier": ["error", { "singleQuote": true }],
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "semi": true
+    }],
+    "spaced-comment": ["error", "always"],
     "import/prefer-default-export": "off",
     "react/function-component-definition": "off",
     "react/jsx-filename-extension": "off",

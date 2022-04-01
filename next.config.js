@@ -8,6 +8,14 @@ const nextConfig = {
       '@material-ui/core': false,
       '@material-ui/icons': false,
     };
+
+    // Allows you to import SVGs as React Components
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.jsx?$/,
+      use: ['@svgr/webpack'],
+    });
+
     return config;
   },
 };

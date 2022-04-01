@@ -9,11 +9,13 @@ export default function ProfileList({ profiles }) {
     <Grid container spacing={3}>
       {!profiles && (
         <>
-          {[{}, {}, {}].map((_, index) => (
-            <Grid key={index} item xs={12} md={4}>
-              <ProfileCard />
-            </Grid>
-          ))}
+          {Array(3)
+            .fill()
+            .map((_, index) => (
+              <Grid key={index} item xs={12} md={4}>
+                <ProfileCard />
+              </Grid>
+            ))}
         </>
       )}
       {profiles && profiles.length > 0 && (

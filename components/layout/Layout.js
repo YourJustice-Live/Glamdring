@@ -5,16 +5,13 @@ import {
   PaperAccountNavigation,
 } from 'components/layout/AccountNavigation';
 import Footer from 'components/layout/Footer';
-import Header from 'components/layout/Header';
+import Header from 'components/layout/Header/Header';
 
-/**
- * Component: Layout
- */
 export default function Layout({ children, title, showAccountNavigation }) {
   return (
     <>
       <Head>
-        <title>{title ? title : 'YourJustice'}</title>
+        <title>{title || 'YourJustice'}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <Header />
