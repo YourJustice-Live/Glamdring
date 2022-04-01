@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import Layout from 'components/layout/Layout';
-import ActionManager from 'components/jurisdiction/backend/ActionManager';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import RoleManager from 'components/jurisdiction/backend/RoleManager';
 import RuleManager from 'components/jurisdiction/backend/RuleManager';
+import Layout from 'components/layout/Layout';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -13,12 +21,41 @@ import useWeb3Context from 'hooks/useWeb3Context';
  * Page with a backend of the jurisdiction.
  */
 export default function JurisdictionBackend() {
-  const { showToastError } = useToasts();
-  const { findActionEntities, findJurisdictionRuleEntities } = useSubgraph();
   const { account } = useWeb3Context();
 
-  const [actions, setActions] = useState([]);
-  const [rules, setRules] = useState([]);
+  return (
+    <Layout
+      title={'YourJustice / Jurisdiction Backend'}
+      showAccountNavigation={!!account}
+    >
+      <Typography variant="h1" gutterBottom>
+        Jurisdiction Backend
+      </Typography>
+      <Divider sx={{ mb: 8 }} />
+      <Roles />
+      <Actions />
+      <Rules />
+    </Layout>
+  );
+}
+
+function Roles() {
+  return (
+    <Box sx={{ mb: 8 }}>
+      <Typography variant="h4" gutterBottom>
+        Roles
+      </Typography>
+      <Divider sx={{ mb: 2.5 }} />
+      <RoleManager />
+    </Box>
+  );
+}
+
+function Actions() {
+  const { showToastError } = useToasts();
+  const { findActionEntities } = useSubgraph();
+
+  const [actions, setActions] = useState(null);
 
   async function loadActions() {
     try {
@@ -27,6 +64,63 @@ export default function JurisdictionBackend() {
       showToastError(error);
     }
   }
+
+  useEffect(() => {
+    loadActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Box sx={{ mb: 8 }}>
+      <Typography variant="h4" gutterBottom>
+        Actions
+      </Typography>
+      <Divider sx={{ mb: 2.5 }} />
+      <Stack direction="row" spacing={2}>
+        <RuleManager />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setActions(null);
+            loadActions();
+          }}
+        >
+          Reload data
+        </Button>
+      </Stack>
+      <Box sx={{ mt: 2.5 }}>
+        {actions ? (
+          <Grid container spacing={3}>
+            {actions.map((rule, index) => (
+              <Grid key={index} item xs={12}>
+                <Card elevation={3} sx={{ p: 1 }}>
+                  <CardContent>
+                    <pre>{JSON.stringify(rule, null, 2)}</pre>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <>
+            <Skeleton
+              variant="rectangular"
+              sx={{ mb: 1 }}
+              width={196}
+              height={24}
+            />
+            <Skeleton variant="rectangular" width={82} height={24} />
+          </>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
+function Rules() {
+  const { showToastError } = useToasts();
+  const { findJurisdictionRuleEntities } = useSubgraph();
+  const [rules, setRules] = useState(null);
 
   async function loadRules() {
     try {
@@ -37,99 +131,53 @@ export default function JurisdictionBackend() {
   }
 
   useEffect(() => {
-    loadActions();
     loadRules();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const actionColumns = [
-    { field: 'id', headerName: 'ID (GUID)', minWidth: 640 },
-    { field: 'subject', headerName: 'Subject' },
-    { field: 'verb', headerName: 'Verb' },
-    { field: 'object', headerName: 'Object' },
-    { field: 'tool', headerName: 'Tool' },
-    { field: 'affected', headerName: 'Affected' },
-    { field: 'confirmationRuling', headerName: 'Confirmation Ruling' },
-    { field: 'confirmationEvidence', headerName: 'Confirmation Evidence' },
-    { field: 'confirmationWitness', headerName: 'Confirmation Witness' },
-    { field: 'uri', headerName: 'URI' },
-  ];
-
-  const ruleColumns = [
-    { field: 'id', headerName: 'ID' },
-    {
-      field: 'about',
-      headerName: 'About (Action GUID)',
-      minWidth: 1200,
-      valueFormatter: ({ value }) => JSON.stringify(value),
-    },
-    { field: 'uri', headerName: 'URI' },
-    { field: 'effectsProfessional', headerName: 'Effects Professional' },
-    { field: 'effectsSocial', headerName: 'Effects Social' },
-    { field: 'effectsPersonal', headerName: 'Effects Personal' },
-    { field: 'negation', headerName: 'Negation' },
-  ];
-
   return (
-    <Layout
-      title={'YourJustice / Jurisdiction Backend'}
-      showAccountNavigation={!!account}
-    >
-      <Box sx={{ mb: 5 }}>
-        <Typography variant="h1" gutterBottom>
-          Jurisdiction Backend
-        </Typography>
-        <Divider />
+    <Box sx={{ mb: 8 }}>
+      <Typography variant="h4" gutterBottom>
+        Rules
+      </Typography>
+      <Divider sx={{ mb: 2.5 }} />
+      <Stack direction="row" spacing={2}>
+        <RuleManager />
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setRules(null);
+            loadRules();
+          }}
+        >
+          Reload data
+        </Button>
+      </Stack>
+      <Box sx={{ mt: 2.5 }}>
+        {rules ? (
+          <Grid container spacing={3}>
+            {rules.map((rule, index) => (
+              <Grid key={index} item xs={12}>
+                <Card elevation={3} sx={{ p: 1 }}>
+                  <CardContent>
+                    <pre>{JSON.stringify(rule, null, 2)}</pre>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <>
+            <Skeleton
+              variant="rectangular"
+              sx={{ mb: 1 }}
+              width={196}
+              height={24}
+            />
+            <Skeleton variant="rectangular" width={82} height={24} />
+          </>
+        )}
       </Box>
-      <Box sx={{ mb: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Roles
-        </Typography>
-        <Divider sx={{ mb: 2.5 }} />
-        <RoleManager />
-      </Box>
-      <Box sx={{ mb: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Actions
-        </Typography>
-        <Divider sx={{ mb: 2.5 }} />
-        <Stack direction="row" spacing={2}>
-          <ActionManager />
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setActions([]);
-              loadActions();
-            }}
-          >
-            Reload data
-          </Button>
-        </Stack>
-        <Box sx={{ height: 400, mt: 2.5 }}>
-          <DataGrid rows={actions} columns={actionColumns} />
-        </Box>
-      </Box>
-      <Box sx={{ mb: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Rules
-        </Typography>
-        <Divider sx={{ mb: 2.5 }} />
-        <Stack direction="row" spacing={2}>
-          <RuleManager />
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setRules([]);
-              loadRules();
-            }}
-          >
-            Reload data
-          </Button>
-        </Stack>
-        <Box sx={{ height: 400, mt: 2.5 }}>
-          <DataGrid rows={rules} columns={ruleColumns} />
-        </Box>
-      </Box>
-    </Layout>
+    </Box>
   );
 }
