@@ -126,21 +126,17 @@ function getFindJurisdictionRuleEntitiesQuery() {
       id
       about {
         id
-        subject
-        verb
-        object
-        tool
-        affected
-        confirmationRuling
-        confirmationEvidence
-        confirmationWitness
-        uri
       }
+      affected
       uri
+      negation
+      effectsEnvironmental
       effectsProfessional
       effectsSocial
       effectsPersonal
-      negation
+      confirmationRuling
+      confirmationEvidence
+      confirmationWitness
     }
   }`;
 }
@@ -153,11 +149,10 @@ function getFindActionEntitiesQuery() {
       verb
       object
       tool
-      affected
-      confirmationRuling
-      confirmationEvidence
-      confirmationWitness
       uri
+      rules {
+        id
+      }
     }
   }`;
 }
