@@ -1,4 +1,5 @@
-import contractJson from 'contracts/Jurisdiction.json';
+// eslint-disable-next-line import/extensions
+import contractAbi from 'contracts/abi/Jurisdiction.json';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -12,7 +13,7 @@ export default function useJuridictionContract() {
   function getContract(signerOrProvider) {
     return new Contract(
       process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-      contractJson.abi,
+      contractAbi,
       signerOrProvider,
     );
   }

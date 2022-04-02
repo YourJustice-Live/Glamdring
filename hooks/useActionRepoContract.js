@@ -1,4 +1,5 @@
-import contractJson from 'contracts/ActionRepo.json';
+// eslint-disable-next-line import/extensions
+import contractAbi from 'contracts/abi/ActionRepo.json';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
 import useWeb3Context from './useWeb3Context';
@@ -12,7 +13,7 @@ export default function useActionRepoContract() {
   function getContract(signerOrProvider) {
     return new Contract(
       process.env.NEXT_PUBLIC_ACTION_REPO_CONTRACT_ADDRESS,
-      contractJson.abi,
+      contractAbi,
       signerOrProvider,
     );
   }
