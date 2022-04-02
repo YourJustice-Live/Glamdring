@@ -125,38 +125,12 @@ function AddActionFormDialog() {
             title: 'Tool',
             default: '',
           },
-          affected: {
-            type: 'string',
-            title: 'Affected',
-            default: 'investor',
-          },
-        },
-      },
-      confirmation: {
-        type: 'object',
-        title: 'Confirmation',
-        properties: {
-          ruling: {
-            type: 'string',
-            title: 'Ruling',
-            default: 'judge',
-          },
-          evidence: {
-            type: 'boolean',
-            title: 'Evidence',
-            default: true,
-          },
-          witness: {
-            type: 'integer',
-            title: 'Witness',
-            default: 1,
-          },
         },
       },
       uri: {
         type: 'string',
         title: 'URI',
-        default: 'TEST_URI',
+        default: 'ipfs://QmZHrDqprEnBcs5cUbtYEbFvZRa7D7xeuXNkfjmyC8ZVbE',
       },
     },
   };
@@ -167,11 +141,6 @@ function AddActionFormDialog() {
       verb: { 'ui:emptyValue': '' },
       object: { 'ui:emptyValue': '' },
       tool: { 'ui:emptyValue': '' },
-      affected: { 'ui:emptyValue': '' },
-    },
-    confirmation: {
-      ruling: { 'ui:emptyValue': '' },
-      witness: { 'ui:widget': 'updown' },
     },
     uri: { 'ui:emptyValue': '' },
   };
@@ -190,7 +159,7 @@ function AddActionFormDialog() {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await addAction(formData.action, formData.confirmation, formData.uri);
+      await addAction(formData.action, formData.uri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

@@ -98,51 +98,96 @@ function AddRuleFormDialog() {
 
   const schema = {
     type: 'object',
-    required: ['about'],
     properties: {
-      about: {
-        type: 'string',
-        title: 'About (Action GUID)',
-      },
-      uri: {
-        type: 'string',
-        title: 'URI',
-        default: 'TEST_URI',
-      },
-      effects: {
+      rule: {
         type: 'object',
+        title: 'Rule',
+        required: ['about'],
         properties: {
-          professional: {
-            type: 'integer',
-            title: 'Professional',
-            default: -5,
+          about: {
+            type: 'string',
+            title: 'About (Action GUID)',
           },
-          social: {
-            type: 'integer',
-            title: 'Social',
-            default: 5,
+          affected: {
+            type: 'string',
+            title: 'Affected',
+            default: 'investor',
           },
-          personal: {
-            type: 'integer',
-            title: 'Personal',
-            default: 0,
+          negation: {
+            type: 'boolean',
+            title: 'Negation',
+            default: false,
+          },
+          uri: {
+            type: 'string',
+            title: 'URI',
+            default: 'ipfs://QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
+          },
+          effects: {
+            type: 'object',
+            properties: {
+              environmental: {
+                type: 'integer',
+                title: 'Environmental',
+                default: 0,
+              },
+              professional: {
+                type: 'integer',
+                title: 'Professional',
+                default: -5,
+              },
+              social: {
+                type: 'integer',
+                title: 'Social',
+                default: 5,
+              },
+              personal: {
+                type: 'integer',
+                title: 'Personal',
+                default: 0,
+              },
+            },
           },
         },
       },
-      negation: {
-        type: 'boolean',
-        title: 'Negation',
-        default: false,
+      confirmation: {
+        type: 'object',
+        title: 'Confirmation',
+        properties: {
+          ruling: {
+            type: 'string',
+            title: 'Ruling',
+            default: 'judge',
+          },
+          evidence: {
+            type: 'boolean',
+            title: 'Evidence',
+            default: true,
+          },
+          witness: {
+            type: 'integer',
+            title: 'Witness',
+            default: 1,
+          },
+        },
       },
     },
   };
 
   const uiSchema = {
-    uri: { 'ui:emptyValue': '' },
-    effects: {
-      professional: { 'ui:widget': 'updown' },
-      social: { 'ui:widget': 'updown' },
-      personal: { 'ui:widget': 'updown' },
+    rule: {
+      affected: { 'ui:emptyValue': '' },
+      uri: { 'ui:emptyValue': '' },
+      effects: {
+        environmental: { 'ui:widget': 'updown' },
+        professional: { 'ui:widget': 'updown' },
+        social: { 'ui:widget': 'updown' },
+        personal: { 'ui:widget': 'updown' },
+      },
+    },
+    confirmation: {
+      ruling: { 'ui:emptyValue': '' },
+      witness: { 'ui:widget': 'updown' },
     },
   };
 
@@ -160,7 +205,7 @@ function AddRuleFormDialog() {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await addRule(formData);
+      await addRule(formData.rule, formData.confirmation);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

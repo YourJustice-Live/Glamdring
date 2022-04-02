@@ -22,21 +22,16 @@ export default function useActionRepoContract() {
    * Add an action.
    *
    * @param {object} action Information about subject, verb, object,
-   * @param {object} confirmatiom Information about ruling, evidence.
    * @param {string} uri URI.
    * @returns Transaction.
    */
-  async function addAction(action, confirmatiom, uri) {
+  async function addAction(action, uri) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).actionAdd(
-      action,
-      confirmatiom,
-      uri,
-    );
+    return await getContract(provider?.getSigner()).actionAdd(action, uri);
   }
 
   return {
