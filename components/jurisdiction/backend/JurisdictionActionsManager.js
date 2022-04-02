@@ -45,6 +45,7 @@ export default function JurisdictionActionsManager() {
       <Divider sx={{ mb: 2.5 }} />
       <Stack direction="row" spacing={2}>
         <AddActionFormDialog />
+        <UpdateActionUriFormDialog />
         <Button
           variant="outlined"
           onClick={() => {
@@ -58,15 +59,11 @@ export default function JurisdictionActionsManager() {
       <Box sx={{ mt: 2.5 }}>
         {actions ? (
           <Grid container spacing={3}>
-            {actions.map((rule, index) => (
+            {actions.map((action, index) => (
               <Grid key={index} item xs={12}>
                 <Card elevation={3} sx={{ p: 1 }}>
                   <CardContent>
-                    <pre>{JSON.stringify(rule, null, 2)}</pre>
-                    <Stack direction="row" spacing={2}>
-                      <UpdateActionUriFormDialog />
-                      <UpdateActionConfirmationFormDialog />
-                    </Stack>
+                    <pre>{JSON.stringify(action, null, 2)}</pre>
                   </CardContent>
                 </Card>
               </Grid>
@@ -186,23 +183,70 @@ function AddActionFormDialog() {
 }
 
 /**
- * TODO: Implement this component
+ * A form for updating uri for specified action.
  */
 function UpdateActionUriFormDialog() {
-  return (
-    <Button variant="outlined" onClick={() => console.error('Not implemented')}>
-      Update URI
-    </Button>
-  );
-}
+  const { showToastSuccess, showToastError } = useToasts();
+  const { updateActionUri } = useActionRepoContract();
+  const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-/**
- * TODO: Implement this component
- */
-function UpdateActionConfirmationFormDialog() {
+  async function open() {
+    setIsOpen(true);
+  }
+
+  async function close() {
+    setFormData({});
+    setIsLoading(false);
+    setIsOpen(false);
+  }
+
+  async function submit({ formData }) {
+    try {
+      setFormData(formData);
+      setIsLoading(true);
+      await updateActionUri(formData.guid, formData.uri);
+      showToastSuccess('Success! Data will be updated soon.');
+      close();
+    } catch (error) {
+      showToastError(error);
+      setIsLoading(false);
+    }
+  }
+
+  const schema = {
+    type: 'object',
+    properties: {
+      guid: {
+        type: 'string',
+        title: 'GUID (ID)',
+      },
+      uri: {
+        type: 'string',
+        title: 'URI',
+      },
+    },
+  };
+
+  const uiSchema = {
+    giud: { 'ui:emptyValue': '' },
+    uri: { 'ui:emptyValue': '' },
+  };
+
   return (
-    <Button variant="outlined" onClick={() => console.error('Not implemented')}>
-      Update Confirmation
-    </Button>
+    <FormDialog
+      buttonTitle="Update Action URI"
+      formTitle="Update Action URI"
+      formText="Update a uri for specified action."
+      formSchema={schema}
+      formUiSchema={uiSchema}
+      formData={formData}
+      isLoading={isLoading}
+      isOpen={isOpen}
+      onOpen={open}
+      onClose={close}
+      onSubmit={submit}
+    />
   );
 }

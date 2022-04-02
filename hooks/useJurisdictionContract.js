@@ -75,6 +75,15 @@ export default function useJuridictionContract() {
     return await getContract(provider?.getSigner()).ruleAdd(rule, confirmation);
   }
 
+  async function updateRule(id, rule) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).ruleUpdate(id, rule);
+  }
+
   return {
     getName,
     getOwner,
@@ -84,5 +93,6 @@ export default function useJuridictionContract() {
     assignRole,
     removeRole,
     addRule,
+    updateRule,
   };
 }

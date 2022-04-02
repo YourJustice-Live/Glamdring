@@ -34,7 +34,24 @@ export default function useActionRepoContract() {
     return await getContract(provider?.getSigner()).actionAdd(action, uri);
   }
 
+  /**
+   * Update an uri for a specified action.
+   *
+   * @param {string} giud Action GUID (ID).
+   * @param {string} uri New URI.
+   * @returns Transaction.
+   */
+  async function updateActionUri(giud, uri) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).actionSetURI(giud, uri);
+  }
+
   return {
     addAction,
+    updateActionUri,
   };
 }
