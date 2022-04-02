@@ -1,8 +1,8 @@
 ## dApp
-YourJustice dApp: a on-chain meta-justice system for tracking and verifying reputation. 
+
+YourJustice dApp: a on-chain meta-justice system for tracking and verifying reputation.
 
 dApp URL: https://yj.life/
-
 
 ## Commands
 
@@ -13,8 +13,10 @@ dApp URL: https://yj.life/
 
 ## Naming Convention
 
-- Branch: '{Notion ID}-{task-name}' example: `1a41b-integrate-new-contracts`
-- Commit Message: '[{Notion ID}]-{Task name}' example: `[1a41b] Add new hooks for the jurisdiction contract`
+- Branch: `{Notion ID}-{task-name}`
+  - Example: `1a41b-integrate-new-contracts`
+- Commit Message: `[{Notion ID}]-{Task name}`
+  - Example: `[1a41b] Add new hooks for the jurisdiction contract`
 
 ## Environment variables for Polygon Mainnet
 
