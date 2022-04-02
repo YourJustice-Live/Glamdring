@@ -1,7 +1,7 @@
 import { Divider, Typography } from '@mui/material';
-import ActionsManager from 'components/jurisdiction/backend/ActionsManager';
-import RolesManager from 'components/jurisdiction/backend/RolesManager';
-import RulesManager from 'components/jurisdiction/backend/RulesManager';
+import JurisdictionActionsManager from 'components/jurisdiction/backend/JurisdictionActionsManager';
+import JurisdictionRolesManager from 'components/jurisdiction/backend/JurisdictionRolesManager';
+import JurisdictionRulesManager from 'components/jurisdiction/backend/JurisdictionRulesManager';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
@@ -20,9 +20,9 @@ export default function JurisdictionBackend() {
         Jurisdiction Backend
       </Typography>
       <Divider sx={{ mb: 8 }} />
-      <RolesManager />
-      <ActionsManager />
-      <RulesManager />
+      <JurisdictionRolesManager />
+      <JurisdictionActionsManager />
+      <JurisdictionRulesManager />
     </Layout>
   );
 }

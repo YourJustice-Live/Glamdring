@@ -12,7 +12,7 @@ import { formatAccount } from 'utils/formatters';
 /**
  * A component with jurisdiction meta (title, image, etc).
  */
-export default function Meta() {
+export default function JurisdictionMeta() {
   const { showToastSuccess, showToastError } = useToasts();
   const { getName, getOwner, isHasRole, join, leave } =
     useJuridictionContract();

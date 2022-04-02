@@ -9,7 +9,7 @@ import useToasts from 'hooks/useToasts';
 /**
  * A component with jurisdiction members.
  */
-export default function Members() {
+export default function JurisdictionMembers() {
   const { showToastError } = useToasts();
   const { findJurisdictionParticipantEntities } = useSubgraph();
   const { getProfiles } = useProfile();

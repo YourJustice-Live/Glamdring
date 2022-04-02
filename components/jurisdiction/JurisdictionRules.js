@@ -14,7 +14,7 @@ import useToasts from 'hooks/useToasts';
 /**
  * A component with jurisdiction rules.
  */
-export default function Rules() {
+export default function JurisdictionRules() {
   const { showToastError } = useToasts();
   const { findJurisdictionRuleEntities } = useSubgraph();
 

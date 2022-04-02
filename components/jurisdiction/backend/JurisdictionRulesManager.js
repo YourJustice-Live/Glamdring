@@ -18,7 +18,7 @@ import useToasts from 'hooks/useToasts';
 /**
  * A component with a list of rules and forms for adding or updating a rule.
  */
-export default function RulesManager() {
+export default function JurisdictionRulesManager() {
   const { showToastError } = useToasts();
   const { findJurisdictionRuleEntities } = useSubgraph();
   const [rules, setRules] = useState(null);

@@ -1,8 +1,8 @@
-import Cases from 'components/jurisdiction/Cases';
-import Members from 'components/jurisdiction/Members';
-import Meta from 'components/jurisdiction/Meta';
-import Officials from 'components/jurisdiction/Officials';
-import Rules from 'components/jurisdiction/Rules';
+import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
+import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
+import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
+import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
+import JurisdictionRules from 'components/jurisdiction/JurisdictionRules';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
@@ -17,11 +17,11 @@ export default function Jurisdiction() {
       title={'YourJustice / Jurisdiction'}
       showAccountNavigation={!!account}
     >
-      <Meta />
-      <Cases />
-      <Officials />
-      <Members />
-      <Rules />
+      <JurisdictionMeta />
+      <JurisdictionCases />
+      <JurisdictionOfficials />
+      <JurisdictionMembers />
+      <JurisdictionRules />
     </Layout>
   );
 }

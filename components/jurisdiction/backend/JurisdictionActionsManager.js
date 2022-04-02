@@ -18,7 +18,7 @@ import useToasts from 'hooks/useToasts';
 /**
  * A component with a list of actions and forms for adding or updating an action.
  */
-export default function ActionsManager() {
+export default function JurisdictionActionsManager() {
   const { showToastError } = useToasts();
   const { findActionEntities } = useSubgraph();
 

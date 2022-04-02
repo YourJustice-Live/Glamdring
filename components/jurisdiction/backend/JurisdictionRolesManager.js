@@ -9,7 +9,7 @@ import useToasts from 'hooks/useToasts';
 /**
  * A component for adding or removing role for specified account.
  */
-export default function RolesManager() {
+export default function JurisdictionRolesManager() {
   return (
     <Box sx={{ mb: 8 }}>
       <Typography variant="h4" gutterBottom>
