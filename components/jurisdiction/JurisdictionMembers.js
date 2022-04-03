@@ -3,7 +3,6 @@ import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileList from 'components/profile/ProfileList';
 import useProfile from 'hooks/useProfile';
-import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 
 /**
@@ -11,20 +10,13 @@ import useToasts from 'hooks/useToasts';
  */
 export default function JurisdictionMembers() {
   const { showToastError } = useToasts();
-  const { findJurisdictionParticipantEntities } = useSubgraph();
-  const { getProfiles } = useProfile();
+  const { getJurisdictionMemberProfiles } = useProfile();
 
-  const [memberProfiles, setMemberProfiles] = useState(null);
+  const [memberProfiles, setMemberProfiles] = useState();
 
   async function loadData() {
     try {
-      const participants = await findJurisdictionParticipantEntities();
-      const memberProfiles = await getProfiles(
-        participants
-          .filter((participant) => participant?.isMember)
-          .map((participant) => participant?.id),
-      );
-      setMemberProfiles(memberProfiles);
+      setMemberProfiles(await getJurisdictionMemberProfiles());
     } catch (error) {
       showToastError(error);
     }

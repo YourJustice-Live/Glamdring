@@ -15,13 +15,14 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the members of jurisdiction.
+   * Find the participants of jurisdiction.
    *
-   * @returns {Promise.<Array.<{object}>>} Array with accounts of members.
+   * @param {('members'|'judges'|'admins')} filter If specified, then the function returns the participants by the filter.
+   * @returns {Promise.<Array.<{object}>>} Array with accounts of participants.
    */
-  let findJurisdictionParticipantEntities = async function () {
+  let findJurisdictionParticipantEntities = async function (filter) {
     const response = await makeSubgraphQuery(
-      getFindJurisdictionParticipantEntitiesQuery(),
+      getFindJurisdictionParticipantEntitiesQuery(filter),
     );
     return response.jurisdictionParticipantEntities;
   };
@@ -73,17 +74,6 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-/**
- *
- * Get query for find avatar nft entities.
- *
- * If "accounts" is null, then return a query for get all entities.
- *
- * If "accounts" is empty array, then return a query for get empty list of entities.
- *
- * @param {Array<string>} accounts Arrays with accounts.
- * @returns Query for subgraph.
- */
 function getFindAvatarNftEntitiesQuery(accounts) {
   let queryParams = `first: 100`;
   if (accounts && accounts.length == 0) {
@@ -110,9 +100,19 @@ function getFindAvatarNftEntitiesQuery(accounts) {
     }`;
 }
 
-function getFindJurisdictionParticipantEntitiesQuery() {
+function getFindJurisdictionParticipantEntitiesQuery(filter) {
+  let queryParams = `first: 100`;
+  if (filter === 'members') {
+    queryParams = `where: {isMember: true}`;
+  }
+  if (filter === 'judges') {
+    queryParams = `where: {isJudge: true}`;
+  }
+  if (filter === 'admins') {
+    queryParams = `where: {isAdmin: true}`;
+  }
   return `{
-    jurisdictionParticipantEntities(first: 100) {
+    jurisdictionParticipantEntities(${queryParams}) {
       id
       isAdmin
       isMember
