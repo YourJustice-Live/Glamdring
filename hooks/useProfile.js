@@ -35,7 +35,9 @@ export default function useProfile() {
           await loadJsonFromIPFS(avatarNftEntity.uri),
         );
         profiles.push(profile);
-      } catch (error) {}
+      } catch (error) {
+        continue;
+      }
     }
     return profiles;
   };
