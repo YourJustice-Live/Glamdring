@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import FormDialog from 'components/extra/FormDialog';
-import useActionRepoContract from 'hooks/useActionRepoContract';
+import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 

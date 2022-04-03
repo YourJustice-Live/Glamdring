@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import FormDialog from 'components/extra/FormDialog';
-import useJuridictionContract from 'hooks/useJurisdictionContract';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 

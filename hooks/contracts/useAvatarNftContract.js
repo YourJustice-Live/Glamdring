@@ -2,7 +2,7 @@
 import contractAbi from 'contracts/abi/AvatarNFT.json';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
-import useWeb3Context from './useWeb3Context';
+import useWeb3Context from '../useWeb3Context';
 
 /**
  * Hook for AvatarNFT Contract.
