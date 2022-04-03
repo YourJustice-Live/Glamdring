@@ -6,7 +6,7 @@ import { Button, Divider, Typography } from '@mui/material';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import Layout from 'components/layout/Layout';
 import ProfileForm from 'components/profile/ProfileForm';
-import useAvatarNftContract from 'hooks/useAvatarNftContract';
+import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';

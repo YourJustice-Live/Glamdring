@@ -21,7 +21,7 @@ import {
   REPUTATION_DOMAIN_ID,
   REPUTATION_RATING_ID,
 } from 'constants/contracts';
-import useAvatarNftContract from 'hooks/useAvatarNftContract';
+import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useToasts from 'hooks/useToasts';
 import NextLink from 'next/link';
 import { useState } from 'react';

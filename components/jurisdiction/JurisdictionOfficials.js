@@ -3,7 +3,6 @@ import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileList from 'components/profile/ProfileList';
 import useProfile from 'hooks/useProfile';
-import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
 
 /**
@@ -11,27 +10,16 @@ import useToasts from 'hooks/useToasts';
  */
 export default function JurisdictionOfficials() {
   const { showToastError } = useToasts();
-  const { findJurisdictionParticipantEntities } = useSubgraph();
-  const { getProfiles } = useProfile();
+  const { getJurisdictionJudgeProfiles, getJurisdictionAdminProfiles } =
+    useProfile();
 
   const [judgeProfiles, setJudgeProfiles] = useState(null);
   const [adminProfiles, setAdminProfiles] = useState(null);
 
   async function loadData() {
     try {
-      const participants = await findJurisdictionParticipantEntities();
-      const judgeProfiles = await getProfiles(
-        participants
-          .filter((participant) => participant?.isJudge)
-          .map((participant) => participant?.id),
-      );
-      const adminProfiles = await getProfiles(
-        participants
-          .filter((participant) => participant?.isAdmin)
-          .map((participant) => participant?.id),
-      );
-      setJudgeProfiles(judgeProfiles);
-      setAdminProfiles(adminProfiles);
+      setJudgeProfiles(await getJurisdictionJudgeProfiles());
+      setAdminProfiles(await getJurisdictionAdminProfiles());
     } catch (error) {
       showToastError(error);
     }

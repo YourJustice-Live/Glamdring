@@ -8,21 +8,21 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 
 /**
  * A component with jurisdiction rules.
  */
 export default function JurisdictionRules() {
   const { showToastError } = useToasts();
-  const { findJurisdictionRuleEntities } = useSubgraph();
+  const { getRules } = useRule();
 
   const [rules, setRules] = useState(null);
 
   async function loadData() {
     try {
-      setRules(await findJurisdictionRuleEntities());
+      setRules(await getRules());
     } catch (error) {
       showToastError(error);
     }

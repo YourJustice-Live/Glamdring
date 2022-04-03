@@ -11,21 +11,21 @@ import {
   Typography,
 } from '@mui/material';
 import FormDialog from 'components/extra/FormDialog';
-import useJuridictionContract from 'hooks/useJurisdictionContract';
-import useSubgraph from 'hooks/useSubgraph';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 
 /**
  * A component with a list of rules and forms for adding or updating a rule.
  */
 export default function JurisdictionRulesManager() {
   const { showToastError } = useToasts();
-  const { findJurisdictionRuleEntities } = useSubgraph();
+  const { getRules } = useRule();
   const [rules, setRules] = useState(null);
 
   async function loadRules() {
     try {
-      setRules(await findJurisdictionRuleEntities());
+      setRules(await getRules());
     } catch (error) {
       showToastError(error);
     }
@@ -119,7 +119,8 @@ function AddRuleFormDialog() {
           uri: {
             type: 'string',
             title: 'URI',
-            default: 'ipfs://QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
+            default:
+              'https://ipfs.io/ipfs/QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
           },
           effects: {
             type: 'object',
@@ -269,7 +270,8 @@ function UpdateRuleFormDialog() {
           uri: {
             type: 'string',
             title: 'URI',
-            default: 'ipfs://QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
+            default:
+              'https://ipfs.io/ipfs/QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
           },
           effects: {
             type: 'object',

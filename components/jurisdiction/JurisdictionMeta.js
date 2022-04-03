@@ -4,7 +4,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import useJuridictionContract from 'hooks/useJurisdictionContract';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { formatAccount } from 'utils/formatters';

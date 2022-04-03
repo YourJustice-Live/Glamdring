@@ -3,7 +3,7 @@ import { Divider, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import FormDialog from 'components/extra/FormDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import useJuridictionContract from 'hooks/useJurisdictionContract';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 
 /**
