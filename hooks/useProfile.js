@@ -1,5 +1,6 @@
 import useSubgraph from 'hooks/useSubgraph';
 import useIpfs from 'hooks/useIpfs';
+import Profile from 'objects/Profile';
 
 /**
  * Hook for work with profiles.
@@ -45,22 +46,5 @@ export default function useProfile() {
   return {
     getProfile,
     getProfiles,
-  };
-}
-
-/**
- * Function that returns profile object.
- */
-function Profile(
-  account,
-  avatarNftId,
-  avatarNftReputations,
-  avatarNftMetadata,
-) {
-  return {
-    account: account,
-    avatarNftId: avatarNftId,
-    avatarNftReputations: avatarNftReputations,
-    avatarNftMetadata: avatarNftMetadata,
   };
 }
