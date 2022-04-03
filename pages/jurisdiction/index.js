@@ -1,4 +1,5 @@
 import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
+import JurisdictionCaseCreator from 'components/jurisdiction/JurisdictionCaseCreator';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
 import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
@@ -18,6 +19,7 @@ export default function Jurisdiction() {
       showAccountNavigation={!!account}
     >
       <JurisdictionMeta />
+      <JurisdictionCaseCreator />
       <JurisdictionCases />
       <JurisdictionOfficials />
       <JurisdictionMembers />

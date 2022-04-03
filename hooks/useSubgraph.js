@@ -152,6 +152,16 @@ function getFindActionEntitiesQuery() {
       uri
       rules {
         id
+        affected
+        uri
+        negation
+        effectsEnvironmental
+        effectsProfessional
+        effectsSocial
+        effectsPersonal
+        confirmationRuling
+        confirmationEvidence
+        confirmationWitness
       }
     }
   }`;
