@@ -127,7 +127,8 @@ function AddActionFormDialog() {
       uri: {
         type: 'string',
         title: 'URI',
-        default: 'ipfs://QmZHrDqprEnBcs5cUbtYEbFvZRa7D7xeuXNkfjmyC8ZVbE',
+        default:
+          'https://ipfs.io/ipfs/QmZHrDqprEnBcs5cUbtYEbFvZRa7D7xeuXNkfjmyC8ZVbE',
       },
     },
   };
@@ -225,6 +226,8 @@ function UpdateActionUriFormDialog() {
       uri: {
         type: 'string',
         title: 'URI',
+        default:
+          'https://ipfs.io/ipfs/QmZHrDqprEnBcs5cUbtYEbFvZRa7D7xeuXNkfjmyC8ZVbE',
       },
     },
   };

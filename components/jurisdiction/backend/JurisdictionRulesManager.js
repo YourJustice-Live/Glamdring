@@ -119,7 +119,8 @@ function AddRuleFormDialog() {
           uri: {
             type: 'string',
             title: 'URI',
-            default: 'ipfs://QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
+            default:
+              'https://ipfs.io/ipfs/QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
           },
           effects: {
             type: 'object',
@@ -269,7 +270,8 @@ function UpdateRuleFormDialog() {
           uri: {
             type: 'string',
             title: 'URI',
-            default: 'ipfs://QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
+            default:
+              'https://ipfs.io/ipfs/QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
           },
           effects: {
             type: 'object',
