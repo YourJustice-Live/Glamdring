@@ -14,21 +14,31 @@ import {
 import useAction from 'hooks/useAction';
 import useToasts from 'hooks/useToasts';
 import useRule from 'hooks/useRule';
+import useProfile from 'hooks/useProfile';
 
 /**
- * TODO: Add docs
+ * A component with form to create jurisdiction case.
+ *
+ * TODO: Use rjsf form with custom widgets
+ * TODO: Create pretty visual components instead of json
+ * TODO: Implement post case to contract
  * TODO: Hide component if account is not connected or acconunt is not member of jurisdiction
+ * TODO: Display loading components if data is processing
  */
 export default function JurisdictionCaseCreator() {
-  const { showToastError } = useToasts();
+  const { showToastSuccess, showToastError } = useToasts();
   const { getActions } = useAction();
   const { getRules } = useRule();
+  const { getJurisdictionMemberProfiles } = useProfile();
 
   const [isOpen, setIsOpen] = useState(false);
   const [actions, setActions] = useState(false);
   const [rules, setRules] = useState(false);
+  const [members, setMembers] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
   const [selectedRule, setSelectedRule] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedAffected, setSelectedAffected] = useState(null);
 
   async function open() {
     setIsOpen(true);
@@ -37,10 +47,15 @@ export default function JurisdictionCaseCreator() {
 
   async function close() {
     setIsOpen(false);
+    // Clear data
     setActions(null);
     setRules(null);
+    setMembers(null);
+    // Clear selectors
     setSelectedAction(null);
     setSelectedRule(null);
+    setSelectedSubject(null);
+    setSelectedAffected(null);
   }
 
   async function loadActions() {
@@ -52,13 +67,48 @@ export default function JurisdictionCaseCreator() {
   }
 
   async function selectAction(index) {
-    setSelectedAction(index);
-    setSelectedRule(null);
-    setRules(await getRules(actions[index].guid));
+    try {
+      setSelectedAction(index);
+      setRules(await getRules(actions[index].guid));
+      // Clear next selectors
+      setSelectedRule(null);
+      setSelectedSubject(null);
+      setSelectedAffected(null);
+    } catch (error) {
+      showToastError(error);
+    }
   }
 
   async function selectRule(index) {
-    setSelectedRule(index);
+    try {
+      setSelectedRule(index);
+      setMembers(await getJurisdictionMemberProfiles());
+      // Clear next selectors
+      setSelectedSubject(null);
+      setSelectedAffected(null);
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  function selectSubject(index) {
+    setSelectedSubject(index);
+  }
+
+  function selectAffected(index) {
+    setSelectedAffected(index);
+  }
+
+  function submit() {
+    const formData = {
+      action: actions[selectedAction],
+      rule: rules[selectedRule],
+      subject: members[selectedSubject],
+      affected: members[selectedAffected],
+    };
+    console.log('[Dev] formData:', formData);
+    showToastSuccess('Success!');
+    close();
   }
 
   return (
@@ -73,13 +123,8 @@ export default function JurisdictionCaseCreator() {
       <Dialog open={isOpen} onClose={close} maxWidth="xl" fullWidth={true}>
         <DialogTitle>Create New Case</DialogTitle>
         <DialogContent>
-          <Box>
-            <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
-            <Divider sx={{ my: 1.5 }} />
-            <Typography>???</Typography>
-          </Box>
           {actions && (
-            <Box sx={{ mt: 4 }}>
+            <Box>
               <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
               <Divider sx={{ my: 1.5 }} />
               <List>
@@ -112,22 +157,44 @@ export default function JurisdictionCaseCreator() {
               </List>
             </Box>
           )}
-          {selectedAction != null && selectedRule != null && (
+          {members && (
             <>
               <Box sx={{ mt: 4 }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Subject</Typography>
                 <Divider sx={{ my: 1.5 }} />
-                <Typography>...</Typography>
+                <List>
+                  {members.map((member, index) => (
+                    <ListItemButton
+                      key={index}
+                      selected={selectedSubject === index}
+                      onClick={() => selectSubject(index)}
+                    >
+                      <pre>{JSON.stringify(member, null, 2)}</pre>
+                    </ListItemButton>
+                  ))}
+                </List>
               </Box>
               <Box sx={{ mt: 4 }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
                 <Divider sx={{ my: 1.5 }} />
-                <Typography>...</Typography>
+                {members.map((member, index) => (
+                  <ListItemButton
+                    key={index}
+                    selected={selectedAffected === index}
+                    onClick={() => selectAffected(index)}
+                  >
+                    <pre>{JSON.stringify(member, null, 2)}</pre>
+                  </ListItemButton>
+                ))}
               </Box>
-              <Button sx={{ mt: 4 }} variant="contained" type="submit">
+            </>
+          )}
+          {selectedSubject != null && selectedAffected != null && (
+            <Box sx={{ mt: 4 }}>
+              <Button variant="contained" onClick={submit}>
                 Create Case
               </Button>
-            </>
+            </Box>
           )}
         </DialogContent>
       </Dialog>
