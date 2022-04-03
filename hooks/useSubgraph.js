@@ -5,7 +5,7 @@ export default function useSubgraph() {
    * Find the Avatar NFTs for all or only for the specified accounts.
    *
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
-   * @returns {Promise.<Array.<{id: number, owner: string, uri: string, reputations: Array<object>}>>} Avatar NFTs with token ID, token owner and token URI.
+   * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
   let findAvatarNftEntities = async function (accounts) {
     const response = await makeSubgraphQuery(
@@ -17,7 +17,7 @@ export default function useSubgraph() {
   /**
    * Find the members of jurisdiction.
    *
-   * @returns {Promise.<Array.<{id: string, isAdmin: boolean, isMember: boolean, isJudge: boolean}>>} Array with accounts of members.
+   * @returns {Promise.<Array.<{object}>>} Array with accounts of members.
    */
   let findJurisdictionParticipantEntities = async function () {
     const response = await makeSubgraphQuery(
@@ -29,11 +29,12 @@ export default function useSubgraph() {
   /**
    * Find the jurisdiction rule entities.
    *
-   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
+   * @param {string} actionGuid If not null, then the function returns the rules for the specified action.
+   * @returns Array with jurisdiction rule entities.
    */
-  let findJurisdictionRuleEntities = async function () {
+  let findJurisdictionRuleEntities = async function (actionGuid) {
     const response = await makeSubgraphQuery(
-      getFindJurisdictionRuleEntitiesQuery(),
+      getFindJurisdictionRuleEntitiesQuery(actionGuid),
     );
     return response.jurisdictionRuleEntities;
   };
@@ -120,9 +121,13 @@ function getFindJurisdictionParticipantEntitiesQuery() {
   }`;
 }
 
-function getFindJurisdictionRuleEntitiesQuery() {
+function getFindJurisdictionRuleEntitiesQuery(actionGuid) {
+  let queryParams = `first: 100`;
+  if (actionGuid) {
+    queryParams = `where: {about: "${actionGuid}"}`;
+  }
   return `{
-    jurisdictionRuleEntities(first: 100) {
+    jurisdictionRuleEntities(${queryParams}) {
       id
       about {
         id

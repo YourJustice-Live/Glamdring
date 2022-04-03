@@ -11,8 +11,9 @@ import {
   ListItemButton,
   Typography,
 } from '@mui/material';
-import useSubgraph from 'hooks/useSubgraph';
+import useAction from 'hooks/useAction';
 import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 
 /**
  * TODO: Add docs
@@ -20,7 +21,8 @@ import useToasts from 'hooks/useToasts';
  */
 export default function JurisdictionCaseCreator() {
   const { showToastError } = useToasts();
-  const { findActionEntities } = useSubgraph();
+  const { getActions } = useAction();
+  const { getRules } = useRule();
 
   const [isOpen, setIsOpen] = useState(false);
   const [actions, setActions] = useState(false);
@@ -43,7 +45,7 @@ export default function JurisdictionCaseCreator() {
 
   async function loadActions() {
     try {
-      setActions(await findActionEntities());
+      setActions(await getActions());
     } catch (error) {
       showToastError(error);
     }
@@ -52,7 +54,7 @@ export default function JurisdictionCaseCreator() {
   async function selectAction(index) {
     setSelectedAction(index);
     setSelectedRule(null);
-    setRules(actions[index].rules);
+    setRules(await getRules(actions[index].guid));
   }
 
   async function selectRule(index) {

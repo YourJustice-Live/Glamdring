@@ -12,20 +12,20 @@ import {
 } from '@mui/material';
 import FormDialog from 'components/extra/FormDialog';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
-import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 
 /**
  * A component with a list of rules and forms for adding or updating a rule.
  */
 export default function JurisdictionRulesManager() {
   const { showToastError } = useToasts();
-  const { findJurisdictionRuleEntities } = useSubgraph();
+  const { getRules } = useRule();
   const [rules, setRules] = useState(null);
 
   async function loadRules() {
     try {
-      setRules(await findJurisdictionRuleEntities());
+      setRules(await getRules());
     } catch (error) {
       showToastError(error);
     }

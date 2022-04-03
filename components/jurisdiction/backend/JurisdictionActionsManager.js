@@ -12,21 +12,21 @@ import {
 import { Box } from '@mui/system';
 import FormDialog from 'components/extra/FormDialog';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
-import useSubgraph from 'hooks/useSubgraph';
 import useToasts from 'hooks/useToasts';
+import useAction from 'hooks/useAction';
 
 /**
  * A component with a list of actions and forms for adding or updating an action.
  */
 export default function JurisdictionActionsManager() {
   const { showToastError } = useToasts();
-  const { findActionEntities } = useSubgraph();
+  const { getActions } = useAction();
 
   const [actions, setActions] = useState(null);
 
   async function loadActions() {
     try {
-      setActions(await findActionEntities());
+      setActions(await getActions());
     } catch (error) {
       showToastError(error);
     }
