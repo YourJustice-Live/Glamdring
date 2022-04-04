@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Typography } from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
+import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
+import ProfilePictureInput from 'components/form/widget/ProfilePictureInput';
 import Layout from 'components/layout/Layout';
-import ProfileForm from 'components/profile/ProfileForm';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import Link from 'next/link';
 
 /**
  * Page where account can create (mint) or edit profile (Avatar NFT).
+ *
+ * TODO: Check that account uploaded picture before submit form
  */
 export default function ProfileManager() {
   const statuses = {
@@ -29,7 +33,39 @@ export default function ProfileManager() {
   const [status, setStatus] = useState(statuses.isAvailable);
   const [formData, setFormData] = useState(null);
 
-  async function submit(formData) {
+  const schema = {
+    type: 'object',
+    properties: {
+      image: {
+        type: 'string',
+        title: 'Profile Picture',
+      },
+      attributes: {
+        type: 'array',
+        title: 'Profile Attributes',
+        items: [{}],
+      },
+    },
+  };
+
+  const uiSchema = {
+    image: {
+      'ui:widget': 'ProfilePictureInput',
+      'ui:options': {
+        size: 128,
+      },
+    },
+    attributes: {
+      'ui:widget': 'ProfileAttributesInput',
+    },
+  };
+
+  const widgets = {
+    ProfilePictureInput: ProfilePictureInput,
+    ProfileAttributesInput: ProfileAttributesInput,
+  };
+
+  async function submit({ formData }) {
     try {
       // Update form data
       setFormData(formData);
@@ -75,9 +111,12 @@ export default function ProfileManager() {
             {accountProfile ? 'Editing Own Profile' : 'Creating Own Profile'}
           </Typography>
           <Divider sx={{ mb: 1 }} />
-          <ProfileForm
-            initData={formData}
+          <Form
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={formData}
             onSubmit={submit}
+            widgets={widgets}
             disabled={status !== statuses.isAvailable ? true : false}
           >
             {status === statuses.isAvailable && (
@@ -105,7 +144,7 @@ export default function ProfileManager() {
                 {accountProfile ? 'Updating NFT' : 'Minting NFT'}
               </LoadingButton>
             )}
-          </ProfileForm>
+          </Form>
         </>
       )}
 
