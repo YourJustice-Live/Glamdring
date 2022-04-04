@@ -231,6 +231,8 @@ function AddRuleFormDialog() {
 
 /**
  * A form for updating a specified rule.
+ *
+ * TODO: Add "confirmation" to schema
  */
 function UpdateRuleFormDialog({ rule }) {
   const { showToastSuccess, showToastError } = useToasts();
