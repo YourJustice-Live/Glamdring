@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddBoxOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -9,103 +9,98 @@ import {
   Divider,
   List,
   ListItemButton,
+  Stack,
   Typography,
 } from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useAction from 'hooks/useAction';
-import useToasts from 'hooks/useToasts';
-import useRule from 'hooks/useRule';
 import useProfile from 'hooks/useProfile';
+import useRule from 'hooks/useRule';
+import useToasts from 'hooks/useToasts';
 
 /**
- * A component with form to create jurisdiction case.
+ * A component with a form to create jurisdiction case.
  *
- * TODO: Use rjsf form with custom widgets
  * TODO: Create pretty visual components instead of json
  * TODO: Implement post case to contract
  * TODO: Hide component if account is not connected or acconunt is not member of jurisdiction
- * TODO: Display loading components if data is processing
  */
 export default function JurisdictionCaseCreator() {
-  const { showToastSuccess, showToastError } = useToasts();
-  const { getActions } = useAction();
-  const { getRules } = useRule();
-  const { getJurisdictionMemberProfiles } = useProfile();
-
+  const { showToastSuccess } = useToasts();
   const [isOpen, setIsOpen] = useState(false);
-  const [actions, setActions] = useState(false);
-  const [rules, setRules] = useState(false);
-  const [members, setMembers] = useState(null);
-  const [selectedAction, setSelectedAction] = useState(null);
-  const [selectedRule, setSelectedRule] = useState(null);
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedAffected, setSelectedAffected] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  const schema = {
+    type: 'object',
+    properties: {
+      actionGuid: {
+        type: 'string',
+        title: 'Action',
+      },
+    },
+    required: ['actionGuid'],
+    dependencies: {
+      actionGuid: {
+        properties: {
+          ruleId: {
+            type: 'string',
+            title: 'Rule',
+          },
+        },
+        required: ['ruleId'],
+      },
+      ruleId: {
+        properties: {
+          subjectProfileAccount: {
+            type: 'string',
+            title: 'Subject',
+          },
+          affectedProfileAccount: {
+            type: 'string',
+            title: 'Affected',
+          },
+        },
+        required: ['subjectProfileAccount', 'affectedProfileAccount'],
+      },
+    },
+  };
+
+  const uiSchema = {
+    actionGuid: {
+      'ui:widget': 'CaseActionSelect',
+    },
+    ruleId: {
+      'ui:widget': 'CaseRuleSelect',
+    },
+    subjectProfileAccount: {
+      'ui:widget': 'CaseProfileSelect',
+    },
+    affectedProfileAccount: {
+      'ui:widget': 'CaseProfileSelect',
+    },
+  };
+
+  const widgets = {
+    CaseActionSelect: CaseActionSelect,
+    CaseRuleSelect: CaseRuleSelect,
+    CaseProfileSelect: CaseProfileSelect,
+  };
 
   async function open() {
     setIsOpen(true);
-    loadActions();
+    setFormData({});
   }
 
   async function close() {
     setIsOpen(false);
-    // Clear data
-    setActions(null);
-    setRules(null);
-    setMembers(null);
-    // Clear selectors
-    setSelectedAction(null);
-    setSelectedRule(null);
-    setSelectedSubject(null);
-    setSelectedAffected(null);
   }
 
-  async function loadActions() {
-    try {
-      setActions(await getActions());
-    } catch (error) {
-      showToastError(error);
-    }
+  function handleChange({ formData }) {
+    setFormData(formData);
   }
 
-  async function selectAction(index) {
-    try {
-      setSelectedAction(index);
-      setRules(await getRules(actions[index].guid));
-      // Clear next selectors
-      setSelectedRule(null);
-      setSelectedSubject(null);
-      setSelectedAffected(null);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  async function selectRule(index) {
-    try {
-      setSelectedRule(index);
-      setMembers(await getJurisdictionMemberProfiles());
-      // Clear next selectors
-      setSelectedSubject(null);
-      setSelectedAffected(null);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  function selectSubject(index) {
-    setSelectedSubject(index);
-  }
-
-  function selectAffected(index) {
-    setSelectedAffected(index);
-  }
-
-  function submit() {
-    const formData = {
-      action: actions[selectedAction],
-      rule: rules[selectedRule],
-      subject: members[selectedSubject],
-      affected: members[selectedAffected],
-    };
+  function handleSubmit({ formData }) {
     console.log('[Dev] formData:', formData);
     showToastSuccess('Success!');
     close();
@@ -123,81 +118,168 @@ export default function JurisdictionCaseCreator() {
       <Dialog open={isOpen} onClose={close} maxWidth="xl" fullWidth={true}>
         <DialogTitle>Create New Case</DialogTitle>
         <DialogContent>
-          {actions && (
-            <Box>
-              <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
-              <Divider sx={{ my: 1.5 }} />
-              <List>
-                {actions.map((action, index) => (
-                  <ListItemButton
-                    key={index}
-                    selected={selectedAction === index}
-                    onClick={() => selectAction(index)}
-                  >
-                    <pre>{JSON.stringify(action, null, 2)}</pre>
-                  </ListItemButton>
-                ))}
-              </List>
-            </Box>
-          )}
-          {rules && (
-            <Box sx={{ mt: 4 }}>
-              <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
-              <Divider sx={{ my: 1.5 }} />
-              <List>
-                {rules.map((rule, index) => (
-                  <ListItemButton
-                    key={index}
-                    selected={selectedRule === index}
-                    onClick={() => selectRule(index)}
-                  >
-                    <pre>{JSON.stringify(rule, null, 2)}</pre>
-                  </ListItemButton>
-                ))}
-              </List>
-            </Box>
-          )}
-          {members && (
-            <>
-              <Box sx={{ mt: 4 }}>
-                <Typography sx={{ fontWeight: 'bold' }}>Subject</Typography>
-                <Divider sx={{ my: 1.5 }} />
-                <List>
-                  {members.map((member, index) => (
-                    <ListItemButton
-                      key={index}
-                      selected={selectedSubject === index}
-                      onClick={() => selectSubject(index)}
-                    >
-                      <pre>{JSON.stringify(member, null, 2)}</pre>
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Box>
-              <Box sx={{ mt: 4 }}>
-                <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
-                <Divider sx={{ my: 1.5 }} />
-                {members.map((member, index) => (
-                  <ListItemButton
-                    key={index}
-                    selected={selectedAffected === index}
-                    onClick={() => selectAffected(index)}
-                  >
-                    <pre>{JSON.stringify(member, null, 2)}</pre>
-                  </ListItemButton>
-                ))}
-              </Box>
-            </>
-          )}
-          {selectedSubject != null && selectedAffected != null && (
-            <Box sx={{ mt: 4 }}>
-              <Button variant="contained" onClick={submit}>
+          <Form
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={formData}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            widgets={widgets}
+            formContext={{
+              formData: formData,
+            }}
+            disabled={isLoading}
+          >
+            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+              <Button variant="contained" type="submit">
                 Create Case
               </Button>
-            </Box>
-          )}
+              <Button variant="outlined" onClick={close}>
+                Cancel
+              </Button>
+            </Stack>
+          </Form>
         </DialogContent>
       </Dialog>
+    </Box>
+  );
+}
+
+function CaseActionSelect(props) {
+  const propsValue = props.value;
+  const propsOnChange = props.onChange;
+  const { showToastError } = useToasts();
+  const { getActions } = useAction();
+  const [actions, setActions] = useState(false);
+
+  async function loadActions() {
+    try {
+      setActions(null);
+      setActions(await getActions());
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  useEffect(() => {
+    loadActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Box>
+      <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
+      <Divider sx={{ my: 1.5 }} />
+      {actions ? (
+        <List>
+          {actions.map((action, index) => (
+            <ListItemButton
+              key={index}
+              selected={propsValue === action.guid}
+              onClick={() => propsOnChange(action.guid)}
+            >
+              <pre>{JSON.stringify(action, null, 2)}</pre>
+            </ListItemButton>
+          ))}
+        </List>
+      ) : (
+        <Typography>Loading...</Typography>
+      )}
+    </Box>
+  );
+}
+
+function CaseRuleSelect(props) {
+  const propsValue = props.value;
+  const propsOnChange = props.onChange;
+  const propsFormActionGuid = props.formContext?.formData?.actionGuid;
+  const { showToastError } = useToasts();
+  const { getRules } = useRule();
+  const [rules, setRules] = useState(null);
+
+  async function loadRules() {
+    try {
+      setRules(null);
+      setRules(await getRules(propsFormActionGuid));
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  useEffect(() => {
+    if (propsFormActionGuid) {
+      loadRules();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propsFormActionGuid]);
+
+  return (
+    <Box>
+      <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
+      <Divider sx={{ my: 1.5 }} />
+      {rules ? (
+        <List>
+          {rules.map((rule, index) => (
+            <ListItemButton
+              key={index}
+              selected={propsValue === rule.id}
+              onClick={() => propsOnChange(rule.id)}
+            >
+              <pre>{JSON.stringify(rule, null, 2)}</pre>
+            </ListItemButton>
+          ))}
+        </List>
+      ) : (
+        <Typography>Loading...</Typography>
+      )}
+    </Box>
+  );
+}
+
+function CaseProfileSelect(props) {
+  const propsValue = props.value;
+  const propsLabel = props.label;
+  const propsOnChange = props.onChange;
+  const propsFormRuleId = props.formContext?.formData?.ruleId;
+  const { showToastError } = useToasts();
+  const { getJurisdictionMemberProfiles } = useProfile();
+  const [profiles, setProfiles] = useState(null);
+
+  async function loadProfiles() {
+    try {
+      setProfiles(null);
+      setProfiles(await getJurisdictionMemberProfiles());
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  useEffect(() => {
+    if (propsFormRuleId) {
+      loadProfiles();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propsFormRuleId]);
+
+  return (
+    <Box>
+      <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
+      <Divider sx={{ my: 1.5 }} />
+      {profiles ? (
+        <List>
+          {profiles.map((profile, index) => (
+            <ListItemButton
+              key={index}
+              selected={propsValue === profile.account}
+              onClick={() => propsOnChange(profile.account)}
+            >
+              <pre>{JSON.stringify(profile, null, 2)}</pre>
+            </ListItemButton>
+          ))}
+        </List>
+      ) : (
+        <Typography>Loading...</Typography>
+      )}
     </Box>
   );
 }
