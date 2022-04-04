@@ -1,27 +1,20 @@
-import { useEffect, useState } from 'react';
-import { AddBoxOutlined, ArrowForwardOutlined } from '@mui/icons-material';
+import { useState } from 'react';
+import { AddBoxOutlined } from '@mui/icons-material';
 import {
-  Avatar,
   Box,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
   Divider,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import useAction from 'hooks/useAction';
-import useProfile from 'hooks/useProfile';
-import useRule from 'hooks/useRule';
+import JurisdictionActionSelect from 'components/form/widget/JurisdictionActionSelect';
+import JurisdictionProfileSelect from 'components/form/widget/JurisdictionProfileSelect';
+import JurisdictionRuleSelect from 'components/form/widget/JurisdictionRuleSelect';
 import useToasts from 'hooks/useToasts';
-import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
  * A component with a form to create jurisdiction case.
@@ -74,23 +67,23 @@ export default function JurisdictionCaseCreator() {
 
   const uiSchema = {
     actionGuid: {
-      'ui:widget': 'ActionSelectWidget',
+      'ui:widget': 'JurisdictionActionSelect',
     },
     ruleId: {
-      'ui:widget': 'RuleSelectWidget',
+      'ui:widget': 'JurisdictionRuleSelect',
     },
     subjectProfileAccount: {
-      'ui:widget': 'ProfileSelectWidget',
+      'ui:widget': 'JurisdictionProfileSelect',
     },
     affectedProfileAccount: {
-      'ui:widget': 'ProfileSelectWidget',
+      'ui:widget': 'JurisdictionProfileSelect',
     },
   };
 
   const widgets = {
-    ActionSelectWidget: ActionSelectWidget,
-    RuleSelectWidget: RuleSelectWidget,
-    ProfileSelectWidget: ProfileSelectWidget,
+    JurisdictionActionSelect: JurisdictionActionSelect,
+    JurisdictionRuleSelect: JurisdictionRuleSelect,
+    JurisdictionProfileSelect: JurisdictionProfileSelect,
   };
 
   async function open() {
@@ -147,180 +140,6 @@ export default function JurisdictionCaseCreator() {
           </Form>
         </DialogContent>
       </Dialog>
-    </Box>
-  );
-}
-
-/**
- * A widget to select action.
- */
-function ActionSelectWidget(props) {
-  const propsValue = props.value;
-  const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
-  const { getActions } = useAction();
-  const [actions, setActions] = useState(false);
-
-  async function loadActions() {
-    try {
-      setActions(null);
-      setActions(await getActions());
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    loadActions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
-      <Divider sx={{ my: 1.5 }} />
-      {actions ? (
-        <List>
-          {actions.map((action, index) => (
-            <ListItemButton
-              key={index}
-              selected={propsValue === action.guid}
-              onClick={() => propsOnChange(action.guid)}
-            >
-              <ListItemIcon>
-                <ArrowForwardOutlined />
-              </ListItemIcon>
-              <ListItemText
-                primary={action.uriData.name}
-                secondary={action.uriData.description}
-              />
-            </ListItemButton>
-          ))}
-        </List>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
-    </Box>
-  );
-}
-
-/**
- * A widget to select rule.
- */
-function RuleSelectWidget(props) {
-  const propsValue = props.value;
-  const propsOnChange = props.onChange;
-  const propsFormActionGuid = props.formContext?.formData?.actionGuid;
-  const { showToastError } = useToasts();
-  const { getRules } = useRule();
-  const [rules, setRules] = useState(null);
-
-  async function loadRules() {
-    try {
-      setRules(null);
-      setRules(await getRules(propsFormActionGuid));
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    if (propsFormActionGuid) {
-      loadRules();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsFormActionGuid]);
-
-  return (
-    <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
-      <Divider sx={{ my: 1.5 }} />
-      {rules ? (
-        <List>
-          {rules.map((rule, index) => (
-            <ListItemButton
-              key={index}
-              selected={propsValue === rule.id}
-              onClick={() => propsOnChange(rule.id)}
-            >
-              <ListItemIcon>
-                <ArrowForwardOutlined />
-              </ListItemIcon>
-              <ListItemText
-                primary={rule.rule.uriData.name}
-                secondary={rule.rule.uriData.description}
-              />
-            </ListItemButton>
-          ))}
-        </List>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
-    </Box>
-  );
-}
-
-/**
- * A widget to select profile.
- */
-function ProfileSelectWidget(props) {
-  const propsValue = props.value;
-  const propsLabel = props.label;
-  const propsOnChange = props.onChange;
-  const propsFormRuleId = props.formContext?.formData?.ruleId;
-  const { showToastError } = useToasts();
-  const { getJurisdictionMemberProfiles } = useProfile();
-  const [profiles, setProfiles] = useState(null);
-
-  async function loadProfiles() {
-    try {
-      setProfiles(null);
-      setProfiles(await getJurisdictionMemberProfiles());
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    if (propsFormRuleId) {
-      loadProfiles();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsFormRuleId]);
-
-  return (
-    <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-      <Divider sx={{ my: 1.5 }} />
-      {profiles ? (
-        <List>
-          {profiles.map((profile, index) => (
-            <ListItemButton
-              key={index}
-              selected={propsValue === profile.account}
-              onClick={() => propsOnChange(profile.account)}
-            >
-              <ListItemAvatar>
-                <Avatar src={profile.avatarNftMetadata?.image} />
-              </ListItemAvatar>
-              <Stack direction="column">
-                <Typography>
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.firstName,
-                  ) || 'None'}{' '}
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.lastName,
-                  ) || 'None'}
-                </Typography>
-              </Stack>
-            </ListItemButton>
-          ))}
-        </List>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
     </Box>
   );
 }
