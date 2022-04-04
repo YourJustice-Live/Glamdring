@@ -45,7 +45,6 @@ export default function JurisdictionActionsManager() {
       <Divider sx={{ mb: 2.5 }} />
       <Stack direction="row" spacing={2}>
         <AddActionFormDialog />
-        <UpdateActionUriFormDialog />
         <Button
           variant="outlined"
           onClick={() => {
@@ -64,6 +63,7 @@ export default function JurisdictionActionsManager() {
                 <Card elevation={3} sx={{ p: 1 }}>
                   <CardContent>
                     <pre>{JSON.stringify(action, null, 2)}</pre>
+                    <UpdateActionUriFormDialog action={action} />
                   </CardContent>
                 </Card>
               </Grid>
@@ -170,7 +170,6 @@ function AddActionFormDialog() {
     <FormDialog
       buttonTitle="Add Action"
       formTitle="Add Action"
-      formText="Add a action."
       formSchema={schema}
       formUiSchema={uiSchema}
       formData={formData}
@@ -186,7 +185,7 @@ function AddActionFormDialog() {
 /**
  * A form for updating uri for specified action.
  */
-function UpdateActionUriFormDialog() {
+function UpdateActionUriFormDialog({ action }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { updateActionUri } = useActionRepoContract();
   const [formData, setFormData] = useState({});
@@ -195,6 +194,7 @@ function UpdateActionUriFormDialog() {
 
   async function open() {
     setIsOpen(true);
+    setFormData(action);
   }
 
   async function close() {
@@ -226,8 +226,6 @@ function UpdateActionUriFormDialog() {
       uri: {
         type: 'string',
         title: 'URI',
-        default:
-          'https://ipfs.io/ipfs/QmZHrDqprEnBcs5cUbtYEbFvZRa7D7xeuXNkfjmyC8ZVbE',
       },
     },
   };
@@ -241,7 +239,6 @@ function UpdateActionUriFormDialog() {
     <FormDialog
       buttonTitle="Update Action URI"
       formTitle="Update Action URI"
-      formText="Update a uri for specified action."
       formSchema={schema}
       formUiSchema={uiSchema}
       formData={formData}
