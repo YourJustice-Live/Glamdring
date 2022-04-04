@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import FormDialog from 'components/extra/FormDialog';
+import FormDialog from 'components/form/FormDialog';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useToasts from 'hooks/useToasts';
 import useAction from 'hooks/useAction';

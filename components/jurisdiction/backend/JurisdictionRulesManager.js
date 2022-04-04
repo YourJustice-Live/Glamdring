@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import FormDialog from 'components/extra/FormDialog';
+import FormDialog from 'components/form/FormDialog';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useRule from 'hooks/useRule';
