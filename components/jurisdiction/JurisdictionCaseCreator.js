@@ -68,23 +68,23 @@ export default function JurisdictionCaseCreator() {
 
   const uiSchema = {
     actionGuid: {
-      'ui:widget': 'CaseActionSelect',
+      'ui:widget': 'ActionSelectWidget',
     },
     ruleId: {
-      'ui:widget': 'CaseRuleSelect',
+      'ui:widget': 'RuleSelectWidget',
     },
     subjectProfileAccount: {
-      'ui:widget': 'CaseProfileSelect',
+      'ui:widget': 'ProfileSelectWidget',
     },
     affectedProfileAccount: {
-      'ui:widget': 'CaseProfileSelect',
+      'ui:widget': 'ProfileSelectWidget',
     },
   };
 
   const widgets = {
-    CaseActionSelect: CaseActionSelect,
-    CaseRuleSelect: CaseRuleSelect,
-    CaseProfileSelect: CaseProfileSelect,
+    ActionSelectWidget: ActionSelectWidget,
+    RuleSelectWidget: RuleSelectWidget,
+    ProfileSelectWidget: ProfileSelectWidget,
   };
 
   async function open() {
@@ -145,7 +145,10 @@ export default function JurisdictionCaseCreator() {
   );
 }
 
-function CaseActionSelect(props) {
+/**
+ * A widget to select action.
+ */
+function ActionSelectWidget(props) {
   const propsValue = props.value;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
@@ -189,7 +192,10 @@ function CaseActionSelect(props) {
   );
 }
 
-function CaseRuleSelect(props) {
+/**
+ * A widget to select rule.
+ */
+function RuleSelectWidget(props) {
   const propsValue = props.value;
   const propsOnChange = props.onChange;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
@@ -236,7 +242,10 @@ function CaseRuleSelect(props) {
   );
 }
 
-function CaseProfileSelect(props) {
+/**
+ * A widget to select profile.
+ */
+function ProfileSelectWidget(props) {
   const propsValue = props.value;
   const propsLabel = props.label;
   const propsOnChange = props.onChange;
