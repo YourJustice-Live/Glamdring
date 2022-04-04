@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AddBoxOutlined } from '@mui/icons-material';
+import { AddBoxOutlined, ArrowForwardOutlined } from '@mui/icons-material';
 import {
+  Avatar,
   Box,
   Button,
   Dialog,
@@ -8,7 +9,10 @@ import {
   DialogTitle,
   Divider,
   List,
+  ListItemAvatar,
   ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
@@ -17,6 +21,7 @@ import useAction from 'hooks/useAction';
 import useProfile from 'hooks/useProfile';
 import useRule from 'hooks/useRule';
 import useToasts from 'hooks/useToasts';
+import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
  * A component with a form to create jurisdiction case.
@@ -24,6 +29,7 @@ import useToasts from 'hooks/useToasts';
  * TODO: Create pretty visual components instead of json
  * TODO: Implement post case to contract
  * TODO: Hide component if account is not connected or acconunt is not member of jurisdiction
+ * TODO: Improve appearance for form validation errors
  */
 export default function JurisdictionCaseCreator() {
   const { showToastSuccess } = useToasts();
@@ -115,7 +121,7 @@ export default function JurisdictionCaseCreator() {
       <Button variant="contained" startIcon={<AddBoxOutlined />} onClick={open}>
         Create Case
       </Button>
-      <Dialog open={isOpen} onClose={close} maxWidth="xl" fullWidth={true}>
+      <Dialog open={isOpen} onClose={close}>
         <DialogTitle>Create New Case</DialogTitle>
         <DialogContent>
           <Form
@@ -181,7 +187,13 @@ function ActionSelectWidget(props) {
               selected={propsValue === action.guid}
               onClick={() => propsOnChange(action.guid)}
             >
-              <pre>{JSON.stringify(action, null, 2)}</pre>
+              <ListItemIcon>
+                <ArrowForwardOutlined />
+              </ListItemIcon>
+              <ListItemText
+                primary={action.uriData.name}
+                secondary={action.uriData.description}
+              />
             </ListItemButton>
           ))}
         </List>
@@ -231,7 +243,13 @@ function RuleSelectWidget(props) {
               selected={propsValue === rule.id}
               onClick={() => propsOnChange(rule.id)}
             >
-              <pre>{JSON.stringify(rule, null, 2)}</pre>
+              <ListItemIcon>
+                <ArrowForwardOutlined />
+              </ListItemIcon>
+              <ListItemText
+                primary={rule.rule.uriData.name}
+                secondary={rule.rule.uriData.description}
+              />
             </ListItemButton>
           ))}
         </List>
@@ -282,7 +300,21 @@ function ProfileSelectWidget(props) {
               selected={propsValue === profile.account}
               onClick={() => propsOnChange(profile.account)}
             >
-              <pre>{JSON.stringify(profile, null, 2)}</pre>
+              <ListItemAvatar>
+                <Avatar src={profile.avatarNftMetadata?.image} />
+              </ListItemAvatar>
+              <Stack direction="column">
+                <Typography>
+                  {getTraitValue(
+                    profile.avatarNftMetadata,
+                    traitTypes.firstName,
+                  ) || 'None'}{' '}
+                  {getTraitValue(
+                    profile.avatarNftMetadata,
+                    traitTypes.lastName,
+                  ) || 'None'}
+                </Typography>
+              </Stack>
             </ListItemButton>
           ))}
         </List>
