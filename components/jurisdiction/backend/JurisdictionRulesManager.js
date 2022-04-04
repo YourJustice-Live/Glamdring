@@ -44,7 +44,6 @@ export default function JurisdictionRulesManager() {
       <Divider sx={{ mb: 2.5 }} />
       <Stack direction="row" spacing={2}>
         <AddRuleFormDialog />
-        <UpdateRuleFormDialog />
         <Button
           variant="outlined"
           onClick={() => {
@@ -63,6 +62,7 @@ export default function JurisdictionRulesManager() {
                 <Card elevation={3} sx={{ p: 1 }}>
                   <CardContent>
                     <pre>{JSON.stringify(rule, null, 2)}</pre>
+                    <UpdateRuleFormDialog rule={rule} />
                   </CardContent>
                 </Card>
               </Grid>
@@ -217,7 +217,6 @@ function AddRuleFormDialog() {
     <FormDialog
       buttonTitle="Add Rule"
       formTitle="Add Rule"
-      formText="Add a rule."
       formSchema={schema}
       formUiSchema={uiSchema}
       formData={formData}
@@ -233,10 +232,10 @@ function AddRuleFormDialog() {
 /**
  * A form for updating a specified rule.
  */
-function UpdateRuleFormDialog() {
+function UpdateRuleFormDialog({ rule }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { updateRule } = useJuridictionContract();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -260,18 +259,14 @@ function UpdateRuleFormDialog() {
           affected: {
             type: 'string',
             title: 'Affected',
-            default: 'investor',
           },
           negation: {
             type: 'boolean',
             title: 'Negation',
-            default: false,
           },
           uri: {
             type: 'string',
             title: 'URI',
-            default:
-              'https://ipfs.io/ipfs/QmRuT4Wi5FWpBMagB8JMZBxqYyB9BHrXV5PC2d7mZzHTzC',
           },
           effects: {
             type: 'object',
@@ -279,22 +274,18 @@ function UpdateRuleFormDialog() {
               environmental: {
                 type: 'integer',
                 title: 'Environmental',
-                default: 0,
               },
               professional: {
                 type: 'integer',
                 title: 'Professional',
-                default: -5,
               },
               social: {
                 type: 'integer',
                 title: 'Social',
-                default: 5,
               },
               personal: {
                 type: 'integer',
                 title: 'Personal',
-                default: 0,
               },
             },
           },
@@ -318,6 +309,7 @@ function UpdateRuleFormDialog() {
 
   function open() {
     setIsOpen(true);
+    setFormData(rule);
   }
 
   function close() {
@@ -343,7 +335,6 @@ function UpdateRuleFormDialog() {
     <FormDialog
       buttonTitle="Update Rule"
       formTitle="Update Rule"
-      formText="Update a specified rule."
       formSchema={schema}
       formUiSchema={uiSchema}
       formData={formData}
