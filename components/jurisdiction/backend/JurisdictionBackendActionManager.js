@@ -1,19 +1,8 @@
-import { useEffect, useState } from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
+import { useState } from 'react';
 import FormDialog from 'components/form/FormDialog';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useToasts from 'hooks/useToasts';
-import useAction from 'hooks/useAction';
+import DataUriInput from 'components/form/widget/DataUriInput';
 
 /**
  * A form for adding a action of updating a specified rule.
@@ -62,7 +51,7 @@ export default function JurisdictionBackendActionManager({ action }) {
       }),
       uri: {
         type: 'string',
-        title: 'URI',
+        title: 'Additional Data',
       },
     },
   };
@@ -86,7 +75,14 @@ export default function JurisdictionBackendActionManager({ action }) {
       },
       tool: { 'ui:emptyValue': '' },
     },
-    uri: { 'ui:emptyValue': '' },
+    uri: {
+      'ui:emptyValue': '',
+      'ui:widget': 'DataUriInput',
+    },
+  };
+
+  const widgets = {
+    DataUriInput: DataUriInput,
   };
 
   async function open() {
@@ -123,6 +119,7 @@ export default function JurisdictionBackendActionManager({ action }) {
       formTitle={action ? 'Update Action' : 'Add Action'}
       formSchema={schema}
       formUiSchema={uiSchema}
+      formWidgets={widgets}
       formData={formData}
       isLoading={isLoading}
       isOpen={isOpen}
