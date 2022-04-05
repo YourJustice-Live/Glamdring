@@ -7,9 +7,9 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 
 /**
- * A component for adding or removing role for specified account.
+ * A component for the jurisdiction backend with a feature to adding or removing role for specified account.
  */
-export default function JurisdictionRolesManager() {
+export default function JurisdictionBackendRoles() {
   return (
     <Box sx={{ mb: 8 }}>
       <Typography variant="h4" gutterBottom>
