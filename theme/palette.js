@@ -15,4 +15,15 @@ export const palette = {
     dark: '#b00036',
     contrastText: '#fff',
   },
+  text: {
+    primary: '#152F4DCC',
+    secondary: '#8198AF',
+    disabled: '#8198AF',
+    hint: '#8198AF',
+  },
+  grey: {
+    [50]: '#E0ECF8',
+    [200]: '#C3D4E680',
+    [600]: '#092A5199',
+  },
 };

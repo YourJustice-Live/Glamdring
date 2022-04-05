@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Divider, Typography, Box } from '@mui/material';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import useWeb3Context from 'hooks/useWeb3Context';

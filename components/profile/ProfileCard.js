@@ -99,7 +99,7 @@ export default function ProfileCard({ profile }) {
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${profile.account}`} passHref>
-                  <Link variant="h6" sx={{ mb: 2 }} underline="none">
+                  <Link variant="h5" sx={{ mb: 2 }} underline="none">
                     {getTraitValue(
                       profile.avatarNftMetadata,
                       traitTypes.firstName,
