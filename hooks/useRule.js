@@ -1,6 +1,6 @@
 import useIpfs from 'hooks/useIpfs';
 import useSubgraph from 'hooks/useSubgraph';
-import Rule from 'objects/Rule';
+import Rule from 'classes/Rule';
 
 /**
  * Hook for work with rules.

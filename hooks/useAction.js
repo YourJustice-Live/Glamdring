@@ -1,6 +1,6 @@
 import useIpfs from 'hooks/useIpfs';
 import useSubgraph from 'hooks/useSubgraph';
-import Action from 'objects/Action';
+import Action from 'classes/Action';
 
 /**
  * Hook for work with actions.

@@ -1,6 +1,6 @@
 import useIpfs from 'hooks/useIpfs';
 import useSubgraph from 'hooks/useSubgraph';
-import Profile from 'objects/Profile';
+import Profile from 'classes/Profile';
 
 /**
  * Hook for work with profiles.

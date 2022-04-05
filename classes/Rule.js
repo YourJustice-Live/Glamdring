@@ -1,24 +1,24 @@
 /**
- * Function that returns rule object.
+ * Class for the rule.
  */
-export default function Rule(
-  id,
-  ruleAbout,
-  ruleAffected,
-  ruleNegation,
-  ruleUri,
-  ruleUriData,
-  ruleEffectsEnvironmental,
-  ruleEffectsProfessional,
-  ruleEffectsSocial,
-  ruleEffectsPersonal,
-  confirmationRuling,
-  confirmationEvidence,
-  confirmationWitness,
-) {
-  return {
-    id: id,
-    rule: {
+export default class Rule {
+  constructor(
+    id,
+    ruleAbout,
+    ruleAffected,
+    ruleNegation,
+    ruleUri,
+    ruleUriData,
+    ruleEffectsEnvironmental,
+    ruleEffectsProfessional,
+    ruleEffectsSocial,
+    ruleEffectsPersonal,
+    confirmationRuling,
+    confirmationEvidence,
+    confirmationWitness,
+  ) {
+    this.id = id;
+    this.rule = {
       about: ruleAbout,
       affected: ruleAffected,
       negation: ruleNegation,
@@ -30,11 +30,11 @@ export default function Rule(
         social: ruleEffectsSocial,
         personal: ruleEffectsPersonal,
       },
-    },
-    confirmation: {
+    };
+    this.confirmation = {
       ruling: confirmationRuling,
       evidence: confirmationEvidence,
       witness: confirmationWitness,
-    },
-  };
+    };
+  }
 }
