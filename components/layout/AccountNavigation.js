@@ -82,14 +82,14 @@ function AccountNavigation() {
           <Link href="/profile" passHref>
             <Button variant="outlined">Open Profile</Button>
           </Link>
-          <Link href="/profile/manager" passHref>
+          <Link href="/profile/manage" passHref>
             <Button variant="outlined">Edit Profile</Button>
           </Link>
         </Stack>
       )}
       {!accountProfile && (
         <Stack>
-          <Link href="/profile/manager" passHref>
+          <Link href="/profile/manage" passHref>
             <Button variant="outlined">Create Profile</Button>
           </Link>
         </Stack>
