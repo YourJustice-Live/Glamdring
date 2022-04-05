@@ -1,5 +1,5 @@
 import { Divider, Typography } from '@mui/material';
-import JurisdictionActionsManager from 'components/jurisdiction/backend/JurisdictionActionsManager';
+import JurisdictionBackendActions from 'components/jurisdiction/backend/JurisdictionBackendActions';
 import JurisdictionBackendRules from 'components/jurisdiction/backend/JurisdictionBackendRules';
 import JurisdictionRolesManager from 'components/jurisdiction/backend/JurisdictionRolesManager';
 import Layout from 'components/layout/Layout';
@@ -21,7 +21,7 @@ export default function JurisdictionBackend() {
       </Typography>
       <Divider sx={{ mb: 8 }} />
       <JurisdictionRolesManager />
-      <JurisdictionActionsManager />
+      <JurisdictionBackendActions />
       <JurisdictionBackendRules />
     </Layout>
   );
