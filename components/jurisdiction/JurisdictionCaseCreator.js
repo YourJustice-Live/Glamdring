@@ -27,7 +27,6 @@ import useToasts from 'hooks/useToasts';
 export default function JurisdictionCaseCreator() {
   const { showToastSuccess } = useToasts();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
   const schema = {
@@ -127,7 +126,7 @@ export default function JurisdictionCaseCreator() {
             formContext={{
               formData: formData,
             }}
-            disabled={isLoading}
+            disabled={false}
           >
             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
               <Button variant="contained" type="submit">
