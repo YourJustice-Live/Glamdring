@@ -60,7 +60,11 @@ export default function JurisdictionBackendActions() {
               <Grid key={index} item xs={12}>
                 <Card elevation={3} sx={{ p: 1 }}>
                   <CardContent>
-                    <pre>{JSON.stringify(action, null, 2)}</pre>
+                    <Box sx={{ overflowX: 'scroll', mb: 2 }}>
+                      <pre style={{ maxWidth: '240px' }}>
+                        {JSON.stringify(action, null, 2)}
+                      </pre>
+                    </Box>
                     <JurisdictionBackendActionManager action={action} />
                   </CardContent>
                 </Card>

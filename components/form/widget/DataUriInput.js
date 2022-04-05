@@ -98,7 +98,7 @@ export default function DataUriInput(props) {
         <Typography>Loading...</Typography>
       ) : (
         <>
-          <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
+          <Paper variant="outlined" sx={{ p: 2, mb: 2, overflowX: 'scroll' }}>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </Paper>
           <FormDialog
