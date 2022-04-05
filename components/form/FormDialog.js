@@ -19,6 +19,7 @@ export default function FormDialog({
   formText,
   formSchema,
   formUiSchema,
+  formWidgets,
   formData,
   isLoading,
   isOpen,
@@ -39,6 +40,7 @@ export default function FormDialog({
             schema={formSchema}
             formData={formData}
             uiSchema={formUiSchema}
+            widgets={formWidgets}
             onSubmit={onSubmit}
             disabled={isLoading}
           >

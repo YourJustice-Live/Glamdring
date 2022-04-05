@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import FormDialog from 'components/form/FormDialog';
+import DataUriInput from 'components/form/widget/DataUriInput';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useRule from 'hooks/useRule';
@@ -124,6 +125,7 @@ function AddRuleFormDialog() {
           },
           effects: {
             type: 'object',
+            title: 'Effects',
             properties: {
               environmental: {
                 type: 'integer',
@@ -231,8 +233,6 @@ function AddRuleFormDialog() {
 
 /**
  * A form for updating a specified rule.
- *
- * TODO: Add "confirmation" to schema
  */
 function UpdateRuleFormDialog({ rule }) {
   const { showToastSuccess, showToastError } = useToasts();
@@ -268,10 +268,11 @@ function UpdateRuleFormDialog({ rule }) {
           },
           uri: {
             type: 'string',
-            title: 'URI',
+            title: 'Additional Data',
           },
           effects: {
             type: 'object',
+            title: 'Effects',
             properties: {
               environmental: {
                 type: 'integer',
@@ -293,13 +294,37 @@ function UpdateRuleFormDialog({ rule }) {
           },
         },
       },
+      confirmation: {
+        type: 'object',
+        title: 'Confirmation',
+        properties: {
+          ruling: {
+            type: 'string',
+            title: 'Ruling',
+            default: 'judge',
+          },
+          evidence: {
+            type: 'boolean',
+            title: 'Evidence',
+            default: true,
+          },
+          witness: {
+            type: 'integer',
+            title: 'Witness',
+            default: 1,
+          },
+        },
+      },
     },
   };
 
   const uiSchema = {
     rule: {
       affected: { 'ui:emptyValue': '' },
-      uri: { 'ui:emptyValue': '' },
+      uri: {
+        'ui:emptyValue': '',
+        'ui:widget': 'DataUriInput',
+      },
       effects: {
         environmental: { 'ui:widget': 'updown' },
         professional: { 'ui:widget': 'updown' },
@@ -307,6 +332,10 @@ function UpdateRuleFormDialog({ rule }) {
         personal: { 'ui:widget': 'updown' },
       },
     },
+  };
+
+  const widgets = {
+    DataUriInput: DataUriInput,
   };
 
   function open() {
@@ -339,6 +368,7 @@ function UpdateRuleFormDialog({ rule }) {
       formTitle="Update Rule"
       formSchema={schema}
       formUiSchema={uiSchema}
+      formWidgets={widgets}
       formData={formData}
       isLoading={isLoading}
       isOpen={isOpen}
