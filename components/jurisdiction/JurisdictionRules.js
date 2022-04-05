@@ -45,7 +45,11 @@ export default function JurisdictionRules() {
             <Grid key={index} item xs={12}>
               <Card elevation={3} sx={{ p: 2 }}>
                 <CardContent>
-                  <pre>{JSON.stringify(rule, null, 2)}</pre>
+                  <Box sx={{ overflowX: 'scroll' }}>
+                    <pre style={{ maxWidth: '240px' }}>
+                      {JSON.stringify(rule, null, 2)}
+                    </pre>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
