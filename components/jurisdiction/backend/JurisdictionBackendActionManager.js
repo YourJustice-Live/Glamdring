@@ -33,18 +33,22 @@ export default function JurisdictionBackendActionManager({ action }) {
             subject: {
               type: 'string',
               title: 'Subject',
+              default: '',
             },
             verb: {
               type: 'string',
               title: 'Verb',
+              default: '',
             },
             object: {
               type: 'string',
               title: 'Object',
+              default: '',
             },
             tool: {
               type: 'string',
               title: 'Tool',
+              default: '',
             },
           },
         },
@@ -52,6 +56,7 @@ export default function JurisdictionBackendActionManager({ action }) {
       uri: {
         type: 'string',
         title: 'Additional Data',
+        default: '',
       },
     },
   };
@@ -98,6 +103,7 @@ export default function JurisdictionBackendActionManager({ action }) {
 
   async function submit({ formData }) {
     try {
+      console.log('[Dev] formData', formData);
       setFormData(formData);
       setIsLoading(true);
       if (action) {

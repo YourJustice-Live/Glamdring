@@ -36,6 +36,7 @@ export default function JurisdictionBackendRuleManager({ rule }) {
           affected: {
             type: 'string',
             title: 'Affected',
+            default: '',
           },
           negation: {
             type: 'boolean',
@@ -45,6 +46,7 @@ export default function JurisdictionBackendRuleManager({ rule }) {
           uri: {
             type: 'string',
             title: 'Additional Data',
+            default: '',
           },
           effects: {
             type: 'object',
@@ -83,6 +85,7 @@ export default function JurisdictionBackendRuleManager({ rule }) {
             ruling: {
               type: 'string',
               title: 'Ruling',
+              default: '',
             },
             evidence: {
               type: 'boolean',
