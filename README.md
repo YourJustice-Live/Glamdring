@@ -1,6 +1,6 @@
-## dApp
+## Overview
 
-YourJustice dApp: a on-chain meta-justice system for tracking and verifying reputation.
+YourJustice dApp is an on-chain meta-justice system for tracking and verifying reputation.
 
 ## Resources
 - [dApp](https://yj.life/)
