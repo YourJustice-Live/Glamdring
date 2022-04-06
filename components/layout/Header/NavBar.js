@@ -249,16 +249,17 @@ const ResponsiveAppBar = () => {
                 >
                   <Box sx={{ mx: '15px', my: '10px', pb: '10px', borderBottom: "1px solid gray", borderColor: 'grey.200' }}>
                     Polygon
-
                     <span>0x7f6r...2Fv235</span>
                   </Box>
 
                   {settings.map((setting) => (
-                    <MenuItem key={setting.name} onClick={() => { handleCloseUserMenu(); window.location.href = setting.url; }}>
+                    <MenuItem key={setting.name} onClick={() => { handleCloseUserMenu(); }}>
                       {/* <Button key={setting.name} sx={settingsButtonSX} startIcon={setting.icon}> */}
-                      <Typography key={setting.name} sx={settingsButtonSX}>
-                        {setting.name}
-                      </Typography>
+                      <Link key={setting.name} href={setting.url} underline="none">
+                        <Typography key={setting.name} sx={settingsButtonSX}>
+                          {setting.name}
+                        </Typography>
+                      </Link>
                     </MenuItem>
                   ))}
 
