@@ -11,20 +11,39 @@
     "plugin:prettier/recommended", // disables conflicting rules (eslint vs prettier) and sets up eslint-plugin-prettier
     "plugin:react/jsx-runtime"
   ],
+  "plugins": [
+    "react"
+  ],
   "rules": {
-    "prettier/prettier": ["error", {
-      "singleQuote": true,
-      "semi": true
-    }],
-    "spaced-comment": ["error", "always"],
+    "react/prop-types": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "semi": true,
+        "endOfLine": "auto"
+      }
+    ],
+    "spaced-comment": [
+      "error",
+      "always"
+    ],
     "import/prefer-default-export": "off",
     "react/function-component-definition": "off",
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off",
     "import/no-unresolved": "off",
-    "import/extensions": ["error", "never", { "scss": "always" }],
+    "import/extensions": [
+      "error",
+      "never",
+      {
+        "scss": "always"
+      }
+    ],
     "import/no-extraneous-dependencies": "off",
     "no-underscore-dangle": "off",
-    "react/self-closing-comp": ["error"]
+    "react/self-closing-comp": [
+      "error"
+    ]
   }
 }
