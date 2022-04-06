@@ -1,10 +1,11 @@
 import { Button } from '@mui/material';
 
-export const HeaderButton = ({ children, onClick, startIcon }) => (
-  <Button
-    variant="outlined"
-    onClick={onClick}
-    startIcon={startIcon}
+// export const HeaderButton = ({ children, onClick, startIcon }) => (
+export const HeaderButton = (props) => (
+  <Button variant="outlined"
+    // onClick={onClick}
+    // startIcon={startIcon}
+    {...props}
     sx={{
       ml: 1.5,
       borderRadius: '12px',
@@ -16,7 +17,7 @@ export const HeaderButton = ({ children, onClick, startIcon }) => (
         border: 'none',
       },
     }}
-  >
-    {children}
-  </Button>
+  />
+  // {children}
+  // </Button>
 );

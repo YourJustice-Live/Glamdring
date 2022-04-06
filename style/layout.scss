@@ -1,5 +1,13 @@
 #menu-appbar {
-  .MuiMenu-list {
-    padding: 15px;
+  .MuiPaper-root {
+    padding: 0px;
+    border-radius: 15px;
+    overflow: hidden;
   }
+}
+
+#menu-full {
+  display: flex;
+  flex-direction: row-reverse;
+
 }
