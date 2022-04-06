@@ -10,12 +10,22 @@ export default function useAction() {
   const { loadJsonFromIPFS } = useIpfs();
 
   /**
+   * Get action for specified guid.
+   *
+   * @returns {Promise.<Action>} A action or null if action not found.
+   */
+  let getAction = async function (guid) {
+    return (await getActions([guid]))[0];
+  };
+
+  /**
    * Get actions.
    *
+   * @param {Array.<string>} guids If not null, then the function returns the actions for the specified guids.
    * @returns {Promise.<Array.<Action>>} A list with actions.
    */
-  let getActions = async function () {
-    const actionEntities = await findActionEntities();
+  let getActions = async function (guids) {
+    const actionEntities = await findActionEntities(guids);
     let actions = [];
     for (const actionEntity of actionEntities) {
       try {
@@ -38,5 +48,6 @@ export default function useAction() {
 
   return {
     getActions,
+    getAction,
   };
 }

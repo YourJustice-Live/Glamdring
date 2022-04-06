@@ -43,10 +43,11 @@ export default function useSubgraph() {
   /**
    * Find the action entities.
    *
+   * @param {Array.<string>} guids If not null, then the function returns the action entities for the specified guids.
    * @returns {Promise.<Array.<{object}>>} Array with action entities.
    */
-  let findActionEntities = async function () {
-    const response = await makeSubgraphQuery(getFindActionEntitiesQuery());
+  let findActionEntities = async function (guids) {
+    const response = await makeSubgraphQuery(getFindActionEntitiesQuery(guids));
     return response.actionEntities;
   };
 
@@ -146,9 +147,19 @@ function getFindJurisdictionRuleEntitiesQuery(actionGuid) {
   }`;
 }
 
-function getFindActionEntitiesQuery() {
+function getFindActionEntitiesQuery(guids) {
+  let queryParams = `first: 100`;
+  if (guids && guids.length == 0) {
+    queryParams = `where: {id: ""}`;
+  }
+  if (guids && guids.length == 1) {
+    queryParams = `where: {id: "${guids[0]}"}`;
+  }
+  if (guids && guids.length > 1) {
+    queryParams = `first: 100, where: {id_in: ["${guids.join('","')}"]}`;
+  }
   return `{
-    actionEntities(first: 100) {
+    actionEntities(${queryParams}) {
       id
       subject
       verb

@@ -3,7 +3,7 @@ import JurisdictionCaseCreator from 'components/jurisdiction/JurisdictionCaseCre
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
 import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
-import JurisdictionRules from 'components/jurisdiction/JurisdictionRules';
+import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
@@ -23,7 +23,7 @@ export default function Jurisdiction() {
       <JurisdictionCases />
       <JurisdictionOfficials />
       <JurisdictionMembers />
-      <JurisdictionRules />
+      <JurisdictionLaws />
     </Layout>
   );
 }
