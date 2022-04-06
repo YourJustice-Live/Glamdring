@@ -1,6 +1,13 @@
-## Overview
+# Your Justice dApp
 
 YourJustice dApp is an on-chain meta-justice system for tracking and verifying reputation.
+
+## Overview
+
+This dApp allows you to track people's reputation history, good and bad deeds, using a web3 on-chain justice system.
+
+You can file cases for or against other individuals, supply evidence and call for witnesses in order to post reputation events to people who supported or mistreaded you.
+
 
 ## Resources
 - [dApp](https://yj.life/)
