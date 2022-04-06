@@ -3,6 +3,7 @@ import { SnackbarProvider } from 'notistack';
 import { Web3Provider } from 'contexts/web3';
 import { CssBaseline } from '@mui/material';
 import { theme } from 'theme';
+import "style/layout.scss";
 
 function App({ Component, pageProps }) {
   return (
