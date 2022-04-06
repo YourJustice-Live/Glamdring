@@ -8,6 +8,7 @@ import {
   Divider,
   Avatar,
 } from '@mui/material';
+import { useRouter } from 'next/router';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { Logo, IconRoadMap, IconWallet, IconProfile, IconHome } from 'icons';
 import { HeaderButton } from './components';
@@ -17,8 +18,11 @@ const DEFAULT_JURISDICTION_IMG_PATH = 'images/defaultJurisdictionAvatar.png';
 
 export default function Navigation() {
   const { network, account, connectWallet } = useWeb3Context();
+  const router = useRouter();
 
-  const handleCreateProfile = () => {};
+  const handleCreateProfile = () => {
+    router.push('/profile/manage');
+  };
 
   return (
     <AppBar
@@ -74,7 +78,7 @@ export default function Navigation() {
           </Box>
 
           <Box>
-            {!account && (
+            {!account ? (
               <Box display="flex" alignItems="center">
                 <Link href="https://yourjustice.life/">
                   <a
@@ -103,8 +107,7 @@ export default function Navigation() {
                   Connect Wallet
                 </HeaderButton>
               </Box>
-            )}
-            {account && network && (
+            ) : network ? (
               <Stack
                 direction="row"
                 alignItems="center"
@@ -129,7 +132,7 @@ export default function Navigation() {
                   Create own profile
                 </HeaderButton>
 
-                <Link href="/">
+                <Link href={`/profile/${account}`}>
                   <a>
                     <IconHome />
                   </a>
@@ -139,7 +142,7 @@ export default function Navigation() {
                   <IconProfile hexColor="#092A5199" />
                 </Avatar>
               </Stack>
-            )}
+            ) : null}
           </Box>
         </Box>
       </Toolbar>
