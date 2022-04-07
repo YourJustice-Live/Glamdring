@@ -1,9 +1,21 @@
-import React from 'react';
-import { AppBar, Avatar, Box, Button, Divider, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconHome, IconPlus, IconProfile, IconWallet, Logo } from 'icons';
 import Link from 'next/link';
-import { palette } from "theme/palette";
+import React from 'react';
+import { palette } from 'theme/palette';
 import { formatAccount } from 'utils/formatters';
 
 const headerButtonSX = {
@@ -23,7 +35,8 @@ const headerButtonSX = {
  */
 export default function Navigation() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { account, accountProfile, connectWallet, disconnectWallet } = useWeb3Context();
+  const { account, accountProfile, connectWallet, disconnectWallet } =
+    useWeb3Context();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -33,15 +46,23 @@ export default function Navigation() {
   };
 
   return (
-    <AppBar color="inherit" position="fixed" elevation={1}
+    <AppBar
+      color="inherit"
+      position="fixed"
+      elevation={1}
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
         boxShadow: '0px 2px 6px rgba(118, 139, 160, 0.1)',
-      }}>
+      }}
+    >
       <Toolbar>
-
         {/* Desktop logo and jurisdiction */}
-        <Typography display="flex" alignItems="center" variant="h3" noWrap component="div"
+        <Typography
+          display="flex"
+          alignItems="center"
+          variant="h3"
+          noWrap
+          component="div"
           sx={{ mr: 6, display: { xs: 'none', md: 'flex', fontSize: '3rem' } }}
         >
           <Link href="/">
@@ -49,11 +70,32 @@ export default function Navigation() {
               <Logo />
             </a>
           </Link>
-          <Typography variant="h5" sx={{ color: 'text.secondary', opacity: 0.6, pl: 1.875, lineHeight: "2.3em" }}>
+          <Typography
+            variant="h5"
+            sx={{
+              color: 'text.secondary',
+              opacity: 0.6,
+              pl: 1.875,
+              lineHeight: '2.3em',
+            }}
+          >
             v.0.1
           </Typography>
-          <Divider orientation="horizontal" sx={{ height: 22, width: '1px', backgroundColor: 'grey.200', opacity: 0.5, border: 'none', ml: 1.5, }} />
-          <Avatar sx={{ width: 22, height: 22, ml: 1.5, mr: 0.75 }} src={'/images/defaultJurisdictionAvatar.png'} />
+          <Divider
+            orientation="horizontal"
+            sx={{
+              height: 22,
+              width: '1px',
+              backgroundColor: 'grey.200',
+              opacity: 0.5,
+              border: 'none',
+              ml: 1.5,
+            }}
+          />
+          <Avatar
+            sx={{ width: 22, height: 22, ml: 1.5, mr: 0.75 }}
+            src={'/images/defaultJurisdictionAvatar.png'}
+          />
           <Typography variant="h5" sx={{ fontWeight: 500 }}>
             Crypto Valley
           </Typography>
@@ -70,27 +112,38 @@ export default function Navigation() {
         </Typography>
 
         {/* Key button */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row-reverse' }}>
+        <Box
+          sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row-reverse' }}
+        >
           {account && accountProfile && (
-            <Link href='/jurisdiction'>
-              <Button variant="outlined" sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }} startIcon={<IconPlus />}>
+            <Link href="/jurisdiction" passHref>
+              <Button
+                variant="outlined"
+                sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }}
+                startIcon={<IconPlus />}
+              >
                 Create Case
               </Button>
             </Link>
           )}
           {account && !accountProfile && (
-            <Link href='/profile/manage'>
+            <Link href="/profile/manage" passHref>
               <Button
-                variant="outlined" sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }}
-                startIcon={<IconProfile hexColor={palette.primary.main}
-                />}
+                variant="outlined"
+                sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }}
+                startIcon={<IconProfile hexColor={palette.primary.main} />}
               >
                 Create Own Profile
               </Button>
             </Link>
           )}
           {!account && (
-            <Button variant="outlined" sx={headerButtonSX} onClick={connectWallet} startIcon={<IconWallet />}>
+            <Button
+              variant="outlined"
+              sx={headerButtonSX}
+              onClick={connectWallet}
+              startIcon={<IconWallet />}
+            >
               Connect Wallet
             </Button>
           )}
@@ -99,7 +152,7 @@ export default function Navigation() {
         {/* Home button */}
         {account && (
           <Box sx={{ flexGrow: 0 }}>
-            <Link href='/'>
+            <Link href="/" passHref>
               <IconButton variant="outlined" sx={{ ml: 2 }}>
                 <IconHome />
               </IconButton>
@@ -120,13 +173,16 @@ export default function Navigation() {
                 </Avatar>
               </IconButton>
             </Tooltip>
-            <Menu id="menu-appbar"
+            <Menu
+              id="menu-appbar"
               sx={{
                 mt: '45px',
                 padding: '15px',
                 [`& .MuiPaper-root`]: {
-                  padding: 0, borderRadius: '15px', overflow: 'hidden'
-                }
+                  padding: 0,
+                  borderRadius: '15px',
+                  overflow: 'hidden',
+                },
               }}
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -141,12 +197,24 @@ export default function Navigation() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <Box sx={{ mx: '15px', my: '10px', pb: '10px', borderBottom: "1px solid gray", borderColor: 'grey.200' }}>
+              <Box
+                sx={{
+                  mx: '15px',
+                  my: '10px',
+                  pb: '10px',
+                  borderBottom: '1px solid gray',
+                  borderColor: 'grey.200',
+                }}
+              >
                 <span>{formatAccount(account)}</span>
               </Box>
               {accountProfile && (
-                <MenuItem onClick={() => { handleCloseUserMenu(); }}>
-                  <Link href='/profile' passHref>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                  }}
+                >
+                  <Link href="/profile" passHref>
                     <Typography>Profile</Typography>
                   </Link>
                 </MenuItem>
@@ -158,6 +226,6 @@ export default function Navigation() {
           </>
         )}
       </Toolbar>
-    </AppBar >
+    </AppBar>
   );
-};
+}
