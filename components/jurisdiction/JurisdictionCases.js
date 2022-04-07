@@ -32,8 +32,6 @@ export default function JurisdictionCases() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('[Dev] cases', cases);
-
   return (
     <Box sx={{ mb: 12 }}>
       <Typography variant="h1" gutterBottom>
