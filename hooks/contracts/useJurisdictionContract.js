@@ -84,6 +84,27 @@ export default function useJuridictionContract() {
     return await getContract(provider?.getSigner()).ruleUpdate(id, rule);
   }
 
+  /**
+   * Make a case in the jurisdiction.
+   *
+   * @param {string} name Case name.
+   * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
+   * @param {Array.<{account : string, role: string}>} roles Case roles.
+   * @returns Transaction.
+   */
+  async function makeCase(name, rules, roles) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(provider?.getSigner()).caseMake(
+      name,
+      rules,
+      roles,
+    );
+  }
+
   return {
     getName,
     getOwner,
@@ -94,5 +115,6 @@ export default function useJuridictionContract() {
     removeRole,
     addRule,
     updateRule,
+    makeCase,
   };
 }
