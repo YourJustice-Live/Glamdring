@@ -14,6 +14,12 @@ You can file cases for or against other individuals, supply evidence and call fo
 - [Task management (Notion)](https://yourjustice.notion.site/1a0b9e7b3bbc43278e3f41567e98c5dd?v=cc7bdb06027648ab9adefc679f3194a9)
 - [Design (Figma)](https://www.figma.com/file/Q27NdlekpXVilnWzflwgdy/Minimal-Existing-Product?node-id=9559%3A38178)
 
+## Stack
+* [NextJS](https://nextjs.org/)
+* [React](https://reactjs.org/)
+* [Ethers](https://ethers.io/)
+* [MUI](https://mui.com/)
+
 ## Commands
 
 - Install depencies - `npm install`
