@@ -1,184 +1,150 @@
-import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { AppBar, Avatar, Box, Button, Divider, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import useWeb3Context from 'hooks/useWeb3Context';
-import { AppBar, Box, Stack, Toolbar, Typography, Divider, Avatar, Menu, MenuItem, IconButton } from '@mui/material';
-import { Logo, IconRoadMap, IconWallet, IconProfile, IconHome } from 'icons';
-import { HeaderButton } from './HeaderButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import { IconHome, IconProfile, IconWallet, Logo } from 'icons';
+import Link from 'next/link';
+import React from 'react';
+import { formatAccount } from 'utils/formatters';
 
 const DEFAULT_JURISDICTION_NAME = 'Crypto Valley';
 const DEFAULT_JURISDICTION_IMG_PATH = '/images/defaultJurisdictionAvatar.png';
 
-// const pages = ['Products', 'Pricing', 'Blog'];
-const pages = [
-  // {name:'Artists', url:'/'},
-  // {name:'New Artist', url:'/artist/new'},
-  { name: 'Search', url: '/search' },
-  // {name:'Gallery', url:'/gallery'},
-];
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const settings = [
-  { name: 'Profile', url: '/profile' },
-];
+const headerButtonSX = {
+  ml: 1.5,
+  borderRadius: '12px',
+  border: 'none',
+  height: 36,
+  textTransform: 'none',
+  backgroundColor: 'rgba(173, 155, 245, 0.08)',
+  '&:hover': {
+    border: 'none',
+  },
+};
 
-/** [DEPRECATED]
- * Component: Navigation Menur
+/**
+ * A component with a header navigation.
  */
 export default function Navigation() {
-  //-- Nav Menu Functionality  
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  const { account, connectWallet, disconnectWallet } = useWeb3Context();
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  //-- Web3 Functionality 
-  const { network, account, connectWallet } = useWeb3Context();
-  const router = useRouter();
-
-
-  const handleCreateProfile = () => {
-    router.push('/profile/manage');
-  };
+  const pages = [
+    { display: !!account, name: null, url: `/profile/`, icon: <IconHome /> },
+    { display: !!account, name: 'Create own profile', url: '/profile/manage', icon: <IconProfile hexColor="#5E42CC" /> },
+  ];
+  const settings = [
+    { name: 'Profile', url: '/profile', icon: <IconProfile hexColor="#5E42CC" /> },
+  ];
 
   return (
     <AppBar color="inherit" position="fixed" elevation={1}
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        boxShadow: '0px 2px 6px rgba(118, 139, 160, 0.05)',
+        boxShadow: '0px 2px 6px rgba(118, 139, 160, 0.1)',
       }}>
       <Toolbar>
-        <Box width="100%" display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex" alignItems="center">
-            <Link href="/">
-              <a style={{ display: 'flex' }}>
-                <Logo />
-              </a>
+
+        {/* Desktop logo and jurisdiction */}
+        <Typography display="flex" alignItems="center" variant="h3" noWrap component="div"
+          sx={{ mr: 6, display: { xs: 'none', md: 'flex', fontSize: '3rem' } }}
+        >
+          <Link href="/">
+            <a style={{ display: 'flex' }}>
+              <Logo />
+            </a>
+          </Link>
+          <Typography variant="h5" sx={{ color: 'text.secondary', opacity: 0.6, pl: 1.875, lineHeight: "2.3em" }}>
+            v.0.1
+          </Typography>
+          <Divider orientation="horizontal" sx={{ height: 22, width: '1px', backgroundColor: 'grey.200', opacity: 0.5, border: 'none', ml: 1.5, }} />
+          <Avatar sx={{ width: 22, height: 22, ml: 1.5, mr: 0.75 }} src={DEFAULT_JURISDICTION_IMG_PATH} />
+          <Typography variant="h5" sx={{ fontWeight: 500 }}>
+            {DEFAULT_JURISDICTION_NAME}
+          </Typography>
+        </Typography>
+
+        {/* Mobile logo */}
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+        >
+          <Logo />
+        </Typography>
+
+        {/* Pages */}
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, flexDirection: 'row-reverse' }}>
+          {pages.map((page) => (page.display !== false ? (
+            <Link key={page.name} href={page.url} underline="none">
+              <Button key={page.name} variant="outlined" sx={headerButtonSX} startIcon={page.icon}>
+                {page.name}
+              </Button>
             </Link>
+          ) : null
+          ))}
+        </Box>
 
-            <Typography variant="h5" sx={{ color: 'text.secondary', opacity: 0.6, pl: 1.875 }}> v.0.1 </Typography>
-
-            <Divider orientation="horizontal" sx={{ height: 22, width: '1px', backgroundColor: 'grey.200', opacity: 0.5, border: 'none', ml: 1.5, }} />
-            <Avatar sx={{ width: 22, height: 22, ml: 1.5, mr: 0.75 }} src={DEFAULT_JURISDICTION_IMG_PATH} />
-            <Typography variant="h5" sx={{ fontWeight: 500 }}>
-              {DEFAULT_JURISDICTION_NAME}
-            </Typography>
-
-          </Box>
-
-          <Box>
-            {!account ? (
-              <Box display="flex" alignItems="center">
-                <Link href="https://yourjustice.life/">
-                  <a
-                    target="_blank"
-                    style={{
-                      height: '48px',
-                      textDecoration: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <IconRoadMap />
-                    <Typography variant="h5" sx={{ fontWeight: 500, color: 'grey.600', pl: 1 }}>
-                      Roadmap
-                    </Typography>
-                  </a>
-                </Link>
-
-                <HeaderButton onClick={connectWallet} startIcon={<IconWallet />}>
-                  Connect Wallet
-                </HeaderButton>
-
-              </Box>
-            ) : network ? (<>
-              <Stack direction="row" alignItems="center" spacing={2.25}
-                divider={
-                  <Divider orientation="horizontal"
-                    sx={{
-                      height: 30,
-                      width: '1px',
-                      backgroundColor: 'grey.200',
-                      opacity: 0.5,
-                      border: 'none',
-                    }}
-                  />
-                }
-              >
-
-
-                <HeaderButton onClick={handleCreateProfile} startIcon={<IconProfile hexColor="#5E42CC" />}>
-                  Create own profile
-                </HeaderButton>
-
-                <Link href={`/profile/${account}`}>
-                  <a>
-                    <IconHome />
-                  </a>
-                </Link>
-
-                <Avatar sx={{ borderRadius: 3, backgroundColor: 'grey.50' }}>
-                  <IconProfile hexColor="#092A5199" />
-                </Avatar>
-
-
-              </Stack>
-
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="inherit"
-                >
-                  <MenuIcon />
+        {/* Settings menu */}
+        <Box sx={{ flexGrow: 0 }}>
+          {!account ? (
+            <Button variant="outlined" sx={headerButtonSX} onClick={connectWallet} startIcon={<IconWallet />}>
+              Connect Wallet
+            </Button>
+          ) : (
+            <>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ ml: 2, p: 0 }}>
+                  <IconProfile hexColor="#5E42CC" />
                 </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                  }}
-                >
-                  {pages.map((page) => (
-                    <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                      <Link key={page.name} href={page.url}>
-                        <Typography textAlign="center">{page.name}</Typography>
-                      </Link>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
+              </Tooltip>
+              <Menu id="menu-appbar"
+                sx={{
+                  mt: '45px',
+                  padding: '15px',
+                  [`& .MuiPaper-root`]: {
+                    padding: 0, borderRadius: '15px', overflow: 'hidden'
+                  }
+                }}
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <Box sx={{ mx: '15px', my: '10px', pb: '10px', borderBottom: "1px solid gray", borderColor: 'grey.200' }}>
+                  <span>{formatAccount(account)}</span>
+                </Box>
+                {settings.map((setting) => (
+                  <MenuItem key={setting.name} onClick={() => { handleCloseUserMenu(); }}>
+                    <Link key={setting.name} href={setting.url} underline="none">
+                      <Typography key={setting.name}>
+                        {setting.name}
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+                <MenuItem onClick={disconnectWallet}>
+                  <Typography textAlign="center">Disconnect Wallet</Typography>
+                </MenuItem>
+              </Menu>
             </>
-
-
-            ) : null}
-          </Box>
+          )}
         </Box>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
-}
+};
