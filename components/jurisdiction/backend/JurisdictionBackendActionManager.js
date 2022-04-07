@@ -103,7 +103,6 @@ export default function JurisdictionBackendActionManager({ action }) {
 
   async function submit({ formData }) {
     try {
-      console.log('[Dev] formData', formData);
       setFormData(formData);
       setIsLoading(true);
       if (action) {

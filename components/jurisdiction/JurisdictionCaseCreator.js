@@ -15,18 +15,21 @@ import JurisdictionActionSelect from 'components/form/widget/JurisdictionActionS
 import JurisdictionProfileSelect from 'components/form/widget/JurisdictionProfileSelect';
 import JurisdictionRuleSelect from 'components/form/widget/JurisdictionRuleSelect';
 import useToasts from 'hooks/useToasts';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 
 /**
  * A component with a form to create jurisdiction case.
  *
- * TODO: Create pretty visual components instead of json
- * TODO: Implement post case to contract
- * TODO: Hide component if account is not connected or acconunt is not member of jurisdiction
+ * TODO: Add feature to select multiple rules
+ * TODO: Add feature to enter case name
+ * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
 export default function JurisdictionCaseCreator() {
-  const { showToastSuccess } = useToasts();
+  const { showToastSuccess, showToastError } = useToasts();
+  const { makeCase } = useJuridictionContract();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
   const schema = {
@@ -98,10 +101,33 @@ export default function JurisdictionCaseCreator() {
     setFormData(formData);
   }
 
-  function handleSubmit({ formData }) {
-    console.log('[Dev] formData:', formData);
-    showToastSuccess('Success!');
-    close();
+  async function handleSubmit({ formData }) {
+    try {
+      setFormData(formData);
+      const caseName = 'TEST_CASE';
+      const caseRules = [
+        {
+          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          ruleId: formData.ruleId,
+        },
+      ];
+      const caseRoles = [
+        {
+          account: formData.subjectProfileAccount,
+          role: 'subject',
+        },
+        {
+          account: formData.affectedProfileAccount,
+          role: 'affected',
+        },
+      ];
+      await makeCase(caseName, caseRules, caseRoles);
+      showToastSuccess('Success! Data will be updated soon.');
+      close();
+    } catch (error) {
+      showToastError(error);
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -126,7 +152,7 @@ export default function JurisdictionCaseCreator() {
             formContext={{
               formData: formData,
             }}
-            disabled={false}
+            disabled={isLoading}
           >
             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
               <Button variant="contained" type="submit">

@@ -41,6 +41,18 @@ export default function useSubgraph() {
   };
 
   /**
+   * Find the jurisdiction case entities.
+   *
+   * @returns Array with jurisdiction case entities.
+   */
+  let findJurisdictionCaseEntities = async function () {
+    const response = await makeSubgraphQuery(
+      getJurisdictionCaseEntititesQuery(),
+    );
+    return response.jurisdictionCaseEntities;
+  };
+
+  /**
    * Find the action entities.
    *
    * @param {Array.<string>} guids If not null, then the function returns the action entities for the specified guids.
@@ -55,6 +67,7 @@ export default function useSubgraph() {
     findAvatarNftEntities,
     findJurisdictionParticipantEntities,
     findJurisdictionRuleEntities,
+    findJurisdictionCaseEntities,
     findActionEntities,
   };
 }
@@ -143,6 +156,15 @@ function getFindJurisdictionRuleEntitiesQuery(actionGuid) {
       confirmationRuling
       confirmationEvidence
       confirmationWitness
+    }
+  }`;
+}
+
+function getJurisdictionCaseEntititesQuery() {
+  return `{
+    jurisdictionCaseEntities(first: 100) {
+      id
+      contractAddress
     }
   }`;
 }

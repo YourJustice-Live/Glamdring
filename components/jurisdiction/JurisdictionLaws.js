@@ -79,7 +79,9 @@ export default function JurisdictionLaws() {
                   <Stack direction="column" spacing={1}>
                     {laws.get(key).rules.map((rule, index) => (
                       <Paper key={index} variant="outlined" sx={{ p: 2 }}>
-                        <Typography>{rule.rule.uriData.name}</Typography>
+                        <Typography sx={{ fontWeight: 'bold' }}>
+                          {rule.rule.uriData.name}
+                        </Typography>
                         <Typography>{rule.rule.uriData.description}</Typography>
                         <Box
                           sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}
