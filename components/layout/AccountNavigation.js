@@ -102,8 +102,8 @@ function AccountNavigation() {
       </Stack>
       <Divider sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }} />
       <Stack>
-        <Link href="/jurisdiction/backend" passHref>
-          <Button variant="outlined">Jurisdiction Backend</Button>
+        <Link href="/backend" passHref>
+          <Button variant="outlined">Backend</Button>
         </Link>
       </Stack>
     </>

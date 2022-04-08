@@ -6,18 +6,15 @@ import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
- * Page with a backend of the jurisdiction.
+ * Page with a backend.
  */
-export default function JurisdictionBackend() {
+export default function Backend() {
   const { account } = useWeb3Context();
 
   return (
-    <Layout
-      title={'YourJustice / Jurisdiction Backend'}
-      showAccountNavigation={!!account}
-    >
+    <Layout title={'YourJustice / Backend'} showAccountNavigation={!!account}>
       <Typography variant="h1" gutterBottom>
-        Jurisdiction Backend
+        Backend
       </Typography>
       <Divider sx={{ mb: 8 }} />
       <JurisdictionBackendRoles />
