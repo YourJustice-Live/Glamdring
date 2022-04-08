@@ -5,9 +5,9 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 
 /**
- * A form for adding a rule of updating a specified rule.
+ * A form for adding a rule or updating a specified rule.
  */
-export default function JurisdictionBackendRuleManager({ rule }) {
+export default function RuleManageFormDialog({ rule }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
   const [formData, setFormData] = useState();

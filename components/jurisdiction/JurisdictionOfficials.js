@@ -31,7 +31,7 @@ export default function JurisdictionOfficials() {
   }, []);
 
   return (
-    <Box sx={{ mb: 12 }}>
+    <>
       <Typography variant="h1" gutterBottom>
         Officials
       </Typography>
@@ -50,6 +50,6 @@ export default function JurisdictionOfficials() {
         <Divider sx={{ mb: 2 }} />
         <ProfileList profiles={adminProfiles} />
       </Box>
-    </Box>
+    </>
   );
 }

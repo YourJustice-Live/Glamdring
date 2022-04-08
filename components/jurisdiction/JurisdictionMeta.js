@@ -71,7 +71,7 @@ export default function JurisdictionMeta() {
   }, []);
 
   return (
-    <Box sx={{ mb: 12 }}>
+    <>
       <Typography variant="h1" gutterBottom>
         Jurisdiction
       </Typography>
@@ -131,14 +131,9 @@ export default function JurisdictionMeta() {
             width={256}
             sx={{ mb: 1 }}
           />
-          <Skeleton
-            variant="rectangular"
-            height={24}
-            width={256}
-            sx={{ mb: 1 }}
-          />
+          <Skeleton variant="rectangular" height={24} width={256} />
         </>
       )}
-    </Box>
+    </>
   );
 }

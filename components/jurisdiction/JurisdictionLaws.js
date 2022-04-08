@@ -19,6 +19,8 @@ import useToasts from 'hooks/useToasts';
 
 /**
  * A component with jurisdiction laws (actions + rules).
+ *
+ * TODO: Use hook to load laws.
  */
 export default function JurisdictionLaws() {
   const { showToastError } = useToasts();
@@ -57,7 +59,7 @@ export default function JurisdictionLaws() {
   }, []);
 
   return (
-    <Box sx={{ mb: 12 }}>
+    <>
       <Typography variant="h1" gutterBottom>
         Laws
       </Typography>
@@ -126,6 +128,6 @@ export default function JurisdictionLaws() {
           <Skeleton variant="rectangular" width={82} height={24} />
         </>
       )}
-    </Box>
+    </>
   );
 }
