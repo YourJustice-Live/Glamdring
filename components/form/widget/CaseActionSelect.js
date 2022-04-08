@@ -9,54 +9,51 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import useRule from 'hooks/useRule';
+import useAction from 'hooks/useAction';
 import useToasts from 'hooks/useToasts';
 
 /**
- * A widget to select jurisdiction rule.
+ * A widget to select case action.
  */
-export default function JurisdictionRuleSelect(props) {
+export default function CaseActionSelect(props) {
   const propsValue = props.value;
   const propsOnChange = props.onChange;
-  const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const { showToastError } = useToasts();
-  const { getRules } = useRule();
-  const [rules, setRules] = useState(null);
+  const { getActions } = useAction();
+  const [actions, setActions] = useState(false);
 
-  async function loadRules() {
+  async function loadActions() {
     try {
-      setRules(null);
-      setRules(await getRules(propsFormActionGuid));
+      setActions(null);
+      setActions(await getActions());
     } catch (error) {
       showToastError(error);
     }
   }
 
   useEffect(() => {
-    if (propsFormActionGuid) {
-      loadRules();
-    }
+    loadActions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsFormActionGuid]);
+  }, []);
 
   return (
     <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
       <Divider sx={{ my: 1.5 }} />
-      {rules ? (
+      {actions ? (
         <List>
-          {rules.map((rule, index) => (
+          {actions.map((action, index) => (
             <ListItemButton
               key={index}
-              selected={propsValue === rule.id}
-              onClick={() => propsOnChange(rule.id)}
+              selected={propsValue === action.guid}
+              onClick={() => propsOnChange(action.guid)}
             >
               <ListItemIcon>
                 <ArrowForwardOutlined />
               </ListItemIcon>
               <ListItemText
-                primary={rule.rule.uriData.name}
-                secondary={rule.rule.uriData.description}
+                primary={action.uriData.name}
+                secondary={action.uriData.description}
               />
             </ListItemButton>
           ))}

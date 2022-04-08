@@ -1,9 +1,11 @@
+import { Divider, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import CaseCreateDialogForm from 'components/case/CaseCreateDialogForm';
 import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
-import JurisdictionCaseCreator from 'components/jurisdiction/JurisdictionCaseCreator';
+import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
 import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
-import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
@@ -18,12 +20,38 @@ export default function Jurisdiction() {
       title={'YourJustice / Jurisdiction'}
       showAccountNavigation={!!account}
     >
-      <JurisdictionMeta />
-      <JurisdictionCaseCreator />
-      <JurisdictionCases />
-      <JurisdictionOfficials />
-      <JurisdictionMembers />
-      <JurisdictionLaws />
+      {/* Meta */}
+      <Box>
+        <JurisdictionMeta />
+      </Box>
+      {/* Case creator */}
+      <Box sx={{ mt: 12 }}>
+        <Box>
+          <Typography variant="h1" gutterBottom>
+            Case Creator
+          </Typography>
+          <Divider />
+        </Box>
+        <Box sx={{ mt: 3 }}>
+          <CaseCreateDialogForm />
+        </Box>
+      </Box>
+      {/* Cases */}
+      <Box sx={{ mt: 12 }}>
+        <JurisdictionCases />
+      </Box>
+      {/* Officials */}
+      <Box sx={{ mt: 12 }}>
+        <JurisdictionOfficials />
+      </Box>
+      {/* Officials */}
+      <Box sx={{ mt: 12 }}>
+        <JurisdictionMembers />
+      </Box>
+      {/* Laws */}
+      <Box sx={{ mt: 12 }}>
+        <JurisdictionLaws />
+      </Box>
     </Layout>
   );
 }

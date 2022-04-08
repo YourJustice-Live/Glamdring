@@ -14,9 +14,9 @@ import useToasts from 'hooks/useToasts';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
- * A widget to select jurisdiction profile.
+ * A widget to select case profile.
  */
-export default function JurisdictionProfileSelect(props) {
+export default function CaseProfileSelect(props) {
   const propsValue = props.value;
   const propsLabel = props.label;
   const propsOnChange = props.onChange;
