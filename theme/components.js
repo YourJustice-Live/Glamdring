@@ -7,10 +7,29 @@ export const components = {
       body: {
         fontFamily: 'Manrope, monospace',
         letterSpacing: 'normal',
+        color: 'text.primary',
+      },
+    },
+  },
+  MuiPaper: {
+    styleOverrides: {
+      // Name of the slot
+      rounded: {
+        // Some CSS
+        borderRadius: '22px',
+      },
+      elevation: {
+        boxShadow: '4px 5px 10px 0px rgb(0 0 0 / 6%)',
       },
     },
   },
   MuiButton: {
+    styleOverrides: {
+      root: {
+        textTransform: 'initial',
+        fontSize: '1em',
+      },
+    },
     variants: [
       {
         props: { variant: 'primary' },
@@ -52,7 +71,7 @@ export const components = {
         },
       },
       {
-        props: { variant: 'text' },
+        props: { variant: 'ghost' },
         style: {
           color: '#5E42CC',
           '&:hover': {
