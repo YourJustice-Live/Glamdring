@@ -5,9 +5,9 @@ import useToasts from 'hooks/useToasts';
 import DataUriInput from 'components/form/widget/DataUriInput';
 
 /**
- * A form for adding a action of updating a specified rule.
+ * A form for adding a action or updating a specified action.
  */
-export default function JurisdictionBackendActionManager({ action }) {
+export default function ActionManageFormDialog({ action }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addAction, updateActionUri } = useActionRepoContract();
   const [formData, setFormData] = useState({});
