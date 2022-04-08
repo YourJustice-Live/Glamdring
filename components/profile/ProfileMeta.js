@@ -1,6 +1,5 @@
 import { InsertPhotoOutlined } from '@mui/icons-material';
 import { Avatar, Divider, Skeleton, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -31,7 +30,7 @@ export default function ProfileMeta({ account }) {
   }, [account]);
 
   return (
-    <Box sx={{ mb: 12 }}>
+    <>
       <Typography variant="h1" gutterBottom>
         Profile
       </Typography>
@@ -89,6 +88,6 @@ export default function ProfileMeta({ account }) {
           />
         </>
       )}
-    </Box>
+    </>
   );
 }
