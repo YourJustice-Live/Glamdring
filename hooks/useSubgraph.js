@@ -51,11 +51,25 @@ export default function useSubgraph() {
     return response.actionEntities;
   };
 
+  /**
+   * Find the case entities.
+   *
+   * @param {string} jurisdiction Jurisdiction address.
+   * @returns {Promise.<Array.<{object}>>} Array with case entities.
+   */
+  let findCaseEntities = async function (jurisdiction) {
+    const response = await makeSubgraphQuery(
+      getFindCaseEntitiesQuery(jurisdiction),
+    );
+    return response.caseEntities;
+  };
+
   return {
     findAvatarNftEntities,
     findJurisdictionParticipantEntities,
     findJurisdictionRuleEntities,
     findActionEntities,
+    findCaseEntities,
   };
 }
 
@@ -178,6 +192,26 @@ function getFindActionEntitiesQuery(guids) {
         confirmationRuling
         confirmationEvidence
         confirmationWitness
+      }
+    }
+  }`;
+}
+
+function getFindCaseEntitiesQuery(jurisdiction) {
+  let queryParams = `where: {jurisdiction: "${jurisdiction}"}`;
+  return `{
+    caseEntities(${queryParams}) {
+      id
+      jurisdiction
+      participants {
+        id
+        account
+        isAdmin
+        isSubject
+        isPlaintiff
+        isJudge
+        isWitness
+        isAffected
       }
     }
   }`;

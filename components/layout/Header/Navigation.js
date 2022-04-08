@@ -18,18 +18,6 @@ import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAccount } from 'utils/formatters';
 
-const headerButtonSX = {
-  ml: 1.5,
-  borderRadius: '12px',
-  border: 'none',
-  height: 36,
-  textTransform: 'none',
-  backgroundColor: 'rgba(173, 155, 245, 0.08)',
-  '&:hover': {
-    border: 'none',
-  },
-};
-
 /**
  * A component with a header navigation.
  */
@@ -118,8 +106,8 @@ export default function Navigation() {
           {account && accountProfile && (
             <Link href="/jurisdiction" passHref>
               <Button
-                variant="outlined"
-                sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }}
+                variant="secondary"
+                sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconPlus />}
               >
                 Create Case
@@ -129,8 +117,8 @@ export default function Navigation() {
           {account && !accountProfile && (
             <Link href="/profile/manage" passHref>
               <Button
-                variant="outlined"
-                sx={{ ...headerButtonSX, display: { xs: 'none', md: 'flex' } }}
+                variant="secondary"
+                sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconProfile hexColor={palette.primary.main} />}
               >
                 Create Own Profile
@@ -139,8 +127,7 @@ export default function Navigation() {
           )}
           {!account && (
             <Button
-              variant="outlined"
-              sx={headerButtonSX}
+              variant="secondary"
               onClick={connectWallet}
               startIcon={<IconWallet />}
             >
@@ -153,7 +140,7 @@ export default function Navigation() {
         {account && (
           <Box sx={{ flexGrow: 0 }}>
             <Link href="/" passHref>
-              <IconButton variant="outlined" sx={{ ml: 2 }}>
+              <IconButton sx={{ ml: 2 }}>
                 <IconHome />
               </IconButton>
             </Link>
@@ -164,7 +151,7 @@ export default function Navigation() {
         {account && (
           <>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
                 <Avatar
                   src={accountProfile?.avatarNftMetadata?.image}
                   sx={{ bgcolor: 'grey.50', width: 36, height: 36 }}
