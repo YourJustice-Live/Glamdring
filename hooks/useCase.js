@@ -21,6 +21,7 @@ export default function useCase() {
         const caseObject = new Case(
           caseEntity.id,
           caseEntity.jurisdiction,
+          caseEntity.rules,
           caseEntity.participants,
         );
         cases.push(caseObject);
