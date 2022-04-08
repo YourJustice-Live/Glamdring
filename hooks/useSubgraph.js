@@ -41,18 +41,6 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the jurisdiction case entities.
-   *
-   * @returns Array with jurisdiction case entities.
-   */
-  let findJurisdictionCaseEntities = async function () {
-    const response = await makeSubgraphQuery(
-      getJurisdictionCaseEntititesQuery(),
-    );
-    return response.jurisdictionCaseEntities;
-  };
-
-  /**
    * Find the action entities.
    *
    * @param {Array.<string>} guids If not null, then the function returns the action entities for the specified guids.
@@ -63,12 +51,25 @@ export default function useSubgraph() {
     return response.actionEntities;
   };
 
+  /**
+   * Find the case entities.
+   *
+   * @param {string} jurisdiction Jurisdiction address.
+   * @returns {Promise.<Array.<{object}>>} Array with case entities.
+   */
+  let findCaseEntities = async function (jurisdiction) {
+    const response = await makeSubgraphQuery(
+      getFindCaseEntitiesQuery(jurisdiction),
+    );
+    return response.caseEntities;
+  };
+
   return {
     findAvatarNftEntities,
     findJurisdictionParticipantEntities,
     findJurisdictionRuleEntities,
-    findJurisdictionCaseEntities,
     findActionEntities,
+    findCaseEntities,
   };
 }
 
@@ -160,15 +161,6 @@ function getFindJurisdictionRuleEntitiesQuery(actionGuid) {
   }`;
 }
 
-function getJurisdictionCaseEntititesQuery() {
-  return `{
-    jurisdictionCaseEntities(first: 100) {
-      id
-      contractAddress
-    }
-  }`;
-}
-
 function getFindActionEntitiesQuery(guids) {
   let queryParams = `first: 100`;
   if (guids && guids.length == 0) {
@@ -200,6 +192,26 @@ function getFindActionEntitiesQuery(guids) {
         confirmationRuling
         confirmationEvidence
         confirmationWitness
+      }
+    }
+  }`;
+}
+
+function getFindCaseEntitiesQuery(jurisdiction) {
+  let queryParams = `where: {jurisdiction: "${jurisdiction}"}`;
+  return `{
+    caseEntities(${queryParams}) {
+      id
+      jurisdiction
+      participants {
+        id
+        account
+        isAdmin
+        isSubject
+        isPlaintiff
+        isJudge
+        isWitness
+        isAffected
       }
     }
   }`;
