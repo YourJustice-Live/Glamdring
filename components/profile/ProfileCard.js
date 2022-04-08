@@ -160,8 +160,7 @@ export default function ProfileCard({ profile }) {
           <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
           <Skeleton variant="rectangular" height={64} />
         </CardContent>
-      )
-      }
-    </Card >
+      )}
+    </Card>
   );
 }
