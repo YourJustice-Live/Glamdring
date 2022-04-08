@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import useSubgraph from 'hooks/useSubgraph';
+import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
 
 /**
@@ -16,12 +16,14 @@ import useToasts from 'hooks/useToasts';
  */
 export default function JurisdictionCases() {
   const { showToastError } = useToasts();
-  const { findJurisdictionCaseEntities } = useSubgraph();
+  const { getCases } = useCase();
   const [cases, setCases] = useState(null);
 
   async function loadCases() {
     try {
-      setCases(await findJurisdictionCaseEntities());
+      setCases(
+        await getCases(process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS),
+      );
     } catch (error) {
       showToastError(error);
     }
