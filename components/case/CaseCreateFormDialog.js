@@ -22,7 +22,7 @@ import { useState } from 'react';
  * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
-export default function CaseCreateDialogForm() {
+export default function CaseCreateFormDialog() {
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const [isOpen, setIsOpen] = useState(false);

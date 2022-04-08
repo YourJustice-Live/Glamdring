@@ -1,6 +1,6 @@
 import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import CaseCreateDialogForm from 'components/case/CaseCreateDialogForm';
+import CaseCreateFormDialog from 'components/case/CaseCreateFormDialog';
 import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
 import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
@@ -33,7 +33,7 @@ export default function Jurisdiction() {
           <Divider />
         </Box>
         <Box sx={{ mt: 3 }}>
-          <CaseCreateDialogForm />
+          <CaseCreateFormDialog />
         </Box>
       </Box>
       {/* Cases */}
