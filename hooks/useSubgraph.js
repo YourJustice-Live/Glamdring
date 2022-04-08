@@ -203,6 +203,9 @@ function getFindCaseEntitiesQuery(jurisdiction) {
     caseEntities(${queryParams}) {
       id
       jurisdiction
+      rules {
+        id
+      }
       participants {
         id
         account
