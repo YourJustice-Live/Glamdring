@@ -1,6 +1,5 @@
-import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import CaseCreateFormDialog from 'components/case/CaseCreateFormDialog';
+import JurisdictionCaseCreator from 'components/jurisdiction/JurisdictionCaseCreator';
 import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
 import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
@@ -26,15 +25,7 @@ export default function Jurisdiction() {
       </Box>
       {/* Case creator */}
       <Box sx={{ mt: 12 }}>
-        <Box>
-          <Typography variant="h1" gutterBottom>
-            Case Creator
-          </Typography>
-          <Divider />
-        </Box>
-        <Box sx={{ mt: 3 }}>
-          <CaseCreateFormDialog />
-        </Box>
+        <JurisdictionCaseCreator />
       </Box>
       {/* Cases */}
       <Box sx={{ mt: 12 }}>

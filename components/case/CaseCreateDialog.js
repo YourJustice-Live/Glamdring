@@ -1,4 +1,3 @@
-import { AddBoxOutlined } from '@mui/icons-material';
 import {
   Button,
   Dialog,
@@ -12,17 +11,17 @@ import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
- * A component with a form to create a case.
+ * A component with a dialog to create a case.
  *
  * TODO: Add feature to select multiple rules
  * TODO: Add feature to enter case name
  * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
-export default function CaseCreateFormDialog() {
+export default function CaseCreateDialog({ onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const [isOpen, setIsOpen] = useState(false);
@@ -92,6 +91,7 @@ export default function CaseCreateFormDialog() {
 
   async function close() {
     setIsOpen(false);
+    onClose();
   }
 
   function handleChange({ formData }) {
@@ -127,37 +127,36 @@ export default function CaseCreateFormDialog() {
     }
   }
 
+  useEffect(() => {
+    open();
+  }, []);
+
   return (
-    <>
-      <Button variant="contained" startIcon={<AddBoxOutlined />} onClick={open}>
-        Create Case
-      </Button>
-      <Dialog open={isOpen} onClose={close}>
-        <DialogTitle>Create New Case</DialogTitle>
-        <DialogContent>
-          <Form
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={formData}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            widgets={widgets}
-            formContext={{
-              formData: formData,
-            }}
-            disabled={isLoading}
-          >
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-              <Button variant="contained" type="submit">
-                Create Case
-              </Button>
-              <Button variant="outlined" onClick={close}>
-                Cancel
-              </Button>
-            </Stack>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>Create New Case</DialogTitle>
+      <DialogContent>
+        <Form
+          schema={schema}
+          uiSchema={uiSchema}
+          formData={formData}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          widgets={widgets}
+          formContext={{
+            formData: formData,
+          }}
+          disabled={isLoading}
+        >
+          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+            <Button variant="contained" type="submit">
+              Create Case
+            </Button>
+            <Button variant="outlined" onClick={close}>
+              Cancel
+            </Button>
+          </Stack>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
