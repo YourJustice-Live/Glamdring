@@ -1,18 +1,27 @@
-import { useState } from 'react';
-import FormDialog from 'components/form/FormDialog';
+import { Save } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Stack,
+} from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
+import DataUriInput from 'components/form/widget/DataUriInput';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useToasts from 'hooks/useToasts';
-import DataUriInput from 'components/form/widget/DataUriInput';
+import { useState } from 'react';
 
 /**
- * A form for adding a action or updating a specified action.
+ * A dialog for adding an action or updating a specified action.
  */
-export default function ActionManageFormDialog({ action }) {
+export default function ActionManageDialog({ action, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addAction, updateActionUri } = useActionRepoContract();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(action || {});
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
@@ -90,15 +99,11 @@ export default function ActionManageFormDialog({ action }) {
     DataUriInput: DataUriInput,
   };
 
-  async function open() {
-    setIsOpen(true);
-    setFormData(action);
-  }
-
   async function close() {
     setFormData({});
     setIsLoading(false);
     setIsOpen(false);
+    onClose();
   }
 
   async function submit({ formData }) {
@@ -119,18 +124,40 @@ export default function ActionManageFormDialog({ action }) {
   }
 
   return (
-    <FormDialog
-      buttonTitle={action ? 'Update Action' : 'Add Action'}
-      formTitle={action ? 'Update Action' : 'Add Action'}
-      formSchema={schema}
-      formUiSchema={uiSchema}
-      formWidgets={widgets}
-      formData={formData}
-      isLoading={isLoading}
-      isOpen={isOpen}
-      onOpen={open}
-      onClose={close}
-      onSubmit={submit}
-    />
+    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+      <DialogTitle>{action ? 'Update Action' : 'Add Action'}</DialogTitle>
+      <DialogContent>
+        <Form
+          schema={schema}
+          formData={formData}
+          uiSchema={uiSchema}
+          widgets={widgets}
+          onSubmit={submit}
+          disabled={isLoading}
+        >
+          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+            {isLoading ? (
+              <LoadingButton
+                loading
+                loadingPosition="start"
+                startIcon={<Save />}
+                variant="outlined"
+              >
+                Processing
+              </LoadingButton>
+            ) : (
+              <>
+                <Button variant="contained" type="submit">
+                  {action ? 'Update Action' : 'Add Action'}
+                </Button>
+                <Button variant="outlined" onClick={onClose}>
+                  Cancel
+                </Button>
+              </>
+            )}
+          </Stack>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
