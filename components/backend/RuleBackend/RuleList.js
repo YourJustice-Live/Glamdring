@@ -1,13 +1,15 @@
-import { Box, Card, CardContent, Grid, Skeleton } from '@mui/material';
+import { Box, Button, Card, CardContent, Grid, Skeleton } from '@mui/material';
+import useDialogContext from 'hooks/useDialogContext';
 import useRule from 'hooks/useRule';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
-import RuleManageFormDialog from './RuleManageFormDialog';
+import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a list of rules.
  */
 export default function RuleList() {
+  const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getRules } = useRule();
   const [rules, setRules] = useState(null);
@@ -38,7 +40,16 @@ export default function RuleList() {
                       {JSON.stringify(rule, null, 2)}
                     </pre>
                   </Box>
-                  <RuleManageFormDialog rule={rule} />
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      showDialog(
+                        <RuleManageDialog rule={rule} onClose={closeDialog} />,
+                      )
+                    }
+                  >
+                    Update Rule
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>

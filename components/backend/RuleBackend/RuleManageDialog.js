@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import FormDialog from 'components/form/FormDialog';
+import { Save } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Stack,
+} from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
 import DataUriInput from 'components/form/widget/DataUriInput';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
+import { useState } from 'react';
 
 /**
- * A form for adding a rule or updating a specified rule.
+ * A dialog for adding a rule or updating a specified rule.
  */
-export default function RuleManageFormDialog({ rule }) {
+export default function RuleManageDialog({ rule, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
-  const [formData, setFormData] = useState();
-  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState(rule || {});
+  const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = {
@@ -138,15 +147,11 @@ export default function RuleManageFormDialog({ rule }) {
     DataUriInput: DataUriInput,
   };
 
-  function open() {
-    setIsOpen(true);
-    setFormData(rule);
-  }
-
   function close() {
     setFormData({});
     setIsLoading(false);
     setIsOpen(false);
+    onClose();
   }
 
   async function submit({ formData }) {
@@ -167,18 +172,40 @@ export default function RuleManageFormDialog({ rule }) {
   }
 
   return (
-    <FormDialog
-      buttonTitle={rule ? 'Update Rule' : 'Add Rule'}
-      formTitle={rule ? 'Update Rule' : 'Add Rule'}
-      formSchema={schema}
-      formUiSchema={uiSchema}
-      formWidgets={widgets}
-      formData={formData}
-      isLoading={isLoading}
-      isOpen={isOpen}
-      onOpen={open}
-      onClose={close}
-      onSubmit={submit}
-    />
+    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+      <DialogTitle>{rule ? 'Update Rule' : 'Add Rule'}</DialogTitle>
+      <DialogContent>
+        <Form
+          schema={schema}
+          formData={formData}
+          uiSchema={uiSchema}
+          widgets={widgets}
+          onSubmit={submit}
+          disabled={isLoading}
+        >
+          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+            {isLoading ? (
+              <LoadingButton
+                loading
+                loadingPosition="start"
+                startIcon={<Save />}
+                variant="outlined"
+              >
+                Processing
+              </LoadingButton>
+            ) : (
+              <>
+                <Button variant="contained" type="submit">
+                  {rule ? 'Update Rule' : 'Add Rule'}
+                </Button>
+                <Button variant="outlined" onClick={onClose}>
+                  Cancel
+                </Button>
+              </>
+            )}
+          </Stack>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
