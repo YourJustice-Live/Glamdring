@@ -11,6 +11,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import CaseCreateDialog from 'components/case/CaseCreateDialog';
+import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconHome, IconPlus, IconProfile, IconWallet, Logo } from 'icons';
 import Link from 'next/link';
@@ -25,6 +27,7 @@ export default function Navigation() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { account, accountProfile, connectWallet, disconnectWallet } =
     useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -104,15 +107,16 @@ export default function Navigation() {
           sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row-reverse' }}
         >
           {account && accountProfile && (
-            <Link href="/jurisdiction" passHref>
-              <Button
-                variant="secondary"
-                sx={{ display: { xs: 'none', md: 'flex' } }}
-                startIcon={<IconPlus />}
-              >
-                Create Case
-              </Button>
-            </Link>
+            <Button
+              variant="secondary"
+              sx={{ display: { xs: 'none', md: 'flex' } }}
+              startIcon={<IconPlus />}
+              onClick={() =>
+                showDialog(<CaseCreateDialog onClose={closeDialog} />)
+              }
+            >
+              Create Case
+            </Button>
           )}
           {account && !accountProfile && (
             <Link href="/profile/manage" passHref>

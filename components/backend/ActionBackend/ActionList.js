@@ -1,14 +1,16 @@
-import { Card, CardContent, Grid, Skeleton } from '@mui/material';
+import { Button, Card, CardContent, Grid, Skeleton } from '@mui/material';
 import { Box } from '@mui/system';
 import useAction from 'hooks/useAction';
+import useDialogContext from 'hooks/useDialogContext';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
-import ActionManageFormDialog from './ActionManageFormDialog';
+import ActionManageDialog from './ActionManageDialog';
 
 /**
  * A component with a list of actions.
  */
 export default function ActionList() {
+  const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
   const [actions, setActions] = useState(null);
@@ -39,7 +41,19 @@ export default function ActionList() {
                       {JSON.stringify(action, null, 2)}
                     </pre>
                   </Box>
-                  <ActionManageFormDialog action={action} />
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      showDialog(
+                        <ActionManageDialog
+                          action={action}
+                          onClose={closeDialog}
+                        />,
+                      )
+                    }
+                  >
+                    Update Action
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>

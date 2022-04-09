@@ -1,9 +1,10 @@
-import { ThemeProvider } from '@mui/material/styles';
-import { SnackbarProvider } from 'notistack';
-import { Web3Provider } from 'contexts/web3';
 import { CssBaseline } from '@mui/material';
-import { theme } from 'theme';
+import { ThemeProvider } from '@mui/material/styles';
+import { DialogProvider } from 'contexts/dialog';
+import { Web3Provider } from 'contexts/web3';
+import { SnackbarProvider } from 'notistack';
 import 'style/layout.scss';
+import { theme } from 'theme';
 
 function App({ Component, pageProps }) {
   return (
@@ -11,7 +12,9 @@ function App({ Component, pageProps }) {
       <CssBaseline />
       <SnackbarProvider maxSnack={3}>
         <Web3Provider>
-          <Component {...pageProps} />
+          <DialogProvider>
+            <Component {...pageProps} />
+          </DialogProvider>
         </Web3Provider>
       </SnackbarProvider>
     </ThemeProvider>

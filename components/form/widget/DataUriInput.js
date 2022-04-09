@@ -1,5 +1,14 @@
-import { Divider, Paper, Typography } from '@mui/material';
-import FormDialog from 'components/form/FormDialog';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -15,9 +24,9 @@ export default function DataUriInput(props) {
   const { showToastError } = useToasts();
   const { loadJsonFromIPFS, uploadJsonToIPFS } = useIpfs();
 
-  const [formData, setFormData] = useState({});
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formData, setFormData] = useState({});
 
   /**
    * Default form schema.
@@ -101,17 +110,30 @@ export default function DataUriInput(props) {
           <Paper variant="outlined" sx={{ p: 2, mb: 2, overflowX: 'scroll' }}>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </Paper>
-          <FormDialog
-            buttonTitle="Edit data"
-            formTitle="Edit data"
-            formSchema={formSchema}
-            formData={formData}
-            isLoading={isLoading}
-            isOpen={isFormOpen}
-            onOpen={openForm}
-            onClose={closeForm}
-            onSubmit={submitForm}
-          />
+          {/* Button for open dialog with form */}
+          <Button variant="outlined" onClick={openForm}>
+            Edit data
+          </Button>
+          {/* Dialog with form */}
+          <Dialog open={isFormOpen} onClose={closeForm}>
+            <DialogTitle>Edit data</DialogTitle>
+            <DialogContent>
+              <Form
+                schema={formSchema}
+                formData={formData}
+                onSubmit={submitForm}
+              >
+                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                  <Button variant="contained" type="submit">
+                    Edit data
+                  </Button>
+                  <Button variant="outlined" onClick={close}>
+                    Cancel
+                  </Button>
+                </Stack>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </>

@@ -1,12 +1,15 @@
-import { Divider, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import ActionManageFormDialog from './ActionManageFormDialog';
+import useDialogContext from 'hooks/useDialogContext';
 import ActionList from './ActionList';
+import ActionManageDialog from './ActionManageDialog';
 
 /**
  * A component with an action backend.
  */
 export default function ActionBackend() {
+  const { showDialog, closeDialog } = useDialogContext();
+
   return (
     <>
       <Box>
@@ -16,7 +19,14 @@ export default function ActionBackend() {
         <Divider />
       </Box>
       <Box sx={{ mt: 2.5 }}>
-        <ActionManageFormDialog />
+        <Button
+          variant="outlined"
+          onClick={() =>
+            showDialog(<ActionManageDialog onClose={closeDialog} />)
+          }
+        >
+          Add Action
+        </Button>
       </Box>
       <Box sx={{ mt: 2.5 }}>
         <ActionList />

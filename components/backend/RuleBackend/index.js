@@ -1,12 +1,15 @@
-import { Divider, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import RuleManageFormDialog from './RuleManageFormDialog';
+import useDialogContext from 'hooks/useDialogContext';
 import RuleList from './RuleList';
+import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with rule backend.
  */
 export default function RuleBackend() {
+  const { showDialog, closeDialog } = useDialogContext();
+
   return (
     <>
       <Box>
@@ -16,7 +19,12 @@ export default function RuleBackend() {
         <Divider />
       </Box>
       <Box sx={{ mt: 2.5 }}>
-        <RuleManageFormDialog />
+        <Button
+          variant="outlined"
+          onClick={() => showDialog(<RuleManageDialog onClose={closeDialog} />)}
+        >
+          Add Rule
+        </Button>
       </Box>
       <Box sx={{ mt: 2.5 }}>
         <RuleList />
