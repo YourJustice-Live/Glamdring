@@ -11,7 +11,7 @@ import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 /**
  * A component with a dialog to create a case.
@@ -21,10 +21,10 @@ import { useEffect, useState } from 'react';
  * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
-export default function CaseCreateDialog({ onClose }) {
+export default function CaseCreateDialog({ isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({});
 
@@ -84,11 +84,6 @@ export default function CaseCreateDialog({ onClose }) {
     CaseProfileSelect: CaseProfileSelect,
   };
 
-  async function open() {
-    setIsOpen(true);
-    setFormData({});
-  }
-
   async function close() {
     setIsOpen(false);
     onClose();
@@ -126,10 +121,6 @@ export default function CaseCreateDialog({ onClose }) {
       setIsLoading(false);
     }
   }
-
-  useEffect(() => {
-    open();
-  }, []);
 
   return (
     <Dialog open={isOpen} onClose={close}>
