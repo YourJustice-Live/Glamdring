@@ -38,7 +38,7 @@ export default function CaseCard({ caseObject }) {
           <CaseJson caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 4 }}>
-          <CaseActions />
+          <CaseActions caseObject={caseObject} />
         </Box>
       </CardContent>
     </Card>
