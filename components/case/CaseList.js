@@ -5,11 +5,13 @@ import {
   AccordionSummary,
   Button,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useDialogContext from 'hooks/useDialogContext';
 import CasePostAddDialog from './CasePostAddDialog';
+import CaseStageChangeDialog from './CaseStageChangeDialog';
 
 /**
  * A component with a list of cases.
@@ -32,19 +34,34 @@ export default function CaseList({ cases }) {
                     {JSON.stringify(caseObject, null, 2)}
                   </pre>
                 </Box>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    showDialog(
-                      <CasePostAddDialog
-                        caseObject={caseObject}
-                        onClose={closeDialog}
-                      />,
-                    )
-                  }
-                >
-                  Add Post
-                </Button>
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      showDialog(
+                        <CasePostAddDialog
+                          caseObject={caseObject}
+                          onClose={closeDialog}
+                        />,
+                      )
+                    }
+                  >
+                    Add Post
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      showDialog(
+                        <CaseStageChangeDialog
+                          caseObject={caseObject}
+                          onClose={closeDialog}
+                        />,
+                      )
+                    }
+                  >
+                    Change Stage
+                  </Button>
+                </Stack>
               </AccordionDetails>
             </Accordion>
           ))}

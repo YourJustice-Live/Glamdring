@@ -17,3 +17,14 @@ export const JURISDICTION_ROLE = {
   judge: 'judge',
   admin: 'admin',
 };
+
+export const CASE_STAGE = {
+  draft: 'draft',
+  open: 'open',
+  verdict: 'verdict',
+  action: 'action',
+  appeal: 'appeal',
+  enforcment: 'enforcment',
+  closed: 'closed',
+  cancelled: 'cancelled',
+};
