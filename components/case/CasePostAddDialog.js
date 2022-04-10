@@ -66,7 +66,6 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
 
   async function submit({ formData }) {
     try {
-      console.log('[Dev] formData', formData);
       setFormData(formData);
       setIsLoading(true);
       await addPost(
