@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { ArrowForwardOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -9,8 +8,10 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import useIpfs from 'hooks/useIpfs';
 import useRule from 'hooks/useRule';
 import useToasts from 'hooks/useToasts';
+import { useEffect, useState } from 'react';
 
 /**
  * A widget to select case rule.
@@ -20,13 +21,23 @@ export default function CaseRuleSelect(props) {
   const propsOnChange = props.onChange;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const { showToastError } = useToasts();
+  const { loadJsonFromIPFS } = useIpfs();
   const { getRules } = useRule();
-  const [rules, setRules] = useState(null);
+  const [items, setItems] = useState(null);
 
-  async function loadRules() {
+  async function loadItems() {
     try {
-      setRules(null);
-      setRules(await getRules(propsFormActionGuid));
+      setItems(null);
+      let items = [];
+      const rules = await getRules(propsFormActionGuid);
+      for (const rule of rules) {
+        let item = {
+          rule: rule,
+          ruleUriData: await loadJsonFromIPFS(rule.rule.uri),
+        };
+        items.push(item);
+      }
+      setItems(items);
     } catch (error) {
       showToastError(error);
     }
@@ -34,7 +45,7 @@ export default function CaseRuleSelect(props) {
 
   useEffect(() => {
     if (propsFormActionGuid) {
-      loadRules();
+      loadItems();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propsFormActionGuid]);
@@ -43,20 +54,20 @@ export default function CaseRuleSelect(props) {
     <Box>
       <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
       <Divider sx={{ my: 1.5 }} />
-      {rules ? (
+      {items ? (
         <List>
-          {rules.map((rule, index) => (
+          {items.map((item, index) => (
             <ListItemButton
               key={index}
-              selected={propsValue === rule.id}
-              onClick={() => propsOnChange(rule.id)}
+              selected={item.rule.id === propsValue}
+              onClick={() => propsOnChange(item.rule.id)}
             >
               <ListItemIcon>
                 <ArrowForwardOutlined />
               </ListItemIcon>
               <ListItemText
-                primary={rule.rule.uriData.name}
-                secondary={rule.rule.uriData.description}
+                primary={item.ruleUriData.name}
+                secondary={item.ruleUriData.description}
               />
             </ListItemButton>
           ))}

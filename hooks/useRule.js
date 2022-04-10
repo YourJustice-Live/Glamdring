@@ -1,13 +1,11 @@
-import useIpfs from 'hooks/useIpfs';
-import useSubgraph from 'hooks/useSubgraph';
 import Rule from 'classes/Rule';
+import useSubgraph from 'hooks/useSubgraph';
 
 /**
  * Hook for work with rules.
  */
 export default function useRule() {
   const { findJurisdictionRuleEntities } = useSubgraph();
-  const { loadJsonFromIPFS } = useIpfs();
 
   /**
    * Get rules.
@@ -26,7 +24,6 @@ export default function useRule() {
           ruleEntity.affected,
           ruleEntity.negation,
           ruleEntity.uri,
-          await loadJsonFromIPFS(ruleEntity.uri),
           ruleEntity.effectsEnvironmental,
           ruleEntity.effectsProfessional,
           ruleEntity.effectsSocial,
