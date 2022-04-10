@@ -13,13 +13,11 @@ export const components = {
   },
   MuiPaper: {
     styleOverrides: {
-      // Name of the slot
       rounded: {
-        // Some CSS
         borderRadius: '22px',
       },
       elevation: {
-        boxShadow: '4px 5px 10px 0px rgb(0 0 0 / 6%)',
+        boxShadow: '0px 6px 18px rgba(118, 139, 160, 0.12)',
       },
     },
   },
