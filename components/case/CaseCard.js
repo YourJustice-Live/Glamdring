@@ -14,6 +14,7 @@ import { Box } from '@mui/system';
 import { CASE_STAGE } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import NextLink from 'next/link';
+import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import CasePostAddDialog from './CasePostAddDialog';
 import CaseStageChangeDialog from './CaseStageChangeDialog';
@@ -29,7 +30,7 @@ export default function CaseCard({ caseObject }) {
           <CaseAddress caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 0.5 }}>
-          <CaseAdmin />
+          <CaseAdmin caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 0.5 }}>
           <CaseStage caseObject={caseObject} />
@@ -63,12 +64,29 @@ function CaseAddress({ caseObject }) {
   );
 }
 
-function CaseAdmin() {
+function CaseAdmin({ caseObject }) {
+  const [adminAccount, setAdminAccount] = useState(null);
+
+  useEffect(() => {
+    const participants = caseObject.participants;
+    const admins = participants.filter((participant) => participant.isAdmin);
+    setAdminAccount(admins[0].account);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Stack direction="row" spacing={1}>
       <Typography variant="body2">Admin: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-        Unknown
+        {adminAccount ? (
+          <NextLink href={`/profile/${adminAccount}`} passHref>
+            <Link underline="none" target="_blank">
+              {formatAddress(adminAccount)}
+            </Link>
+          </NextLink>
+        ) : (
+          'Loading...'
+        )}
       </Typography>
     </Stack>
   );
