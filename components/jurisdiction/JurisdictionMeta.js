@@ -7,7 +7,7 @@ import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { formatAccount } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -84,7 +84,7 @@ export default function JurisdictionMeta() {
           </Typography>
           <Typography gutterBottom>
             <b>Owner: </b>
-            {formatAccount(data.owner)}
+            {formatAddress(data.owner)}
           </Typography>
           {account && (
             <>

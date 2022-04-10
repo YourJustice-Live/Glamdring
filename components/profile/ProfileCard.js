@@ -25,7 +25,7 @@ import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useToasts from 'hooks/useToasts';
 import NextLink from 'next/link';
 import { useState } from 'react';
-import { formatAccount } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 import { getRating } from 'utils/reputation';
 
@@ -110,7 +110,7 @@ export default function ProfileCard({ profile }) {
                 </Link>
               </NextLink>
               <Box>
-                <Typography>{formatAccount(profile.account)}</Typography>
+                <Typography>{formatAddress(profile.account)}</Typography>
               </Box>
             </Box>
 

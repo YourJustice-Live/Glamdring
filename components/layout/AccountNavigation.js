@@ -12,7 +12,7 @@ import {
 import { Box } from '@mui/system';
 import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
-import { formatAccount } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a drawer style account navigation .
@@ -71,7 +71,7 @@ function AccountNavigation() {
         <InsertPhotoOutlined />
       </Avatar>
       <Typography gutterBottom>
-        <b>Account:</b> {formatAccount(account) || 'none'}
+        <b>Account:</b> {formatAddress(account) || 'none'}
       </Typography>
       <Typography>
         <b>Account has profile:</b> {accountProfile ? 'yes' : 'no'}
