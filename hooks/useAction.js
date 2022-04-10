@@ -1,13 +1,11 @@
-import useIpfs from 'hooks/useIpfs';
-import useSubgraph from 'hooks/useSubgraph';
 import Action from 'classes/Action';
+import useSubgraph from 'hooks/useSubgraph';
 
 /**
  * Hook for work with actions.
  */
 export default function useAction() {
   const { findActionEntities } = useSubgraph();
-  const { loadJsonFromIPFS } = useIpfs();
 
   /**
    * Get action for specified guid.
@@ -36,7 +34,6 @@ export default function useAction() {
           actionEntity.object,
           actionEntity.tool,
           actionEntity.uri,
-          await loadJsonFromIPFS(actionEntity.uri),
         );
         actions.push(action);
       } catch (error) {

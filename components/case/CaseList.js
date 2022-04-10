@@ -1,55 +1,13 @@
-import { ExpandMoreOutlined } from '@mui/icons-material';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Skeleton,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-import useDialogContext from 'hooks/useDialogContext';
-import CasePostAddDialog from './CasePostAddDialog';
+import { Skeleton, Stack, Typography } from '@mui/material';
+import CaseCard from './CaseCard';
 
 /**
  * A component with a list of cases.
  */
 export default function CaseList({ cases }) {
-  const { showDialog, closeDialog } = useDialogContext();
-
   return (
-    <>
-      {cases ? (
-        <>
-          {cases.map((caseObject, index) => (
-            <Accordion key={index}>
-              <AccordionSummary expandIcon={<ExpandMoreOutlined />}>
-                <Typography>Case #{index + 1}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ overflowX: 'scroll', mb: 2 }}>
-                  <pre style={{ maxWidth: '240px' }}>
-                    {JSON.stringify(caseObject, null, 2)}
-                  </pre>
-                </Box>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    showDialog(
-                      <CasePostAddDialog
-                        caseObject={caseObject}
-                        onClose={closeDialog}
-                      />,
-                    )
-                  }
-                >
-                  Add Post
-                </Button>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </>
-      ) : (
+    <Stack spacing={2}>
+      {!cases && (
         <>
           <Skeleton
             variant="rectangular"
@@ -60,6 +18,14 @@ export default function CaseList({ cases }) {
           <Skeleton variant="rectangular" width={82} height={24} />
         </>
       )}
-    </>
+      {cases && cases.length === 0 && <Typography>None</Typography>}
+      {cases && cases.length > 0 && (
+        <>
+          {cases.map((caseObject, index) => (
+            <CaseCard key={index} caseObject={caseObject} />
+          ))}
+        </>
+      )}
+    </Stack>
   );
 }

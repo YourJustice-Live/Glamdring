@@ -36,7 +36,64 @@ export default function useCaseContract() {
     );
   }
 
+  /**
+   * Change a case stage to open stage.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @returns Transaction.
+   */
+  async function setStageOpen(contractAddress) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).stageFile();
+  }
+
+  /**
+   * Change a case stage to verdict stage.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @returns Transaction.
+   */
+  async function setStageVerdict(contractAddress) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).stageWaitForVerdict();
+  }
+
+  /**
+   * Change a case stage to close stage.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @returns Transaction.
+   */
+  async function setStageClosed(contractAddress, verdictUri) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).stageVerdict(verdictUri);
+  }
+
   return {
     addPost,
+    setStageOpen,
+    setStageVerdict,
+    setStageClosed,
   };
 }

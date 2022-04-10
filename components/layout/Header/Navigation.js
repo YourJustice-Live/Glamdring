@@ -18,7 +18,7 @@ import { IconHome, IconPlus, IconProfile, IconWallet, Logo } from 'icons';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
-import { formatAccount } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a header navigation.
@@ -197,7 +197,7 @@ export default function Navigation() {
                   borderColor: 'grey.200',
                 }}
               >
-                <span>{formatAccount(account)}</span>
+                <span>{formatAddress(account)}</span>
               </Box>
               {accountProfile && (
                 <MenuItem

@@ -203,6 +203,8 @@ function getFindCaseEntitiesQuery(jurisdiction) {
     caseEntities(${queryParams}) {
       id
       jurisdiction
+      stage
+      verdictUri
       rules {
         id
       }

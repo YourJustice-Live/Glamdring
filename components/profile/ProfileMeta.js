@@ -3,7 +3,7 @@ import { Avatar, Divider, Skeleton, Typography } from '@mui/material';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
-import { formatAccount } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
@@ -49,7 +49,7 @@ export default function ProfileMeta({ account }) {
           </Avatar>
           <Typography gutterBottom>
             <b>Account: </b>
-            {formatAccount(profile?.account) || 'none'}
+            {formatAddress(profile?.account) || 'none'}
           </Typography>
           <Typography gutterBottom>
             <b>First Name: </b>
