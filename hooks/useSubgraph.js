@@ -216,6 +216,12 @@ function getFindCaseEntitiesQuery(jurisdiction) {
         isWitness
         isAffected
       }
+      posts {
+        id
+        entityRole
+        postRole
+        uri
+      }
     }
   }`;
 }

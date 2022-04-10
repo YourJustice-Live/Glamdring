@@ -23,6 +23,7 @@ export default function useCase() {
           caseEntity.jurisdiction,
           caseEntity.rules,
           caseEntity.participants,
+          caseEntity.posts,
         );
         cases.push(caseObject);
       } catch (error) {
