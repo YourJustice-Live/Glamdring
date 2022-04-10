@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
 import {
   Avatar,
   Card,
   CardContent,
-  CardHeader,
   Chip,
   Divider,
-  Grid,
   Paper,
   Skeleton,
   Stack,
@@ -16,6 +13,7 @@ import { Box } from '@mui/system';
 import useAction from 'hooks/useAction';
 import useRule from 'hooks/useRule';
 import useToasts from 'hooks/useToasts';
+import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction laws (actions + rules).
@@ -66,57 +64,62 @@ export default function JurisdictionLaws() {
       <Divider sx={{ mb: 3 }} />
       {/* Laws */}
       {laws ? (
-        <Grid container spacing={3}>
+        <Stack spacing={2}>
           {[...laws.keys()].map((key) => (
-            <Grid key={key} item xs={12}>
-              <Card elevation={3} sx={{ p: 2 }}>
-                {/* Law action */}
-                <CardHeader
-                  avatar={<Avatar sx={{ bgcolor: 'primary.main' }}>L</Avatar>}
-                  title={laws.get(key).action.uriData.name}
-                  subheader={laws.get(key).action.uriData.description}
-                />
-                {/* Law rules */}
-                <CardContent>
-                  <Stack direction="column" spacing={1}>
-                    {laws.get(key).rules.map((rule, index) => (
-                      <Paper key={index} variant="outlined" sx={{ p: 2 }}>
-                        <Typography sx={{ fontWeight: 'bold' }}>
-                          {rule.rule.uriData.name}
-                        </Typography>
-                        <Typography>{rule.rule.uriData.description}</Typography>
-                        <Box
-                          sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}
-                        >
-                          <Chip
-                            label={
-                              'Environmental ' + rule.rule.effects.environmental
-                            }
-                            sx={{ mr: 1 }}
-                          />
-                          <Chip
-                            label={
-                              'Professional ' + rule.rule.effects.professional
-                            }
-                            sx={{ mr: 1 }}
-                          />
-                          <Chip
-                            label={'Social ' + rule.rule.effects.social}
-                            sx={{ mr: 1 }}
-                          />
-                          <Chip
-                            label={'Personal ' + rule.rule.effects.personal}
-                            sx={{ mr: 1 }}
-                          />
-                        </Box>
-                      </Paper>
-                    ))}
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
+            <Card key={key} elevation={1} sx={{ p: 2 }}>
+              {/* Avatar with name */}
+              <CardContent>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Avatar sx={{ bgcolor: 'primary.main' }}>L</Avatar>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    {laws.get(key).action.uriData.name}
+                  </Typography>
+                </Stack>
+                {/* Description */}
+                <Box sx={{ mt: 2 }}>
+                  <Typography>
+                    {laws.get(key).action.uriData.description}
+                  </Typography>
+                </Box>
+                {/* Rules */}
+                <Stack direction="column" spacing={1} sx={{ mt: 3 }}>
+                  {laws.get(key).rules.map((rule, index) => (
+                    <Paper key={index} variant="outlined" sx={{ p: 2 }}>
+                      <Typography sx={{ fontWeight: 'bold' }}>
+                        {rule.rule.uriData.name}
+                      </Typography>
+                      <Typography>{rule.rule.uriData.description}</Typography>
+                      <Box
+                        sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}
+                      >
+                        <Chip
+                          label={
+                            'Environmental ' + rule.rule.effects.environmental
+                          }
+                          sx={{ mr: 1 }}
+                        />
+                        <Chip
+                          label={
+                            'Professional ' + rule.rule.effects.professional
+                          }
+                          sx={{ mr: 1 }}
+                        />
+                        <Chip
+                          label={'Social ' + rule.rule.effects.social}
+                          sx={{ mr: 1 }}
+                        />
+                        <Chip
+                          label={'Personal ' + rule.rule.effects.personal}
+                          sx={{ mr: 1 }}
+                        />
+                      </Box>
+                    </Paper>
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
+        </Stack>
       ) : (
         <>
           <Skeleton
