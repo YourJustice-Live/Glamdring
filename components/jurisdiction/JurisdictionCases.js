@@ -1,5 +1,3 @@
-import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import CaseList from 'components/case/CaseList';
 import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
@@ -28,17 +26,5 @@ export default function JurisdictionCases() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Cases
-        </Typography>
-        <Divider />
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <CaseList cases={cases} />
-      </Box>
-    </>
-  );
+  return <CaseList cases={cases} />;
 }
