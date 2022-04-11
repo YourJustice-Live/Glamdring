@@ -17,7 +17,7 @@ export const components = {
         borderRadius: '22px',
       },
       elevation: {
-        boxShadow: '0px 6px 18px rgba(118, 139, 160, 0.12)',
+        boxShadow: '0px 6px 18px rgba(118, 139, 160, 0.24)',
       },
     },
   },

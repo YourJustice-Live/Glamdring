@@ -6,7 +6,7 @@ import CaseCard from './CaseCard';
  */
 export default function CaseList({ cases }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={4}>
       {!cases && (
         <>
           <Skeleton

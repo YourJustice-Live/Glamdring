@@ -32,11 +32,7 @@ export default function JurisdictionOfficials() {
 
   return (
     <>
-      <Typography variant="h1" gutterBottom>
-        Officials
-      </Typography>
-      <Divider sx={{ mb: 2 }} />
-      <Box sx={{ mt: 6 }}>
+      <Box>
         <Typography gutterBottom sx={{ fontWeight: 'bold' }}>
           Judges
         </Typography>

@@ -1,4 +1,3 @@
-import { Divider, Typography } from '@mui/material';
 import ProfileList from 'components/profile/ProfileList';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
@@ -26,13 +25,5 @@ export default function JurisdictionMembers() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <Typography variant="h1" gutterBottom>
-        Members
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
-      <ProfileList profiles={memberProfiles} />
-    </>
-  );
+  return <ProfileList profiles={memberProfiles} />;
 }

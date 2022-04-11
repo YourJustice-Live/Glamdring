@@ -1,18 +1,21 @@
-import { ExpandMoreOutlined } from '@mui/icons-material';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Button,
   Card,
   CardContent,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
   Link,
   Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import LawList from 'components/law/LawList';
 import { CASE_STAGE } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
+import useLaw from 'hooks/useLaw';
+import useRule from 'hooks/useRule';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -35,10 +38,28 @@ export default function CaseCard({ caseObject }) {
         <Box sx={{ mt: 0.5 }}>
           <CaseStage caseObject={caseObject} />
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <CaseJson caseObject={caseObject} />
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Case Laws
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseLaws caseObject={caseObject} />
         </Box>
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Case Posts
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CasePosts />
+        </Box>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Case Participants
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseParticipants />
+        </Box>
+        <Box sx={{ mt: 6 }}>
           <CaseActions caseObject={caseObject} />
         </Box>
       </CardContent>
@@ -115,10 +136,38 @@ function CaseStage({ caseObject }) {
   );
 }
 
+function CaseLaws({ caseObject }) {
+  const { getRulesByIds } = useRule();
+  const { getLawsByRules } = useLaw();
+  const [laws, setLaws] = useState(null);
+
+  async function loadData() {
+    const ruleIds = caseObject.rules.map((rule) => rule.id);
+    const rules = await getRulesByIds(ruleIds);
+    const laws = await getLawsByRules(rules);
+    setLaws(laws);
+  }
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return <LawList laws={laws} />;
+}
+
+function CasePosts() {
+  return <Typography>Unknown</Typography>;
+}
+
+function CaseParticipants() {
+  return <Typography>Unknown</Typography>;
+}
+
 function CaseActions({ caseObject }) {
   const { showDialog, closeDialog } = useDialogContext();
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
       <Button
         variant="outlined"
         onClick={() =>
@@ -142,23 +191,36 @@ function CaseActions({ caseObject }) {
       >
         Change Stage
       </Button>
+      <Button
+        variant="outlined"
+        onClick={() =>
+          showDialog(
+            <CaseJsonDialog caseObject={caseObject} onClose={closeDialog} />,
+          )
+        }
+      >
+        Open JSON
+      </Button>
     </Stack>
   );
 }
 
-function CaseJson({ caseObject }) {
+function CaseJsonDialog({ caseObject, isClose, onClose }) {
+  const [isOpen, setIsOpen] = useState(!isClose);
+
+  async function close() {
+    setIsOpen(false);
+    onClose();
+  }
+
   return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreOutlined />}>
-        <Typography>JSON</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Box sx={{ overflowX: 'scroll' }}>
-          <pre style={{ maxWidth: '240px' }}>
-            {JSON.stringify(caseObject, null, 2)}
-          </pre>
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>Case JSON</DialogTitle>
+      <DialogContent sx={{ overflowX: 'scroll' }}>
+        <pre style={{ maxWidth: '480px' }}>
+          {JSON.stringify(caseObject, null, 2)}
+        </pre>
+      </DialogContent>
+    </Dialog>
   );
 }

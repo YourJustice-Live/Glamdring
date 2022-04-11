@@ -1,4 +1,3 @@
-import { Box, Divider, Typography } from '@mui/material';
 import LawList from 'components/law/LawList';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
@@ -25,17 +24,5 @@ export default function JurisdictionLaws() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Laws
-        </Typography>
-        <Divider />
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <LawList laws={laws} />
-      </Box>
-    </>
-  );
+  return <LawList laws={laws} />;
 }

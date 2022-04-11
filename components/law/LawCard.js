@@ -36,7 +36,11 @@ export default function LawCard({ law }) {
                 {lawRule.ruleUriData.name}
               </Typography>
               <Typography>{lawRule.ruleUriData.description}</Typography>
-              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ mt: 2 }}
+              >
                 <Effect
                   name="Environmental"
                   value={lawRule.rule.rule.effects?.environmental}
@@ -81,8 +85,10 @@ function Effect({ name, value }) {
       >
         <Stack direction="row" spacing={1.5}>
           <IconChart hexColor={palette.primary.contrastText} />
-          <Typography sx={{ color: 'primary.contrastText' }}>{name}</Typography>
-          <Typography sx={{ color: 'primary.contrastText' }}>
+          <Typography variant="body2" sx={{ color: 'primary.contrastText' }}>
+            {name}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'primary.contrastText' }}>
             {value > 0 ? `+${value}` : value}
           </Typography>
         </Stack>
