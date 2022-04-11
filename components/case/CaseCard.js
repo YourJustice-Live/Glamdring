@@ -167,7 +167,7 @@ function CaseParticipants() {
 function CaseActions({ caseObject }) {
   const { showDialog, closeDialog } = useDialogContext();
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
       <Button
         variant="outlined"
         onClick={() =>
