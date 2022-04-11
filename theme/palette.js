@@ -1,6 +1,12 @@
 export const palette = {
-  primary: { main: '#5E42CC' },
-  secondary: { main: '#05B5A1' },
+  primary: {
+    main: '#5E42CC',
+    contrastText: '#fff',
+  },
+  secondary: {
+    main: '#05B5A1',
+    contrastText: '#fff',
+  },
   success: {
     main: '#05B5A1',
     primary: '#05B5A1',
@@ -23,7 +29,7 @@ export const palette = {
   },
   grey: {
     [50]: '#E0ECF8',
-    [200]: '#C3D4E680',
-    [600]: '#092A5199',
+    [200]: '#C3D4E6',
+    [600]: '#092A51',
   },
 };

@@ -123,7 +123,7 @@ export default function Navigation() {
               <Button
                 variant="secondary"
                 sx={{ display: { xs: 'none', md: 'flex' } }}
-                startIcon={<IconProfile hexColor={palette.primary.main} />}
+                startIcon={<IconProfile />}
               >
                 Create Own Profile
               </Button>
