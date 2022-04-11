@@ -8,7 +8,7 @@ export default function useRule() {
   const { findJurisdictionRuleEntities } = useSubgraph();
 
   /**
-   * Get rules.
+   * Get jurisdiction rules.
    *
    * @param {string} actionGuid If not null, then the function returns the rules for the specified action.
    * @returns {Promise.<Array.<Rule>>} A list with rules.
