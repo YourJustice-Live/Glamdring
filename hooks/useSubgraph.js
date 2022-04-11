@@ -28,14 +28,39 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the jurisdiction rule entities.
+   * Find all jurisdiction rule entities.
    *
-   * @param {string} actionGuid If not null, then the function returns the rules for the specified action.
-   * @returns Array with jurisdiction rule entities.
+   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
    */
-  let findJurisdictionRuleEntities = async function (actionGuid) {
+  let findJurisdictionRuleEntities = async function () {
     const response = await makeSubgraphQuery(
-      getFindJurisdictionRuleEntitiesQuery(actionGuid),
+      getFindJurisdictionRuleEntitiesQuery(),
+    );
+    return response.jurisdictionRuleEntities;
+  };
+
+  /**
+   * Find the jurisdiction rule entities by ids.
+   *
+   * @param {Array.<string>} ids Rule ids.
+   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
+   */
+  let findJurisdictionRuleEntitiesByIds = async function (ids) {
+    const response = await makeSubgraphQuery(
+      getFindJurisdictionRuleEntitiesQuery(ids, null),
+    );
+    return response.jurisdictionRuleEntities;
+  };
+
+  /**
+   * Find the jurisdiction rule entities by action guid.
+   *
+   * @param {string} actionGuid Action guid.
+   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
+   */
+  let findJurisdictionRuleEntitiesByActionGuid = async function (actionGuid) {
+    const response = await makeSubgraphQuery(
+      getFindJurisdictionRuleEntitiesQuery(null, actionGuid),
     );
     return response.jurisdictionRuleEntities;
   };
@@ -68,6 +93,8 @@ export default function useSubgraph() {
     findAvatarNftEntities,
     findJurisdictionParticipantEntities,
     findJurisdictionRuleEntities,
+    findJurisdictionRuleEntitiesByIds,
+    findJurisdictionRuleEntitiesByActionGuid,
     findActionEntities,
     findCaseEntities,
   };
@@ -136,8 +163,11 @@ function getFindJurisdictionParticipantEntitiesQuery(filter) {
   }`;
 }
 
-function getFindJurisdictionRuleEntitiesQuery(actionGuid) {
+function getFindJurisdictionRuleEntitiesQuery(ids, actionGuid) {
   let queryParams = `first: 100`;
+  if (ids) {
+    queryParams = `first: 100, where: {id_in: ["${ids.join('","')}"]}`;
+  }
   if (actionGuid) {
     queryParams = `where: {about: "${actionGuid}"}`;
   }

@@ -5,6 +5,8 @@ import useIpfs from './useIpfs';
 
 /**
  * Hook for work with laws.
+ *
+ * @typedef {import('../classes/Rule').default} Rule
  */
 export default function useLaw() {
   const { loadJsonFromIPFS } = useIpfs();
@@ -12,13 +14,13 @@ export default function useLaw() {
   const { getRules } = useRule();
 
   /**
-   * Get jurisdiction laws.
+   * Get laws by specified rules.
    *
+   * @param {Array.<Rule>} rules Rules.
    * @returns {Promise.<Map.<string,Law>>} A map with laws.
    */
-  let getJurisdictionLaws = async function () {
+  let getLawsByRules = async function (rules) {
     let laws = new Map();
-    const rules = await getRules();
     for (const rule of rules) {
       try {
         // Find or create law by action (about)
@@ -38,7 +40,19 @@ export default function useLaw() {
     return laws;
   };
 
+  /**
+   * Get jurisdiction laws.
+   *
+   * @returns {Promise.<Map.<string,Law>>} A map with laws.
+   */
+  let getJurisdictionLaws = async function () {
+    const rules = await getRules();
+    const laws = await getLawsByRules(rules);
+    return laws;
+  };
+
   return {
+    getLawsByRules,
     getJurisdictionLaws,
   };
 }

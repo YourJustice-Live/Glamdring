@@ -22,14 +22,14 @@ export default function CaseRuleSelect(props) {
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const { showToastError } = useToasts();
   const { loadJsonFromIPFS } = useIpfs();
-  const { getRules } = useRule();
+  const { getRulesByActionGuid } = useRule();
   const [items, setItems] = useState(null);
 
   async function loadItems() {
     try {
       setItems(null);
       let items = [];
-      const rules = await getRules(propsFormActionGuid);
+      const rules = await getRulesByActionGuid(propsFormActionGuid);
       for (const rule of rules) {
         let item = {
           rule: rule,
