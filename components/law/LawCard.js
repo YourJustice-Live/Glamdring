@@ -2,12 +2,13 @@ import {
   Avatar,
   Card,
   CardContent,
-  Chip,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { IconChart } from 'icons';
+import { palette } from 'theme/palette';
 
 /**
  * A component with a card with law.
@@ -35,7 +36,7 @@ export default function LawCard({ law }) {
                 {lawRule.ruleUriData.name}
               </Typography>
               <Typography>{lawRule.ruleUriData.description}</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}>
+              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                 <Effect
                   name="Environmental"
                   value={lawRule.rule.rule.effects?.environmental}
@@ -52,7 +53,7 @@ export default function LawCard({ law }) {
                   name="Personal"
                   value={lawRule.rule.rule.effects?.personal}
                 />
-              </Box>
+              </Stack>
             </Paper>
           ))}
         </Stack>
@@ -70,11 +71,22 @@ export default function LawCard({ law }) {
 function Effect({ name, value }) {
   if (value && value !== 0) {
     return (
-      <Chip
-        label={`${name} ${value}`}
-        sx={{ mr: 1 }}
-        color={value > 0 ? 'success' : 'danger'}
-      />
+      <Box
+        sx={{
+          py: 1.2,
+          px: 1.8,
+          borderRadius: '14px',
+          backgroundColor: value > 0 ? 'success.main' : 'danger.main',
+        }}
+      >
+        <Stack direction="row" spacing={1.5}>
+          <IconChart hexColor={palette.primary.contrastText} />
+          <Typography sx={{ color: 'primary.contrastText' }}>{name}</Typography>
+          <Typography sx={{ color: 'primary.contrastText' }}>
+            {value > 0 ? `+${value}` : value}
+          </Typography>
+        </Stack>
+      </Box>
     );
   } else {
     return null;
