@@ -38,6 +38,9 @@ export default function CaseCard({ caseObject }) {
         <Box sx={{ mt: 0.5 }}>
           <CaseStage caseObject={caseObject} />
         </Box>
+        <Box sx={{ mt: 0.5 }}>
+          <CaseCreatedDate caseObject={caseObject} />
+        </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
             Case Laws
@@ -50,7 +53,7 @@ export default function CaseCard({ caseObject }) {
             Case Posts
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CasePosts />
+          <CasePosts caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
@@ -138,6 +141,17 @@ function CaseStage({ caseObject }) {
   );
 }
 
+function CaseCreatedDate({ caseObject }) {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Typography variant="body2">Created Date: </Typography>
+      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+        {new Date(caseObject.createdDate * 1000).toLocaleString()}
+      </Typography>
+    </Stack>
+  );
+}
+
 function CaseLaws({ caseObject }) {
   const { getRulesByIds } = useRule();
   const { getLawsByRules } = useLaw();
@@ -158,8 +172,39 @@ function CaseLaws({ caseObject }) {
   return <LawList laws={laws} />;
 }
 
-function CasePosts() {
-  return <Typography>Unknown</Typography>;
+function CasePosts({ caseObject }) {
+  function getPostRoleString(postRole) {
+    if (postRole === 'evidence') {
+      return 'Evidence';
+    }
+    return 'Unknown Post Role';
+  }
+
+  return (
+    <Stack spacing={2}>
+      {caseObject.posts.length === 0 && <Typography>None</Typography>}
+      {caseObject.posts.length > 0 && (
+        <>
+          {caseObject.posts.map((post, index) => (
+            <Box key={index}>
+              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+                {getPostRoleString(post.postRole)}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 'bold' }}
+                gutterBottom
+              >
+                <Link href={post.uri} underline="none" target="_blank">
+                  {post.uri}
+                </Link>
+              </Typography>
+            </Box>
+          ))}
+        </>
+      )}
+    </Stack>
+  );
 }
 
 function CaseParticipants({ caseObject }) {
