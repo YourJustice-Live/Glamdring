@@ -50,7 +50,7 @@ export default function CaseCard({ caseObject }) {
             Case Posts
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CasePosts />
+          <CasePosts caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
@@ -158,8 +158,39 @@ function CaseLaws({ caseObject }) {
   return <LawList laws={laws} />;
 }
 
-function CasePosts() {
-  return <Typography>Unknown</Typography>;
+function CasePosts({ caseObject }) {
+  function getPostRoleString(postRole) {
+    if (postRole === 'evidence') {
+      return 'Evidence';
+    }
+    return 'Unknown Post Role';
+  }
+
+  return (
+    <Stack spacing={2}>
+      {caseObject.posts.length === 0 && <Typography>None</Typography>}
+      {caseObject.posts.length > 0 && (
+        <>
+          {caseObject.posts.map((post, index) => (
+            <Box key={index}>
+              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+                {getPostRoleString(post.postRole)}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 'bold' }}
+                gutterBottom
+              >
+                <Link href={post.uri} underline="none" target="_blank">
+                  {post.uri}
+                </Link>
+              </Typography>
+            </Box>
+          ))}
+        </>
+      )}
+    </Stack>
+  );
 }
 
 function CaseParticipants({ caseObject }) {
