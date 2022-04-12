@@ -238,15 +238,10 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       rules {
         id
       }
-      participants {
+      roles {
         id
-        account
-        isAdmin
-        isSubject
-        isPlaintiff
-        isJudge
-        isWitness
-        isAffected
+        roleId
+        accounts
       }
       posts {
         id

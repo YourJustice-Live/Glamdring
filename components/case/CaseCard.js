@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
-import { CASE_STAGE } from 'constants/contracts';
+import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useLaw from 'hooks/useLaw';
 import useRule from 'hooks/useRule';
@@ -57,7 +57,7 @@ export default function CaseCard({ caseObject }) {
             Case Participants
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CaseParticipants />
+          <CaseParticipants caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <CaseActions caseObject={caseObject} />
@@ -89,9 +89,10 @@ function CaseAdmin({ caseObject }) {
   const [adminAccount, setAdminAccount] = useState(null);
 
   useEffect(() => {
-    const participants = caseObject.participants;
-    const admins = participants.filter((participant) => participant.isAdmin);
-    setAdminAccount(admins[0].account);
+    const adminRoles = caseObject.roles.find(
+      (role) => role.roleId === CASE_ROLE.admin.id,
+    );
+    setAdminAccount(adminRoles.accounts[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,6 +127,7 @@ function CaseStage({ caseObject }) {
     }
     return 'Unknown';
   }
+
   return (
     <Stack direction="row" spacing={1}>
       <Typography variant="body2">Stage: </Typography>
@@ -160,8 +162,54 @@ function CasePosts() {
   return <Typography>Unknown</Typography>;
 }
 
-function CaseParticipants() {
-  return <Typography>Unknown</Typography>;
+function CaseParticipants({ caseObject }) {
+  function getRoleString(roleId) {
+    if (roleId === CASE_ROLE.admin.id) {
+      return 'Admin';
+    }
+    if (roleId === CASE_ROLE.subject.id) {
+      return 'Subject';
+    }
+    if (roleId === CASE_ROLE.plaintiff.id) {
+      return 'Plaintiff';
+    }
+    if (roleId === CASE_ROLE.judge.id) {
+      return 'Judge';
+    }
+    if (roleId === CASE_ROLE.witness.id) {
+      return 'Witness';
+    }
+    if (roleId === CASE_ROLE.affected.id) {
+      return 'Affected';
+    }
+    return 'Unkown Role';
+  }
+
+  return (
+    <Stack spacing={2}>
+      {caseObject.roles.map((role, roleIndex) => (
+        <Box key={roleIndex}>
+          <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+            {getRoleString(role.roleId)}
+          </Typography>
+          {role.accounts.map((account, accountIndex) => (
+            <Typography
+              key={accountIndex}
+              variant="body2"
+              sx={{ fontWeight: 'bold' }}
+              gutterBottom
+            >
+              <NextLink href={`/profile/${account}`} passHref>
+                <Link underline="none" target="_blank">
+                  {formatAddress(account)}
+                </Link>
+              </NextLink>
+            </Typography>
+          ))}
+        </Box>
+      ))}
+    </Stack>
+  );
 }
 
 function CaseActions({ caseObject }) {
