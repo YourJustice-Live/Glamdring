@@ -28,3 +28,30 @@ export const CASE_STAGE = {
   closed: 6,
   cancelled: 7,
 };
+
+export const CASE_ROLE = {
+  admin: {
+    id: '1',
+    name: 'admin',
+  },
+  subject: {
+    id: '2',
+    name: 'subject',
+  },
+  plaintiff: {
+    id: '3',
+    name: 'plaintiff',
+  },
+  judge: {
+    id: '4',
+    name: 'judge',
+  },
+  witness: {
+    id: '5',
+    name: 'witness',
+  },
+  affected: {
+    id: '6',
+    name: 'affected',
+  },
+};
