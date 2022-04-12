@@ -38,6 +38,9 @@ export default function CaseCard({ caseObject }) {
         <Box sx={{ mt: 0.5 }}>
           <CaseStage caseObject={caseObject} />
         </Box>
+        <Box sx={{ mt: 0.5 }}>
+          <CaseCreatedDate caseObject={caseObject} />
+        </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
             Case Laws
@@ -133,6 +136,17 @@ function CaseStage({ caseObject }) {
       <Typography variant="body2">Stage: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         {getStageString(caseObject)}
+      </Typography>
+    </Stack>
+  );
+}
+
+function CaseCreatedDate({ caseObject }) {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Typography variant="body2">Created Date: </Typography>
+      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+        {new Date(caseObject.createdDate * 1000).toLocaleString()}
       </Typography>
     </Stack>
   );
