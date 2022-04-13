@@ -26,7 +26,6 @@ import useToasts from 'hooks/useToasts';
 import NextLink from 'next/link';
 import { useState } from 'react';
 import { formatAddress } from 'utils/formatters';
-import { getTraitValue, traitTypes } from 'utils/metadata';
 import { getRating } from 'utils/reputation';
 
 /**
@@ -71,7 +70,7 @@ export default function ProfileCard({ profile }) {
             <Box sx={{ mr: 2 }}>
               <Avatar
                 sx={{ width: 82, height: 82, borderRadius: '16px' }}
-                src={profile.avatarNftMetadata?.image}
+                src={profile.avatarNftUriImage}
               >
                 <InsertPhotoOutlined />
               </Avatar>
@@ -99,14 +98,8 @@ export default function ProfileCard({ profile }) {
               </Box>
               <NextLink href={`/profile/${profile.account}`} passHref>
                 <Link variant="h5" sx={{ mb: 2 }} underline="none">
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.firstName,
-                  ) || 'None'}{' '}
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.lastName,
-                  ) || 'None'}
+                  {profile.avatarNftUriFirstName || 'None'}{' '}
+                  {profile.avatarNftUriLastName || 'None'}
                 </Link>
               </NextLink>
               <Box>

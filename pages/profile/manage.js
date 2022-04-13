@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Typography } from '@mui/material';
@@ -12,6 +11,8 @@ import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { hexStringToJson } from 'utils/converters';
 
 /**
  * Page where account can create (mint) or edit profile (Avatar NFT).
@@ -74,7 +75,6 @@ export default function ProfileManager() {
       const { url } = await uploadJsonToIPFS({
         image: formData.image,
         attributes: formData.attributes,
-        lastUpdatedTime: new Date().getTime(),
       });
       showToastSuccessLink('Your data uploaded to IPFS!', url);
       setStatus(statuses.isMintingOrUpdating);
@@ -94,7 +94,7 @@ export default function ProfileManager() {
 
   useEffect(() => {
     setFormData(
-      accountProfile?.avatarNftMetadata ? accountProfile.avatarNftMetadata : [],
+      accountProfile ? hexStringToJson(accountProfile.avatarNftUriData) : {},
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

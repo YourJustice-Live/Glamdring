@@ -62,11 +62,7 @@ function AccountNavigation() {
     <>
       <Avatar
         sx={{ width: 82, height: 82, my: 1.5 }}
-        src={
-          accountProfile?.avatarNftMetadata?.image
-            ? accountProfile.avatarNftMetadata.image
-            : null
-        }
+        src={accountProfile?.avatarNftUriImage}
       >
         <InsertPhotoOutlined />
       </Avatar>

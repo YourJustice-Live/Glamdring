@@ -157,7 +157,7 @@ export default function Navigation() {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
                 <Avatar
-                  src={accountProfile?.avatarNftMetadata?.image}
+                  src={accountProfile?.avatarNftUriImage}
                   sx={{ bgcolor: 'grey.50', width: 36, height: 36 }}
                 >
                   <IconProfile hexColor={palette.grey[600]} />
