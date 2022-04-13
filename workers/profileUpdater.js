@@ -12,10 +12,9 @@ addEventListener('message', (event) => {
   let accountLoadedProfile = event.data.accountProfile;
 
   setInterval(async function () {
-    // Post message if last update times of loaded profile is different
+    // Post message if uri has changed
     if (
-      accountInitProfile?.avatarNftMetadata?.lastUpdatedTime !==
-      accountLoadedProfile?.avatarNftMetadata?.lastUpdatedTime
+      accountInitProfile?.avatarNftUri !== accountLoadedProfile?.avatarNftUri
     ) {
       postMessage(accountLoadedProfile);
     }

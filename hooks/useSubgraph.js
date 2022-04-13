@@ -132,6 +132,10 @@ function getFindAvatarNftEntitiesQuery(accounts) {
         id
         owner
         uri
+        uriData
+        uriImage
+        uriFirstName
+        uriLastName
         reputations {
           id
           domain

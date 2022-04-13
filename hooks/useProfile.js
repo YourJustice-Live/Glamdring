@@ -1,6 +1,5 @@
-import useIpfs from 'hooks/useIpfs';
-import useSubgraph from 'hooks/useSubgraph';
 import Profile from 'classes/Profile';
+import useSubgraph from 'hooks/useSubgraph';
 
 /**
  * Hook for work with profiles.
@@ -8,7 +7,6 @@ import Profile from 'classes/Profile';
 export default function useProfile() {
   const { findAvatarNftEntities, findJurisdictionParticipantEntities } =
     useSubgraph();
-  const { loadJsonFromIPFS } = useIpfs();
 
   /**
    * Get profile for specified account.
@@ -33,8 +31,12 @@ export default function useProfile() {
         const profile = new Profile(
           avatarNftEntity.owner,
           avatarNftEntity.id,
+          avatarNftEntity.uri,
+          avatarNftEntity.uriData,
+          avatarNftEntity.uriImage,
+          avatarNftEntity.uriFirstName,
+          avatarNftEntity.uriLastName,
           avatarNftEntity.reputations,
-          await loadJsonFromIPFS(avatarNftEntity.uri),
         );
         profiles.push(profile);
       } catch (error) {

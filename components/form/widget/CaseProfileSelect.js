@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -11,7 +10,7 @@ import {
 } from '@mui/material';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import { getTraitValue, traitTypes } from 'utils/metadata';
+import { useEffect, useState } from 'react';
 
 /**
  * A widget to select case profile.
@@ -54,18 +53,12 @@ export default function CaseProfileSelect(props) {
               onClick={() => propsOnChange(profile.account)}
             >
               <ListItemAvatar>
-                <Avatar src={profile.avatarNftMetadata?.image} />
+                <Avatar src={profile.avatarNftUriImage} />
               </ListItemAvatar>
               <Stack direction="column">
                 <Typography>
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.firstName,
-                  ) || 'None'}{' '}
-                  {getTraitValue(
-                    profile.avatarNftMetadata,
-                    traitTypes.lastName,
-                  ) || 'None'}
+                  {profile.avatarNftUriFirstName || 'None'}{' '}
+                  {profile.avatarNftUriLastName || 'None'}
                 </Typography>
               </Stack>
             </ListItemButton>

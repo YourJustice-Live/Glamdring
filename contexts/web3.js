@@ -83,6 +83,9 @@ export function Web3Provider({ children }) {
     clearContext();
   }
 
+  /**
+   * Run web worker to check if the account profile in the blockchain has been changed.
+   */
   async function runProfileUpdater() {
     profileWorkerRef.current = new Worker(
       new URL('../workers/profileUpdater.js', import.meta.url),
