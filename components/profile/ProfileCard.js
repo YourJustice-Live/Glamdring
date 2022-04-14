@@ -20,6 +20,7 @@ import {
   REPUTATION_RATING_ID,
 } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
+import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
 import { getRating } from 'utils/reputation';
@@ -28,6 +29,7 @@ import { getRating } from 'utils/reputation';
  * A component with a card with profile.
  */
 export default function ProfileCard({ profile }) {
+  const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
@@ -90,7 +92,13 @@ export default function ProfileCard({ profile }) {
                 size="small"
                 startIcon={<AddBoxOutlined />}
                 onClick={() =>
-                  showDialog(<CaseCreateDialog onClose={closeDialog} />)
+                  showDialog(
+                    <CaseCreateDialog
+                      subjectProfile={profile}
+                      affectedProfile={accountProfile}
+                      onClose={closeDialog}
+                    />,
+                  )
                 }
               >
                 Add Score
@@ -101,7 +109,13 @@ export default function ProfileCard({ profile }) {
                 size="small"
                 startIcon={<IndeterminateCheckBoxOutlined />}
                 onClick={() =>
-                  showDialog(<CaseCreateDialog onClose={closeDialog} />)
+                  showDialog(
+                    <CaseCreateDialog
+                      subjectProfile={profile}
+                      affectedProfile={accountProfile}
+                      onClose={closeDialog}
+                    />,
+                  )
                 }
               >
                 Add Score

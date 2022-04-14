@@ -15,6 +15,7 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
@@ -24,6 +25,7 @@ import { getTraitValue, traitTypes } from 'utils/metadata';
  * A component with profile meta (image, name, email, socials).
  */
 export default function ProfileMeta({ account }) {
+  const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getProfile } = useProfile();
@@ -91,7 +93,13 @@ export default function ProfileMeta({ account }) {
               color="success"
               startIcon={<AddBoxOutlined />}
               onClick={() =>
-                showDialog(<CaseCreateDialog onClose={closeDialog} />)
+                showDialog(
+                  <CaseCreateDialog
+                    subjectProfile={profile}
+                    affectedProfile={accountProfile}
+                    onClose={closeDialog}
+                  />,
+                )
               }
             >
               Add Score
@@ -101,7 +109,13 @@ export default function ProfileMeta({ account }) {
               color="danger"
               startIcon={<IndeterminateCheckBoxOutlined />}
               onClick={() =>
-                showDialog(<CaseCreateDialog onClose={closeDialog} />)
+                showDialog(
+                  <CaseCreateDialog
+                    subjectProfile={profile}
+                    affectedProfile={accountProfile}
+                    onClose={closeDialog}
+                  />,
+                )
               }
             >
               Add Score

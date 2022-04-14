@@ -16,17 +16,24 @@ import { useState } from 'react';
 /**
  * A component with a dialog to create a case.
  *
- * TODO: Add feature to select multiple rules
  * TODO: Add feature to enter case name
  * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
-export default function CaseCreateDialog({ isClose, onClose }) {
+export default function CaseCreateDialog({
+  subjectProfile,
+  affectedProfile,
+  isClose,
+  onClose,
+}) {
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    subjectProfileAccount: subjectProfile ? subjectProfile.account : null,
+    affectedProfileAccount: affectedProfile ? affectedProfile.account : null,
+  });
 
   const schema = {
     type: 'object',
