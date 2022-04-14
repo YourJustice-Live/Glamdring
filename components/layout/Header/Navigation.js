@@ -19,6 +19,7 @@ import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
+import JurisdictionLink from './JurisdictionLink';
 
 /**
  * A component with a header navigation.
@@ -83,13 +84,7 @@ export default function Navigation() {
               ml: 1.5,
             }}
           />
-          <Avatar
-            sx={{ width: 22, height: 22, ml: 1.5, mr: 0.75 }}
-            src={'/images/defaultJurisdictionAvatar.png'}
-          />
-          <Typography variant="h5" sx={{ fontWeight: 500 }}>
-            Crypto Valley
-          </Typography>
+          <JurisdictionLink />
         </Typography>
 
         {/* Mobile logo */}
