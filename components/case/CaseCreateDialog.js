@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
@@ -11,13 +12,15 @@ import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
+import { IconWallet } from 'icons';
 import { useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
  *
  * TODO: Add feature to enter case name
- * TODO: Hide component if account is not connected or account is not member of jurisdiction
  * TODO: Improve appearance for form validation errors
  */
 export default function CaseCreateDialog({
@@ -26,6 +29,7 @@ export default function CaseCreateDialog({
   isClose,
   onClose,
 }) {
+  const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -130,31 +134,56 @@ export default function CaseCreateDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>Create New Case</DialogTitle>
-      <DialogContent>
-        <Form
-          schema={schema}
-          uiSchema={uiSchema}
-          formData={formData}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-          widgets={widgets}
-          formContext={{
-            formData: formData,
-          }}
-          disabled={isLoading}
-        >
-          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-            <Button variant="contained" type="submit">
-              Create Case
+    <>
+      {accountProfile ? (
+        <Dialog open={isOpen} onClose={close}>
+          <DialogTitle>Create New Case</DialogTitle>
+          <DialogContent>
+            <Form
+              schema={schema}
+              uiSchema={uiSchema}
+              formData={formData}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              widgets={widgets}
+              formContext={{
+                formData: formData,
+              }}
+              disabled={isLoading}
+            >
+              <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                <Button variant="contained" type="submit">
+                  Create Case
+                </Button>
+                <Button variant="outlined" onClick={close}>
+                  Cancel
+                </Button>
+              </Stack>
+            </Form>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Dialog open={isOpen} onClose={close}>
+          <DialogTitle>Create New Case</DialogTitle>
+          <DialogContent>
+            <Typography>
+              To create case and add score you need to connect wallet and create
+              own profile.
+            </Typography>
+            <Button
+              sx={{ mt: 4 }}
+              variant="contained"
+              onClick={() => {
+                connectWallet();
+                close();
+              }}
+              startIcon={<IconWallet hexColor={palette.primary.contrastText} />}
+            >
+              Connect Wallet
             </Button>
-            <Button variant="outlined" onClick={close}>
-              Cancel
-            </Button>
-          </Stack>
-        </Form>
-      </DialogContent>
-    </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }

@@ -69,6 +69,7 @@ export function Web3Provider({ children }) {
       setProvider(null);
       setAccount(null);
       setNetwork(null);
+      setAccountProfile(null);
     } catch (error) {
       console.error(error);
     } finally {
