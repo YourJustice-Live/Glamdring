@@ -1,5 +1,9 @@
 import axios from 'axios';
+import { unionWith } from 'lodash';
 
+/**
+ * TODO: Move query fields to constants
+ */
 export default function useSubgraph() {
   /**
    * Find the Avatar NFTs for all or only for the specified accounts.
@@ -12,6 +16,24 @@ export default function useSubgraph() {
       getFindAvatarNftEntitiesQuery(accounts),
     );
     return response.avatarNftEntities;
+  };
+
+  /**
+   * Find the Avatar NFTs by part of address, first name, second, name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<{object}>>} Avatar NFTs.
+   */
+  let findAvatarNftEntitiesBySearchQuery = async function (searchQuery) {
+    const response = await makeSubgraphQuery(
+      getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery),
+    );
+    return unionWith(
+      response.result1,
+      response.result2,
+      response.result3,
+      (entity1, entity2) => entity1.id === entity2.id,
+    );
   };
 
   /**
@@ -91,6 +113,7 @@ export default function useSubgraph() {
 
   return {
     findAvatarNftEntities,
+    findAvatarNftEntitiesBySearchQuery,
     findJurisdictionParticipantEntities,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesByIds,
@@ -144,6 +167,56 @@ function getFindAvatarNftEntitiesQuery(accounts) {
         }
       }
     }`;
+}
+
+function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
+  return `{
+    result1: avatarNftEntities(where: {owner_contains_nocase: "${searchQuery}"}) {
+      id
+      owner
+      uri
+      uriData
+      uriImage
+      uriFirstName
+      uriLastName
+      reputations {
+        id
+        domain
+        positiveRating
+        negativeRating
+      } 
+    }
+    result2: avatarNftEntities(where: {uriFirstName_contains_nocase: "${searchQuery}"}) {
+      id
+      owner
+      uri
+      uriData
+      uriImage
+      uriFirstName
+      uriLastName
+      reputations {
+        id
+        domain
+        positiveRating
+        negativeRating
+      }
+    }
+    result3: avatarNftEntities(where: {uriFirstName_contains_nocase: "${searchQuery}"}) {
+      id
+      owner
+      uri
+      uriData
+      uriImage
+      uriFirstName
+      uriLastName
+      reputations {
+        id
+        domain
+        positiveRating
+        negativeRating
+      }
+    }
+  }`;
 }
 
 function getFindJurisdictionParticipantEntitiesQuery(filter) {

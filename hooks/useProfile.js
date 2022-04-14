@@ -5,12 +5,16 @@ import useSubgraph from 'hooks/useSubgraph';
  * Hook for work with profiles.
  */
 export default function useProfile() {
-  const { findAvatarNftEntities, findJurisdictionParticipantEntities } =
-    useSubgraph();
+  const {
+    findAvatarNftEntities,
+    findAvatarNftEntitiesBySearchQuery,
+    findJurisdictionParticipantEntities,
+  } = useSubgraph();
 
   /**
    * Get profile for specified account.
    *
+   * @param {string} account Account address.
    * @returns {Promise.<Profile>} A profile or null if profile not found.
    */
   let getProfile = async function (account) {
@@ -25,25 +29,24 @@ export default function useProfile() {
    */
   let getProfiles = async function (accounts) {
     const avatarNftEntities = await findAvatarNftEntities(accounts);
-    let profiles = [];
-    for (const avatarNftEntity of avatarNftEntities) {
-      try {
-        const profile = new Profile(
-          avatarNftEntity.owner,
-          avatarNftEntity.id,
-          avatarNftEntity.uri,
-          avatarNftEntity.uriData,
-          avatarNftEntity.uriImage,
-          avatarNftEntity.uriFirstName,
-          avatarNftEntity.uriLastName,
-          avatarNftEntity.reputations,
-        );
-        profiles.push(profile);
-      } catch (error) {
-        continue;
-      }
-    }
-    return profiles;
+    return avatarNftEntities.map((avatarNftEntity) =>
+      createProfileObject(avatarNftEntity),
+    );
+  };
+
+  /**
+   * Get profiles by part of address, first name, second, name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<Profile>>} A list with profiles.
+   */
+  let getProfilesBySearchQuery = async function (searchQuery) {
+    const avatarNftEntities = await findAvatarNftEntitiesBySearchQuery(
+      searchQuery,
+    );
+    return avatarNftEntities.map((avatarNftEntity) =>
+      createProfileObject(avatarNftEntity),
+    );
   };
 
   /**
@@ -82,8 +85,28 @@ export default function useProfile() {
   return {
     getProfile,
     getProfiles,
+    getProfilesBySearchQuery,
     getJurisdictionMemberProfiles,
     getJurisdictionJudgeProfiles,
     getJurisdictionAdminProfiles,
   };
+}
+
+/**
+ * Convert avatar nft entity to profile object.
+ *
+ * @param {object} profileEntity Avatar nft entity.
+ * @returns Profile object.
+ */
+function createProfileObject(avatarNftEntity) {
+  return new Profile(
+    avatarNftEntity.owner,
+    avatarNftEntity.id,
+    avatarNftEntity.uri,
+    avatarNftEntity.uriData,
+    avatarNftEntity.uriImage,
+    avatarNftEntity.uriFirstName,
+    avatarNftEntity.uriLastName,
+    avatarNftEntity.reputations,
+  );
 }
