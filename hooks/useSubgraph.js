@@ -201,7 +201,7 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
         negativeRating
       }
     }
-    result3: avatarNftEntities(where: {uriFirstName_contains_nocase: "${searchQuery}"}) {
+    result3: avatarNftEntities(where: {uriLastName_contains_nocase: "${searchQuery}"}) {
       id
       owner
       uri
