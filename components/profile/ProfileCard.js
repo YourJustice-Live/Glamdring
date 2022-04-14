@@ -2,9 +2,7 @@ import {
   AddBoxOutlined,
   IndeterminateCheckBoxOutlined,
   InsertPhotoOutlined,
-  Save,
 } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
 import {
   Avatar,
   Box,
@@ -16,15 +14,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import {
-  DEFAULT_ADD_REPUTATION_AMOUNT,
   REPUTATION_DOMAIN_ID,
   REPUTATION_RATING_ID,
 } from 'constants/contracts';
-import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
-import useToasts from 'hooks/useToasts';
+import useDialogContext from 'hooks/useDialogContext';
+import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
-import { useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getRating } from 'utils/reputation';
 
@@ -32,33 +29,8 @@ import { getRating } from 'utils/reputation';
  * A component with a card with profile.
  */
 export default function ProfileCard({ profile }) {
-  const { showToastSuccess, showToastError } = useToasts();
-  const { addReputation } = useAvatarNftContract();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  /**
-   * Add positive or negative reputation (score) to the environment domain for specified profile.
-   */
-  async function addScore(isNegative) {
-    try {
-      setIsProcessing(true);
-      await addReputation(
-        profile.avatarNftId,
-        REPUTATION_DOMAIN_ID.environment,
-        isNegative
-          ? REPUTATION_RATING_ID.negative
-          : REPUTATION_RATING_ID.positive,
-        DEFAULT_ADD_REPUTATION_AMOUNT,
-      );
-      showToastSuccess(
-        'Success! Reputation of this profile will be updated soon.',
-      );
-    } catch (error) {
-      showToastError(error);
-    } finally {
-      setIsProcessing(false);
-    }
-  }
+  const { accountProfile } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
 
   return (
     <Card elevation={1}>
@@ -114,37 +86,40 @@ export default function ProfileCard({ profile }) {
               justifyContent="center"
               sx={{ mr: '10px !important' }}
             >
-              {isProcessing ? (
-                <LoadingButton
-                  loading
-                  loadingPosition="start"
-                  startIcon={<Save />}
-                  variant="outlined"
-                >
-                  Processing
-                </LoadingButton>
-              ) : (
-                <>
-                  <Button
-                    variant="text"
-                    color="success"
-                    size="small"
-                    startIcon={<AddBoxOutlined />}
-                    onClick={() => addScore(false)}
-                  >
-                    Add Score
-                  </Button>
-                  <Button
-                    variant="text"
-                    color="danger"
-                    size="small"
-                    startIcon={<IndeterminateCheckBoxOutlined />}
-                    onClick={() => addScore(true)}
-                  >
-                    Add Score
-                  </Button>
-                </>
-              )}
+              <Button
+                variant="text"
+                color="success"
+                size="small"
+                startIcon={<AddBoxOutlined />}
+                onClick={() =>
+                  showDialog(
+                    <CaseCreateDialog
+                      subjectProfile={profile}
+                      affectedProfile={accountProfile}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Add Score
+              </Button>
+              <Button
+                variant="text"
+                color="danger"
+                size="small"
+                startIcon={<IndeterminateCheckBoxOutlined />}
+                onClick={() =>
+                  showDialog(
+                    <CaseCreateDialog
+                      subjectProfile={profile}
+                      affectedProfile={accountProfile}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Add Score
+              </Button>
             </Stack>
           </Stack>
         </CardContent>
