@@ -48,16 +48,14 @@ export default function ProfilePictureInput(props) {
     if (!file) {
       return;
     }
-    // Show error if file is not valid
-    if (!isFileValid(file)) {
-      event.target.value = null;
-      showToastError(
-        'Sorry, only JPG/PNG/GIF files with size smaller than 2MB are currently supported!',
-      );
-      return;
-    }
     // Upload file to IPFS
     try {
+      // Check file
+      if (!isFileValid(file)) {
+        throw new Error(
+          'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!',
+        );
+      }
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
