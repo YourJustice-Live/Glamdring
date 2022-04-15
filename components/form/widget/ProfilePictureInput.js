@@ -11,7 +11,7 @@ import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 
 /**
- * A widget for input a profile picture.
+ * A widget for input a profile picture, upload it to IPFS, and get URI.
  */
 export default function ProfilePictureInput(props) {
   const propsSize = props.options.size || 128;

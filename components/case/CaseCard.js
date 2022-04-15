@@ -173,13 +173,6 @@ function CaseLaws({ caseObject }) {
 }
 
 function CasePosts({ caseObject }) {
-  function getPostRoleString(postRole) {
-    if (postRole === 'evidence') {
-      return 'Evidence';
-    }
-    return 'Unknown Post Role';
-  }
-
   return (
     <Stack spacing={2}>
       {caseObject.posts.length === 0 && <Typography>None</Typography>}
@@ -187,9 +180,6 @@ function CasePosts({ caseObject }) {
         <>
           {caseObject.posts.map((post, index) => (
             <Box key={index}>
-              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                {getPostRoleString(post.postRole)}
-              </Typography>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 'bold' }}

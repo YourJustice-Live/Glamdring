@@ -30,11 +30,6 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
         title: 'Entity Role',
         default: '',
       },
-      postRole: {
-        type: 'string',
-        title: 'Post Role',
-        default: '',
-      },
       uri: {
         type: 'string',
         title: 'URI',
@@ -47,10 +42,6 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
     entityRole: {
       'ui:emptyValue': '',
       'ui:placeholder': 'subject',
-    },
-    postRole: {
-      'ui:emptyValue': '',
-      'ui:placeholder': 'evidence',
     },
     uri: {
       'ui:emptyValue': '',
@@ -68,12 +59,7 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await addPost(
-        caseObject.id,
-        formData.entityRole,
-        formData.postRole,
-        formData.uri,
-      );
+      await addPost(caseObject.id, formData.entityRole, formData.uri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

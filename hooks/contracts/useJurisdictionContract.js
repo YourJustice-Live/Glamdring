@@ -90,18 +90,21 @@ export default function useJuridictionContract() {
    * @param {string} name Case name.
    * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
    * @param {Array.<{account : string, role: string}>} roles Case roles.
+   * @param {Array.<{entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
    */
-  async function makeCase(name, rules, roles) {
+  async function makeCase(name, rules, roles, posts) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).caseMake(
+    // TODO: Use case make open
+    return await getContract(provider?.getSigner()).caseMakeOpen(
       name,
       rules,
       roles,
+      posts,
     );
   }
 
