@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Link,
   Paper,
   Stack,
   TextField,
@@ -68,9 +69,9 @@ export default function CaseEvidencePostInput(props) {
       const evidencePost = {
         role: 'evidence',
         title: inputEvidenceTitle,
-        uri: evidenceFileUri,
-        name: inputEvidenceFile.name,
-        type: inputEvidenceFile.type,
+        fileUri: evidenceFileUri,
+        fileName: inputEvidenceFile.name,
+        fileType: inputEvidenceFile.type,
       };
       const { url: evidencePostUri } = await uploadJsonToIPFS(evidencePost);
       // Save post and post uri, close dialog
@@ -106,12 +107,21 @@ export default function CaseEvidencePostInput(props) {
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       {evidencePost ? (
         <>
-          <Button variant="outlined" onClick={removeEvidence}>
+          <Paper variant="outlined" sx={{ p: 2 }}>
+            <Stack direction="row" spacing={1}>
+              <AttachFileOutlined />
+              <Link
+                href={evidencePost.fileUri}
+                underline="none"
+                target="_blank"
+              >
+                {evidencePost.title}
+              </Link>
+            </Stack>
+          </Paper>
+          <Button variant="outlined" sx={{ mt: 2 }} onClick={removeEvidence}>
             Remove
           </Button>
-          <Paper variant="outlined" sx={{ p: 2, mt: 2, overflowX: 'scroll' }}>
-            <pre>{JSON.stringify(evidencePost, null, 2)}</pre>
-          </Paper>
         </>
       ) : (
         <Button variant="outlined" onClick={openDialog}>
