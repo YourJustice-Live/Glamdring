@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
+import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
@@ -68,6 +69,11 @@ export default function CaseCreateDialog({
             type: 'string',
             title: 'Affected',
           },
+          evidencePostUri: {
+            type: 'string',
+            title: 'Evidence',
+            default: '',
+          },
         },
         required: ['subjectProfileAccount', 'affectedProfileAccount'],
       },
@@ -87,12 +93,17 @@ export default function CaseCreateDialog({
     affectedProfileAccount: {
       'ui:widget': 'CaseProfileSelect',
     },
+    evidencePostUri: {
+      'ui:widget': 'CaseEvidencePostInput',
+      'ui:emptyValue': '',
+    },
   };
 
   const widgets = {
     CaseActionSelect: CaseActionSelect,
     CaseRuleSelect: CaseRuleSelect,
     CaseProfileSelect: CaseProfileSelect,
+    CaseEvidencePostInput: CaseEvidencePostInput,
   };
 
   async function close() {
@@ -124,7 +135,12 @@ export default function CaseCreateDialog({
           role: 'affected',
         },
       ];
-      const casePosts = [];
+      const casePosts = [
+        {
+          entRole: 'admin',
+          uri: formData.evidencePostUri,
+        },
+      ];
       await makeCase(caseName, caseRules, caseRoles, casePosts);
       showToastSuccess('Success! Data will be updated soon.');
       close();

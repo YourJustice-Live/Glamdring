@@ -6,7 +6,10 @@ const theGraphClient = create(process.env.NEXT_PUBLIC_THE_GRAPH_IPFS_API);
 
 export default function useIpfs() {
   let uploadFileToIPFS = async function (file) {
-    const created = await infuraClient.add(file);
+    const created = await infuraClient.add({
+      path: '',
+      content: file,
+    });
     const cid = created.path;
     const url = `https://ipfs.infura.io/ipfs/${cid}`;
     return { cid, url };
