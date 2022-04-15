@@ -72,15 +72,9 @@
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "string",
-        "name": "entRole",
-        "type": "string"
-      },
-      {
         "indexed": false,
         "internalType": "string",
-        "name": "postRole",
+        "name": "entRole",
         "type": "string"
       },
       {
@@ -457,11 +451,6 @@
       },
       {
         "internalType": "string",
-        "name": "postRole",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
         "name": "uri",
         "type": "string"
       }
@@ -534,25 +523,6 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "name": "roleName",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -871,6 +841,25 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniqueMembers",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

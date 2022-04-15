@@ -124,7 +124,8 @@ export default function CaseCreateDialog({
           role: 'affected',
         },
       ];
-      await makeCase(caseName, caseRules, caseRoles);
+      const casePosts = [];
+      await makeCase(caseName, caseRules, caseRoles, casePosts);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

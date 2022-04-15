@@ -18,12 +18,11 @@ export default function useCaseContract() {
    * Add a post to specified case contract.
    *
    * @param {string} contractAddress Case contract address.
-   * @param {string} entityRole Entity role
-   * @param {string} postRole Post role
+   * @param {string} entityRole Entity role.
    * @param {string} uri Uri.
    * @returns Transaction.
    */
-  async function addPost(contractAddress, entityRole, postRole, uri) {
+  async function addPost(contractAddress, entityRole, uri) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
@@ -31,7 +30,6 @@ export default function useCaseContract() {
     }
     return await getContract(contractAddress, provider?.getSigner()).post(
       entityRole,
-      postRole,
       uri,
     );
   }

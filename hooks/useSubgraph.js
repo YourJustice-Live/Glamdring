@@ -324,7 +324,6 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       posts {
         id
         entityRole
-        postRole
         uri
       }
     }
