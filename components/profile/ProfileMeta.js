@@ -1,7 +1,21 @@
-import { InsertPhotoOutlined } from '@mui/icons-material';
-import { Avatar, Divider, Skeleton, Typography } from '@mui/material';
+import {
+  AddBoxOutlined,
+  IndeterminateCheckBoxOutlined,
+  InsertPhotoOutlined,
+} from '@mui/icons-material';
+import {
+  Avatar,
+  Button,
+  Divider,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
+import CaseCreateDialog from 'components/case/CaseCreateDialog';
+import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
@@ -11,6 +25,8 @@ import { getTraitValue, traitTypes } from 'utils/metadata';
  * A component with profile meta (image, name, email, socials).
  */
 export default function ProfileMeta({ account }) {
+  const { accountProfile } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getProfile } = useProfile();
   const [profile, setProfile] = useState(null);
@@ -42,12 +58,14 @@ export default function ProfileMeta({ account }) {
       <Divider sx={{ mb: 3 }} />
       {profile && profileMetadata ? (
         <>
+          {/* Avatar */}
           <Avatar
             sx={{ width: 128, height: 128, my: 3 }}
             src={profileMetadata.image}
           >
             <InsertPhotoOutlined />
           </Avatar>
+          {/* Traits */}
           <Typography gutterBottom>
             <b>Account: </b>
             {formatAddress(profile?.account) || 'none'}
@@ -68,6 +86,41 @@ export default function ProfileMeta({ account }) {
             <b>Twitter: </b>{' '}
             {getTraitValue(profileMetadata, traitTypes.twitter) || 'none'}
           </Typography>
+          {/* Actions */}
+          <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<AddBoxOutlined />}
+              onClick={() =>
+                showDialog(
+                  <CaseCreateDialog
+                    subjectProfile={profile}
+                    affectedProfile={accountProfile}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            >
+              Add Score
+            </Button>
+            <Button
+              variant="contained"
+              color="danger"
+              startIcon={<IndeterminateCheckBoxOutlined />}
+              onClick={() =>
+                showDialog(
+                  <CaseCreateDialog
+                    subjectProfile={profile}
+                    affectedProfile={accountProfile}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            >
+              Add Score
+            </Button>
+          </Stack>
         </>
       ) : (
         <>
