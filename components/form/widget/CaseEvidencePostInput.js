@@ -53,6 +53,12 @@ export default function CaseEvidencePostInput(props) {
 
   async function addEvidence() {
     try {
+      // Check file
+      if (!isFileValid(inputEvidenceFile)) {
+        throw new Error(
+          'Only files with size smaller than 10MB are currently supported!',
+        );
+      }
       setIsUploadingToIpfs(true);
       // Upload evidence file to ipfs
       const { url: evidenceFileUri } = await uploadFileToIPFS(
@@ -81,6 +87,17 @@ export default function CaseEvidencePostInput(props) {
   function removeEvidence() {
     setEvidencePost(null);
     propsOnChange('');
+  }
+
+  function isFileValid(file) {
+    if (!file) {
+      return false;
+    }
+    const isLt10M = file.size / 1024 / 1024 < 10;
+    if (!isLt10M) {
+      return false;
+    }
+    return true;
   }
 
   return (
