@@ -127,7 +127,7 @@ export default function DataUriInput(props) {
                   <Button variant="contained" type="submit">
                     Edit data
                   </Button>
-                  <Button variant="outlined" onClick={close}>
+                  <Button variant="outlined" onClick={closeForm}>
                     Cancel
                   </Button>
                 </Stack>
