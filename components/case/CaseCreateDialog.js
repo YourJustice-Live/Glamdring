@@ -11,8 +11,10 @@ import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
+import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconWallet } from 'icons';
 import { useState } from 'react';
@@ -33,12 +35,14 @@ export default function CaseCreateDialog({
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
+  const { getRuleById } = useRule();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     subjectProfileAccount: subjectProfile ? subjectProfile.account : null,
     affectedProfileAccount: affectedProfile ? affectedProfile.account : null,
   });
+  const [formRule, setFormRule] = useState(null);
 
   const schema = {
     type: 'object',
@@ -74,6 +78,14 @@ export default function CaseCreateDialog({
             title: 'Evidence',
             default: '',
           },
+          witnessProfileAccounts: {
+            type: 'array',
+            title: 'Witnesses',
+            items: {
+              type: 'string',
+            },
+            default: [],
+          },
         },
         required: ['subjectProfileAccount', 'affectedProfileAccount'],
       },
@@ -97,6 +109,10 @@ export default function CaseCreateDialog({
       'ui:widget': 'CaseEvidencePostInput',
       'ui:emptyValue': '',
     },
+    witnessProfileAccounts: {
+      'ui:widget': 'CaseWitnessesSelect',
+      'ui:emptyValue': [],
+    },
   };
 
   const widgets = {
@@ -104,6 +120,7 @@ export default function CaseCreateDialog({
     CaseRuleSelect: CaseRuleSelect,
     CaseProfileSelect: CaseProfileSelect,
     CaseEvidencePostInput: CaseEvidencePostInput,
+    CaseWitnessesSelect: CaseWitnessesSelect,
   };
 
   async function close() {
@@ -112,35 +129,48 @@ export default function CaseCreateDialog({
   }
 
   function handleChange({ formData }) {
+    if (formData.ruleId) {
+      getRuleById(formData.ruleId).then((rule) => setFormRule(rule));
+    }
     setFormData(formData);
   }
 
   async function handleSubmit({ formData }) {
     try {
       setFormData(formData);
+      // Check witness count
+      const formRuleWitness = Number(formRule?.confirmation?.witness);
+      if (formData.witnessProfileAccounts.length < formRuleWitness) {
+        throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
+      }
+      // Define case params
       const caseName = 'TEST_CASE';
-      const caseRules = [
-        {
-          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-          ruleId: formData.ruleId,
-        },
-      ];
-      const caseRoles = [
-        {
-          account: formData.subjectProfileAccount,
-          role: 'subject',
-        },
-        {
-          account: formData.affectedProfileAccount,
-          role: 'affected',
-        },
-      ];
-      const casePosts = [
-        {
-          entRole: 'admin',
-          uri: formData.evidencePostUri,
-        },
-      ];
+      const caseRules = [];
+      caseRules.push({
+        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ruleId: formData.ruleId,
+      });
+      const caseRoles = [];
+      caseRoles.push({
+        account: formData.subjectProfileAccount,
+        role: 'subject',
+      });
+      caseRoles.push({
+        account: formData.affectedProfileAccount,
+        role: 'affected',
+      });
+      for (const witnessProfileAccount of formData.witnessProfileAccounts) {
+        caseRoles.push({
+          account: witnessProfileAccount,
+          role: 'witness',
+        });
+      }
+      const casePosts = [];
+      casePosts.push({
+        entRole: 'admin',
+        uri: formData.evidencePostUri,
+      });
+      // Make case
       await makeCase(caseName, caseRules, caseRoles, casePosts);
       showToastSuccess('Success! Data will be updated soon.');
       close();
@@ -165,6 +195,7 @@ export default function CaseCreateDialog({
               widgets={widgets}
               formContext={{
                 formData: formData,
+                formRule: formRule,
               }}
               disabled={isLoading}
             >

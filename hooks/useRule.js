@@ -22,6 +22,16 @@ export default function useRule() {
   };
 
   /**
+   * Get jurisdiction rule by id.
+   *
+   * @param {string} id Rule id.
+   * @returns {Promise<Rule>} A rule.
+   */
+  let getRuleById = async function (id) {
+    return (await getRulesByIds([id]))[0];
+  };
+
+  /**
    * Get jurisdiction rules by ids.
    *
    * @param {Array.<string>} ids Rule ids.
@@ -47,6 +57,7 @@ export default function useRule() {
 
   return {
     getRules,
+    getRuleById,
     getRulesByIds,
     getRulesByActionGuid,
   };
