@@ -5,7 +5,6 @@ import {
   List,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Typography,
 } from '@mui/material';
 import useRule from 'hooks/useRule';
@@ -55,6 +54,7 @@ export default function CaseActionSelect(props) {
       <List>
         {items.map((item, index) => (
           <ListItemButton
+            sx={{ py: 2.4 }}
             key={index}
             selected={item.action.guid === propsValue}
             disabled={propsDisabled}
@@ -63,10 +63,20 @@ export default function CaseActionSelect(props) {
             <ListItemIcon>
               <ArrowForwardOutlined />
             </ListItemIcon>
-            <ListItemText
-              primary={item?.actionUriData?.name || 'None Name'}
-              secondary={item?.actionUriData?.description || 'None Description'}
-            />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+                {item?.actionUriData?.name || 'None Name'}
+              </Typography>
+              <Typography variant="body2">
+                {item?.actionUriData?.description || 'None Description'}
+              </Typography>
+            </Box>
           </ListItemButton>
         ))}
       </List>
