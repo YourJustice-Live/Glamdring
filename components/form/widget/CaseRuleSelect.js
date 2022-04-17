@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
  */
 export default function CaseRuleSelect(props) {
   const propsValue = props.value;
+  const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const propsLaws = props.formContext?.laws;
   const propsFormCategory = props.formContext?.formData?.category;
@@ -55,6 +56,7 @@ export default function CaseRuleSelect(props) {
           <ListItemButton
             key={index}
             selected={item.rule.id === propsValue}
+            disabled={propsDisabled}
             onClick={() => propsOnChange(item.rule.id)}
           >
             <ListItemIcon>
