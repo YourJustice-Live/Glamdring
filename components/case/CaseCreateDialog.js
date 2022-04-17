@@ -1,3 +1,5 @@
+import { Save } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {
   Avatar,
   Button,
@@ -11,18 +13,17 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
+import CaseNameInput from 'components/form/widget/CaseNameInput';
 import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconWallet } from 'icons';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import useLaw from 'hooks/useLaw';
-import { LoadingButton } from '@mui/lab';
-import { Save } from '@mui/icons-material';
 
 /**
  * A component with a dialog to create a case.
@@ -69,12 +70,16 @@ export default function CaseCreateDialog({
     dependencies: {
       actionGuid: {
         properties: {
+          name: {
+            type: 'string',
+            title: 'Name',
+          },
           ruleId: {
             type: 'string',
             title: 'Rule',
           },
         },
-        required: ['ruleId'],
+        required: ['name', 'ruleId'],
       },
       ruleId: {
         properties: {
@@ -115,6 +120,12 @@ export default function CaseCreateDialog({
     actionGuid: {
       'ui:widget': 'CaseActionSelect',
     },
+    name: {
+      'ui:widget': 'CaseNameInput',
+      'ui:options': {
+        inputLabel: 'Describe the case',
+      },
+    },
     ruleId: {
       'ui:widget': 'CaseRuleSelect',
     },
@@ -140,6 +151,7 @@ export default function CaseCreateDialog({
     CaseProfileSelect: CaseProfileSelect,
     CaseEvidencePostInput: CaseEvidencePostInput,
     CaseWitnessesSelect: CaseWitnessesSelect,
+    CaseNameInput: CaseNameInput,
   };
 
   async function loadData() {
@@ -165,12 +177,14 @@ export default function CaseCreateDialog({
     // If category changed then clear dependent form fields
     if (formData.category !== changedFormData.category) {
       delete changedFormData.actionGuid;
+      delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
       delete changedFormData.witnessProfileAccounts;
     }
     // If action changed then clear dependent form fields
     if (formData.actionGuid !== changedFormData.actionGuid) {
+      delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
       delete changedFormData.witnessProfileAccounts;
@@ -206,7 +220,7 @@ export default function CaseCreateDialog({
         throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
       }
       // Define case params
-      const caseName = 'TEST_CASE';
+      const caseName = submittedFormData.name;
       const caseRules = [];
       caseRules.push({
         jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
