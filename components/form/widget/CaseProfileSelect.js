@@ -18,6 +18,7 @@ import { useEffect, useMemo, useState } from 'react';
 export default function CaseProfileSelect(props) {
   const propsLabel = props.label;
   const propsValue = props.value; // Profile account
+  const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
@@ -82,7 +83,7 @@ export default function CaseProfileSelect(props) {
 
   return (
     <Autocomplete
-      disabled={isDisabled}
+      disabled={isDisabled || propsDisabled}
       getOptionLabel={(option) =>
         (option.avatarNftUriFirstName || 'None') +
         ' ' +

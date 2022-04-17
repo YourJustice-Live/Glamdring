@@ -55,11 +55,38 @@ export default function useRule() {
     return ruleEntities.map((ruleEntity) => createRuleObject(ruleEntity));
   };
 
+  /**
+   * Checking that the rule is in a category.
+   *
+   * @param {Rule} rule Rule.
+   * @param {'positive'|'negative'} category Category.
+   * @returns {boolean} Result of checking.
+   */
+  let isRuleInCategory = function (rule, category) {
+    if (category === 'positive') {
+      return (
+        rule?.rule?.effects?.environmental >= 0 &&
+        rule?.rule?.effects?.professional >= 0 &&
+        rule?.rule?.effects?.social >= 0 &&
+        rule?.rule?.effects?.personal >= 0
+      );
+    }
+    if (category === 'negative') {
+      return (
+        rule?.rule?.effects?.environmental < 0 ||
+        rule?.rule?.effects?.professional < 0 ||
+        rule?.rule?.effects?.social < 0 ||
+        rule?.rule?.effects?.personal < 0
+      );
+    }
+  };
+
   return {
     getRules,
     getRuleById,
     getRulesByIds,
     getRulesByActionGuid,
+    isRuleInCategory,
   };
 }
 

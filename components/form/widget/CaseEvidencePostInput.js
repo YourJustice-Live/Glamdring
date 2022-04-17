@@ -25,6 +25,7 @@ import Dropzone from 'react-dropzone';
  */
 export default function CaseEvidencePostInput(props) {
   const propsLabel = props.label;
+  const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
   const { uploadFileToIPFS, uploadJsonToIPFS } = useIpfs();
@@ -119,12 +120,21 @@ export default function CaseEvidencePostInput(props) {
               </Link>
             </Stack>
           </Paper>
-          <Button variant="outlined" sx={{ mt: 2 }} onClick={removeEvidence}>
+          <Button
+            variant="outlined"
+            sx={{ mt: 2 }}
+            disabled={propsDisabled}
+            onClick={removeEvidence}
+          >
             Remove
           </Button>
         </>
       ) : (
-        <Button variant="outlined" onClick={openDialog}>
+        <Button
+          variant="outlined"
+          disabled={propsDisabled}
+          onClick={openDialog}
+        >
           Add
         </Button>
       )}

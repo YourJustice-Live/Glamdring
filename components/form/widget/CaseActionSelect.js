@@ -8,9 +8,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import useAction from 'hooks/useAction';
-import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
+import useRule from 'hooks/useRule';
 import { useEffect, useState } from 'react';
 
 /**
@@ -18,60 +16,60 @@ import { useEffect, useState } from 'react';
  */
 export default function CaseActionSelect(props) {
   const propsValue = props.value;
+  const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
-  const { loadJsonFromIPFS } = useIpfs();
-  const { getActions } = useAction();
-  const [items, setItems] = useState(null);
+  const propsLaws = props.formContext?.laws;
+  const propsFormCategory = props.formContext?.formData?.category;
+  const { isRuleInCategory } = useRule();
+  const [items, setItems] = useState([]);
 
-  async function loadItems() {
-    try {
-      setItems(null);
-      let items = [];
-      const actions = await getActions();
-      for (const action of actions) {
-        let item = {
-          action: action,
-          actionUriData: await loadJsonFromIPFS(action.uri),
-        };
-        items.push(item);
-      }
-      setItems(items);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
+  /**
+   * Get actions from laws and add it to items if action has any rule in the specified category.
+   */
   useEffect(() => {
-    loadItems();
+    if (propsLaws) {
+      const items = [];
+      [...propsLaws.keys()].forEach((key) => {
+        let isActionInCategory = false;
+        propsLaws.get(key).rules.forEach((lawRule) => {
+          if (isRuleInCategory(lawRule.rule, propsFormCategory)) {
+            isActionInCategory = true;
+          }
+        });
+        if (isActionInCategory) {
+          items.push({
+            action: propsLaws.get(key).action,
+            actionUriData: propsLaws.get(key).actionUriData,
+          });
+        }
+      });
+      setItems(items);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [propsLaws, propsFormCategory]);
 
   return (
     <Box>
       <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
       <Divider sx={{ my: 1.5 }} />
-      {items ? (
-        <List>
-          {items.map((item, index) => (
-            <ListItemButton
-              key={index}
-              selected={item.action.guid === propsValue}
-              onClick={() => propsOnChange(item.action.guid)}
-            >
-              <ListItemIcon>
-                <ArrowForwardOutlined />
-              </ListItemIcon>
-              <ListItemText
-                primary={item.actionUriData.name}
-                secondary={item.actionUriData.description}
-              />
-            </ListItemButton>
-          ))}
-        </List>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
+      <List>
+        {items.map((item, index) => (
+          <ListItemButton
+            key={index}
+            selected={item.action.guid === propsValue}
+            disabled={propsDisabled}
+            onClick={() => propsOnChange(item.action.guid)}
+          >
+            <ListItemIcon>
+              <ArrowForwardOutlined />
+            </ListItemIcon>
+            <ListItemText
+              primary={item?.actionUriData?.name || 'None Name'}
+              secondary={item?.actionUriData?.description || 'None Description'}
+            />
+          </ListItemButton>
+        ))}
+      </List>
     </Box>
   );
 }

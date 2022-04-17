@@ -11,12 +11,12 @@ export default function JurisdictionLink() {
   const router = useRouter();
   const { showToastError } = useToasts();
   const { getName } = useJuridictionContract();
-  const [data, setData] = useState(null);
+  const [jurisdiction, setJurisdiction] = useState(null);
 
   async function loadData() {
     try {
       const name = await getName();
-      setData({
+      setJurisdiction({
         name: name,
         image: null,
       });
@@ -34,14 +34,14 @@ export default function JurisdictionLink() {
     <Stack
       direction="row"
       spacing={1}
-      sx={{ ml: 1.5, cursor: data ? 'pointer' : null }}
+      sx={{ ml: 1.5, cursor: jurisdiction ? 'pointer' : null }}
       onClick={() => {
-        if (data) {
+        if (jurisdiction) {
           router.push(`/jurisdiction`);
         }
       }}
     >
-      {data ? (
+      {jurisdiction ? (
         <>
           <Avatar
             sx={{
@@ -50,12 +50,12 @@ export default function JurisdictionLink() {
               bgcolor: 'primary.main',
               fontSize: 14,
             }}
-            src={data.image}
+            src={jurisdiction.image}
           >
             J
           </Avatar>
           <Typography variant="h5" sx={{ fontWeight: 500 }}>
-            {data.name}
+            {jurisdiction.name}
           </Typography>
         </>
       ) : (

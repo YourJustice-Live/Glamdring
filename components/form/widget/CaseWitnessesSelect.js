@@ -5,6 +5,7 @@ import CaseProfileSelect from './CaseProfileSelect';
 
 export default function CaseWitnessesSelect(props) {
   const propsLabel = props.label;
+  const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const propsFormRule = props.formContext?.formRule;
   const [witnesses, setWitnesses] = useState([null]);
@@ -41,6 +42,7 @@ export default function CaseWitnessesSelect(props) {
         {witnesses.map((_, index) => (
           <CaseProfileSelect
             key={index}
+            disabled={propsDisabled}
             onChange={(profile) => selectWitness(profile, index)}
           />
         ))}
@@ -51,13 +53,18 @@ export default function CaseWitnessesSelect(props) {
         sx={{ mt: witnesses.length > 0 ? 2 : 0 }}
       >
         {witnesses.length < 5 && (
-          <Button startIcon={<IconPlus size={22} />} onClick={addWitnessSelect}>
+          <Button
+            startIcon={<IconPlus size={22} />}
+            disabled={propsDisabled}
+            onClick={addWitnessSelect}
+          >
             Add
           </Button>
         )}
         {witnesses.length > 1 && (
           <Button
             startIcon={<IconClose size={24} />}
+            disabled={propsDisabled}
             onClick={removeWitnessSelect}
           >
             Remove
