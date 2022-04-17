@@ -5,9 +5,9 @@ import {
   List,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Typography,
 } from '@mui/material';
+import RuleEffects from 'components/rule/RuleEffects';
 import useRule from 'hooks/useRule';
 import { useEffect, useState } from 'react';
 
@@ -54,6 +54,7 @@ export default function CaseRuleSelect(props) {
       <List>
         {items.map((item, index) => (
           <ListItemButton
+            sx={{ py: 2.4 }}
             key={index}
             selected={item.rule.id === propsValue}
             disabled={propsDisabled}
@@ -62,10 +63,21 @@ export default function CaseRuleSelect(props) {
             <ListItemIcon>
               <ArrowForwardOutlined />
             </ListItemIcon>
-            <ListItemText
-              primary={item?.ruleUriData?.name || 'None Name'}
-              secondary={item?.ruleUriData?.description || 'None Description'}
-            />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+                {item?.ruleUriData?.name || 'None Name'}
+              </Typography>
+              <Typography variant="body2">
+                {item?.ruleUriData?.description || 'None Description'}
+              </Typography>
+              <RuleEffects rule={item.rule} sx={{ mt: 1.2 }} />
+            </Box>
           </ListItemButton>
         ))}
       </List>
