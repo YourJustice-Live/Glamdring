@@ -14,17 +14,16 @@ import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import useRule from 'hooks/useRule';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconWallet } from 'icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
+import useLaw from 'hooks/useLaw';
+import { LoadingButton } from '@mui/lab';
+import { Save } from '@mui/icons-material';
 
 /**
  * A component with a dialog to create a case.
- *
- * TODO: Add feature to enter case name
- * TODO: Improve appearance for form validation errors
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -35,18 +34,29 @@ export default function CaseCreateDialog({
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { getRuleById } = useRule();
+  const { getJurisdictionLaws } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
-    subjectProfileAccount: subjectProfile ? subjectProfile.account : null,
-    affectedProfileAccount: affectedProfile ? affectedProfile.account : null,
+    ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
+    ...(affectedProfile && {
+      affectedProfileAccount: affectedProfile?.account,
+    }),
   });
   const [formRule, setFormRule] = useState(null);
 
   const schema = {
     type: 'object',
     properties: {
+      category: {
+        type: 'string',
+        title: '',
+        enum: ['positive', 'negative'],
+        enumNames: ['Positive', 'Negative'],
+        default: 'positive',
+      },
       actionGuid: {
         type: 'string',
         title: 'Action',
@@ -93,6 +103,12 @@ export default function CaseCreateDialog({
   };
 
   const uiSchema = {
+    category: {
+      'ui:widget': 'radio',
+      'ui:options': {
+        inline: true,
+      },
+    },
     actionGuid: {
       'ui:widget': 'CaseActionSelect',
     },
@@ -123,24 +139,63 @@ export default function CaseCreateDialog({
     CaseWitnessesSelect: CaseWitnessesSelect,
   };
 
-  async function close() {
+  async function loadData() {
+    try {
+      setJurisdictionLaws(await getJurisdictionLaws());
+    } catch (error) {
+      showToastError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function close() {
     setIsOpen(false);
     onClose();
   }
 
-  function handleChange({ formData }) {
-    if (formData.ruleId) {
-      getRuleById(formData.ruleId).then((rule) => setFormRule(rule));
+  function handleChange({ formData: changedFormData }) {
+    // If category changed then clear dependent form fields
+    if (formData.category !== changedFormData.category) {
+      delete changedFormData.actionGuid;
+      delete changedFormData.ruleId;
+      delete changedFormData.evidencePostUri;
+      delete changedFormData.witnessProfileAccounts;
     }
-    setFormData(formData);
+    // If action changed then clear dependent form fields
+    if (formData.actionGuid !== changedFormData.actionGuid) {
+      delete changedFormData.ruleId;
+      delete changedFormData.evidencePostUri;
+      delete changedFormData.witnessProfileAccounts;
+    }
+    // If rule changed then clear dependent form fields
+    if (formData.ruleId !== changedFormData.ruleId) {
+      delete changedFormData.evidencePostUri;
+      delete changedFormData.witnessProfileAccounts;
+    }
+    // Update state of form data
+    setFormData(changedFormData);
+    // Update state of form rule if defined
+    if (changedFormData.ruleId) {
+      let formRule;
+      [...jurisdictionLaws.keys()].forEach((key) => {
+        jurisdictionLaws.get(key).rules.forEach((lawRule) => {
+          if (lawRule.rule.id === changedFormData.ruleId) {
+            formRule = lawRule.rule;
+          }
+        });
+      });
+      setFormRule(formRule);
+    }
   }
 
-  async function handleSubmit({ formData }) {
+  async function handleSubmit({ formData: submittedFormData }) {
     try {
-      setFormData(formData);
+      setIsSubmitting(true);
+      setFormData(submittedFormData);
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
-      if (formData.witnessProfileAccounts.length < formRuleWitness) {
+      if (submittedFormData.witnessProfileAccounts.length < formRuleWitness) {
         throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
       }
       // Define case params
@@ -148,18 +203,18 @@ export default function CaseCreateDialog({
       const caseRules = [];
       caseRules.push({
         jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        ruleId: formData.ruleId,
+        ruleId: submittedFormData.ruleId,
       });
       const caseRoles = [];
       caseRoles.push({
-        account: formData.subjectProfileAccount,
+        account: submittedFormData.subjectProfileAccount,
         role: 'subject',
       });
       caseRoles.push({
-        account: formData.affectedProfileAccount,
+        account: submittedFormData.affectedProfileAccount,
         role: 'affected',
       });
-      for (const witnessProfileAccount of formData.witnessProfileAccounts) {
+      for (const witnessProfileAccount of submittedFormData.witnessProfileAccounts) {
         caseRoles.push({
           account: witnessProfileAccount,
           role: 'witness',
@@ -168,7 +223,7 @@ export default function CaseCreateDialog({
       const casePosts = [];
       casePosts.push({
         entRole: 'admin',
-        uri: formData.evidencePostUri,
+        uri: submittedFormData.evidencePostUri,
       });
       // Make case
       await makeCase(caseName, caseRules, caseRoles, casePosts);
@@ -176,9 +231,14 @@ export default function CaseCreateDialog({
       close();
     } catch (error) {
       showToastError(error);
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   }
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -186,28 +246,46 @@ export default function CaseCreateDialog({
         <Dialog open={isOpen} onClose={close}>
           <DialogTitle>Create New Case</DialogTitle>
           <DialogContent>
-            <Form
-              schema={schema}
-              uiSchema={uiSchema}
-              formData={formData}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              widgets={widgets}
-              formContext={{
-                formData: formData,
-                formRule: formRule,
-              }}
-              disabled={isLoading}
-            >
-              <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                <Button variant="contained" type="submit">
-                  Create Case
-                </Button>
-                <Button variant="outlined" onClick={close}>
-                  Cancel
-                </Button>
-              </Stack>
-            </Form>
+            {isLoading ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <Form
+                schema={schema}
+                uiSchema={uiSchema}
+                formData={formData}
+                onChange={handleChange}
+                onSubmit={handleSubmit}
+                widgets={widgets}
+                formContext={{
+                  laws: jurisdictionLaws,
+                  formData: formData,
+                  formRule: formRule,
+                }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoadingButton
+                      loading
+                      loadingPosition="start"
+                      startIcon={<Save />}
+                      variant="outlined"
+                    >
+                      Submitting
+                    </LoadingButton>
+                  </>
+                ) : (
+                  <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                    <Button variant="contained" type="submit">
+                      Create Case
+                    </Button>
+                    <Button variant="outlined" onClick={close}>
+                      Cancel
+                    </Button>
+                  </Stack>
+                )}
+              </Form>
+            )}
           </DialogContent>
         </Dialog>
       ) : (
