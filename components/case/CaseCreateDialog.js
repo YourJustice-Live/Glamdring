@@ -1,8 +1,10 @@
 import {
+  Avatar,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Stack,
   Typography,
 } from '@mui/material';
@@ -33,11 +35,12 @@ export default function CaseCreateDialog({
 }) {
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
-  const { makeCase } = useJuridictionContract();
+  const { getName, makeCase } = useJuridictionContract();
   const { getJurisdictionLaws } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [jurisdiction, setJurisdiction] = useState(null);
   const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
     ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
@@ -141,6 +144,10 @@ export default function CaseCreateDialog({
 
   async function loadData() {
     try {
+      setJurisdiction({
+        name: await getName(),
+        image: null,
+      });
       setJurisdictionLaws(await getJurisdictionLaws());
     } catch (error) {
       showToastError(error);
@@ -249,42 +256,62 @@ export default function CaseCreateDialog({
             {isLoading ? (
               <Typography>Loading...</Typography>
             ) : (
-              <Form
-                schema={schema}
-                uiSchema={uiSchema}
-                formData={formData}
-                onChange={handleChange}
-                onSubmit={handleSubmit}
-                widgets={widgets}
-                formContext={{
-                  laws: jurisdictionLaws,
-                  formData: formData,
-                  formRule: formRule,
-                }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <LoadingButton
-                      loading
-                      loadingPosition="start"
-                      startIcon={<Save />}
-                      variant="outlined"
-                    >
-                      Submitting
-                    </LoadingButton>
-                  </>
-                ) : (
-                  <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                    <Button variant="contained" type="submit">
-                      Create Case
-                    </Button>
-                    <Button variant="outlined" onClick={close}>
-                      Cancel
-                    </Button>
-                  </Stack>
-                )}
-              </Form>
+              <>
+                <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    Jurisdiction
+                  </Typography>
+                  <Avatar
+                    sx={{
+                      width: 22,
+                      height: 22,
+                      bgcolor: 'primary.main',
+                      fontSize: 14,
+                    }}
+                    src={jurisdiction.image}
+                  >
+                    J
+                  </Avatar>
+                  <Typography>{jurisdiction.name}</Typography>
+                </Stack>
+                <Divider sx={{ mt: 1.5 }} />
+                <Form
+                  schema={schema}
+                  uiSchema={uiSchema}
+                  formData={formData}
+                  onChange={handleChange}
+                  onSubmit={handleSubmit}
+                  widgets={widgets}
+                  formContext={{
+                    laws: jurisdictionLaws,
+                    formData: formData,
+                    formRule: formRule,
+                  }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <LoadingButton
+                        loading
+                        loadingPosition="start"
+                        startIcon={<Save />}
+                        variant="outlined"
+                      >
+                        Submitting
+                      </LoadingButton>
+                    </>
+                  ) : (
+                    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                      <Button variant="contained" type="submit">
+                        Create Case
+                      </Button>
+                      <Button variant="outlined" onClick={close}>
+                        Cancel
+                      </Button>
+                    </Stack>
+                  )}
+                </Form>
+              </>
             )}
           </DialogContent>
         </Dialog>
