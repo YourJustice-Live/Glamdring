@@ -16,6 +16,7 @@ import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useLaw from 'hooks/useLaw';
 import useRule from 'hooks/useRule';
+import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -108,24 +109,21 @@ function CaseAdmin({ caseObject, sx }) {
 }
 
 function CaseStage({ caseObject, sx }) {
-  function getStageString(caseObject) {
-    if (!caseObject?.stage || caseObject.stage === CASE_STAGE.draft) {
-      return 'Draft';
+  function getStageName(caseObject) {
+    let stageName = caseObject.stage;
+    for (const stage of Object.values(CASE_STAGE)) {
+      if (stage.id === caseObject.stage) {
+        stageName = capitalize(stage.name);
+      }
     }
-    if (caseObject.stage === CASE_STAGE.verdict) {
-      return 'Verdict';
-    }
-    if (caseObject.stage === CASE_STAGE.closed) {
-      return 'Closed';
-    }
-    return caseObject.stage;
+    return stageName;
   }
 
   return (
     <Stack direction="row" spacing={1} sx={{ ...sx }}>
       <Typography variant="body2">Stage: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-        {getStageString(caseObject)}
+        {getStageName(caseObject)}
       </Typography>
     </Stack>
   );
