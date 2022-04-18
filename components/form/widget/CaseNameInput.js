@@ -5,7 +5,7 @@ import { Divider, TextField, Typography } from '@mui/material';
  */
 export default function CaseNameInput(props) {
   const propsLabel = props.label;
-  const propsInputLabel = props.options.inputLabel;
+  const propsInputLabel = props.options?.inputLabel;
   const propsValue = props.value;
   const propsRequired = props.required;
   const propsDisabled = props.disabled;

@@ -150,6 +150,12 @@ export default function CaseCreateDialog({
     witnessProfileAccounts: {
       'ui:widget': 'CaseWitnessesSelect',
       'ui:emptyValue': [],
+      'ui:options': {
+        subLabel: `
+          Minimal number of witnesses:
+          ${formRule?.confirmation?.witness || 0}
+        `,
+      },
     },
   };
 
@@ -319,7 +325,6 @@ export default function CaseCreateDialog({
                   formContext={{
                     laws: jurisdictionLaws,
                     formData: formData,
-                    formRule: formRule,
                   }}
                   disabled={isSubmitting}
                 >
