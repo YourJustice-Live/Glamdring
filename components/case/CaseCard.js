@@ -29,18 +29,10 @@ export default function CaseCard({ caseObject }) {
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 4 }}>
-        <Box>
-          <CaseAddress caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 0.5 }}>
-          <CaseAdmin caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 0.5 }}>
-          <CaseStage caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 0.5 }}>
-          <CaseCreatedDate caseObject={caseObject} />
-        </Box>
+        <CaseAddress caseObject={caseObject} />
+        <CaseAdmin caseObject={caseObject} sx={{ mt: 0.5 }} />
+        <CaseStage caseObject={caseObject} sx={{ mt: 0.5 }} />
+        <CaseCreatedDate caseObject={caseObject} sx={{ mt: 0.5 }} />
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
             Case Laws
@@ -62,17 +54,15 @@ export default function CaseCard({ caseObject }) {
           <Divider sx={{ mb: 3 }} />
           <CaseParticipants caseObject={caseObject} />
         </Box>
-        <Box sx={{ mt: 6 }}>
-          <CaseActions caseObject={caseObject} />
-        </Box>
+        <CaseActions caseObject={caseObject} sx={{ mt: 6 }} />
       </CardContent>
     </Card>
   );
 }
 
-function CaseAddress({ caseObject }) {
+function CaseAddress({ caseObject, sx }) {
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
       <Typography variant="body2">Address: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         <NextLink
@@ -88,7 +78,7 @@ function CaseAddress({ caseObject }) {
   );
 }
 
-function CaseAdmin({ caseObject }) {
+function CaseAdmin({ caseObject, sx }) {
   const [adminAccount, setAdminAccount] = useState(null);
 
   useEffect(() => {
@@ -100,7 +90,7 @@ function CaseAdmin({ caseObject }) {
   }, []);
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
       <Typography variant="body2">Admin: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         {adminAccount ? (
@@ -117,7 +107,7 @@ function CaseAdmin({ caseObject }) {
   );
 }
 
-function CaseStage({ caseObject }) {
+function CaseStage({ caseObject, sx }) {
   function getStageString(caseObject) {
     if (!caseObject?.stage || caseObject.stage === CASE_STAGE.draft) {
       return 'Draft';
@@ -128,11 +118,11 @@ function CaseStage({ caseObject }) {
     if (caseObject.stage === CASE_STAGE.closed) {
       return 'Closed';
     }
-    return 'Unknown';
+    return caseObject.stage;
   }
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
       <Typography variant="body2">Stage: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         {getStageString(caseObject)}
@@ -141,9 +131,9 @@ function CaseStage({ caseObject }) {
   );
 }
 
-function CaseCreatedDate({ caseObject }) {
+function CaseCreatedDate({ caseObject, sx }) {
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
       <Typography variant="body2">Created Date: </Typography>
       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
         {new Date(caseObject.createdDate * 1000).toLocaleString()}
@@ -247,10 +237,10 @@ function CaseParticipants({ caseObject }) {
   );
 }
 
-function CaseActions({ caseObject }) {
+function CaseActions({ caseObject, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   return (
-    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ ...sx }}>
       <Button
         variant="outlined"
         onClick={() =>
