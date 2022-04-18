@@ -31,6 +31,7 @@ export default function CaseCard({ caseObject }) {
     <Card elevation={1}>
       <CardContent sx={{ p: 4 }}>
         <CaseAddress caseObject={caseObject} />
+        <CaseName caseObject={caseObject} sx={{ mt: 0.5 }} />
         <CaseAdmin caseObject={caseObject} sx={{ mt: 0.5 }} />
         <CaseStage caseObject={caseObject} sx={{ mt: 0.5 }} />
         <CaseCreatedDate caseObject={caseObject} sx={{ mt: 0.5 }} />
@@ -74,6 +75,17 @@ function CaseAddress({ caseObject, sx }) {
             {formatAddress(caseObject.id)}
           </Link>
         </NextLink>
+      </Typography>
+    </Stack>
+  );
+}
+
+function CaseName({ caseObject, sx }) {
+  return (
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
+      <Typography variant="body2">Name: </Typography>
+      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+        {caseObject.name}
       </Typography>
     </Stack>
   );

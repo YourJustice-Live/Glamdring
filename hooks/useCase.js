@@ -20,6 +20,7 @@ export default function useCase() {
       try {
         const caseObject = new Case(
           caseEntity.id,
+          caseEntity.name,
           caseEntity.createdDate,
           caseEntity.jurisdiction,
           caseEntity.stage,
