@@ -17,7 +17,8 @@ import { useEffect, useMemo, useState } from 'react';
  */
 export default function CaseProfileSelect(props) {
   const propsLabel = props.label;
-  const propsValue = props.value; // Profile account
+  const propsSubLabel = props.options?.subLabel;
+  const propsValue = props.value;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
@@ -105,6 +106,7 @@ export default function CaseProfileSelect(props) {
           {propsLabel && (
             <>
               <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
+              <Typography variant="body2">{propsSubLabel}</Typography>
               <Divider sx={{ mt: 1.5, mb: 2.5 }} />
             </>
           )}
