@@ -16,6 +16,7 @@ import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput'
 import CaseNameInput from 'components/form/widget/CaseNameInput';
 import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
+import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useLaw from 'hooks/useLaw';
@@ -106,6 +107,10 @@ export default function CaseCreateDialog({
             },
             default: [],
           },
+          ruling: {
+            title: 'Ruling',
+            type: 'string',
+          },
         },
         required: ['subjectProfileAccount', 'affectedProfileAccount'],
       },
@@ -157,6 +162,12 @@ export default function CaseCreateDialog({
         `,
       },
     },
+    ruling: {
+      'ui:widget': 'CaseRulingInput',
+      'ui:options': {
+        type: formRule?.confirmation?.ruling,
+      },
+    },
   };
 
   const widgets = {
@@ -166,6 +177,7 @@ export default function CaseCreateDialog({
     CaseEvidencePostInput: CaseEvidencePostInput,
     CaseWitnessesSelect: CaseWitnessesSelect,
     CaseNameInput: CaseNameInput,
+    CaseRulingInput: CaseRulingInput,
   };
 
   async function loadData() {
