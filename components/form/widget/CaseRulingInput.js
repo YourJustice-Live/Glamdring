@@ -19,7 +19,7 @@ export default function CaseRulingInput(props) {
           </Typography>
         ) : (
           <Typography>
-            Ruling type is <b>&apos;{propsType}&apos;</b>.
+            Ruling type is <b>&apos;{propsType || 'unknown'}&apos;</b>.
           </Typography>
         )}
       </Paper>
