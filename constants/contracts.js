@@ -19,14 +19,18 @@ export const JURISDICTION_ROLE = {
 };
 
 export const CASE_STAGE = {
-  draft: 0,
-  open: 1,
-  verdict: 2,
-  action: 3,
-  appeal: 4,
-  enforcment: 5,
-  closed: 6,
-  cancelled: 7,
+  draft: {
+    id: 0,
+    name: 'draft',
+  },
+  open: {
+    id: 1,
+    name: 'open',
+  },
+  verdict: {
+    id: 2,
+    name: 'verdict',
+  },
 };
 
 export const CASE_ROLE = {

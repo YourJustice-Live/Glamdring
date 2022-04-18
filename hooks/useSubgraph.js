@@ -309,6 +309,7 @@ function getFindCaseEntitiesQuery(jurisdiction) {
   return `{
     caseEntities(${queryParams}) {
       id
+      name
       createdDate
       jurisdiction
       stage

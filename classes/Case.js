@@ -4,6 +4,7 @@
 export default class Case {
   constructor(
     id,
+    name,
     createdDate,
     jurisdiction,
     stage,
@@ -13,6 +14,7 @@ export default class Case {
     posts,
   ) {
     this.id = id;
+    this.name = name;
     this.createdDate = createdDate;
     this.jurisdiction = jurisdiction;
     this.stage = stage;

@@ -13,9 +13,13 @@ export default function JurisdictionCases() {
 
   async function loadCases() {
     try {
-      setCases(
-        await getCases(process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS),
+      const cases = await getCases(
+        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
       );
+      cases.sort((case1, case2) =>
+        case2.createdDate.localeCompare(case1.createdDate),
+      );
+      setCases(cases);
     } catch (error) {
       showToastError(error);
     }
