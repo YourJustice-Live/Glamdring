@@ -175,7 +175,7 @@ function CaseLaws({ caseObject }) {
 function CasePosts({ caseObject }) {
   return (
     <Stack spacing={2}>
-      {caseObject.posts.length === 0 && <Typography>None</Typography>}
+      {caseObject.posts.length == 0 && <Typography>None</Typography>}
       {caseObject.posts.length > 0 && (
         <>
           {caseObject.posts.map((post, index) => (
@@ -185,9 +185,17 @@ function CasePosts({ caseObject }) {
                 sx={{ fontWeight: 'bold' }}
                 gutterBottom
               >
-                <Link href={post.uri} underline="none" target="_blank">
-                  {post.uri}
-                </Link>
+                {post.uri ? (
+                  <>
+                    <Link href={post.uri} underline="none" target="_blank">
+                      {post.uri}
+                    </Link>
+                  </>
+                ) : (
+                  <Typography sx={{ color: 'danger.main' }}>
+                    Incorrect post, URI not available
+                  </Typography>
+                )}
               </Typography>
             </Box>
           ))}

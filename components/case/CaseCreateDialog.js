@@ -97,7 +97,6 @@ export default function CaseCreateDialog({
           evidencePostUri: {
             type: 'string',
             title: 'Evidence',
-            default: '',
           },
           witnessProfileAccounts: {
             type: 'array',
@@ -150,7 +149,6 @@ export default function CaseCreateDialog({
     },
     evidencePostUri: {
       'ui:widget': 'CaseEvidencePostInput',
-      'ui:emptyValue': '',
     },
     witnessProfileAccounts: {
       'ui:widget': 'CaseWitnessesSelect',
@@ -280,10 +278,12 @@ export default function CaseCreateDialog({
         });
       }
       const casePosts = [];
-      casePosts.push({
-        entRole: 'admin',
-        uri: submittedFormData.evidencePostUri,
-      });
+      if (submittedFormData.evidencePostUri) {
+        casePosts.push({
+          entRole: 'admin',
+          uri: submittedFormData.evidencePostUri,
+        });
+      }
       // Make case
       await makeCase(caseName, caseRules, caseRoles, casePosts);
       showToastSuccess('Success! Data will be updated soon.');
