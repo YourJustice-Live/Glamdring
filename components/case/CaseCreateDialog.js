@@ -16,12 +16,14 @@ import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput'
 import CaseNameInput from 'components/form/widget/CaseNameInput';
 import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
+import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconWallet } from 'icons';
+import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -49,6 +51,7 @@ export default function CaseCreateDialog({
       affectedProfileAccount: affectedProfile?.account,
     }),
   });
+  const [formAction, setFormAction] = useState(null);
   const [formRule, setFormRule] = useState(null);
 
   const schema = {
@@ -104,6 +107,10 @@ export default function CaseCreateDialog({
             },
             default: [],
           },
+          ruling: {
+            title: 'Ruling',
+            type: 'string',
+          },
         },
         required: ['subjectProfileAccount', 'affectedProfileAccount'],
       },
@@ -131,9 +138,15 @@ export default function CaseCreateDialog({
     },
     subjectProfileAccount: {
       'ui:widget': 'CaseProfileSelect',
+      'ui:options': {
+        subLabel: capitalize(formAction?.action?.subject),
+      },
     },
     affectedProfileAccount: {
       'ui:widget': 'CaseProfileSelect',
+      'ui:options': {
+        subLabel: capitalize(formRule?.rule?.affected),
+      },
     },
     evidencePostUri: {
       'ui:widget': 'CaseEvidencePostInput',
@@ -142,6 +155,18 @@ export default function CaseCreateDialog({
     witnessProfileAccounts: {
       'ui:widget': 'CaseWitnessesSelect',
       'ui:emptyValue': [],
+      'ui:options': {
+        subLabel: `
+          Minimal number of witnesses:
+          ${formRule?.confirmation?.witness || 0}
+        `,
+      },
+    },
+    ruling: {
+      'ui:widget': 'CaseRulingInput',
+      'ui:options': {
+        type: formRule?.confirmation?.ruling,
+      },
     },
   };
 
@@ -152,6 +177,7 @@ export default function CaseCreateDialog({
     CaseEvidencePostInput: CaseEvidencePostInput,
     CaseWitnessesSelect: CaseWitnessesSelect,
     CaseNameInput: CaseNameInput,
+    CaseRulingInput: CaseRulingInput,
   };
 
   async function loadData() {
@@ -196,7 +222,19 @@ export default function CaseCreateDialog({
     }
     // Update state of form data
     setFormData(changedFormData);
-    // Update state of form rule if defined
+    // Update action rule state if action defined
+    if (changedFormData.actionGuid) {
+      let formAction;
+      [...jurisdictionLaws.keys()].forEach((key) => {
+        if (
+          jurisdictionLaws.get(key).action.guid === changedFormData.actionGuid
+        ) {
+          formAction = jurisdictionLaws.get(key).action;
+        }
+      });
+      setFormAction(formAction);
+    }
+    // Update form rule state if rule defined
     if (changedFormData.ruleId) {
       let formRule;
       [...jurisdictionLaws.keys()].forEach((key) => {
@@ -299,7 +337,6 @@ export default function CaseCreateDialog({
                   formContext={{
                     laws: jurisdictionLaws,
                     formData: formData,
-                    formRule: formRule,
                   }}
                   disabled={isSubmitting}
                 >

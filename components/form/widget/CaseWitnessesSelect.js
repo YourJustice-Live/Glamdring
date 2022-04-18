@@ -5,9 +5,9 @@ import CaseProfileSelect from './CaseProfileSelect';
 
 export default function CaseWitnessesSelect(props) {
   const propsLabel = props.label;
+  const propsSubLabel = props.options?.subLabel;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
-  const propsFormRule = props.formContext?.formRule;
   const [witnesses, setWitnesses] = useState([null]);
 
   function addWitnessSelect() {
@@ -33,10 +33,7 @@ export default function CaseWitnessesSelect(props) {
   return (
     <>
       <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-      <Typography variant="body2">
-        Minimal number of witnesses:{' '}
-        {Number(propsFormRule?.confirmation?.witness || 0)}
-      </Typography>
+      <Typography variant="body2">{propsSubLabel}</Typography>
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       <Stack spacing={2}>
         {witnesses.map((_, index) => (
