@@ -1,7 +1,7 @@
 /**
  * Class for metadata of evidence post.
  */
-export default class EvidencePost {
+export default class EvidencePostMetadata {
   constructor(title, fileUri, fileName, fileType) {
     this.type = 'evidence';
     this.evidenceTitle = title;
