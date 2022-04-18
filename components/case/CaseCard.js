@@ -180,23 +180,17 @@ function CasePosts({ caseObject }) {
         <>
           {caseObject.posts.map((post, index) => (
             <Box key={index}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 'bold' }}
-                gutterBottom
-              >
-                {post.uri ? (
-                  <>
-                    <Link href={post.uri} underline="none" target="_blank">
-                      {post.uri}
-                    </Link>
-                  </>
-                ) : (
-                  <Typography sx={{ color: 'danger.main' }}>
-                    Incorrect post, URI not available
-                  </Typography>
-                )}
-              </Typography>
+              {post.uri ? (
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  <Link href={post.uri} underline="none" target="_blank">
+                    {post.uri}
+                  </Link>
+                </Typography>
+              ) : (
+                <Typography variant="body2" sx={{ color: 'danger.main' }}>
+                  Incorrect post, URI not available
+                </Typography>
+              )}
             </Box>
           ))}
         </>
