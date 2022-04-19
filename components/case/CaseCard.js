@@ -197,18 +197,48 @@ function CasePosts({ caseObject }) {
         <>
           {caseObject.posts.map((post, index) => (
             <Paper key={index} sx={{ p: 2, overflowX: 'scroll' }}>
+              {/* Post author */}
               <Stack direction="row" spacing={1}>
                 <Typography variant="body2">Author:</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {formatAddress(post.author)}
                 </Typography>
               </Stack>
+              {/* Post type */}
               <Stack direction="row" spacing={1}>
                 <Typography variant="body2">Type:</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {capitalize(post.uriType || 'Unknown')}
                 </Typography>
               </Stack>
+              {/* Evidence post */}
+              {post.uriType === 'evidence' && (
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Evidence:</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    <Link
+                      href={
+                        hexStringToJson(post.uriData)?.evidenceFileUri || '#'
+                      }
+                      underline="none"
+                      target="_blank"
+                    >
+                      {hexStringToJson(post.uriData)?.evidenceTitle ||
+                        'Unknown'}
+                    </Link>
+                  </Typography>
+                </Stack>
+              )}
+              {/* Witness post */}
+              {post.uriType === 'witness' && (
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Message:</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {hexStringToJson(post.uriData)?.witnessMessage || 'Unknown'}
+                  </Typography>
+                </Stack>
+              )}
+              {/* Uri */}
               <Stack direction="row" spacing={1}>
                 <Typography variant="body2">Uri:</Typography>
                 {post.uri ? (
