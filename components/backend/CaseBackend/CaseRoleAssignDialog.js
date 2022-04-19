@@ -47,6 +47,9 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
   };
 
   const uiSchema = {
+    contractAddress: {
+      'ui:placeholder': '0xfd3...',
+    },
     account: {
       'ui:placeholder': '0x430...',
     },

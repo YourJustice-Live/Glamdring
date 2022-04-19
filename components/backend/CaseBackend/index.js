@@ -2,6 +2,7 @@ import { Button, Divider, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import useDialogContext from 'hooks/useDialogContext';
 import CaseRoleAssignDialog from './CaseRoleAssignDialog';
+import CaseStageChangeDialog from './CaseStageChangeDialog';
 
 /**
  * A component with rule backend.
@@ -29,9 +30,11 @@ export default function CaseBackend() {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => console.log('[Dev] Not implemented')}
+            onClick={() =>
+              showDialog(<CaseStageChangeDialog onClose={closeDialog} />)
+            }
           >
-            Set Stage Verdict
+            Change Stage
           </Button>
         </Stack>
       </Box>

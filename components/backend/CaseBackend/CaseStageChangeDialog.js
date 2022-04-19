@@ -8,43 +8,46 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import { CASE_STAGE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useToasts from 'hooks/useToasts';
+import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for add post to case.
+ * A dialog for change case stage.
  */
-export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
+export default function CaseStageChangeDialog({ isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { addPost } = useCaseContract();
+  const { setStageOpen, setStageVerdict } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
+    required: ['contractAddress', 'stage'],
     properties: {
-      entityRole: {
+      contractAddress: {
         type: 'string',
-        title: 'Entity Role',
-        default: '',
+        title: 'Contract Address',
       },
-      uri: {
-        type: 'string',
-        title: 'URI',
-        default: '',
+      stage: {
+        type: 'number',
+        title: 'New Stage',
+        default: CASE_STAGE.open.id,
+        enum: [CASE_STAGE.open.id, CASE_STAGE.verdict.id],
+        enumNames: [
+          capitalize(CASE_STAGE.open.name),
+          capitalize(CASE_STAGE.verdict.name),
+        ],
       },
     },
   };
 
   const uiSchema = {
-    entityRole: {
-      'ui:emptyValue': '',
-      'ui:placeholder': 'subject',
-    },
-    uri: {
-      'ui:emptyValue': '',
+    contractAddress: {
+      'ui:placeholder': '0xfd3...',
     },
   };
 
@@ -59,7 +62,12 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await addPost(caseObject.id, formData.entityRole, formData.uri);
+      if (formData.stage === CASE_STAGE.open.id) {
+        await setStageOpen(formData.contractAddress);
+      }
+      if (formData.stage === CASE_STAGE.verdict.id) {
+        await setStageVerdict(formData.contractAddress);
+      }
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -70,7 +78,7 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={isLoading ? null : close}>
-      <DialogTitle>Add Post</DialogTitle>
+      <DialogTitle>Change Case Stage</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -92,7 +100,7 @@ export default function CasePostAddDialog({ caseObject, isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Add Post
+                  Change Stage
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

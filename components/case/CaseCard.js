@@ -1,10 +1,6 @@
 import {
-  Button,
   Card,
   CardContent,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Divider,
   Link,
   Paper,
@@ -14,15 +10,12 @@ import {
 import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
-import useDialogContext from 'hooks/useDialogContext';
 import useLaw from 'hooks/useLaw';
 import useRule from 'hooks/useRule';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
-import CasePostAddDialog from './CasePostAddDialog';
-import CaseStageChangeDialog from './CaseStageChangeDialog';
 
 /**
  * A component with a card with case.
@@ -64,7 +57,6 @@ export default function CaseCard({ caseObject }) {
           <Divider sx={{ mb: 3 }} />
           <Typography>Unknown</Typography>
         </Box>
-        <CaseActions caseObject={caseObject} sx={{ mt: 6 }} />
       </CardContent>
     </Card>
   );
@@ -275,66 +267,5 @@ function CaseParticipants({ caseObject }) {
         </Box>
       ))}
     </Stack>
-  );
-}
-
-function CaseActions({ caseObject, sx }) {
-  const { showDialog, closeDialog } = useDialogContext();
-  return (
-    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ ...sx }}>
-      <Button
-        variant="outlined"
-        onClick={() =>
-          showDialog(
-            <CasePostAddDialog caseObject={caseObject} onClose={closeDialog} />,
-          )
-        }
-      >
-        Add Post
-      </Button>
-      <Button
-        variant="outlined"
-        onClick={() =>
-          showDialog(
-            <CaseStageChangeDialog
-              caseObject={caseObject}
-              onClose={closeDialog}
-            />,
-          )
-        }
-      >
-        Change Stage
-      </Button>
-      <Button
-        variant="outlined"
-        onClick={() =>
-          showDialog(
-            <CaseJsonDialog caseObject={caseObject} onClose={closeDialog} />,
-          )
-        }
-      >
-        Open JSON
-      </Button>
-    </Stack>
-  );
-}
-
-function CaseJsonDialog({ caseObject, isClose, onClose }) {
-  const [isOpen, setIsOpen] = useState(!isClose);
-
-  async function close() {
-    setIsOpen(false);
-    onClose();
-  }
-
-  return (
-    <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>Case JSON</DialogTitle>
-      <DialogContent sx={{ overflowX: 'scroll' }}>
-        <pre style={{ maxWidth: '480px' }}>
-          {JSON.stringify(caseObject, null, 2)}
-        </pre>
-      </DialogContent>
-    </Dialog>
   );
 }
