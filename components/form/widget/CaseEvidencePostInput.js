@@ -17,6 +17,7 @@ import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 import Dropzone from 'react-dropzone';
+import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
 
 /**
  * A widget for input an evidence title and file, generate case post, upload it to IPFS, and get URI.
@@ -67,13 +68,12 @@ export default function CaseEvidencePostInput(props) {
         inputEvidenceFile,
       );
       // Upload evidence post to ipfs
-      const evidencePost = {
-        role: 'evidence',
-        title: inputEvidenceTitle,
-        fileUri: evidenceFileUri,
-        fileName: inputEvidenceFile.name,
-        fileType: inputEvidenceFile.type,
-      };
+      const evidencePost = new EvidencePostMetadata(
+        inputEvidenceTitle,
+        evidenceFileUri,
+        inputEvidenceFile.name,
+        inputEvidenceFile.type,
+      );
       const { url: evidencePostUri } = await uploadJsonToIPFS(evidencePost);
       // Save post and post uri, close dialog
       setEvidencePost(evidencePost);
@@ -112,11 +112,11 @@ export default function CaseEvidencePostInput(props) {
             <Stack direction="row" spacing={1}>
               <AttachFileOutlined />
               <Link
-                href={evidencePost.fileUri}
+                href={evidencePost.evidenceFileUri}
                 underline="none"
                 target="_blank"
               >
-                {evidencePost.title}
+                {evidencePost.evidenceTitle}
               </Link>
             </Stack>
           </Paper>

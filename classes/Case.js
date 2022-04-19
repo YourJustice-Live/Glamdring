@@ -8,7 +8,9 @@ export default class Case {
     createdDate,
     jurisdiction,
     stage,
+    verdictAuthor,
     verdictUri,
+    verdictUriData,
     rules,
     roles,
     posts,
@@ -18,7 +20,9 @@ export default class Case {
     this.createdDate = createdDate;
     this.jurisdiction = jurisdiction;
     this.stage = stage;
+    this.verdictAuthor = verdictAuthor;
     this.verdictUri = verdictUri;
+    this.verdictUriData = verdictUriData;
     this.rules = rules;
     this.roles = roles;
     this.posts = posts;

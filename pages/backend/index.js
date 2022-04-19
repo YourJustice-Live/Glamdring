@@ -1,6 +1,7 @@
 import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ActionBackend from 'components/backend/ActionBackend';
+import CaseBackend from 'components/backend/CaseBackend';
 import RoleBackend from 'components/backend/RoleBackend';
 import RuleBackend from 'components/backend/RuleBackend';
 import Layout from 'components/layout/Layout';
@@ -19,6 +20,9 @@ export default function Backend() {
           Backend
         </Typography>
         <Divider />
+      </Box>
+      <Box sx={{ mt: 12 }}>
+        <CaseBackend />
       </Box>
       <Box sx={{ mt: 12 }}>
         <RoleBackend />

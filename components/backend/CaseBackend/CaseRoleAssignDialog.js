@@ -8,59 +8,53 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { CASE_STAGE } from 'constants/contracts';
+import { CASE_ROLE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useToasts from 'hooks/useToasts';
+import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for change case stage.
+ * A dialog for assign a role to a specified account
  */
-export default function CaseStageChangeDialog({
-  caseObject,
-  isClose,
-  onClose,
-}) {
+export default function CaseRoleAssignDialog({ isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { setStageOpen, setStageVerdict, setStageClosed } = useCaseContract();
+  const { assignRole } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
+    required: ['contractAddress', 'account', 'role'],
     properties: {
-      stage: {
+      contractAddress: {
         type: 'string',
-        title: 'New Stage',
-        default: CASE_STAGE.open,
-        enum: [CASE_STAGE.open, CASE_STAGE.verdict, CASE_STAGE.closed],
-        enumNames: ['Open', 'Verdict', 'Closed'],
+        title: 'Contract Address',
       },
-    },
-    dependencies: {
-      stage: {
-        oneOf: [
-          {
-            properties: {
-              stage: {
-                enum: [CASE_STAGE.closed],
-              },
-              verdictUri: {
-                type: 'string',
-                title: 'Verdict URI',
-                default: '',
-              },
-            },
-          },
+      account: {
+        type: 'string',
+        title: 'Account',
+      },
+      role: {
+        type: 'string',
+        title: 'Role',
+        default: CASE_ROLE.witness.name,
+        enum: [CASE_ROLE.witness.name, CASE_ROLE.judge.name],
+        enumNames: [
+          capitalize(CASE_ROLE.witness.name),
+          capitalize(CASE_ROLE.judge.name),
         ],
       },
     },
   };
 
   const uiSchema = {
-    verdictUri: {
-      'ui:emptyValue': '',
+    contractAddress: {
+      'ui:placeholder': '0xfd3...',
+    },
+    account: {
+      'ui:placeholder': '0x430...',
     },
   };
 
@@ -75,15 +69,11 @@ export default function CaseStageChangeDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      if (formData.stage === CASE_STAGE.open) {
-        await setStageOpen(caseObject.id);
-      }
-      if (formData.stage === CASE_STAGE.verdict) {
-        await setStageVerdict(caseObject.id);
-      }
-      if (formData.stage === CASE_STAGE.closed) {
-        await setStageClosed(caseObject.id, formData.verdictUri);
-      }
+      await assignRole(
+        formData.contractAddress,
+        formData.account,
+        formData.role,
+      );
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -93,13 +83,13 @@ export default function CaseStageChangeDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
-      <DialogTitle>Change stage</DialogTitle>
+    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
+      <DialogTitle>Assign Case Role</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
-          uiSchema={uiSchema}
           formData={formData}
+          uiSchema={uiSchema}
           onSubmit={submit}
           disabled={isLoading}
         >
@@ -116,7 +106,7 @@ export default function CaseStageChangeDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Change stage
+                  Assign Role
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

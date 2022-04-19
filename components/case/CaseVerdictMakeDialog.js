@@ -8,27 +8,23 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import WitnessPostMetadata from 'classes/metadata/WitnessPostMetadata';
+import VerdictMetadata from 'classes/metadata/VerdictMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
 /**
- * A component with dialog for add case post.
- *
- * @param {{caseObject: object, entityRole: 'witness', postType: 'witness', isClose: function, onClose: function}} params Params.
+ * A component with dialog for make case verdict.
  */
-export default function CasePostAddDialog({
+export default function CaseVerdictMakeDialog({
   caseObject,
-  entityRole,
-  postType,
   isClose,
   onClose,
 }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
-  const { addPost } = useCaseContract();
+  const { setStageClosed } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -55,16 +51,10 @@ export default function CasePostAddDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      // Define post metadata
-      let postMetadata;
-      if (postType === 'witness') {
-        postMetadata = new WitnessPostMetadata(formData.message);
-      } else {
-        throw new Error('Post type is not supported');
-      }
-      // Upload post metadata to ipfs and add post to contract
-      const { url: postMetadataUri } = await uploadJsonToIPFS(postMetadata);
-      await addPost(caseObject.id, entityRole, postMetadataUri);
+      const { url: verdictMetadataUri } = await uploadJsonToIPFS(
+        new VerdictMetadata(formData.message),
+      );
+      await setStageClosed(caseObject.id, verdictMetadataUri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -80,9 +70,7 @@ export default function CasePostAddDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>
-        {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
-      </DialogTitle>
+      <DialogTitle>Make Verdict</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -103,7 +91,7 @@ export default function CasePostAddDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
+                  Make Verdict
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

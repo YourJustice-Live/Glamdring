@@ -313,7 +313,9 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       createdDate
       jurisdiction
       stage
+      verdictAuthor
       verdictUri
+      verdictUriData
       rules {
         id
       }
@@ -324,8 +326,11 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       }
       posts {
         id
+        author
         entityRole
         uri
+        uriData
+        uriType
       }
     }
   }`;

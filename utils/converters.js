@@ -2,9 +2,12 @@
  * Convert hex string to json.
  *
  * @param {string} hexString Hex string.
- * @returns {object} JSON.
+ * @returns {object} JSON or null.
  */
 export function hexStringToJson(hexString) {
+  if (!hexString || hexString.length === 0) {
+    return null;
+  }
   var hex = hexString.toString();
   if (hex.startsWith('0x')) {
     hex = hex.substring(2);

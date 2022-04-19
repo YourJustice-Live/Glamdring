@@ -8,39 +8,46 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import WitnessPostMetadata from 'classes/metadata/WitnessPostMetadata';
+import { CASE_STAGE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
-import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
+import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A component with dialog for add case post.
- *
- * @param {{caseObject: object, entityRole: 'witness', postType: 'witness', isClose: function, onClose: function}} params Params.
+ * A dialog for change case stage.
  */
-export default function CasePostAddDialog({
-  caseObject,
-  entityRole,
-  postType,
-  isClose,
-  onClose,
-}) {
+export default function CaseStageChangeDialog({ isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { uploadJsonToIPFS } = useIpfs();
-  const { addPost } = useCaseContract();
+  const { setStageOpen, setStageVerdict } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: ['message'],
+    required: ['contractAddress', 'stage'],
     properties: {
-      message: {
+      contractAddress: {
         type: 'string',
-        title: 'Message',
+        title: 'Contract Address',
       },
+      stage: {
+        type: 'number',
+        title: 'New Stage',
+        default: CASE_STAGE.open.id,
+        enum: [CASE_STAGE.open.id, CASE_STAGE.verdict.id],
+        enumNames: [
+          capitalize(CASE_STAGE.open.name),
+          capitalize(CASE_STAGE.verdict.name),
+        ],
+      },
+    },
+  };
+
+  const uiSchema = {
+    contractAddress: {
+      'ui:placeholder': '0xfd3...',
     },
   };
 
@@ -55,16 +62,12 @@ export default function CasePostAddDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      // Define post metadata
-      let postMetadata;
-      if (postType === 'witness') {
-        postMetadata = new WitnessPostMetadata(formData.message);
-      } else {
-        throw new Error('Post type is not supported');
+      if (formData.stage === CASE_STAGE.open.id) {
+        await setStageOpen(formData.contractAddress);
       }
-      // Upload post metadata to ipfs and add post to contract
-      const { url: postMetadataUri } = await uploadJsonToIPFS(postMetadata);
-      await addPost(caseObject.id, entityRole, postMetadataUri);
+      if (formData.stage === CASE_STAGE.verdict.id) {
+        await setStageVerdict(formData.contractAddress);
+      }
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -74,19 +77,13 @@ export default function CasePostAddDialog({
   }
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={isLoading ? null : close}
-      maxWidth="xs"
-      fullWidth
-    >
-      <DialogTitle>
-        {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
-      </DialogTitle>
+    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+      <DialogTitle>Change Case Stage</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
           formData={formData}
+          uiSchema={uiSchema}
           onSubmit={submit}
           disabled={isLoading}
         >
@@ -103,7 +100,7 @@ export default function CasePostAddDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
+                  Change Stage
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

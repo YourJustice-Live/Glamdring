@@ -2,6 +2,7 @@ import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Typography } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import AvatarNftMetadata from 'classes/metadata/AvatarNftMetadata';
 import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
 import ProfilePictureInput from 'components/form/widget/ProfilePictureInput';
@@ -69,10 +70,9 @@ export default function ProfileManage() {
       setFormData(formData);
       // Upload json with form data to IPFS
       setStatus(STATUS.isUploadingToIpfs);
-      const { url } = await uploadJsonToIPFS({
-        image: formData.image,
-        attributes: formData.attributes,
-      });
+      const { url } = await uploadJsonToIPFS(
+        new AvatarNftMetadata(formData.image, formData.attributes),
+      );
       showToastSuccessLink('Your data uploaded to IPFS!', url);
       setStatus(STATUS.isMintingOrUpdating);
       // Update token if account has profile otherwise mint token
