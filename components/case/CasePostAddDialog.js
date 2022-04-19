@@ -8,53 +8,39 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { CASE_ROLE } from 'constants/contracts';
+import WitnessPostMetadata from 'classes/metadata/WitnessPostMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for assign a role to a specified account
+ * A component with dialog for add case post.
+ *
+ * @param {{caseObject: object, entityRole: 'witness', postType: 'witness', isClose: function, onClose: function}} params Params.
  */
-export default function CaseRoleAssignDialog({ isClose, onClose }) {
+export default function CasePostAddDialog({
+  caseObject,
+  entityRole,
+  postType,
+  isClose,
+  onClose,
+}) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { assignRole } = useCaseContract();
+  const { uploadJsonToIPFS } = useIpfs();
+  const { addPost } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: ['contractAddress', 'account', 'role'],
+    required: ['message'],
     properties: {
-      contractAddress: {
+      message: {
         type: 'string',
-        title: 'Contract Address',
+        title: 'Message',
       },
-      account: {
-        type: 'string',
-        title: 'Account',
-      },
-      role: {
-        type: 'string',
-        title: 'Role',
-        default: CASE_ROLE.witness.name,
-        enum: [CASE_ROLE.witness.name, CASE_ROLE.judge.name],
-        enumNames: [
-          capitalize(CASE_ROLE.witness.name),
-          capitalize(CASE_ROLE.judge.name),
-        ],
-      },
-    },
-  };
-
-  const uiSchema = {
-    contractAddress: {
-      'ui:placeholder': '0xfd3...',
-    },
-    account: {
-      'ui:placeholder': '0x430...',
     },
   };
 
@@ -69,11 +55,16 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await assignRole(
-        formData.contractAddress,
-        formData.account,
-        formData.role,
-      );
+      // Define post metadata
+      let postMetadata;
+      if (postType === 'witness') {
+        postMetadata = new WitnessPostMetadata(formData.message);
+      } else {
+        throw new Error('Post type is not supported');
+      }
+      // Upload post metadata to ipfs and add post to contract
+      const { url: postMetadataUri } = await uploadJsonToIPFS(postMetadata);
+      await addPost(caseObject.id, entityRole, postMetadataUri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -83,13 +74,19 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
-      <DialogTitle>Assign Case Role</DialogTitle>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : close}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle>
+        {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
+      </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
           formData={formData}
-          uiSchema={uiSchema}
           onSubmit={submit}
           disabled={isLoading}
         >
@@ -106,7 +103,7 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Assign Role
+                  {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

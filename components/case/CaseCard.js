@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardContent,
   Divider,
@@ -10,12 +11,15 @@ import {
 import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
+import useDialogContext from 'hooks/useDialogContext';
 import useLaw from 'hooks/useLaw';
 import useRule from 'hooks/useRule';
+import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
+import CasePostAddDialog from './CasePostAddDialog';
 
 /**
  * A component with a card with case.
@@ -173,8 +177,19 @@ function CaseLaws({ caseObject }) {
 }
 
 function CasePosts({ caseObject }) {
+  const { account } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
+
+  function isAccountCaseWitness(account, caseObject) {
+    const witnessRole = caseObject.roles.find(
+      (role) => role.roleId === CASE_ROLE.witness.id,
+    );
+    return witnessRole?.accounts?.includes(account);
+  }
+
   return (
     <Stack spacing={2}>
+      {/* Post list */}
       {caseObject.posts.length == 0 && <Typography>None</Typography>}
       {caseObject.posts.length > 0 && (
         <>
@@ -216,6 +231,25 @@ function CasePosts({ caseObject }) {
           ))}
         </>
       )}
+      {/* Add witness post button */}
+      {caseObject.stage === CASE_STAGE.open.id &&
+        isAccountCaseWitness(account, caseObject) && (
+          <Button
+            variant="outlined"
+            onClick={() =>
+              showDialog(
+                <CasePostAddDialog
+                  caseObject={caseObject}
+                  entityRole="witness"
+                  postType="witness"
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            Add Witness Post
+          </Button>
+        )}
     </Stack>
   );
 }
