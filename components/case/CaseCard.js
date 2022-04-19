@@ -18,6 +18,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
+import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
 import CasePostAddDialog from './CasePostAddDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
@@ -320,7 +321,21 @@ function CaseVerdict({ caseObject }) {
     <Stack spacing={2}>
       {/* Verdict */}
       {caseObject.stage === CASE_STAGE.closed.id && (
-        <Typography>Verdict is...</Typography>
+        <Paper sx={{ p: 2 }}>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body2">Judge:</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {formatAddress(caseObject.verdictAuthor)}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="body2">Message:</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {hexStringToJson(caseObject.verdictUriData)?.verdictMessage ||
+                'Unknown'}
+            </Typography>
+          </Stack>
+        </Paper>
       )}
       {caseObject.stage === CASE_STAGE.verdict.id && (
         <Typography>The judge&apos;s verdict is awaited.</Typography>

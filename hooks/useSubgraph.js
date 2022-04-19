@@ -313,7 +313,9 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       createdDate
       jurisdiction
       stage
+      verdictAuthor
       verdictUri
+      verdictUriData
       rules {
         id
       }
