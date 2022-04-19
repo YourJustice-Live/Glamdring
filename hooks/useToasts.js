@@ -47,6 +47,10 @@ export default function useToasts() {
           ),
         },
       );
+    } else if (error.message.length > 128) {
+      enqueueSnackbar(`Error: ${error.message.substring(0, 256)}...`, {
+        variant: 'error',
+      });
     } else {
       enqueueSnackbar(`Error: ${error.message}`, { variant: 'error' });
     }
