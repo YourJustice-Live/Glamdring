@@ -45,6 +45,13 @@ export default function CaseCard({ caseObject }) {
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
+            Case Participants
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseParticipants caseObject={caseObject} />
+        </Box>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
             Case Posts
           </Typography>
           <Divider sx={{ mb: 3 }} />
@@ -52,10 +59,10 @@ export default function CaseCard({ caseObject }) {
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
-            Case Participants
+            Case Verdict
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CaseParticipants caseObject={caseObject} />
+          <Typography>Unknown</Typography>
         </Box>
         <CaseActions caseObject={caseObject} sx={{ mt: 6 }} />
       </CardContent>
