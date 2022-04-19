@@ -8,21 +8,19 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import WitnessPostMetadata from 'classes/metadata/WitnessPostMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import CommentPostMetadata from 'classes/metadata/CommentPostMetadata';
+import { CASE_ROLE } from 'constants/contracts';
+import { capitalize } from 'lodash';
 
 /**
- * A component with dialog for add case post.
- *
- * @param {{caseObject: object, entityRole: 'witness', postType: 'witness', isClose: function, onClose: function}} params Params.
+ * A component with dialog for add case comment post.
  */
-export default function CasePostAddDialog({
+export default function CaseCommentPostAddDialog({
   caseObject,
-  entityRole,
-  postType,
   isClose,
   onClose,
 }) {
@@ -35,8 +33,28 @@ export default function CasePostAddDialog({
 
   const schema = {
     type: 'object',
-    required: ['message'],
+    required: ['role', 'message'],
     properties: {
+      role: {
+        type: 'string',
+        title: 'Your Role',
+        enum: [
+          CASE_ROLE.admin.name,
+          CASE_ROLE.subject.name,
+          CASE_ROLE.plaintiff.name,
+          CASE_ROLE.judge.name,
+          CASE_ROLE.witness.name,
+          CASE_ROLE.affected.name,
+        ],
+        enumNames: [
+          capitalize(CASE_ROLE.admin.name),
+          capitalize(CASE_ROLE.subject.name),
+          capitalize(CASE_ROLE.plaintiff.name),
+          capitalize(CASE_ROLE.judge.name),
+          capitalize(CASE_ROLE.witness.name),
+          capitalize(CASE_ROLE.affected.name),
+        ],
+      },
       message: {
         type: 'string',
         title: 'Message',
@@ -55,16 +73,10 @@ export default function CasePostAddDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      // Define post metadata
-      let postMetadata;
-      if (postType === 'witness') {
-        postMetadata = new WitnessPostMetadata(formData.message);
-      } else {
-        throw new Error('Post type is not supported');
-      }
-      // Upload post metadata to ipfs and add post to contract
-      const { url: postMetadataUri } = await uploadJsonToIPFS(postMetadata);
-      await addPost(caseObject.id, entityRole, postMetadataUri);
+      const { url: commentPostMetadataUri } = await uploadJsonToIPFS(
+        new CommentPostMetadata(formData.message),
+      );
+      await addPost(caseObject.id, formData.role, commentPostMetadataUri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -80,9 +92,7 @@ export default function CasePostAddDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>
-        {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
-      </DialogTitle>
+      <DialogTitle>Add Comment Post</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -103,7 +113,7 @@ export default function CasePostAddDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {postType === 'witness' ? 'Add Witness Post' : 'Add Post'}
+                  Add Comment Post
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

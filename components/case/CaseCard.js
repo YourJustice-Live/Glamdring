@@ -20,7 +20,7 @@ import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
-import CasePostAddDialog from './CasePostAddDialog';
+import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 
 /**
@@ -182,11 +182,14 @@ function CasePosts({ caseObject }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
-  function isAccountCaseWitness(account, caseObject) {
-    const witnessRole = caseObject.roles.find(
-      (role) => role.roleId === CASE_ROLE.witness.id,
-    );
-    return witnessRole?.accounts?.includes(account);
+  function isAccountHasRole(account, caseObject) {
+    let result = false;
+    caseObject.roles.forEach((role) => {
+      if (role.accounts.includes(account)) {
+        result = true;
+      }
+    });
+    return result;
   }
 
   return (
@@ -202,6 +205,13 @@ function CasePosts({ caseObject }) {
                 <Typography variant="body2">Author:</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                   {formatAddress(post.author)}
+                </Typography>
+              </Stack>
+              {/* Post author role */}
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body2">Author Role:</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {capitalize(post.entityRole)}
                 </Typography>
               </Stack>
               {/* Post type */}
@@ -229,12 +239,12 @@ function CasePosts({ caseObject }) {
                   </Typography>
                 </Stack>
               )}
-              {/* Witness post */}
-              {post.uriType === 'witness' && (
+              {/* Comment post */}
+              {post.uriType === 'comment' && (
                 <Stack direction="row" spacing={1}>
                   <Typography variant="body2">Message:</Typography>
                   <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    {hexStringToJson(post.uriData)?.witnessMessage || 'Unknown'}
+                    {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
                   </Typography>
                 </Stack>
               )}
@@ -263,23 +273,21 @@ function CasePosts({ caseObject }) {
           ))}
         </>
       )}
-      {/* Add witness post form */}
+      {/* Add comment post form */}
       {caseObject.stage === CASE_STAGE.open.id &&
-        isAccountCaseWitness(account, caseObject) && (
+        isAccountHasRole(account, caseObject) && (
           <Button
             variant="outlined"
             onClick={() =>
               showDialog(
-                <CasePostAddDialog
+                <CaseCommentPostAddDialog
                   caseObject={caseObject}
-                  entityRole="witness"
-                  postType="witness"
                   onClose={closeDialog}
                 />,
               )
             }
           >
-            Add Witness Post
+            Add Comment Post
           </Button>
         )}
     </Stack>
