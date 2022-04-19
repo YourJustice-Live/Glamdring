@@ -327,6 +327,7 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       posts {
         id
         author
+        createdDate
         entityRole
         uri
         uriData

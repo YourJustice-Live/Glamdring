@@ -214,6 +214,13 @@ function CasePosts({ caseObject }) {
                   {capitalize(post.entityRole)}
                 </Typography>
               </Stack>
+              {/* Post created date */}
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body2">Created Date:</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {new Date(post.createdDate * 1000).toLocaleString()}
+                </Typography>
+              </Stack>
               {/* Post type */}
               <Stack direction="row" spacing={1}>
                 <Typography variant="body2">Type:</Typography>
