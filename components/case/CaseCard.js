@@ -20,6 +20,7 @@ import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import CasePostAddDialog from './CasePostAddDialog';
+import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 
 /**
  * A component with a card with case.
@@ -54,12 +55,12 @@ export default function CaseCard({ caseObject }) {
           <Divider sx={{ mb: 3 }} />
           <CasePosts caseObject={caseObject} />
         </Box>
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 6, mb: 3 }}>
           <Typography variant="h3" gutterBottom>
             Case Verdict
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <Typography>Unknown</Typography>
+          <CaseVerdict caseObject={caseObject} />
         </Box>
       </CardContent>
     </Card>
@@ -231,7 +232,7 @@ function CasePosts({ caseObject }) {
           ))}
         </>
       )}
-      {/* Add witness post button */}
+      {/* Add witness post form */}
       {caseObject.stage === CASE_STAGE.open.id &&
         isAccountCaseWitness(account, caseObject) && (
           <Button
@@ -300,6 +301,54 @@ function CaseParticipants({ caseObject }) {
           ))}
         </Box>
       ))}
+    </Stack>
+  );
+}
+
+function CaseVerdict({ caseObject }) {
+  const { account } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
+
+  function isAccountCaseJudge(account, caseObject) {
+    const judgeRole = caseObject.roles.find(
+      (role) => role.roleId === CASE_ROLE.judge.id,
+    );
+    return judgeRole?.accounts?.includes(account);
+  }
+
+  return (
+    <Stack spacing={2}>
+      {/* Verdict */}
+      {caseObject.stage === CASE_STAGE.closed.id && (
+        <Typography>Verdict is...</Typography>
+      )}
+      {caseObject.stage === CASE_STAGE.verdict.id && (
+        <Typography>The judge&apos;s verdict is awaited.</Typography>
+      )}
+      {caseObject.stage !== CASE_STAGE.closed.id &&
+        caseObject.stage !== CASE_STAGE.verdict.id && (
+          <Typography>
+            The verdict can be made by the judge when the case has a
+            &quot;Verdict&quot; stage.
+          </Typography>
+        )}
+      {/* Add verdict form */}
+      {caseObject.stage === CASE_STAGE.verdict.id &&
+        isAccountCaseJudge(account, caseObject) && (
+          <Button
+            variant="outlined"
+            onClick={() =>
+              showDialog(
+                <CaseVerdictMakeDialog
+                  caseObject={caseObject}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            Make Verdict
+          </Button>
+        )}
     </Stack>
   );
 }
