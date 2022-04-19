@@ -324,8 +324,11 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       }
       posts {
         id
+        author
         entityRole
         uri
+        uriData
+        uriType
       }
     }
   }`;

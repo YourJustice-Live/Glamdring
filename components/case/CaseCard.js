@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Divider,
   Link,
+  Paper,
   Stack,
   Typography,
 } from '@mui/material';
@@ -179,19 +180,40 @@ function CasePosts({ caseObject }) {
       {caseObject.posts.length > 0 && (
         <>
           {caseObject.posts.map((post, index) => (
-            <Box key={index}>
-              {post.uri ? (
+            <Paper key={index} sx={{ p: 2, overflowX: 'scroll' }}>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body2">Author:</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  <Link href={post.uri} underline="none" target="_blank">
-                    {post.uri}
-                  </Link>
+                  {formatAddress(post.author)}
                 </Typography>
-              ) : (
-                <Typography variant="body2" sx={{ color: 'danger.main' }}>
-                  Incorrect post, URI not available
+              </Stack>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body2">Type:</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {capitalize(post.uriType || 'Unknown')}
                 </Typography>
-              )}
-            </Box>
+              </Stack>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="body2">Uri:</Typography>
+                {post.uri ? (
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', maxWidth: '240px' }}
+                  >
+                    <Link href={post.uri} underline="none" target="_blank">
+                      {post.uri}
+                    </Link>
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'danger.main' }}
+                  >
+                    Not available
+                  </Typography>
+                )}
+              </Stack>
+            </Paper>
           ))}
         </>
       )}
