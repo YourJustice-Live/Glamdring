@@ -397,6 +397,17 @@ function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
                 Cancellation
               </Typography>
             </Stack>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Judge:</Typography>
+              <ProfileCompactCard account={caseObject.cancellationAuthor} />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body2">Message:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {hexStringToJson(caseObject.cancellationUriData)
+                  ?.cancellationMessage || 'Unknown'}
+              </Typography>
+            </Stack>
           </Paper>
         )}
         {/* Forms to add verdict or cancel case */}
