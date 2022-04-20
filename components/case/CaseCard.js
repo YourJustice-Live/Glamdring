@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
+import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useLaw from 'hooks/useLaw';
@@ -109,19 +110,9 @@ function CaseAdmin({ caseObject, sx }) {
   }, []);
 
   return (
-    <Stack direction="row" spacing={1} sx={{ ...sx }}>
+    <Stack direction="row" spacing={1} alignItems="center" sx={{ ...sx }}>
       <Typography variant="body2">Admin: </Typography>
-      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-        {adminAccount ? (
-          <NextLink href={`/profile/${adminAccount}`} passHref>
-            <Link underline="none" target="_blank">
-              {formatAddress(adminAccount)}
-            </Link>
-          </NextLink>
-        ) : (
-          'Loading...'
-        )}
-      </Typography>
+      <ProfileCompactCard account={adminAccount} />
     </Stack>
   );
 }
@@ -203,9 +194,7 @@ function CasePosts({ caseObject }) {
               {/* Post author */}
               <Stack direction="row" spacing={1}>
                 <Typography variant="body2">Author:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  {formatAddress(post.author)}
-                </Typography>
+                <ProfileCompactCard account={post.author} />
               </Stack>
               {/* Post author role */}
               <Stack direction="row" spacing={1}>
@@ -304,22 +293,22 @@ function CasePosts({ caseObject }) {
 function CaseParticipants({ caseObject }) {
   function getRoleString(roleId) {
     if (roleId === CASE_ROLE.admin.id) {
-      return 'Admin';
+      return capitalize(CASE_ROLE.admin.name);
     }
     if (roleId === CASE_ROLE.subject.id) {
-      return 'Subject';
+      return capitalize(CASE_ROLE.subject.name);
     }
     if (roleId === CASE_ROLE.plaintiff.id) {
-      return 'Plaintiff';
+      return capitalize(CASE_ROLE.plaintiff.name);
     }
     if (roleId === CASE_ROLE.judge.id) {
-      return 'Judge';
+      return capitalize(CASE_ROLE.judge.name);
     }
     if (roleId === CASE_ROLE.witness.id) {
-      return 'Witness';
+      return capitalize(CASE_ROLE.witness.name);
     }
     if (roleId === CASE_ROLE.affected.id) {
-      return 'Affected';
+      return capitalize(CASE_ROLE.affected.name);
     }
     return 'Unkown Role';
   }
@@ -332,18 +321,11 @@ function CaseParticipants({ caseObject }) {
             {getRoleString(role.roleId)}
           </Typography>
           {role.accounts.map((account, accountIndex) => (
-            <Typography
+            <ProfileCompactCard
               key={accountIndex}
-              variant="body2"
-              sx={{ fontWeight: 'bold' }}
-              gutterBottom
-            >
-              <NextLink href={`/profile/${account}`} passHref>
-                <Link underline="none" target="_blank">
-                  {formatAddress(account)}
-                </Link>
-              </NextLink>
-            </Typography>
+              account={account}
+              sx={{ mb: 1 }}
+            />
           ))}
         </Box>
       ))}
@@ -369,9 +351,7 @@ function CaseVerdict({ caseObject }) {
         <Paper sx={{ p: 2 }}>
           <Stack direction="row" spacing={1}>
             <Typography variant="body2">Judge:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {formatAddress(caseObject.verdictAuthor)}
-            </Typography>
+            <ProfileCompactCard account={caseObject.verdictAuthor} />
           </Stack>
           <Stack direction="row" spacing={1}>
             <Typography variant="body2">Message:</Typography>
