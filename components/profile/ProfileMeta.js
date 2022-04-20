@@ -1,7 +1,7 @@
 import {
   AddBoxOutlined,
   IndeterminateCheckBoxOutlined,
-  InsertPhotoOutlined,
+  PersonOutlined,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -63,7 +63,7 @@ export default function ProfileMeta({ account }) {
             sx={{ width: 128, height: 128, my: 3 }}
             src={profileMetadata.image}
           >
-            <InsertPhotoOutlined />
+            <PersonOutlined />
           </Avatar>
           {/* Traits */}
           <Typography gutterBottom>

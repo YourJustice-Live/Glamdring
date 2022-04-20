@@ -1,12 +1,11 @@
 import {
   Autocomplete,
-  Avatar,
   Box,
   Divider,
-  Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { throttle, unionWith } from 'lodash';
@@ -116,16 +115,11 @@ export default function CaseProfileSelect(props) {
       renderOption={(props, option) => {
         return (
           <li {...props}>
-            <Stack direction="row" spacing={2} sx={{ my: 1 }}>
-              <Avatar src={option.avatarNftUriImage} />
-              <Stack>
-                <Typography>
-                  {option.avatarNftUriFirstName || 'None'}{' '}
-                  {option.avatarNftUriLastName || 'None'}
-                </Typography>
-                <Typography variant="body2">{option.account}</Typography>
-              </Stack>
-            </Stack>
+            <ProfileCompactCard
+              profile={option}
+              disableLink={true}
+              sx={{ my: 0.6 }}
+            />
           </li>
         );
       }}
