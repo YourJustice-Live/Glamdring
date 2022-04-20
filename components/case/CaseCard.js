@@ -28,6 +28,22 @@ import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
+  const { getRulesByIds } = useRule();
+  const { getLawsByRules } = useLaw();
+  const [caseLaws, setCaseLaws] = useState(null);
+
+  async function loadData() {
+    const ruleIds = caseObject.rules.map((rule) => rule.id);
+    const rules = await getRulesByIds(ruleIds);
+    const laws = await getLawsByRules(rules);
+    setCaseLaws(laws);
+  }
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseObject]);
+
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 4 }}>
@@ -41,7 +57,7 @@ export default function CaseCard({ caseObject }) {
             Case Laws
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CaseLaws caseObject={caseObject} />
+          <CaseLaws caseLaws={caseLaws} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
@@ -62,7 +78,7 @@ export default function CaseCard({ caseObject }) {
             Case Verdict
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CaseVerdict caseObject={caseObject} />
+          <CaseVerdict caseObject={caseObject} caseLaws={caseLaws} />
         </Box>
       </CardContent>
     </Card>
@@ -149,24 +165,8 @@ function CaseCreatedDate({ caseObject, sx }) {
   );
 }
 
-function CaseLaws({ caseObject }) {
-  const { getRulesByIds } = useRule();
-  const { getLawsByRules } = useLaw();
-  const [laws, setLaws] = useState(null);
-
-  async function loadData() {
-    const ruleIds = caseObject.rules.map((rule) => rule.id);
-    const rules = await getRulesByIds(ruleIds);
-    const laws = await getLawsByRules(rules);
-    setLaws(laws);
-  }
-
-  useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return <LawList laws={laws} />;
+function CaseLaws({ caseLaws }) {
+  return <LawList laws={caseLaws} />;
 }
 
 function CasePosts({ caseObject }) {
@@ -336,7 +336,7 @@ function CaseParticipants({ caseObject }) {
   );
 }
 
-function CaseVerdict({ caseObject }) {
+function CaseVerdict({ caseObject, caseLaws }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -384,6 +384,7 @@ function CaseVerdict({ caseObject }) {
               showDialog(
                 <CaseVerdictMakeDialog
                   caseObject={caseObject}
+                  caseLaws={caseLaws}
                   onClose={closeDialog}
                 />,
               )

@@ -5,26 +5,31 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Stack,
+  Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import VerdictMetadata from 'classes/metadata/VerdictMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * A component with dialog for make case verdict.
  */
 export default function CaseVerdictMakeDialog({
   caseObject,
+  caseLaws,
   isClose,
   onClose,
 }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
   const { setStageClosed } = useCaseContract();
+  const [ruleIds, setRuleids] = useState([]);
+  const [ruleNames, setRuleNames] = useState([]);
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -33,10 +38,27 @@ export default function CaseVerdictMakeDialog({
     type: 'object',
     required: ['message'],
     properties: {
+      confirmedRules: {
+        type: 'array',
+        title: ' ',
+        items: {
+          type: 'string',
+          enum: ruleIds,
+          enumNames: ruleNames,
+        },
+        uniqueItems: true,
+        default: [],
+      },
       message: {
         type: 'string',
         title: 'Message',
       },
+    },
+  };
+
+  const uiSchema = {
+    confirmedRules: {
+      'ui:widget': 'checkboxes',
     },
   };
 
@@ -51,10 +73,20 @@ export default function CaseVerdictMakeDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
+      // Upload verdict metadata to ipfs
       const { url: verdictMetadataUri } = await uploadJsonToIPFS(
         new VerdictMetadata(formData.message),
       );
-      await setStageClosed(caseObject.id, verdictMetadataUri);
+      // Create verdict using confirmed rules
+      const verdict = [];
+      ruleIds.forEach((ruleId) => {
+        verdict.push({
+          ruleId: ruleId,
+          decision: formData.confirmedRules.includes(ruleId),
+        });
+      });
+      // Use contract
+      await setStageClosed(caseObject.id, verdict, verdictMetadataUri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -62,6 +94,25 @@ export default function CaseVerdictMakeDialog({
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (caseLaws) {
+      // Get rule ids and rule names for form from case laws
+      const caseLawValues = Array.from(caseLaws.values());
+      const caseLawRules = caseLawValues.reduce(
+        (caseRules, caseLaw) => [...caseRules, ...caseLaw.rules],
+        [],
+      );
+      setRuleids(caseLawRules.map((lawRule) => lawRule.rule.id));
+      setRuleNames(
+        caseLawRules.map(
+          (lawRule) =>
+            `${lawRule.ruleUriData.name} / ${lawRule.ruleUriData.description}`,
+        ),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseLaws]);
 
   return (
     <Dialog
@@ -72,8 +123,13 @@ export default function CaseVerdictMakeDialog({
     >
       <DialogTitle>Make Verdict</DialogTitle>
       <DialogContent>
+        <Typography>
+          Select the rules you confirm and write a message for your verdict.
+        </Typography>
+        <Divider sx={{ my: 1.5 }} />
         <Form
           schema={schema}
+          uiSchema={uiSchema}
           formData={formData}
           onSubmit={submit}
           disabled={isLoading}
