@@ -192,7 +192,7 @@ function CasePosts({ caseObject }) {
           {caseObject.posts.map((post, index) => (
             <Paper key={index} sx={{ p: 2, overflowX: 'scroll' }}>
               {/* Post author */}
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} alignItems="center">
                 <Typography variant="body2">Author:</Typography>
                 <ProfileCompactCard account={post.author} />
               </Stack>
@@ -237,11 +237,14 @@ function CasePosts({ caseObject }) {
               )}
               {/* Comment post */}
               {post.uriType === 'comment' && (
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} alignItems="center">
                   <Typography variant="body2">Message:</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
-                  </Typography>
+                  <Paper variant="outlined" sx={{ py: 1, px: 2 }}>
+                    <Typography variant="body2">
+                      {hexStringToJson(post.uriData)?.commentMessage ||
+                        'Unknown'}
+                    </Typography>
+                  </Paper>
                 </Stack>
               )}
               {/* Uri */}
@@ -349,7 +352,7 @@ function CaseVerdict({ caseObject }) {
       {/* Verdict */}
       {caseObject.stage === CASE_STAGE.closed.id && (
         <Paper sx={{ p: 2 }}>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2">Judge:</Typography>
             <ProfileCompactCard account={caseObject.verdictAuthor} />
           </Stack>
