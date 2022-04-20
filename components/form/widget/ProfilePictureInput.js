@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InsertPhotoOutlined } from '@mui/icons-material';
+import { PersonOutlined } from '@mui/icons-material';
 import {
   Avatar,
   CircularProgress,
@@ -80,7 +80,7 @@ export default function ProfilePictureInput(props) {
           }}
           src={!isLoading ? propsPicture : null}
         >
-          {isLoading ? <CircularProgress /> : <InsertPhotoOutlined />}
+          {isLoading ? <CircularProgress /> : <PersonOutlined />}
         </Avatar>
         <Input
           onChange={onChange}

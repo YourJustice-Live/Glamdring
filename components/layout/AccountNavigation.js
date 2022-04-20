@@ -1,4 +1,4 @@
-import { InsertPhotoOutlined } from '@mui/icons-material';
+import { PersonOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Button,
@@ -64,7 +64,7 @@ function AccountNavigation() {
         sx={{ width: 82, height: 82, my: 1.5 }}
         src={accountProfile?.avatarNftUriImage}
       >
-        <InsertPhotoOutlined />
+        <PersonOutlined />
       </Avatar>
       <Typography gutterBottom>
         <b>Account:</b> {formatAddress(account) || 'none'}

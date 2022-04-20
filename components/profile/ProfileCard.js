@@ -1,7 +1,7 @@
 import {
   AddBoxOutlined,
   IndeterminateCheckBoxOutlined,
-  InsertPhotoOutlined,
+  PersonOutlined,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -44,7 +44,7 @@ export default function ProfileCard({ profile }) {
                 sx={{ width: 82, height: 82, borderRadius: '16px' }}
                 src={profile.avatarNftUriImage}
               >
-                <InsertPhotoOutlined />
+                <PersonOutlined />
               </Avatar>
             </Box>
             {/* Details */}
