@@ -21,6 +21,7 @@ import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
+import CaseCancelDialog from './CaseCancelDialog';
 import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 
@@ -28,6 +29,22 @@ import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
+  const { getRulesByIds } = useRule();
+  const { getLawsByRules } = useLaw();
+  const [caseLaws, setCaseLaws] = useState(null);
+
+  async function loadData() {
+    const ruleIds = caseObject.rules.map((rule) => rule.id);
+    const rules = await getRulesByIds(ruleIds);
+    const laws = await getLawsByRules(rules);
+    setCaseLaws(laws);
+  }
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseObject]);
+
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 4 }}>
@@ -36,34 +53,14 @@ export default function CaseCard({ caseObject }) {
         <CaseAdmin caseObject={caseObject} sx={{ mt: 0.5 }} />
         <CaseStage caseObject={caseObject} sx={{ mt: 0.5 }} />
         <CaseCreatedDate caseObject={caseObject} sx={{ mt: 0.5 }} />
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Case Laws
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseLaws caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Case Participants
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseParticipants caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Case Posts
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CasePosts caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6, mb: 3 }}>
-          <Typography variant="h3" gutterBottom>
-            Case Verdict
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseVerdict caseObject={caseObject} />
-        </Box>
+        <CaseLaws caseLaws={caseLaws} sx={{ mt: 6 }} />
+        <CaseParticipants caseObject={caseObject} sx={{ mt: 6 }} />
+        <CasePosts caseObject={caseObject} sx={{ mt: 6 }} />
+        <CaseVerdictCancellation
+          caseObject={caseObject}
+          caseLaws={caseLaws}
+          sx={{ mt: 6, mb: 3 }}
+        />
       </CardContent>
     </Card>
   );
@@ -149,27 +146,19 @@ function CaseCreatedDate({ caseObject, sx }) {
   );
 }
 
-function CaseLaws({ caseObject }) {
-  const { getRulesByIds } = useRule();
-  const { getLawsByRules } = useLaw();
-  const [laws, setLaws] = useState(null);
-
-  async function loadData() {
-    const ruleIds = caseObject.rules.map((rule) => rule.id);
-    const rules = await getRulesByIds(ruleIds);
-    const laws = await getLawsByRules(rules);
-    setLaws(laws);
-  }
-
-  useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return <LawList laws={laws} />;
+function CaseLaws({ caseLaws, sx }) {
+  return (
+    <Box sx={{ ...sx }}>
+      <Typography variant="h3" gutterBottom>
+        Case Laws
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+      <LawList laws={caseLaws} />
+    </Box>
+  );
 }
 
-function CasePosts({ caseObject }) {
+function CasePosts({ caseObject, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -184,116 +173,122 @@ function CasePosts({ caseObject }) {
   }
 
   return (
-    <Stack spacing={2}>
-      {/* Post list */}
-      {caseObject.posts.length == 0 && <Typography>None</Typography>}
-      {caseObject.posts.length > 0 && (
-        <>
-          {caseObject.posts.map((post, index) => (
-            <Paper key={index} sx={{ p: 2, overflowX: 'scroll' }}>
-              {/* Post author */}
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">Author:</Typography>
-                <ProfileCompactCard account={post.author} />
-              </Stack>
-              {/* Post author role */}
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Author Role:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  {capitalize(post.entityRole)}
-                </Typography>
-              </Stack>
-              {/* Post created date */}
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Created Date:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  {new Date(post.createdDate * 1000).toLocaleString()}
-                </Typography>
-              </Stack>
-              {/* Post type */}
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Type:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  {capitalize(post.uriType || 'Unknown')}
-                </Typography>
-              </Stack>
-              {/* Evidence post */}
-              {post.uriType === 'evidence' && (
-                <Stack direction="row" spacing={1}>
-                  <Typography variant="body2">Evidence:</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    <Link
-                      href={
-                        hexStringToJson(post.uriData)?.evidenceFileUri || '#'
-                      }
-                      underline="none"
-                      target="_blank"
-                    >
-                      {hexStringToJson(post.uriData)?.evidenceTitle ||
-                        'Unknown'}
-                    </Link>
-                  </Typography>
-                </Stack>
-              )}
-              {/* Comment post */}
-              {post.uriType === 'comment' && (
+    <Box sx={{ ...sx }}>
+      <Typography variant="h3" gutterBottom>
+        Case Posts
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={2}>
+        {/* Post list */}
+        {caseObject.posts.length == 0 && <Typography>None</Typography>}
+        {caseObject.posts.length > 0 && (
+          <>
+            {caseObject.posts.map((post, index) => (
+              <Paper key={index} sx={{ p: 2, overflowX: 'scroll' }}>
+                {/* Post author */}
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography variant="body2">Message:</Typography>
-                  <Paper variant="outlined" sx={{ py: 1, px: 2 }}>
-                    <Typography variant="body2">
-                      {hexStringToJson(post.uriData)?.commentMessage ||
-                        'Unknown'}
-                    </Typography>
-                  </Paper>
+                  <Typography variant="body2">Author:</Typography>
+                  <ProfileCompactCard account={post.author} />
                 </Stack>
-              )}
-              {/* Uri */}
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Uri:</Typography>
-                {post.uri ? (
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: 'bold', maxWidth: '240px' }}
-                  >
-                    <Link href={post.uri} underline="none" target="_blank">
-                      {post.uri}
-                    </Link>
+                {/* Post author role */}
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Author Role:</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {capitalize(post.entityRole)}
                   </Typography>
-                ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: 'bold', color: 'danger.main' }}
-                  >
-                    Not available
+                </Stack>
+                {/* Post created date */}
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Created Date:</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {new Date(post.createdDate * 1000).toLocaleString()}
                   </Typography>
+                </Stack>
+                {/* Post type */}
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Type:</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {capitalize(post.uriType || 'Unknown')}
+                  </Typography>
+                </Stack>
+                {/* Evidence post */}
+                {post.uriType === 'evidence' && (
+                  <Stack direction="row" spacing={1}>
+                    <Typography variant="body2">Evidence:</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      <Link
+                        href={
+                          hexStringToJson(post.uriData)?.evidenceFileUri || '#'
+                        }
+                        underline="none"
+                        target="_blank"
+                      >
+                        {hexStringToJson(post.uriData)?.evidenceTitle ||
+                          'Unknown'}
+                      </Link>
+                    </Typography>
+                  </Stack>
                 )}
-              </Stack>
-            </Paper>
-          ))}
-        </>
-      )}
-      {/* Add comment post form */}
-      {caseObject.stage === CASE_STAGE.open.id &&
-        isAccountHasRole(account, caseObject) && (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              showDialog(
-                <CaseCommentPostAddDialog
-                  caseObject={caseObject}
-                  onClose={closeDialog}
-                />,
-              )
-            }
-          >
-            Add Comment Post
-          </Button>
+                {/* Comment post */}
+                {post.uriType === 'comment' && (
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography variant="body2">Message:</Typography>
+                    <Paper variant="outlined" sx={{ py: 1, px: 2 }}>
+                      <Typography variant="body2">
+                        {hexStringToJson(post.uriData)?.commentMessage ||
+                          'Unknown'}
+                      </Typography>
+                    </Paper>
+                  </Stack>
+                )}
+                {/* Uri */}
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body2">Uri:</Typography>
+                  {post.uri ? (
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 'bold', maxWidth: '240px' }}
+                    >
+                      <Link href={post.uri} underline="none" target="_blank">
+                        {post.uri}
+                      </Link>
+                    </Typography>
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 'bold', color: 'danger.main' }}
+                    >
+                      Not available
+                    </Typography>
+                  )}
+                </Stack>
+              </Paper>
+            ))}
+          </>
         )}
-    </Stack>
+        {/* Add comment post form */}
+        {caseObject.stage === CASE_STAGE.open.id &&
+          isAccountHasRole(account, caseObject) && (
+            <Button
+              variant="outlined"
+              onClick={() =>
+                showDialog(
+                  <CaseCommentPostAddDialog
+                    caseObject={caseObject}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            >
+              Add Comment Post
+            </Button>
+          )}
+      </Stack>
+    </Box>
   );
 }
 
-function CaseParticipants({ caseObject }) {
+function CaseParticipants({ caseObject, sx }) {
   function getRoleString(roleId) {
     if (roleId === CASE_ROLE.admin.id) {
       return capitalize(CASE_ROLE.admin.name);
@@ -317,26 +312,32 @@ function CaseParticipants({ caseObject }) {
   }
 
   return (
-    <Stack spacing={2}>
-      {caseObject.roles.map((role, roleIndex) => (
-        <Box key={roleIndex}>
-          <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-            {getRoleString(role.roleId)}
-          </Typography>
-          {role.accounts.map((account, accountIndex) => (
-            <ProfileCompactCard
-              key={accountIndex}
-              account={account}
-              sx={{ mb: 1 }}
-            />
-          ))}
-        </Box>
-      ))}
-    </Stack>
+    <Box sx={{ ...sx }}>
+      <Typography variant="h3" gutterBottom>
+        Case Participants
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={2}>
+        {caseObject.roles.map((role, roleIndex) => (
+          <Box key={roleIndex}>
+            <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+              {getRoleString(role.roleId)}
+            </Typography>
+            {role.accounts.map((account, accountIndex) => (
+              <ProfileCompactCard
+                key={accountIndex}
+                account={account}
+                sx={{ mb: 1 }}
+              />
+            ))}
+          </Box>
+        ))}
+      </Stack>
+    </Box>
   );
 }
 
-function CaseVerdict({ caseObject }) {
+function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -348,50 +349,101 @@ function CaseVerdict({ caseObject }) {
   }
 
   return (
-    <Stack spacing={2}>
-      {/* Verdict */}
-      {caseObject.stage === CASE_STAGE.closed.id && (
-        <Paper sx={{ p: 2 }}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="body2">Judge:</Typography>
-            <ProfileCompactCard account={caseObject.verdictAuthor} />
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="body2">Message:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {hexStringToJson(caseObject.verdictUriData)?.verdictMessage ||
-                'Unknown'}
-            </Typography>
-          </Stack>
-        </Paper>
-      )}
-      {caseObject.stage === CASE_STAGE.verdict.id && (
-        <Typography>The judge&apos;s verdict is awaited.</Typography>
-      )}
-      {caseObject.stage !== CASE_STAGE.closed.id &&
-        caseObject.stage !== CASE_STAGE.verdict.id && (
+    <Box sx={{ ...sx }}>
+      <Typography variant="h3" gutterBottom>
+        Case Verdict or Cancellation
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={2}>
+        {/* Case in process */}
+        {caseObject.stage < CASE_STAGE.verdict.id && (
           <Typography>
             The verdict can be made by the judge when the case has a
             &quot;Verdict&quot; stage.
           </Typography>
         )}
-      {/* Add verdict form */}
-      {caseObject.stage === CASE_STAGE.verdict.id &&
-        isAccountCaseJudge(account, caseObject) && (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              showDialog(
-                <CaseVerdictMakeDialog
-                  caseObject={caseObject}
-                  onClose={closeDialog}
-                />,
-              )
-            }
-          >
-            Make Verdict
-          </Button>
+        {/* Wait verdict */}
+        {caseObject.stage === CASE_STAGE.verdict.id && (
+          <Typography>The judge&apos;s verdict is awaited.</Typography>
         )}
-    </Stack>
+        {/* Verdict */}
+        {caseObject.stage === CASE_STAGE.closed.id && (
+          <Paper sx={{ p: 2 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Type:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                Verdict
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Judge:</Typography>
+              <ProfileCompactCard account={caseObject.verdictAuthor} />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body2">Message:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {hexStringToJson(caseObject.verdictUriData)?.verdictMessage ||
+                  'Unknown'}
+              </Typography>
+            </Stack>
+          </Paper>
+        )}
+        {/* Cancellation */}
+        {caseObject.stage === CASE_STAGE.cancelled.id && (
+          <Paper sx={{ p: 2 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Type:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                Cancellation
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Judge:</Typography>
+              <ProfileCompactCard account={caseObject.cancellationAuthor} />
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body2">Message:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {hexStringToJson(caseObject.cancellationUriData)
+                  ?.cancellationMessage || 'Unknown'}
+              </Typography>
+            </Stack>
+          </Paper>
+        )}
+        {/* Forms to add verdict or cancel case */}
+        {caseObject.stage === CASE_STAGE.verdict.id &&
+          isAccountCaseJudge(account, caseObject) && (
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  showDialog(
+                    <CaseVerdictMakeDialog
+                      caseObject={caseObject}
+                      caseLaws={caseLaws}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Make Verdict
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  showDialog(
+                    <CaseCancelDialog
+                      caseObject={caseObject}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Cancel Case
+              </Button>
+            </Stack>
+          )}
+      </Stack>
+    </Box>
   );
 }

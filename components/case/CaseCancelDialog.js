@@ -10,26 +10,19 @@ import {
   Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import VerdictMetadata from 'classes/metadata/VerdictMetadata';
+import CancellationMetadata from 'classes/metadata/CancellationMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 /**
- * A component with dialog for make case verdict.
+ * A component with dialog for cancel case.
  */
-export default function CaseVerdictMakeDialog({
-  caseObject,
-  caseLaws,
-  isClose,
-  onClose,
-}) {
+export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
-  const { setStageClosed } = useCaseContract();
-  const [ruleIds, setRuleids] = useState([]);
-  const [ruleNames, setRuleNames] = useState([]);
+  const { setStageCancelled } = useCaseContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -38,27 +31,10 @@ export default function CaseVerdictMakeDialog({
     type: 'object',
     required: ['message'],
     properties: {
-      confirmedRules: {
-        type: 'array',
-        title: ' ',
-        items: {
-          type: 'string',
-          enum: ruleIds,
-          enumNames: ruleNames,
-        },
-        uniqueItems: true,
-        default: [],
-      },
       message: {
         type: 'string',
         title: 'Message',
       },
-    },
-  };
-
-  const uiSchema = {
-    confirmedRules: {
-      'ui:widget': 'checkboxes',
     },
   };
 
@@ -73,20 +49,10 @@ export default function CaseVerdictMakeDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      // Upload verdict metadata to ipfs
-      const { url: verdictMetadataUri } = await uploadJsonToIPFS(
-        new VerdictMetadata(formData.message),
+      const { url: cancellationMetadataUri } = await uploadJsonToIPFS(
+        new CancellationMetadata(formData.message),
       );
-      // Create verdict using confirmed rules
-      const verdict = [];
-      ruleIds.forEach((ruleId) => {
-        verdict.push({
-          ruleId: ruleId,
-          decision: formData.confirmedRules.includes(ruleId),
-        });
-      });
-      // Use contract
-      await setStageClosed(caseObject.id, verdict, verdictMetadataUri);
+      await setStageCancelled(caseObject.id, cancellationMetadataUri);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -95,25 +61,6 @@ export default function CaseVerdictMakeDialog({
     }
   }
 
-  useEffect(() => {
-    if (caseLaws) {
-      // Get rule ids and rule names for form from case laws
-      const caseLawValues = Array.from(caseLaws.values());
-      const caseLawRules = caseLawValues.reduce(
-        (caseRules, caseLaw) => [...caseRules, ...caseLaw.rules],
-        [],
-      );
-      setRuleids(caseLawRules.map((lawRule) => lawRule.rule.id));
-      setRuleNames(
-        caseLawRules.map(
-          (lawRule) =>
-            `${lawRule.ruleUriData.name} / ${lawRule.ruleUriData.description}`,
-        ),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caseLaws]);
-
   return (
     <Dialog
       open={isOpen}
@@ -121,15 +68,14 @@ export default function CaseVerdictMakeDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>Make Verdict</DialogTitle>
+      <DialogTitle>Cancel Case</DialogTitle>
       <DialogContent>
         <Typography>
-          Select the rules you confirm and write a message for your verdict.
+          Describe the reason why you want to cancel the case.
         </Typography>
         <Divider sx={{ my: 1.5 }} />
         <Form
           schema={schema}
-          uiSchema={uiSchema}
           formData={formData}
           onSubmit={submit}
           disabled={isLoading}
@@ -147,7 +93,7 @@ export default function CaseVerdictMakeDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Make Verdict
+                  Cancel Case
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

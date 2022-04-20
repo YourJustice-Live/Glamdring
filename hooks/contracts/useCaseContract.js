@@ -94,9 +94,11 @@ export default function useCaseContract() {
    * Change a case stage to close stage.
    *
    * @param {string} contractAddress Case contract address.
+   * @param {Array.<{ruleId: string, decision: boolean}>} verdict Verdict.
+   * @param {string} verdictUri Uri with verdict metadata.
    * @returns Transaction.
    */
-  async function setStageClosed(contractAddress, verdictUri) {
+  async function setStageClosed(contractAddress, verdict, verdictUri) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
@@ -105,7 +107,26 @@ export default function useCaseContract() {
     return await getContract(
       contractAddress,
       provider?.getSigner(),
-    ).stageVerdict(verdictUri);
+    ).stageVerdict(verdict, verdictUri);
+  }
+
+  /**
+   * Change a case stage to cancelled stage.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @param {string} cancellationUri Uri with cancellation metadata.
+   * @returns Transaction.
+   */
+  async function setStageCancelled(contractAddress, cancellationUri) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).stageCancel(cancellationUri);
   }
 
   return {
@@ -114,5 +135,6 @@ export default function useCaseContract() {
     setStageOpen,
     setStageVerdict,
     setStageClosed,
+    setStageCancelled,
   };
 }
