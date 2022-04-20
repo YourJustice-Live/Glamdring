@@ -35,6 +35,10 @@ export const CASE_STAGE = {
     id: 6,
     name: 'closed',
   },
+  cancelled: {
+    id: 7,
+    name: 'cancelled',
+  },
 };
 
 export const CASE_ROLE = {

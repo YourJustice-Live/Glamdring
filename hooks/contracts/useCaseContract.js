@@ -110,11 +110,31 @@ export default function useCaseContract() {
     ).stageVerdict(verdict, verdictUri);
   }
 
+  /**
+   * Change a case stage to cancelled stage.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @param {string} cancellationUri Uri with cancellation metadata.
+   * @returns Transaction.
+   */
+  async function setStageCancelled(contractAddress, cancellationUri) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).stageCancel(cancellationUri);
+  }
+
   return {
     assignRole,
     addPost,
     setStageOpen,
     setStageVerdict,
     setStageClosed,
+    setStageCancelled,
   };
 }

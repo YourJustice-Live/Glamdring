@@ -21,6 +21,7 @@ import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
+import CaseCancelDialog from './CaseCancelDialog';
 import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 
@@ -55,7 +56,7 @@ export default function CaseCard({ caseObject }) {
         <CaseLaws caseLaws={caseLaws} sx={{ mt: 6 }} />
         <CaseParticipants caseObject={caseObject} sx={{ mt: 6 }} />
         <CasePosts caseObject={caseObject} sx={{ mt: 6 }} />
-        <CaseVerdict
+        <CaseVerdictCancellation
           caseObject={caseObject}
           caseLaws={caseLaws}
           sx={{ mt: 6, mb: 3 }}
@@ -336,7 +337,7 @@ function CaseParticipants({ caseObject, sx }) {
   );
 }
 
-function CaseVerdict({ caseObject, caseLaws, sx }) {
+function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -350,13 +351,30 @@ function CaseVerdict({ caseObject, caseLaws, sx }) {
   return (
     <Box sx={{ ...sx }}>
       <Typography variant="h3" gutterBottom>
-        Case Verdict
+        Case Verdict or Cancellation
       </Typography>
       <Divider sx={{ mb: 3 }} />
       <Stack spacing={2}>
+        {/* Case in process */}
+        {caseObject.stage < CASE_STAGE.verdict.id && (
+          <Typography>
+            The verdict can be made by the judge when the case has a
+            &quot;Verdict&quot; stage.
+          </Typography>
+        )}
+        {/* Wait verdict */}
+        {caseObject.stage === CASE_STAGE.verdict.id && (
+          <Typography>The judge&apos;s verdict is awaited.</Typography>
+        )}
         {/* Verdict */}
         {caseObject.stage === CASE_STAGE.closed.id && (
           <Paper sx={{ p: 2 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Type:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                Verdict
+              </Typography>
+            </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="body2">Judge:</Typography>
               <ProfileCompactCard account={caseObject.verdictAuthor} />
@@ -370,33 +388,49 @@ function CaseVerdict({ caseObject, caseLaws, sx }) {
             </Stack>
           </Paper>
         )}
-        {caseObject.stage === CASE_STAGE.verdict.id && (
-          <Typography>The judge&apos;s verdict is awaited.</Typography>
+        {/* Cancellation */}
+        {caseObject.stage === CASE_STAGE.cancelled.id && (
+          <Paper sx={{ p: 2 }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="body2">Type:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                Cancellation
+              </Typography>
+            </Stack>
+          </Paper>
         )}
-        {caseObject.stage !== CASE_STAGE.closed.id &&
-          caseObject.stage !== CASE_STAGE.verdict.id && (
-            <Typography>
-              The verdict can be made by the judge when the case has a
-              &quot;Verdict&quot; stage.
-            </Typography>
-          )}
-        {/* Add verdict form */}
+        {/* Forms to add verdict or cancel case */}
         {caseObject.stage === CASE_STAGE.verdict.id &&
           isAccountCaseJudge(account, caseObject) && (
-            <Button
-              variant="outlined"
-              onClick={() =>
-                showDialog(
-                  <CaseVerdictMakeDialog
-                    caseObject={caseObject}
-                    caseLaws={caseLaws}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Make Verdict
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  showDialog(
+                    <CaseVerdictMakeDialog
+                      caseObject={caseObject}
+                      caseLaws={caseLaws}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Make Verdict
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  showDialog(
+                    <CaseCancelDialog
+                      caseObject={caseObject}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Cancel Case
+              </Button>
+            </Stack>
           )}
       </Stack>
     </Box>
