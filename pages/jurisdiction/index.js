@@ -48,19 +48,19 @@ export default function Jurisdiction() {
             </TabList>
           </Box>
           {/* Cases */}
-          <TabPanel value="1">
+          <TabPanel value="1" sx={{ px: 0 }}>
             <JurisdictionCases />
           </TabPanel>
           {/* Officials */}
-          <TabPanel value="2">
+          <TabPanel value="2" sx={{ px: 0 }}>
             <JurisdictionOfficials />
           </TabPanel>
           {/* Members */}
-          <TabPanel value="3">
+          <TabPanel value="3" sx={{ px: 0 }}>
             <JurisdictionMembers />
           </TabPanel>
           {/* Laws */}
-          <TabPanel value="4">
+          <TabPanel value="4" sx={{ px: 0 }}>
             <JurisdictionLaws />
           </TabPanel>
         </TabContext>
