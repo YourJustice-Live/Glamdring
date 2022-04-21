@@ -102,11 +102,13 @@ export default function useSubgraph() {
    * Find the case entities.
    *
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {number} first The number of cases to getting.
+   * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
    */
-  let findCaseEntities = async function (jurisdiction) {
+  let findCaseEntities = async function (jurisdiction, first = 5, skip = 0) {
     const response = await makeSubgraphQuery(
-      getFindCaseEntitiesQuery(jurisdiction),
+      getFindCaseEntitiesQuery(jurisdiction, first, skip),
     );
     return response.caseEntities;
   };
@@ -304,10 +306,12 @@ function getFindActionEntitiesQuery(guids) {
   }`;
 }
 
-function getFindCaseEntitiesQuery(jurisdiction) {
-  let queryParams = `where: {jurisdiction: "${jurisdiction}"}`;
+function getFindCaseEntitiesQuery(jurisdiction, first, skip) {
+  let filterParams = `where: {jurisdiction: "${jurisdiction}"}`;
+  let sortParams = `orderBy: createdDate, orderDirection: desc`;
+  let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
-    caseEntities(${queryParams}) {
+    caseEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
       id
       name
       createdDate

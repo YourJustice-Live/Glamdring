@@ -1,3 +1,4 @@
+import { Box, Pagination } from '@mui/material';
 import CaseList from 'components/case/CaseList';
 import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
@@ -10,25 +11,43 @@ export default function JurisdictionCases() {
   const { showToastError } = useToasts();
   const { getCases } = useCase();
   const [cases, setCases] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const pageSize = 5;
 
-  async function loadCases() {
+  async function loadData() {
     try {
+      // Load cases for current page
+      setCases(null);
       const cases = await getCases(
         process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-      );
-      cases.sort((case1, case2) =>
-        case2.createdDate.localeCompare(case1.createdDate),
+        pageSize,
+        (currentPage - 1) * pageSize,
       );
       setCases(cases);
+      // Add next page to pagination if possible
+      if (currentPage == pageCount && cases.length === pageSize) {
+        setPageCount(pageCount + 1);
+      }
     } catch (error) {
       showToastError(error);
     }
   }
 
   useEffect(() => {
-    loadCases();
+    loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentPage]);
 
-  return <CaseList cases={cases} />;
+  return (
+    <Box>
+      <Pagination
+        color="primary"
+        count={pageCount}
+        page={currentPage}
+        onChange={(_, page) => setCurrentPage(page)}
+      />
+      <CaseList cases={cases} sx={{ mt: 4 }} />
+    </Box>
+  );
 }
