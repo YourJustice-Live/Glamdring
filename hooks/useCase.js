@@ -27,6 +27,7 @@ export default function useCase() {
           caseEntity.verdictAuthor,
           caseEntity.verdictUri,
           caseEntity.verdictUriData,
+          caseEntity.verdictConfirmedRules,
           caseEntity.cancellationAuthor,
           caseEntity.cancellationUri,
           caseEntity.cancellationUriData,

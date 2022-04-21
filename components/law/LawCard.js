@@ -2,6 +2,7 @@ import {
   Avatar,
   Card,
   CardContent,
+  Chip,
   Paper,
   Stack,
   Typography,
@@ -31,10 +32,15 @@ export default function LawCard({ law }) {
         <Stack direction="column" spacing={1} sx={{ mt: 3 }}>
           {law.rules.map((lawRule, index) => (
             <Paper key={index} variant="outlined" sx={{ p: 3 }}>
-              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                {lawRule.ruleUriData.name}
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  {lawRule.ruleUriData.name}
+                </Typography>
+                <Chip label={`ID: ${lawRule.rule.id}`} size="small" />
+              </Stack>
+              <Typography sx={{ mt: 1 }}>
+                {lawRule.ruleUriData.description}
               </Typography>
-              <Typography>{lawRule.ruleUriData.description}</Typography>
               <Box sx={{ mt: 2 }}>
                 <RuleEffects rule={lawRule.rule} />
               </Box>

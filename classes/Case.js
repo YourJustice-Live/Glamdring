@@ -11,6 +11,7 @@ export default class Case {
     verdictAuthor,
     verdictUri,
     verdictUriData,
+    verdictConfirmedRules,
     cancellationAuthor,
     cancellationUri,
     cancellationUriData,
@@ -26,6 +27,7 @@ export default class Case {
     this.verdictAuthor = verdictAuthor;
     this.verdictUri = verdictUri;
     this.verdictUriData = verdictUriData;
+    this.verdictConfirmedRules = verdictConfirmedRules;
     this.cancellationAuthor = cancellationAuthor;
     this.cancellationUri = cancellationUri;
     this.cancellationUriData = cancellationUriData;
