@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Link,
   Paper,
@@ -385,6 +386,26 @@ function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
                 {hexStringToJson(caseObject.verdictUriData)?.verdictMessage ||
                   'Unknown'}
               </Typography>
+            </Stack>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography variant="body2">Confirmed Rules:</Typography>
+              {caseObject.verdictConfirmedRules.length > 0 ? (
+                <>
+                  {caseObject.verdictConfirmedRules.map(
+                    (confirmedRule, index) => (
+                      <Chip
+                        key={index}
+                        label={`ID: ${confirmedRule.id}`}
+                        size="small"
+                      />
+                    ),
+                  )}
+                </>
+              ) : (
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  None
+                </Typography>
+              )}
             </Stack>
           </Paper>
         )}

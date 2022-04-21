@@ -316,6 +316,9 @@ function getFindCaseEntitiesQuery(jurisdiction) {
       verdictAuthor
       verdictUri
       verdictUriData
+      verdictConfirmedRules {
+        id
+      }
       cancellationAuthor
       cancellationUri
       cancellationUriData
