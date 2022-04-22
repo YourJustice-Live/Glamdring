@@ -11,6 +11,7 @@ export default function useCase() {
    * Get cases.
    *
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {number} stage Case stage.
    * @param {string} participantAccount Account that must be a participant in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
@@ -18,12 +19,14 @@ export default function useCase() {
    */
   let getCases = async function (
     jurisdiction,
+    stage,
     participantAccount,
     first,
     skip,
   ) {
     const caseEntities = await findCaseEntities(
       jurisdiction,
+      stage,
       participantAccount,
       first,
       skip,

@@ -1,5 +1,6 @@
 import { Box, Pagination } from '@mui/material';
 import CaseList from 'components/case/CaseList';
+import CaseStageSelect from 'components/form/widget/CaseStageSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
@@ -14,7 +15,9 @@ export default function JurisdictionCases() {
   const [cases, setCases] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCount, setCurrentPageCount] = useState(1);
-  const [participantAccount, setParticipantAccount] = useState(null);
+  const [selectedStage, setSelectedStage] = useState(null);
+  const [selectedParticipantAccount, setSelectedParticipantAccount] =
+    useState(null);
   const pageSize = 5;
 
   async function loadData(page = currentPage, pageCount = currentPageCount) {
@@ -26,7 +29,8 @@ export default function JurisdictionCases() {
       // Load cases for page
       const cases = await getCases(
         process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        participantAccount,
+        selectedStage,
+        selectedParticipantAccount,
         pageSize,
         (page - 1) * pageSize,
       );
@@ -43,7 +47,7 @@ export default function JurisdictionCases() {
   useEffect(() => {
     loadData(1, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [participantAccount]);
+  }, [selectedParticipantAccount, selectedStage]);
 
   return (
     <Box>
@@ -57,8 +61,15 @@ export default function JurisdictionCases() {
       >
         <ProfileSelect
           size="small"
-          sx={{ flexGrow: 1 }}
-          onChange={(account) => setParticipantAccount(account)}
+          sx={{ flexGrow: 4 }}
+          onChange={(account) => setSelectedParticipantAccount(account)}
+        />
+        <CaseStageSelect
+          size="small"
+          sx={{ flexGrow: 1, ml: 1 }}
+          onChange={(stage) =>
+            stage !== '' ? setSelectedStage(stage) : setSelectedStage(null)
+          }
         />
         <Pagination
           color="primary"

@@ -102,6 +102,7 @@ export default function useSubgraph() {
    * Find the case entities.
    *
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {number} stage Case stage.
    * @param {string} participantAccount Account that must be a participant in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
@@ -109,12 +110,19 @@ export default function useSubgraph() {
    */
   let findCaseEntities = async function (
     jurisdiction,
+    stage,
     participantAccount,
     first = 5,
     skip = 0,
   ) {
     const response = await makeSubgraphQuery(
-      getFindCaseEntitiesQuery(jurisdiction, participantAccount, first, skip),
+      getFindCaseEntitiesQuery(
+        jurisdiction,
+        stage,
+        participantAccount,
+        first,
+        skip,
+      ),
     );
     return response.caseEntities;
   };
@@ -314,17 +322,19 @@ function getFindActionEntitiesQuery(guids) {
 
 function getFindCaseEntitiesQuery(
   jurisdiction,
+  stage,
   participantAccount,
   first,
   skip,
 ) {
-  let filterParams = '';
-  if (jurisdiction) {
-    filterParams = `where: {jurisdiction: "${jurisdiction}"},`;
-  }
-  if (jurisdiction && participantAccount) {
-    filterParams = `where: {jurisdiction: "${jurisdiction}", participantAccounts_contains: ["${participantAccount}"]}`;
-  }
+  let jurisdictionFilter = jurisdiction
+    ? `jurisdiction: "${jurisdiction}"`
+    : '';
+  let participantAccountFilter = participantAccount
+    ? `participantAccounts_contains: ["${participantAccount}"]`
+    : '';
+  let stageFilter = stage !== null ? `stage: ${stage}` : '';
+  let filterParams = `where: {${jurisdictionFilter}, ${participantAccountFilter}, ${stageFilter}}`;
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
