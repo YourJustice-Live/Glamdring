@@ -54,9 +54,9 @@ export default function JurisdictionCases() {
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: { md: 'space-between' },
+          alignItems: { md: 'center' },
         }}
       >
         <ProfileSelect
@@ -66,13 +66,14 @@ export default function JurisdictionCases() {
         />
         <CaseStageSelect
           size="small"
-          sx={{ flexGrow: 1, ml: 1 }}
+          sx={{ flexGrow: 1, ml: { md: 1 }, mt: { xs: 1, md: 0 } }}
           onChange={(stage) =>
             stage !== '' ? setSelectedStage(stage) : setSelectedStage(null)
           }
         />
         <Pagination
           color="primary"
+          sx={{ mt: { xs: 2, md: 0 } }}
           count={currentPageCount}
           page={currentPage}
           onChange={(_, page) => loadData(page)}
