@@ -11,12 +11,23 @@ export default function useCase() {
    * Get cases.
    *
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {string} participantAccount Account that must be a participant in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<Case>>} A list with cases.
    */
-  let getCases = async function (jurisdiction, first, skip) {
-    const caseEntities = await findCaseEntities(jurisdiction, first, skip);
+  let getCases = async function (
+    jurisdiction,
+    participantAccount,
+    first,
+    skip,
+  ) {
+    const caseEntities = await findCaseEntities(
+      jurisdiction,
+      participantAccount,
+      first,
+      skip,
+    );
     let cases = [];
     for (const caseEntity of caseEntities) {
       try {

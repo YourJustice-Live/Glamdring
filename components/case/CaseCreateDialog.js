@@ -14,10 +14,10 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseNameInput from 'components/form/widget/CaseNameInput';
-import CaseProfileSelect from 'components/form/widget/CaseProfileSelect';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
+import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
@@ -136,13 +136,13 @@ export default function CaseCreateDialog({
       'ui:widget': 'CaseRuleSelect',
     },
     subjectProfileAccount: {
-      'ui:widget': 'CaseProfileSelect',
+      'ui:widget': 'ProfileSelect',
       'ui:options': {
         subLabel: capitalize(formAction?.action?.subject),
       },
     },
     affectedProfileAccount: {
-      'ui:widget': 'CaseProfileSelect',
+      'ui:widget': 'ProfileSelect',
       'ui:options': {
         subLabel: capitalize(formRule?.rule?.affected),
       },
@@ -171,7 +171,7 @@ export default function CaseCreateDialog({
   const widgets = {
     CaseActionSelect: CaseActionSelect,
     CaseRuleSelect: CaseRuleSelect,
-    CaseProfileSelect: CaseProfileSelect,
+    ProfileSelect: ProfileSelect,
     CaseEvidencePostInput: CaseEvidencePostInput,
     CaseWitnessesSelect: CaseWitnessesSelect,
     CaseNameInput: CaseNameInput,

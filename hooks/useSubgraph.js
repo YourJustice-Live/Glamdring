@@ -102,13 +102,19 @@ export default function useSubgraph() {
    * Find the case entities.
    *
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {string} participantAccount Account that must be a participant in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
    */
-  let findCaseEntities = async function (jurisdiction, first = 5, skip = 0) {
+  let findCaseEntities = async function (
+    jurisdiction,
+    participantAccount,
+    first = 5,
+    skip = 0,
+  ) {
     const response = await makeSubgraphQuery(
-      getFindCaseEntitiesQuery(jurisdiction, first, skip),
+      getFindCaseEntitiesQuery(jurisdiction, participantAccount, first, skip),
     );
     return response.caseEntities;
   };
@@ -306,8 +312,19 @@ function getFindActionEntitiesQuery(guids) {
   }`;
 }
 
-function getFindCaseEntitiesQuery(jurisdiction, first, skip) {
-  let filterParams = `where: {jurisdiction: "${jurisdiction}"}`;
+function getFindCaseEntitiesQuery(
+  jurisdiction,
+  participantAccount,
+  first,
+  skip,
+) {
+  let filterParams = '';
+  if (jurisdiction) {
+    filterParams = `where: {jurisdiction: "${jurisdiction}"},`;
+  }
+  if (jurisdiction && participantAccount) {
+    filterParams = `where: {jurisdiction: "${jurisdiction}", participantAccounts_contains: ["${participantAccount}"]}`;
+  }
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{

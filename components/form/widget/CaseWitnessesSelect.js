@@ -1,7 +1,7 @@
 import { Button, Divider, Stack, Typography } from '@mui/material';
 import { IconClose, IconPlus } from 'icons';
 import { useEffect, useState } from 'react';
-import CaseProfileSelect from './CaseProfileSelect';
+import ProfileSelect from './ProfileSelect';
 
 export default function CaseWitnessesSelect(props) {
   const propsLabel = props.label;
@@ -37,7 +37,7 @@ export default function CaseWitnessesSelect(props) {
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       <Stack spacing={2}>
         {witnesses.map((_, index) => (
-          <CaseProfileSelect
+          <ProfileSelect
             key={index}
             disabled={propsDisabled}
             onChange={(profile) => selectWitness(profile, index)}
