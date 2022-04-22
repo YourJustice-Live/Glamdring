@@ -40,7 +40,7 @@ export default function Jurisdiction() {
       <Box sx={{ width: '100%', mt: 12 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <TabList onChange={handleChange}>
               <Tab label="Cases" value="1" />
               <Tab label="Officials" value="2" />
               <Tab label="Citizen" value="3" />

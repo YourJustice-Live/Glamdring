@@ -12,13 +12,15 @@ import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 
 /**
- * A widget to select case profile.
+ * A widget to select profile.
  */
-export default function CaseProfileSelect(props) {
+export default function ProfileSelect(props) {
   const propsLabel = props.label;
   const propsSubLabel = props.options?.subLabel;
-  const propsValue = props.value;
+  const propsSize = props.size;
   const propsDisabled = props.disabled;
+  const propsSx = props.sx;
+  const propsValue = props.value;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
@@ -83,6 +85,7 @@ export default function CaseProfileSelect(props) {
 
   return (
     <Autocomplete
+      sx={{ ...propsSx }}
       disabled={isDisabled || propsDisabled}
       getOptionLabel={(option) =>
         (option.avatarNftUriFirstName || 'None') +
@@ -92,11 +95,11 @@ export default function CaseProfileSelect(props) {
       filterOptions={(x) => x}
       options={options}
       value={value}
-      onChange={(event, newValue) => {
+      onChange={(_, newValue) => {
         setValue(newValue);
         propsOnChange(newValue ? newValue.account : null);
       }}
-      onInputChange={(event, newInputValue) => {
+      onInputChange={(_, newInputValue) => {
         setInputValue(newInputValue);
       }}
       isOptionEqualToValue={(option, value) => option.account === value.account}
@@ -109,7 +112,12 @@ export default function CaseProfileSelect(props) {
               <Divider sx={{ mt: 1.5, mb: 2.5 }} />
             </>
           )}
-          <TextField {...params} label="First name, last name, address" />
+          <TextField
+            fullWidth
+            {...params}
+            size={propsSize}
+            label="First name, last name, address"
+          />
         </Box>
       )}
       renderOption={(props, option) => {
