@@ -16,6 +16,7 @@ export default function ProfileCompactCard({
   profile,
   account,
   disableLink = false,
+  disableRating = false,
   sx,
 }) {
   const { showToastError } = useToasts();
@@ -67,24 +68,30 @@ export default function ProfileCompactCard({
               </Link>
             )}
           </Typography>
-          <Typography
-            sx={{ color: 'success.main', fontWeight: 'bold', ml: 1.5 }}
-          >
-            +
-            {getRating(
-              profile || accountProfile,
-              REPUTATION_DOMAIN_ID.environment,
-              REPUTATION_RATING_ID.positive,
-            )}
-          </Typography>
-          <Typography sx={{ color: 'danger.main', fontWeight: 'bold', ml: 1 }}>
-            -
-            {getRating(
-              profile || accountProfile,
-              REPUTATION_DOMAIN_ID.environment,
-              REPUTATION_RATING_ID.negative,
-            )}
-          </Typography>
+          {!disableRating && (
+            <>
+              <Typography
+                sx={{ color: 'success.main', fontWeight: 'bold', ml: 1.5 }}
+              >
+                +
+                {getRating(
+                  profile || accountProfile,
+                  REPUTATION_DOMAIN_ID.environment,
+                  REPUTATION_RATING_ID.positive,
+                )}
+              </Typography>
+              <Typography
+                sx={{ color: 'danger.main', fontWeight: 'bold', ml: 1 }}
+              >
+                -
+                {getRating(
+                  profile || accountProfile,
+                  REPUTATION_DOMAIN_ID.environment,
+                  REPUTATION_RATING_ID.negative,
+                )}
+              </Typography>
+            </>
+          )}
         </>
       ) : (
         <Skeleton variant="rectangular" width={128} height={22} />

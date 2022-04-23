@@ -76,10 +76,13 @@ function AccountNavigation() {
       {accountProfile && (
         <Stack spacing={1} direction="column">
           <Link href="/profile" passHref>
-            <Button variant="outlined">Open Profile</Button>
+            <Button variant="outlined">Profile</Button>
           </Link>
           <Link href="/profile/manage" passHref>
-            <Button variant="outlined">Edit Profile</Button>
+            <Button variant="outlined">Profile Editor</Button>
+          </Link>
+          <Link href="/events" passHref>
+            <Button variant="outlined">Events</Button>
           </Link>
         </Stack>
       )}
