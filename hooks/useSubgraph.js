@@ -127,6 +127,19 @@ export default function useSubgraph() {
     return response.caseEntities;
   };
 
+  /**
+   * Find the case event entities.
+   *
+   * @param {Array.<string>} caseIds Case ids.
+   * @returns {Promise.<Array.<{object}>>} Array with case event entities.
+   */
+  let findCaseEventEntities = async function (caseIds) {
+    const response = await makeSubgraphQuery(
+      getFindCaseEventEntitiesQuery(caseIds),
+    );
+    return response.caseEventEntities;
+  };
+
   return {
     findAvatarNftEntities,
     findAvatarNftEntitiesBySearchQuery,
@@ -136,6 +149,7 @@ export default function useSubgraph() {
     findJurisdictionRuleEntitiesByActionGuid,
     findActionEntities,
     findCaseEntities,
+    findCaseEventEntities,
   };
 }
 
@@ -370,6 +384,24 @@ function getFindCaseEntitiesQuery(
         uriData
         uriType
       }
+    }
+  }`;
+}
+
+function getFindCaseEventEntitiesQuery(caseIds) {
+  let filterParams = `where: {caseEntity_in: ["${caseIds.join('","')}"]}`;
+  let sortParams = `orderBy: createdDate, orderDirection: desc`;
+  let paginationParams = `first: 30, skip: 0`;
+  return `{
+    caseEventEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
+      id
+      caseEntity {
+        id
+        name
+      }
+      createdDate
+      type
+      data
     }
   }`;
 }
