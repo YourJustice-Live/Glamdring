@@ -1,5 +1,6 @@
 import Profile from 'classes/Profile';
 import useSubgraph from 'hooks/useSubgraph';
+import { hexStringToJson } from 'utils/converters';
 
 /**
  * Hook for work with profiles.
@@ -104,7 +105,7 @@ function createProfileObject(avatarNftEntity) {
     avatarNftEntity.owner,
     avatarNftEntity.id,
     avatarNftEntity.uri,
-    avatarNftEntity.uriData,
+    hexStringToJson(avatarNftEntity.uriData),
     avatarNftEntity.uriImage,
     avatarNftEntity.uriFirstName,
     avatarNftEntity.uriLastName,

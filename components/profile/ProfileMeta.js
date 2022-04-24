@@ -11,7 +11,6 @@ import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { useEffect, useState } from 'react';
-import { hexStringToJson } from 'utils/converters';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 
@@ -29,7 +28,7 @@ export default function ProfileMeta({ account }) {
   async function loadData() {
     try {
       const profile = await getProfile(account);
-      const profileMedata = hexStringToJson(profile.avatarNftUriData);
+      const profileMedata = profile.avatarNftUriData;
       setProfile(profile);
       setProfileMetadata(profileMedata);
     } catch (error) {

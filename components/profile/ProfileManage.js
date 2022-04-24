@@ -12,7 +12,6 @@ import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { hexStringToJson } from 'utils/converters';
 
 /**
  * A component for create (mint) or edit profile (Avatar NFT).
@@ -90,9 +89,7 @@ export default function ProfileManage() {
   }
 
   useEffect(() => {
-    setFormData(
-      accountProfile ? hexStringToJson(accountProfile.avatarNftUriData) : {},
-    );
+    setFormData(accountProfile ? accountProfile.avatarNftUriData : {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
