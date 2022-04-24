@@ -42,7 +42,9 @@ export default function Case() {
   }
 
   useEffect(() => {
-    loadData();
+    if (queryCase) {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryCase]);
 
