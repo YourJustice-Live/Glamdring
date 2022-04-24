@@ -23,10 +23,7 @@ export default function CaseEventCard({ caseEvent }) {
         <Stack direction="row" spacing={1}>
           <Typography variant="body2">Case Address: </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            <NextLink
-              href={`${process.env.NEXT_PUBLIC_NETWORK_BLOCK_EXPLORER_URL}address/${caseEvent.caseEntity.id}`}
-              passHref
-            >
+            <NextLink href={`/case/${caseEvent.caseEntity.id}`} passHref>
               <Link underline="none" target="_blank">
                 {formatAddress(caseEvent.caseEntity.id)}
               </Link>

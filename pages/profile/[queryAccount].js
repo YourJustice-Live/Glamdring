@@ -1,3 +1,4 @@
+import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileCases from 'components/profile/ProfileCases';
@@ -16,10 +17,18 @@ export default function Profile() {
   return (
     <Layout title={'YourJustice / Profile'} showAccountNavigation={!!account}>
       <Box>
+        <Typography variant="h1" gutterBottom>
+          Profile
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
         <ProfileMeta account={queryAccount} />
       </Box>
       <Box sx={{ mt: 12 }}>
-        <ProfileCases />
+        <Typography variant="h1" gutterBottom>
+          Profile Cases
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
+        <ProfileCases account={queryAccount} />
       </Box>
     </Layout>
   );

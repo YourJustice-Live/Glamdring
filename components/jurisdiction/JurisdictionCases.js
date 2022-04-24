@@ -28,6 +28,7 @@ export default function JurisdictionCases() {
       setCases(null);
       // Load cases for page
       const cases = await getCases(
+        null,
         process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
         selectedStage,
         selectedParticipantAccount,

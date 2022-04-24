@@ -3,14 +3,8 @@ import {
   IndeterminateCheckBoxOutlined,
   PersonOutlined,
 } from '@mui/icons-material';
-import {
-  Avatar,
-  Button,
-  Divider,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, Skeleton, Stack, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
@@ -51,11 +45,7 @@ export default function ProfileMeta({ account }) {
   }, [account]);
 
   return (
-    <>
-      <Typography variant="h1" gutterBottom>
-        Profile
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
+    <Box>
       {profile && profileMetadata ? (
         <>
           {/* Avatar */}
@@ -138,6 +128,6 @@ export default function ProfileMeta({ account }) {
           />
         </>
       )}
-    </>
+    </Box>
   );
 }
