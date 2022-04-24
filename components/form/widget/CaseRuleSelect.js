@@ -1,6 +1,7 @@
 import { ArrowForwardOutlined } from '@mui/icons-material';
 import {
   Box,
+  Chip,
   Divider,
   List,
   ListItemButton,
@@ -32,12 +33,9 @@ export default function CaseRuleSelect(props) {
       const items = [];
       [...propsLaws.keys()].forEach((key) => {
         if (propsLaws.get(key).action.guid === propsFormActionGuid) {
-          propsLaws.get(key).rules.forEach((lawRule) => {
-            if (isRuleInCategory(lawRule.rule, propsFormCategory)) {
-              items.push({
-                rule: lawRule.rule,
-                ruleUriData: lawRule.ruleUriData,
-              });
+          propsLaws.get(key).rules.forEach((rule) => {
+            if (isRuleInCategory(rule, propsFormCategory)) {
+              items.push(rule);
             }
           });
         }
@@ -56,9 +54,9 @@ export default function CaseRuleSelect(props) {
           <ListItemButton
             sx={{ py: 2.4 }}
             key={index}
-            selected={item.rule.id === propsValue}
+            selected={item.id === propsValue}
             disabled={propsDisabled}
-            onClick={() => propsOnChange(item.rule.id)}
+            onClick={() => propsOnChange(item.id)}
           >
             <ListItemIcon>
               <ArrowForwardOutlined />
@@ -70,13 +68,14 @@ export default function CaseRuleSelect(props) {
                 flexDirection: 'column',
               }}
             >
-              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                {item?.ruleUriData?.name || 'None Name'}
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {item?.rule?.uriData?.name || 'None Name'}
               </Typography>
-              <Typography variant="body2">
-                {item?.ruleUriData?.description || 'None Description'}
+              <Chip label={`ID: ${item?.id}`} size="small" sx={{ mt: 0.8 }} />
+              <Typography variant="body2" sx={{ mt: 1.2 }}>
+                {item?.rule?.uriData?.description || 'None Description'}
               </Typography>
-              <RuleEffects rule={item.rule} sx={{ mt: 1.2 }} />
+              <RuleEffects rule={item} sx={{ mt: 1.2 }} />
             </Box>
           </ListItemButton>
         ))}

@@ -1,5 +1,6 @@
 import Rule from 'classes/Rule';
 import useSubgraph from 'hooks/useSubgraph';
+import { hexStringToJson } from 'utils/converters';
 
 /**
  * Hook for work with rules.
@@ -103,6 +104,7 @@ function createRuleObject(ruleEntity) {
     ruleEntity.affected,
     ruleEntity.negation,
     ruleEntity.uri,
+    hexStringToJson(ruleEntity.uriData),
     ruleEntity.effectsEnvironmental,
     ruleEntity.effectsProfessional,
     ruleEntity.effectsSocial,

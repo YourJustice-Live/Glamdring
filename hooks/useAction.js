@@ -1,5 +1,6 @@
 import Action from 'classes/Action';
 import useSubgraph from 'hooks/useSubgraph';
+import { hexStringToJson } from 'utils/converters';
 
 /**
  * Hook for work with actions.
@@ -34,6 +35,7 @@ export default function useAction() {
           actionEntity.object,
           actionEntity.tool,
           actionEntity.uri,
+          hexStringToJson(actionEntity.uriData),
         );
         actions.push(action);
       } catch (error) {

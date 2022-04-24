@@ -6,30 +6,23 @@
  */
 export default class Law {
   action;
-  actionUriData;
   rules = [];
 
   /**
    * Law constructor.
    *
    * @param {Action} action Law action.
-   * @param {object} actionUriData Law action uri data.
    */
-  constructor(action, actionUriData) {
+  constructor(action) {
     this.action = action;
-    this.actionUriData = actionUriData;
   }
 
   /**
-   * Add rule and rule uri data to law.
+   * Add rule.
    *
    * @param {Rule} rule Law rule.
-   * @param {object} ruleUriData Law rule uri data.
    */
-  addRule(rule, ruleUriData) {
-    this.rules.push({
-      rule: rule,
-      ruleUriData: ruleUriData,
-    });
+  addRule(rule) {
+    this.rules.push(rule);
   }
 }

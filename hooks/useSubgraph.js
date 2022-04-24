@@ -289,6 +289,7 @@ function getFindJurisdictionRuleEntitiesQuery(ids, actionGuid) {
       }
       affected
       uri
+      uriData
       negation
       effectsEnvironmental
       effectsProfessional
@@ -320,6 +321,7 @@ function getFindActionEntitiesQuery(guids) {
       object
       tool
       uri
+      uriData
       rules {
         id
         affected

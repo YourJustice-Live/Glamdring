@@ -1,7 +1,6 @@
 import Law from 'classes/Law';
 import useAction from 'hooks/useAction';
 import useRule from 'hooks/useRule';
-import useIpfs from './useIpfs';
 
 /**
  * Hook for work with laws.
@@ -9,7 +8,6 @@ import useIpfs from './useIpfs';
  * @typedef {import('../classes/Rule').default} Rule
  */
 export default function useLaw() {
-  const { loadJsonFromIPFS } = useIpfs();
   const { getAction } = useAction();
   const { getRules } = useRule();
 
@@ -27,10 +25,10 @@ export default function useLaw() {
         let law = laws.get(rule.rule.about);
         if (!law) {
           const action = await getAction(rule.rule.about);
-          law = new Law(action, await loadJsonFromIPFS(action.uri));
+          law = new Law(action);
         }
         // Add rule to law
-        law.addRule(rule, await loadJsonFromIPFS(rule.rule.uri));
+        law.addRule(rule);
         // Update laws
         laws.set(rule.rule.about, law);
       } catch (error) {

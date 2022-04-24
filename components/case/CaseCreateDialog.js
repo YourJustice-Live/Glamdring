@@ -236,9 +236,9 @@ export default function CaseCreateDialog({
     if (changedFormData.ruleId) {
       let formRule;
       [...jurisdictionLaws.keys()].forEach((key) => {
-        jurisdictionLaws.get(key).rules.forEach((lawRule) => {
-          if (lawRule.rule.id === changedFormData.ruleId) {
-            formRule = lawRule.rule;
+        jurisdictionLaws.get(key).rules.forEach((rule) => {
+          if (rule.id === changedFormData.ruleId) {
+            formRule = rule;
           }
         });
       });

@@ -8,6 +8,7 @@ export default class Rule {
     ruleAffected,
     ruleNegation,
     ruleUri,
+    ruleUriData,
     ruleEffectsEnvironmental,
     ruleEffectsProfessional,
     ruleEffectsSocial,
@@ -22,6 +23,7 @@ export default class Rule {
       affected: ruleAffected,
       negation: ruleNegation,
       uri: ruleUri,
+      uriData: ruleUriData,
       effects: {
         environmental: ruleEffectsEnvironmental,
         professional: ruleEffectsProfessional,

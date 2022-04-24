@@ -30,16 +30,13 @@ export default function CaseActionSelect(props) {
       const items = [];
       [...propsLaws.keys()].forEach((key) => {
         let isActionInCategory = false;
-        propsLaws.get(key).rules.forEach((lawRule) => {
-          if (isRuleInCategory(lawRule.rule, propsFormCategory)) {
+        propsLaws.get(key).rules.forEach((rule) => {
+          if (isRuleInCategory(rule, propsFormCategory)) {
             isActionInCategory = true;
           }
         });
         if (isActionInCategory) {
-          items.push({
-            action: propsLaws.get(key).action,
-            actionUriData: propsLaws.get(key).actionUriData,
-          });
+          items.push(propsLaws.get(key).action);
         }
       });
       setItems(items);
@@ -56,9 +53,9 @@ export default function CaseActionSelect(props) {
           <ListItemButton
             sx={{ py: 2.4 }}
             key={index}
-            selected={item.action.guid === propsValue}
+            selected={item.guid === propsValue}
             disabled={propsDisabled}
-            onClick={() => propsOnChange(item.action.guid)}
+            onClick={() => propsOnChange(item.guid)}
           >
             <ListItemIcon>
               <ArrowForwardOutlined />
@@ -71,10 +68,10 @@ export default function CaseActionSelect(props) {
               }}
             >
               <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                {item?.actionUriData?.name || 'None Name'}
+                {item?.uriData?.name || 'None Name'}
               </Typography>
               <Typography variant="body2">
-                {item?.actionUriData?.description || 'None Description'}
+                {item?.uriData?.description || 'None Description'}
               </Typography>
             </Box>
           </ListItemButton>

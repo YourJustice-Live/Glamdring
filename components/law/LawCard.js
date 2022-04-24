@@ -21,28 +21,28 @@ export default function LawCard({ law }) {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar sx={{ bgcolor: 'primary.main' }}>L</Avatar>
           <Typography sx={{ fontWeight: 'bold' }}>
-            {law.actionUriData.name}
+            {law.action.uriData.name}
           </Typography>
         </Stack>
         {/* Description */}
         <Box sx={{ mt: 2 }}>
-          <Typography>{law.actionUriData.description}</Typography>
+          <Typography>{law.action.uriData.description}</Typography>
         </Box>
         {/* Rules */}
         <Stack direction="column" spacing={1} sx={{ mt: 3 }}>
-          {law.rules.map((lawRule, index) => (
+          {law.rules.map((rule, index) => (
             <Paper key={index} variant="outlined" sx={{ p: 3 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ fontWeight: 'bold' }}>
-                  {lawRule.ruleUriData.name}
+                  {rule.rule.uriData.name}
                 </Typography>
-                <Chip label={`ID: ${lawRule.rule.id}`} size="small" />
+                <Chip label={`ID: ${rule.id}`} size="small" />
               </Stack>
               <Typography sx={{ mt: 1 }}>
-                {lawRule.ruleUriData.description}
+                {rule.rule.uriData.description}
               </Typography>
               <Box sx={{ mt: 2 }}>
-                <RuleEffects rule={lawRule.rule} />
+                <RuleEffects rule={rule} />
               </Box>
             </Paper>
           ))}
