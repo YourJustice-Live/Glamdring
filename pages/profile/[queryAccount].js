@@ -28,7 +28,7 @@ export default function Profile() {
           Profile Cases
         </Typography>
         <Divider sx={{ mb: 3 }} />
-        <ProfileCases />
+        <ProfileCases account={queryAccount} />
       </Box>
     </Layout>
   );
