@@ -16,7 +16,7 @@ import { useState } from 'react';
 /**
  * A dialog for adding a rule or updating a specified rule.
  */
-export default function RuleManageDialog({ rule, isClose, onClose }) {
+export default function RuleManageDialog({ about, rule, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
   const [formData, setFormData] = useState(rule || {});
@@ -41,6 +41,9 @@ export default function RuleManageDialog({ rule, isClose, onClose }) {
           about: {
             type: 'string',
             title: 'About (Action GUID)',
+            ...(about && {
+              default: about,
+            }),
           },
           affected: {
             type: 'string',

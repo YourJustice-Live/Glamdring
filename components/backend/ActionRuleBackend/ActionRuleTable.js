@@ -1,4 +1,8 @@
-import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
+import {
+  AddOutlined,
+  DataObjectOutlined,
+  ModeEditOutline,
+} from '@mui/icons-material';
 import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
@@ -160,12 +164,26 @@ export default function ActionRuleTable({ sx }) {
       width: 100,
       getActions: (params) => [
         <GridActionsCellItem
-          key="viewActionRule"
+          key="viewJson"
           icon={<DataObjectOutlined />}
           label="View as JSON"
           onClick={() =>
             showDialog(
               <JsonViewDialog json={params.row} onClose={closeDialog} />,
+            )
+          }
+        />,
+        <GridActionsCellItem
+          key="addRuleToAction"
+          icon={<AddOutlined />}
+          label="Add Rule to Action"
+          showInMenu
+          onClick={() =>
+            showDialog(
+              <RuleManageDialog
+                about={params.row.action.guid}
+                onClose={closeDialog}
+              />,
             )
           }
         />,
