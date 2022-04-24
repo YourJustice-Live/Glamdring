@@ -1,5 +1,5 @@
 import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import useAction from 'hooks/useAction';
@@ -17,7 +17,7 @@ export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
-  const { getRulesByActionGuid } = useRule();
+  const { getRulesByActionGuid, isRuleInCategory } = useRule();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
 
@@ -93,6 +93,22 @@ export default function ActionRuleTable({ sx }) {
       headerName: 'Rule URI Data Description',
       width: 500,
       valueGetter: (params) => `${params.row.rule?.rule.uriData.description}`,
+    },
+    {
+      field: 'ruleCategory',
+      headerName: 'Rule Category',
+      width: 140,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
+          {isRuleInCategory(params.row.rule, 'positive') ? (
+            <Typography sx={{ color: 'success.main' }}>Positive</Typography>
+          ) : (
+            <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
+          )}
+        </>
+      ),
     },
     {
       field: 'ruleEffectsEnvironmental',
