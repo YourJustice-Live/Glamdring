@@ -98,17 +98,18 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleCategory',
       headerName: 'Rule Category',
       width: 140,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <>
-          {isRuleInCategory(params.row.rule, 'positive') ? (
-            <Typography sx={{ color: 'success.main' }}>Positive</Typography>
-          ) : (
-            <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
-          )}
-        </>
-      ),
+      valueGetter: (params) => {
+        return isRuleInCategory(params.row.rule, 'positive')
+          ? 'Positive'
+          : 'Negative';
+      },
+      renderCell: (params) => {
+        return isRuleInCategory(params.row.rule, 'positive') ? (
+          <Typography sx={{ color: 'success.main' }}>Positive</Typography>
+        ) : (
+          <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
+        );
+      },
     },
     {
       field: 'ruleEffectsEnvironmental',
