@@ -1,9 +1,6 @@
-import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import ActionBackend from 'components/backend/ActionBackend';
+import ActionRuleBackend from 'components/backend/ActionRuleBackend';
 import CaseBackend from 'components/backend/CaseBackend';
 import RoleBackend from 'components/backend/RoleBackend';
-import RuleBackend from 'components/backend/RuleBackend';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/useWeb3Context';
 
@@ -15,24 +12,9 @@ export default function Backend() {
 
   return (
     <Layout title={'YourJustice / Backend'} showAccountNavigation={!!account}>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Backend
-        </Typography>
-        <Divider />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <CaseBackend />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <RoleBackend />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <ActionBackend />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <RuleBackend />
-      </Box>
+      <CaseBackend />
+      <RoleBackend sx={{ mt: 12 }} />
+      <ActionRuleBackend sx={{ mt: 12 }} />
     </Layout>
   );
 }

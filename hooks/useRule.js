@@ -71,14 +71,15 @@ export default function useRule() {
         rule?.rule?.effects?.social >= 0 &&
         rule?.rule?.effects?.personal >= 0
       );
-    }
-    if (category === 'negative') {
+    } else if (category === 'negative') {
       return (
         rule?.rule?.effects?.environmental < 0 ||
         rule?.rule?.effects?.professional < 0 ||
         rule?.rule?.effects?.social < 0 ||
         rule?.rule?.effects?.personal < 0
       );
+    } else {
+      return false;
     }
   };
 
