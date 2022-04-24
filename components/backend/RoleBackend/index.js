@@ -6,14 +6,14 @@ import RoleManageDialog from './RoleManageDialog';
 /**
  * A component with a role backend.
  */
-export default function RoleBackend() {
+export default function RoleBackend({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
-    <>
+    <Box sx={{ ...sx }}>
       <Box>
-        <Typography variant="h4" gutterBottom>
-          Role Backend
+        <Typography variant="h2" gutterBottom>
+          Backend for Jurisdiction Roles
         </Typography>
         <Divider />
       </Box>
@@ -41,6 +41,6 @@ export default function RoleBackend() {
           </Button>
         </Stack>
       </Box>
-    </>
+    </Box>
   );
 }

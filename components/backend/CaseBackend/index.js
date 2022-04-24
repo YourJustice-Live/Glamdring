@@ -7,14 +7,14 @@ import CaseStageChangeDialog from './CaseStageChangeDialog';
 /**
  * A component with rule backend.
  */
-export default function CaseBackend() {
+export default function CaseBackend({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
-    <>
+    <Box sx={{ ...sx }}>
       <Box>
-        <Typography variant="h4" gutterBottom>
-          Case Backend
+        <Typography variant="h2" gutterBottom>
+          Backend for Cases
         </Typography>
         <Divider />
       </Box>
@@ -38,6 +38,6 @@ export default function CaseBackend() {
           </Button>
         </Stack>
       </Box>
-    </>
+    </Box>
   );
 }

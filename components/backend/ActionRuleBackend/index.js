@@ -14,7 +14,7 @@ export default function ActionRuleBackend({ sx }) {
   return (
     <Box sx={{ ...sx }}>
       <Box>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h2" gutterBottom>
           Backend for Actions and Rules
         </Typography>
         <Divider />
