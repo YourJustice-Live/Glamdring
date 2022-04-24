@@ -10,8 +10,20 @@ export default function useCase() {
   const { findCaseEntities, findCaseEventEntities } = useSubgraph();
 
   /**
+   * Get case.
+   *
+   * @param {string} id Case id.
+   * @returns {Promise.<Case>} A case or null.
+   */
+  let getCase = async function (id) {
+    const cases = await getCases([id], null, null, null, null, null);
+    return cases && cases.length > 0 ? cases[0] : null;
+  };
+
+  /**
    * Get cases.
    *
+   * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} jurisdiction Jurisdiction address.
    * @param {number} stage Case stage.
    * @param {string} participantAccount Account that must be a participant in the case.
@@ -20,6 +32,7 @@ export default function useCase() {
    * @returns {Promise.<Array.<Case>>} A list with cases.
    */
   let getCases = async function (
+    ids,
     jurisdiction,
     stage,
     participantAccount,
@@ -27,6 +40,7 @@ export default function useCase() {
     skip,
   ) {
     const caseEntities = await findCaseEntities(
+      ids,
       jurisdiction,
       stage,
       participantAccount,
@@ -84,6 +98,7 @@ export default function useCase() {
   };
 
   return {
+    getCase,
     getCases,
     getCaseEvents,
   };
