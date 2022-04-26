@@ -18,6 +18,7 @@ import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
+import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
@@ -30,7 +31,6 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
- *
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -263,32 +263,47 @@ export default function CaseCreateDialog({
       if (submittedFormData.witnessProfileAccounts.length < formRuleWitness) {
         throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
       }
-      // Define case params
+      // Define case name
       const caseName = submittedFormData.name;
+      // Define case rules
       const caseRules = [];
       caseRules.push({
         jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
         ruleId: submittedFormData.ruleId,
       });
+      // Define case roles
       const caseRoles = [];
       caseRoles.push({
         account: submittedFormData.subjectProfileAccount,
-        role: 'subject',
+        role: CASE_ROLE.subject.name,
       });
       caseRoles.push({
         account: submittedFormData.affectedProfileAccount,
-        role: 'affected',
+        role: CASE_ROLE.affected.name,
       });
       for (const witnessProfileAccount of submittedFormData.witnessProfileAccounts) {
         caseRoles.push({
           account: witnessProfileAccount,
-          role: 'witness',
+          role: CASE_ROLE.witness.name,
         });
       }
+      // Add jurisdiction judges to case judges
+      const jurisdictionJudgeRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
+      );
+      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.accounts || [];
+      for (const jurisdictionJudgeAccount of jurisdictionJudgeAccounts) {
+        caseRoles.push({
+          account: jurisdictionJudgeAccount,
+          role: CASE_ROLE.judge.name,
+        });
+      }
+      console.log('[Dev] caseRoles', caseRoles);
+      // Define case posts
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {
         casePosts.push({
-          entRole: 'admin',
+          entRole: CASE_ROLE.admin.name,
           uri: submittedFormData.evidencePostUri,
         });
       }
