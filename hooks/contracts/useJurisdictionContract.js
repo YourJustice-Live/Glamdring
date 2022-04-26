@@ -20,14 +20,6 @@ export default function useJuridictionContract() {
     );
   }
 
-  async function getName() {
-    return await getContract(defaultProvider).name();
-  }
-
-  async function getOwner() {
-    return await getContract(defaultProvider).owner();
-  }
-
   async function isHasRole(account, role) {
     return await getContract(defaultProvider).roleHas(account, role);
   }
@@ -110,8 +102,6 @@ export default function useJuridictionContract() {
   }
 
   return {
-    getName,
-    getOwner,
     isHasRole,
     join,
     leave,

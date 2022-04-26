@@ -24,6 +24,7 @@ export default function useJurisdiction() {
     const jurisdictionEntity = jurisdictionEntities[0];
     const jurisdiction = new Jurisdiction(
       jurisdictionEntity.id,
+      jurisdictionEntity.name,
       jurisdictionEntity.roles,
       jurisdictionEntity.rules,
     );

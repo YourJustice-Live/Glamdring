@@ -7,17 +7,15 @@ import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
  *
  * TODO: Use jurisdiction object instead of jurisdiction contract.
  */
-export default function JurisdictionMeta() {
+export default function JurisdictionMeta({ jurisdiction }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { getName, getOwner, isHasRole, join, leave } =
-    useJuridictionContract();
+  const { isHasRole, join, leave } = useJuridictionContract();
   const { account } = useWeb3Context();
 
   const [data, setData] = useState(null);
@@ -25,8 +23,6 @@ export default function JurisdictionMeta() {
 
   async function loadData() {
     try {
-      const name = await getName();
-      const owner = await getOwner();
       const isAccountMember = account
         ? await isHasRole(account, JURISDICTION_ROLE.member.name)
         : null;
@@ -37,8 +33,6 @@ export default function JurisdictionMeta() {
         ? await isHasRole(account, JURISDICTION_ROLE.admin.name)
         : null;
       setData({
-        name: name,
-        owner: owner,
         isAccountMember: isAccountMember,
         isAccountJudge: isAccountJudge,
         isAccountAdmin: isAccountAdmin,
@@ -78,15 +72,11 @@ export default function JurisdictionMeta() {
         Jurisdiction
       </Typography>
       <Divider sx={{ mb: 3 }} />
-      {data ? (
+      {jurisdiction && data ? (
         <>
           <Typography gutterBottom>
             <b>Name: </b>
-            {data.name}
-          </Typography>
-          <Typography gutterBottom>
-            <b>Owner: </b>
-            {formatAddress(data.owner)}
+            {jurisdiction.name}
           </Typography>
           {account && (
             <>

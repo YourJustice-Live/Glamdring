@@ -251,6 +251,7 @@ function getFindJurisdictionEntitiesQuery(ids) {
   return `{
     jurisdictionEntities(${filterParams}, ${paginationParams}) {
       id
+      name
       roles {
         id
         roleId

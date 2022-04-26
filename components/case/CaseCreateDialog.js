@@ -19,6 +19,7 @@ import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -30,7 +31,6 @@ import { palette } from 'theme/palette';
 /**
  * A component with a dialog to create a case.
  *
- * TODO: Use jurisdiction object instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -40,7 +40,8 @@ export default function CaseCreateDialog({
 }) {
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
-  const { getName, makeCase } = useJuridictionContract();
+  const { makeCase } = useJuridictionContract();
+  const { getJurisdiction } = useJurisdiction();
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(true);
@@ -182,10 +183,11 @@ export default function CaseCreateDialog({
 
   async function loadData() {
     try {
-      setJurisdiction({
-        name: await getName(),
-        image: null,
-      });
+      setJurisdiction(
+        await getJurisdiction(
+          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
       setJurisdictionLaws(
         await getLawsByJurisdiction(
           process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,

@@ -52,7 +52,7 @@ export default function Jurisdiction() {
     >
       {/* Meta */}
       <Box>
-        <JurisdictionMeta />
+        <JurisdictionMeta jurisdiction={jurisdiction} />
       </Box>
       {/* Tabs */}
       <Box sx={{ width: '100%', mt: 12 }}>
