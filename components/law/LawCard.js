@@ -34,12 +34,12 @@ export default function LawCard({ law }) {
             <Paper key={index} variant="outlined" sx={{ p: 3 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ fontWeight: 'bold' }}>
-                  {rule.rule.uriData.name}
+                  {rule.rule.uriData?.name || 'None Name'}
                 </Typography>
-                <Chip label={`ID: ${rule.id}`} size="small" />
+                <Chip label={`ID: ${rule.ruleId}`} size="small" />
               </Stack>
               <Typography sx={{ mt: 1 }}>
-                {rule.rule.uriData.description}
+                {rule.rule.uriData?.description || 'None Description'}
               </Typography>
               <Box sx={{ mt: 2 }}>
                 <RuleEffects rule={rule} />

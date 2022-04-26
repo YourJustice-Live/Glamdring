@@ -11,6 +11,8 @@ import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
+ *
+ * TODO: Use jurisdiction object instead of jurisdiction contract.
  */
 export default function JurisdictionMeta() {
   const { showToastSuccess, showToastError } = useToasts();
@@ -26,13 +28,13 @@ export default function JurisdictionMeta() {
       const name = await getName();
       const owner = await getOwner();
       const isAccountMember = account
-        ? await isHasRole(account, JURISDICTION_ROLE.member)
+        ? await isHasRole(account, JURISDICTION_ROLE.member.name)
         : null;
       const isAccountJudge = account
-        ? await isHasRole(account, JURISDICTION_ROLE.judge)
+        ? await isHasRole(account, JURISDICTION_ROLE.judge.name)
         : null;
       const isAccountAdmin = account
-        ? await isHasRole(account, JURISDICTION_ROLE.admin)
+        ? await isHasRole(account, JURISDICTION_ROLE.admin.name)
         : null;
       setData({
         name: name,

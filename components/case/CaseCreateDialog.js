@@ -29,6 +29,8 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
+ *
+ * TODO: Use jurisdiction object instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -39,7 +41,7 @@ export default function CaseCreateDialog({
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { getName, makeCase } = useJuridictionContract();
-  const { getJurisdictionLaws } = useLaw();
+  const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -184,7 +186,11 @@ export default function CaseCreateDialog({
         name: await getName(),
         image: null,
       });
-      setJurisdictionLaws(await getJurisdictionLaws());
+      setJurisdictionLaws(
+        await getLawsByJurisdiction(
+          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
     } catch (error) {
       showToastError(error);
     } finally {
@@ -237,7 +243,7 @@ export default function CaseCreateDialog({
       let formRule;
       [...jurisdictionLaws.keys()].forEach((key) => {
         jurisdictionLaws.get(key).rules.forEach((rule) => {
-          if (rule.id === changedFormData.ruleId) {
+          if (rule.ruleId === changedFormData.ruleId) {
             formRule = rule;
           }
         });

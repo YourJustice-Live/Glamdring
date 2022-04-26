@@ -6,6 +6,8 @@ import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
  * Hook for Juridiction Contract.
+ *
+ * TODO: Use contract address as function param instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
  */
 export default function useJuridictionContract() {
   const { defaultProvider, provider, network } = useWeb3Context();
@@ -99,7 +101,6 @@ export default function useJuridictionContract() {
     ) {
       throw new WrongNetworkError();
     }
-    // TODO: Use case make open
     return await getContract(provider?.getSigner()).caseMakeOpen(
       name,
       rules,

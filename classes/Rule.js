@@ -4,6 +4,7 @@
 export default class Rule {
   constructor(
     id,
+    ruleId,
     ruleAbout,
     ruleAffected,
     ruleNegation,
@@ -18,6 +19,7 @@ export default class Rule {
     confirmationWitness,
   ) {
     this.id = id;
+    this.ruleId = ruleId;
     this.rule = {
       about: ruleAbout,
       affected: ruleAffected,

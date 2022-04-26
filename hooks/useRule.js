@@ -4,6 +4,8 @@ import { hexStringToJson } from 'utils/converters';
 
 /**
  * Hook for work with rules.
+ *
+ * TODO: Define jurisdiction to get rules.
  */
 export default function useRule() {
   const {
@@ -20,16 +22,6 @@ export default function useRule() {
   let getRules = async function () {
     const ruleEntities = await findJurisdictionRuleEntities();
     return ruleEntities.map((ruleEntity) => createRuleObject(ruleEntity));
-  };
-
-  /**
-   * Get jurisdiction rule by id.
-   *
-   * @param {string} id Rule id.
-   * @returns {Promise<Rule>} A rule.
-   */
-  let getRuleById = async function (id) {
-    return (await getRulesByIds([id]))[0];
   };
 
   /**
@@ -85,7 +77,6 @@ export default function useRule() {
 
   return {
     getRules,
-    getRuleById,
     getRulesByIds,
     getRulesByActionGuid,
     isRuleInCategory,
@@ -101,6 +92,7 @@ export default function useRule() {
 function createRuleObject(ruleEntity) {
   return new Rule(
     ruleEntity.id,
+    ruleEntity.ruleId,
     ruleEntity.about.id,
     ruleEntity.affected,
     ruleEntity.negation,

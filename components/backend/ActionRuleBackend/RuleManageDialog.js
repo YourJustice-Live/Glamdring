@@ -28,9 +28,9 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
     properties: {
       // Show id scheme only for updating a rule
       ...(rule && {
-        id: {
+        ruleId: {
           type: 'string',
-          title: 'ID',
+          title: 'Rule ID',
         },
       }),
       rule: {
@@ -116,7 +116,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
   };
 
   const uiSchema = {
-    id: {
+    ruleId: {
       'ui:disabled': true,
     },
     rule: {
@@ -162,7 +162,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
       setFormData(formData);
       setIsLoading(true);
       if (rule) {
-        await updateRule(formData.id, formData.rule);
+        await updateRule(formData.ruleId, formData.rule);
       } else {
         await addRule(formData.rule, formData.confirmation);
       }

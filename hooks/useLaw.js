@@ -39,11 +39,15 @@ export default function useLaw() {
   };
 
   /**
-   * Get jurisdiction laws.
+   * Get laws by specified jurisdiction.
    *
+   * TODO: Use jurisdiction param.
+   *
+   * @param {string} jurisdiction Jurisdiction id (address).
    * @returns {Promise.<Map.<string,Law>>} A map with laws.
    */
-  let getJurisdictionLaws = async function () {
+  // eslint-disable-next-line no-unused-vars
+  let getLawsByJurisdiction = async function (jurisdiction) {
     const rules = await getRules();
     const laws = await getLawsByRules(rules);
     return laws;
@@ -51,6 +55,6 @@ export default function useLaw() {
 
   return {
     getLawsByRules,
-    getJurisdictionLaws,
+    getLawsByJurisdiction,
   };
 }

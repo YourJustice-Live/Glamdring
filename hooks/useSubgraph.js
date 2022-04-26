@@ -37,16 +37,16 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the participants of jurisdiction.
+   * Find the jurisdiction entities by ids (addresses).
    *
-   * @param {('members'|'judges'|'admins')} filter If specified, then the function returns the participants by the filter.
-   * @returns {Promise.<Array.<{object}>>} Array with accounts of participants.
+   * @param {Array.<string>} ids Jurisdction ids (addresses).
+   * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
    */
-  let findJurisdictionParticipantEntities = async function (filter) {
+  let findJurisdictionEntities = async function (ids) {
     const response = await makeSubgraphQuery(
-      getFindJurisdictionParticipantEntitiesQuery(filter),
+      getFindJurisdictionEntitiesQuery(ids),
     );
-    return response.jurisdictionParticipantEntities;
+    return response.jurisdictionEntities;
   };
 
   /**
@@ -146,7 +146,7 @@ export default function useSubgraph() {
   return {
     findAvatarNftEntities,
     findAvatarNftEntitiesBySearchQuery,
-    findJurisdictionParticipantEntities,
+    findJurisdictionEntities,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesByIds,
     findJurisdictionRuleEntitiesByActionGuid,
@@ -252,23 +252,21 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
   }`;
 }
 
-function getFindJurisdictionParticipantEntitiesQuery(filter) {
-  let queryParams = `first: 100`;
-  if (filter === 'members') {
-    queryParams = `where: {isMember: true}`;
-  }
-  if (filter === 'judges') {
-    queryParams = `where: {isJudge: true}`;
-  }
-  if (filter === 'admins') {
-    queryParams = `where: {isAdmin: true}`;
-  }
+function getFindJurisdictionEntitiesQuery(ids) {
+  let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
+  let filterParams = `where: {${idsFilter}}`;
+  let paginationParams = `first: 10`;
   return `{
-    jurisdictionParticipantEntities(${queryParams}) {
+    jurisdictionEntities(${filterParams}, ${paginationParams}) {
       id
-      isAdmin
-      isMember
-      isJudge
+      roles {
+        id
+        roleId
+        accounts
+      }
+      rules {
+        id
+      }
     }
   }`;
 }
@@ -287,6 +285,7 @@ function getFindJurisdictionRuleEntitiesQuery(ids, actionGuid) {
       about {
         id
       }
+      ruleId
       affected
       uri
       uriData

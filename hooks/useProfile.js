@@ -6,11 +6,8 @@ import { hexStringToJson } from 'utils/converters';
  * Hook for work with profiles.
  */
 export default function useProfile() {
-  const {
-    findAvatarNftEntities,
-    findAvatarNftEntitiesBySearchQuery,
-    findJurisdictionParticipantEntities,
-  } = useSubgraph();
+  const { findAvatarNftEntities, findAvatarNftEntitiesBySearchQuery } =
+    useSubgraph();
 
   /**
    * Get profile for specified account.
@@ -51,46 +48,10 @@ export default function useProfile() {
     );
   };
 
-  /**
-   * Get jurisdiction member profiles.
-   *
-   * @returns {Promise.<Array.<Profile>>} A list with profiles.
-   */
-  let getJurisdictionMemberProfiles = async function () {
-    const entities = await findJurisdictionParticipantEntities('members');
-    const profiles = await getProfiles(entities.map((entity) => entity?.id));
-    return profiles;
-  };
-
-  /**
-   * Get jurisdiction judge profiles.
-   *
-   * @returns {Promise.<Array.<Profile>>} A list with profiles.
-   */
-  let getJurisdictionJudgeProfiles = async function () {
-    const entities = await findJurisdictionParticipantEntities('judges');
-    const profiles = await getProfiles(entities.map((entity) => entity?.id));
-    return profiles;
-  };
-
-  /**
-   * Get jurisdiction admin profiles.
-   *
-   * @returns {Promise.<Array.<Profile>>} A list with profiles.
-   */
-  let getJurisdictionAdminProfiles = async function () {
-    const entities = await findJurisdictionParticipantEntities('admins');
-    const profiles = await getProfiles(entities.map((entity) => entity?.id));
-    return profiles;
-  };
-
   return {
     getProfile,
     getProfiles,
     getProfilesBySearchQuery,
-    getJurisdictionMemberProfiles,
-    getJurisdictionJudgeProfiles,
-    getJurisdictionAdminProfiles,
   };
 }
 

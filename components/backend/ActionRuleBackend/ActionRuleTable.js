@@ -72,7 +72,7 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleId',
       headerName: 'Rule ID',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.id}`,
+      valueGetter: (params) => `${params.row.rule?.ruleId}`,
     },
     {
       field: 'ruleAffected',
@@ -90,13 +90,13 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleUriDataName',
       headerName: 'Rule URI Data Name',
       width: 300,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData.name}`,
+      valueGetter: (params) => `${params.row.rule?.rule.uriData?.name}`,
     },
     {
       field: 'ruleUriDataDescription',
       headerName: 'Rule URI Data Description',
       width: 500,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData.description}`,
+      valueGetter: (params) => `${params.row.rule?.rule.uriData?.description}`,
     },
     {
       field: 'ruleCategory',

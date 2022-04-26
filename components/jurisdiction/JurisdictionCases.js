@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 /**
  * A component with jurisdiction cases.
  */
-export default function JurisdictionCases() {
+export default function JurisdictionCases({ jurisdiction }) {
   const { showToastError } = useToasts();
   const { getCases } = useCase();
   const [cases, setCases] = useState(null);
@@ -29,7 +29,7 @@ export default function JurisdictionCases() {
       // Load cases for page
       const cases = await getCases(
         null,
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        jurisdiction.id,
         selectedStage,
         selectedParticipantAccount,
         pageSize,
@@ -46,9 +46,11 @@ export default function JurisdictionCases() {
   }
 
   useEffect(() => {
-    loadData(1, 1);
+    if (jurisdiction) {
+      loadData(1, 1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedParticipantAccount, selectedStage]);
+  }, [jurisdiction, selectedParticipantAccount, selectedStage]);
 
   return (
     <Box>

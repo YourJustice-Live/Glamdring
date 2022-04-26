@@ -54,9 +54,9 @@ export default function CaseRuleSelect(props) {
           <ListItemButton
             sx={{ py: 2.4 }}
             key={index}
-            selected={item.id === propsValue}
+            selected={item.ruleId === propsValue}
             disabled={propsDisabled}
-            onClick={() => propsOnChange(item.id)}
+            onClick={() => propsOnChange(item.ruleId)}
           >
             <ListItemIcon>
               <ArrowForwardOutlined />
@@ -71,7 +71,11 @@ export default function CaseRuleSelect(props) {
               <Typography sx={{ fontWeight: 'bold' }}>
                 {item?.rule?.uriData?.name || 'None Name'}
               </Typography>
-              <Chip label={`ID: ${item?.id}`} size="small" sx={{ mt: 0.8 }} />
+              <Chip
+                label={`ID: ${item?.ruleId}`}
+                size="small"
+                sx={{ mt: 0.8 }}
+              />
               <Typography variant="body2" sx={{ mt: 1.2 }}>
                 {item?.rule?.uriData?.description || 'None Description'}
               </Typography>
