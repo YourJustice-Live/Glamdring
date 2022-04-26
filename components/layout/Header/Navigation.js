@@ -14,7 +14,14 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconHome, IconPlus, IconProfile, IconWallet, Logo } from 'icons';
+import {
+  IconHome,
+  IconNotification,
+  IconPlus,
+  IconProfile,
+  IconWallet,
+  Logo,
+} from 'icons';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
@@ -141,6 +148,17 @@ export default function Navigation() {
             <Link href="/" passHref>
               <IconButton sx={{ ml: 2 }}>
                 <IconHome />
+              </IconButton>
+            </Link>
+          </Box>
+        )}
+
+        {/* Notification button */}
+        {account && (
+          <Box sx={{ flexGrow: 0 }}>
+            <Link href="/events" passHref>
+              <IconButton sx={{ ml: 0.4 }}>
+                <IconNotification />
               </IconButton>
             </Link>
           </Box>

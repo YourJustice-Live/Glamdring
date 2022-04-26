@@ -81,9 +81,6 @@ function AccountNavigation() {
           <Link href="/profile/manage" passHref>
             <Button variant="outlined">Profile Editor</Button>
           </Link>
-          <Link href="/events" passHref>
-            <Button variant="outlined">Events</Button>
-          </Link>
         </Stack>
       )}
       {!accountProfile && (
