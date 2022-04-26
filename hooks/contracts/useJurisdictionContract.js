@@ -10,7 +10,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
  * TODO: Use contract address as function param instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
  */
 export default function useJuridictionContract() {
-  const { defaultProvider, provider, network } = useWeb3Context();
+  const { provider, network } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -18,10 +18,6 @@ export default function useJuridictionContract() {
       contractAbi,
       signerOrProvider,
     );
-  }
-
-  async function isHasRole(account, role) {
-    return await getContract(defaultProvider).roleHas(account, role);
   }
 
   async function join() {
@@ -102,7 +98,6 @@ export default function useJuridictionContract() {
   }
 
   return {
-    isHasRole,
     join,
     leave,
     assignRole,

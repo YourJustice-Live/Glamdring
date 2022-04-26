@@ -1,59 +1,35 @@
-import { useEffect, useState } from 'react';
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Divider, Skeleton, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
- *
- * TODO: Use jurisdiction object instead of jurisdiction contract.
  */
-export default function JurisdictionMeta({ jurisdiction }) {
+export default function JurisdictionMeta({ jurisdiction, sx }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { isHasRole, join, leave } = useJuridictionContract();
+  const { join, leave } = useJuridictionContract();
   const { account } = useWeb3Context();
-
-  const [data, setData] = useState(null);
+  const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
-
-  async function loadData() {
-    try {
-      const isAccountMember = account
-        ? await isHasRole(account, JURISDICTION_ROLE.member.name)
-        : null;
-      const isAccountJudge = account
-        ? await isHasRole(account, JURISDICTION_ROLE.judge.name)
-        : null;
-      const isAccountAdmin = account
-        ? await isHasRole(account, JURISDICTION_ROLE.admin.name)
-        : null;
-      setData({
-        isAccountMember: isAccountMember,
-        isAccountJudge: isAccountJudge,
-        isAccountAdmin: isAccountAdmin,
-      });
-    } catch (error) {
-      showToastError(error);
-    }
-  }
 
   async function joinOrLeave() {
     try {
       setIsJoiningOrLeaving(true);
       let transaction;
-      if (data.isAccountMember) {
+      if (isMember) {
         transaction = await leave();
       } else {
         transaction = await join();
       }
       showToastSuccess('Success! Data will be updated soon.');
       await transaction.wait();
-      await loadData();
+      setIsMember(!isMember);
     } catch (error) {
       showToastError(error);
     } finally {
@@ -62,35 +38,28 @@ export default function JurisdictionMeta({ jurisdiction }) {
   }
 
   useEffect(() => {
-    loadData();
+    if (jurisdiction && account) {
+      const memberRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.member.id,
+      );
+      setIsMember(memberRole.accounts.includes(account.toLowerCase()));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
-    <>
+    <Box sx={{ ...sx }}>
       <Typography variant="h1" gutterBottom>
         Jurisdiction
       </Typography>
       <Divider sx={{ mb: 3 }} />
-      {jurisdiction && data ? (
+      {jurisdiction && (
         <>
-          <Typography gutterBottom>
-            <b>Name: </b>
-            {jurisdiction.name}
-          </Typography>
-          {account && (
+          <Typography gutterBottom>{jurisdiction.name}</Typography>
+          {account && isMember !== null && (
             <>
-              <Typography gutterBottom>
-                <b>Account is member: </b>
-                {data.isAccountMember ? 'yes' : 'no'}
-              </Typography>
-              <Typography gutterBottom>
-                <b>Account is judge: </b>
-                {data.isAccountJudge ? 'yes' : 'no'}
-              </Typography>
-              <Typography gutterBottom>
-                <b>Account is admin: </b>
-                {data.isAccountAdmin ? 'yes' : 'no'}
+              <Typography gutterBottom variant="body2">
+                {isMember ? 'Account is Member' : 'Account is Not Member'}
               </Typography>
               <Box sx={{ mt: 3 }}>
                 {isJoiningOrLeaving ? (
@@ -100,7 +69,7 @@ export default function JurisdictionMeta({ jurisdiction }) {
                     startIcon={<Save />}
                     variant="outlined"
                   >
-                    {data.isAccountMember ? 'Leaving' : 'Joining'}
+                    {isMember ? 'Leaving' : 'Joining'}
                   </LoadingButton>
                 ) : (
                   <Button
@@ -108,24 +77,14 @@ export default function JurisdictionMeta({ jurisdiction }) {
                     type="submit"
                     onClick={joinOrLeave}
                   >
-                    {data.isAccountMember ? 'Leave' : 'Join'}
+                    {isMember ? 'Leave' : 'Join'}
                   </Button>
                 )}
               </Box>
             </>
           )}
         </>
-      ) : (
-        <>
-          <Skeleton
-            variant="rectangular"
-            height={24}
-            width={256}
-            sx={{ mb: 1 }}
-          />
-          <Skeleton variant="rectangular" height={24} width={256} />
-        </>
       )}
-    </>
+    </Box>
   );
 }
