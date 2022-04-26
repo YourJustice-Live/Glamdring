@@ -1,34 +1,45 @@
-import { useEffect, useState } from 'react';
 import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileList from 'components/profile/ProfileList';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
+import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction officials (judges, admins).
  */
-export default function JurisdictionOfficials() {
+export default function JurisdictionOfficials({ jurisdiction }) {
   const { showToastError } = useToasts();
-  const { getJurisdictionJudgeProfiles, getJurisdictionAdminProfiles } =
-    useProfile();
-
+  const { getProfiles } = useProfile();
   const [judgeProfiles, setJudgeProfiles] = useState(null);
   const [adminProfiles, setAdminProfiles] = useState(null);
 
   async function loadData() {
     try {
-      setJudgeProfiles(await getJurisdictionJudgeProfiles());
-      setAdminProfiles(await getJurisdictionAdminProfiles());
+      const judgeRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
+      );
+      const adminRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.admin.id,
+      );
+      setJudgeProfiles(
+        judgeRole?.accounts ? await getProfiles(judgeRole.accounts) : [],
+      );
+      setAdminProfiles(
+        adminRole?.accounts ? await getProfiles(adminRole.accounts) : [],
+      );
     } catch (error) {
       showToastError(error);
     }
   }
 
   useEffect(() => {
-    loadData();
+    if (jurisdiction) {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
     <>

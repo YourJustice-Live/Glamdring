@@ -12,7 +12,7 @@ export default function useCase() {
   /**
    * Get case.
    *
-   * @param {string} id Case id.
+   * @param {string} id Case id (address).
    * @returns {Promise.<Case>} A case or null.
    */
   let getCase = async function (id) {

@@ -12,8 +12,11 @@ export default function useSubgraph() {
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
   let findAvatarNftEntities = async function (accounts) {
+    const fixedAccounts = accounts
+      ? accounts.map((account) => account.toLowerCase())
+      : null;
     const response = await makeSubgraphQuery(
-      getFindAvatarNftEntitiesQuery(accounts),
+      getFindAvatarNftEntitiesQuery(fixedAccounts),
     );
     return response.avatarNftEntities;
   };
@@ -37,52 +40,40 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the participants of jurisdiction.
+   * Find the jurisdiction entities by ids (addresses).
    *
-   * @param {('members'|'judges'|'admins')} filter If specified, then the function returns the participants by the filter.
-   * @returns {Promise.<Array.<{object}>>} Array with accounts of participants.
+   * @param {Array.<string>} ids Jurisdction ids (addresses).
+   * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
    */
-  let findJurisdictionParticipantEntities = async function (filter) {
+  let findJurisdictionEntities = async function (ids) {
+    const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const response = await makeSubgraphQuery(
-      getFindJurisdictionParticipantEntitiesQuery(filter),
+      getFindJurisdictionEntitiesQuery(fixedIds),
     );
-    return response.jurisdictionParticipantEntities;
+    return response.jurisdictionEntities;
   };
 
   /**
-   * Find all jurisdiction rule entities.
+   * Find the jurisdiction rule entities.
    *
-   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
+   * @param {Array.<string>} ids A list with jurisdiction rule ids.
+   * @param {string} jurisdiction Jurisdiction id (address).
+   * @param {string} actionGuid Action id (guid).
+   * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
-  let findJurisdictionRuleEntities = async function () {
+  let findJurisdictionRuleEntities = async function (
+    ids,
+    jurisdiction,
+    actionGuid,
+  ) {
+    const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
+    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
-      getFindJurisdictionRuleEntitiesQuery(),
-    );
-    return response.jurisdictionRuleEntities;
-  };
-
-  /**
-   * Find the jurisdiction rule entities by ids.
-   *
-   * @param {Array.<string>} ids Rule ids.
-   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
-   */
-  let findJurisdictionRuleEntitiesByIds = async function (ids) {
-    const response = await makeSubgraphQuery(
-      getFindJurisdictionRuleEntitiesQuery(ids, null),
-    );
-    return response.jurisdictionRuleEntities;
-  };
-
-  /**
-   * Find the jurisdiction rule entities by action guid.
-   *
-   * @param {string} actionGuid Action guid.
-   * @returns {Promise.<Array.<{object}>>} Array with jurisdiction rule entities.
-   */
-  let findJurisdictionRuleEntitiesByActionGuid = async function (actionGuid) {
-    const response = await makeSubgraphQuery(
-      getFindJurisdictionRuleEntitiesQuery(null, actionGuid),
+      getFindJurisdictionRuleEntitiesQuery(
+        fixedIds,
+        fixedJurisdiction,
+        actionGuid,
+      ),
     );
     return response.jurisdictionRuleEntities;
   };
@@ -117,10 +108,12 @@ export default function useSubgraph() {
     first = 5,
     skip = 0,
   ) {
+    const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
+    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
-        ids,
-        jurisdiction,
+        fixedIds,
+        fixedJurisdiction,
         stage,
         participantAccount,
         first,
@@ -137,8 +130,9 @@ export default function useSubgraph() {
    * @returns {Promise.<Array.<{object}>>} Array with case event entities.
    */
   let findCaseEventEntities = async function (caseIds) {
+    const fixedIds = caseIds ? caseIds.map((id) => id.toLowerCase()) : null;
     const response = await makeSubgraphQuery(
-      getFindCaseEventEntitiesQuery(caseIds),
+      getFindCaseEventEntitiesQuery(fixedIds),
     );
     return response.caseEventEntities;
   };
@@ -146,10 +140,8 @@ export default function useSubgraph() {
   return {
     findAvatarNftEntities,
     findAvatarNftEntitiesBySearchQuery,
-    findJurisdictionParticipantEntities,
+    findJurisdictionEntities,
     findJurisdictionRuleEntities,
-    findJurisdictionRuleEntitiesByIds,
-    findJurisdictionRuleEntitiesByActionGuid,
     findActionEntities,
     findCaseEntities,
     findCaseEventEntities,
@@ -252,41 +244,41 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
   }`;
 }
 
-function getFindJurisdictionParticipantEntitiesQuery(filter) {
-  let queryParams = `first: 100`;
-  if (filter === 'members') {
-    queryParams = `where: {isMember: true}`;
-  }
-  if (filter === 'judges') {
-    queryParams = `where: {isJudge: true}`;
-  }
-  if (filter === 'admins') {
-    queryParams = `where: {isAdmin: true}`;
-  }
+function getFindJurisdictionEntitiesQuery(ids) {
+  let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
+  let filterParams = `where: {${idsFilter}}`;
+  let paginationParams = `first: 10`;
   return `{
-    jurisdictionParticipantEntities(${queryParams}) {
+    jurisdictionEntities(${filterParams}, ${paginationParams}) {
       id
-      isAdmin
-      isMember
-      isJudge
+      name
+      roles {
+        id
+        roleId
+        accounts
+      }
+      rules {
+        id
+      }
     }
   }`;
 }
 
-function getFindJurisdictionRuleEntitiesQuery(ids, actionGuid) {
-  let queryParams = `first: 100`;
-  if (ids) {
-    queryParams = `first: 100, where: {id_in: ["${ids.join('","')}"]}`;
-  }
-  if (actionGuid) {
-    queryParams = `where: {about: "${actionGuid}"}`;
-  }
+function getFindJurisdictionRuleEntitiesQuery(ids, jurisdiction, actionGuid) {
+  let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
+  let jurisdictionFilter = jurisdiction
+    ? `jurisdiction: "${jurisdiction}"`
+    : '';
+  let actionGuidFilter = actionGuid ? `about: "${actionGuid}"` : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}}`;
+  let paginationParams = `first: 100`;
   return `{
-    jurisdictionRuleEntities(${queryParams}) {
+    jurisdictionRuleEntities(${filterParams}, ${paginationParams}) {
       id
       about {
         id
       }
+      ruleId
       affected
       uri
       uriData

@@ -21,8 +21,6 @@ import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
 
 /**
  * A widget for input an evidence title and file, generate case post, upload it to IPFS, and get URI.
- *
- * TODO: Check file size before uploading
  */
 export default function CaseEvidencePostInput(props) {
   const propsLabel = props.label;

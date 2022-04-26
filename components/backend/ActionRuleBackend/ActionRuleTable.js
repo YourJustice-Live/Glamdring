@@ -8,7 +8,7 @@ import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import useAction from 'hooks/useAction';
 import useDialogContext from 'hooks/useDialogContext';
-import useRule from 'hooks/useRule';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import ActionManageDialog from './ActionManageDialog';
@@ -21,7 +21,8 @@ export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
-  const { getRulesByActionGuid, isRuleInCategory } = useRule();
+  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
+    useJurisdiction();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
 
@@ -72,7 +73,7 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleId',
       headerName: 'Rule ID',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.id}`,
+      valueGetter: (params) => `${params.row.rule?.ruleId}`,
     },
     {
       field: 'ruleAffected',
@@ -90,25 +91,25 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleUriDataName',
       headerName: 'Rule URI Data Name',
       width: 300,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData.name}`,
+      valueGetter: (params) => `${params.row.rule?.rule.uriData?.name}`,
     },
     {
       field: 'ruleUriDataDescription',
       headerName: 'Rule URI Data Description',
       width: 500,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData.description}`,
+      valueGetter: (params) => `${params.row.rule?.rule.uriData?.description}`,
     },
     {
       field: 'ruleCategory',
       headerName: 'Rule Category',
       width: 140,
       valueGetter: (params) => {
-        return isRuleInCategory(params.row.rule, 'positive')
+        return isJurisdictionRuleInCategory(params.row.rule, 'positive')
           ? 'Positive'
           : 'Negative';
       },
       renderCell: (params) => {
-        return isRuleInCategory(params.row.rule, 'positive') ? (
+        return isJurisdictionRuleInCategory(params.row.rule, 'positive') ? (
           <Typography sx={{ color: 'success.main' }}>Positive</Typography>
         ) : (
           <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
@@ -223,7 +224,11 @@ export default function ActionRuleTable({ sx }) {
       const rows = [];
       const actions = await getActions();
       for (const action of actions) {
-        const actionRules = await getRulesByActionGuid(action.guid);
+        const actionRules = await getJusirsdictionRules(
+          null,
+          null,
+          action.guid,
+        );
         if (actionRules) {
           for (const rule of actionRules) {
             rows.push({ action: action, rule: rule });

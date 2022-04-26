@@ -7,7 +7,7 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material';
-import useRule from 'hooks/useRule';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
 
 /**
@@ -19,7 +19,7 @@ export default function CaseActionSelect(props) {
   const propsOnChange = props.onChange;
   const propsLaws = props.formContext?.laws;
   const propsFormCategory = props.formContext?.formData?.category;
-  const { isRuleInCategory } = useRule();
+  const { isJurisdictionRuleInCategory } = useJurisdiction();
   const [items, setItems] = useState([]);
 
   /**
@@ -31,7 +31,7 @@ export default function CaseActionSelect(props) {
       [...propsLaws.keys()].forEach((key) => {
         let isActionInCategory = false;
         propsLaws.get(key).rules.forEach((rule) => {
-          if (isRuleInCategory(rule, propsFormCategory)) {
+          if (isJurisdictionRuleInCategory(rule, propsFormCategory)) {
             isActionInCategory = true;
           }
         });

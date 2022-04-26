@@ -19,6 +19,7 @@ import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -29,6 +30,7 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
+ *
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -38,8 +40,9 @@ export default function CaseCreateDialog({
 }) {
   const { accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
-  const { getName, makeCase } = useJuridictionContract();
-  const { getJurisdictionLaws } = useLaw();
+  const { makeCase } = useJuridictionContract();
+  const { getJurisdiction } = useJurisdiction();
+  const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,11 +183,16 @@ export default function CaseCreateDialog({
 
   async function loadData() {
     try {
-      setJurisdiction({
-        name: await getName(),
-        image: null,
-      });
-      setJurisdictionLaws(await getJurisdictionLaws());
+      setJurisdiction(
+        await getJurisdiction(
+          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
+      setJurisdictionLaws(
+        await getLawsByJurisdiction(
+          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
     } catch (error) {
       showToastError(error);
     } finally {
@@ -237,7 +245,7 @@ export default function CaseCreateDialog({
       let formRule;
       [...jurisdictionLaws.keys()].forEach((key) => {
         jurisdictionLaws.get(key).rules.forEach((rule) => {
-          if (rule.id === changedFormData.ruleId) {
+          if (rule.ruleId === changedFormData.ruleId) {
             formRule = rule;
           }
         });

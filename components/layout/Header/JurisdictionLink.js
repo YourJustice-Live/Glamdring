@@ -1,5 +1,5 @@
 import { Avatar, Skeleton, Stack, Typography } from '@mui/material';
-import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -10,16 +10,16 @@ import { useEffect, useState } from 'react';
 export default function JurisdictionLink() {
   const router = useRouter();
   const { showToastError } = useToasts();
-  const { getName } = useJuridictionContract();
+  const { getJurisdiction } = useJurisdiction();
   const [jurisdiction, setJurisdiction] = useState(null);
 
   async function loadData() {
     try {
-      const name = await getName();
-      setJurisdiction({
-        name: name,
-        image: null,
-      });
+      setJurisdiction(
+        await getJurisdiction(
+          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
     } catch (error) {
       showToastError(error);
     }

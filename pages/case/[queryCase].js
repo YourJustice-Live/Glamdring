@@ -7,8 +7,8 @@ import CaseVerdictCancellation from 'components/case/CaseVerdictCancellation';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
 import useCase from 'hooks/useCase';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
-import useRule from 'hooks/useRule';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
@@ -23,16 +23,16 @@ export default function Case() {
   const { account } = useWeb3Context();
   const { showToastError } = useToasts();
   const { getCase } = useCase();
-  const { getRulesByIds } = useRule();
+  const { getJusirsdictionRules } = useJurisdiction();
   const { getLawsByRules } = useLaw();
   const [caseObject, setCaseObject] = useState();
   const [caseLaws, setCaseLaws] = useState(null);
 
   async function loadData() {
     try {
-      const caseObject = await getCase(queryCase.toLowerCase());
+      const caseObject = await getCase(queryCase);
       const ruleIds = caseObject.rules.map((rule) => rule.id);
-      const rules = await getRulesByIds(ruleIds);
+      const rules = await getJusirsdictionRules(ruleIds, null, null);
       const laws = await getLawsByRules(rules);
       setCaseObject(caseObject);
       setCaseLaws(laws);

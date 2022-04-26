@@ -10,12 +10,19 @@ export const REPUTATION_RATING_ID = {
   positive: 1,
 };
 
-export const DEFAULT_ADD_REPUTATION_AMOUNT = 1;
-
 export const JURISDICTION_ROLE = {
-  member: 'member',
-  judge: 'judge',
-  admin: 'admin',
+  admin: {
+    id: '1',
+    name: 'admin',
+  },
+  member: {
+    id: '2',
+    name: 'member',
+  },
+  judge: {
+    id: '3',
+    name: 'judge',
+  },
 };
 
 export const CASE_STAGE = {
