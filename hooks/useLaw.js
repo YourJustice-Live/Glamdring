@@ -1,15 +1,15 @@
 import Law from 'classes/Law';
 import useAction from 'hooks/useAction';
-import useRule from 'hooks/useRule';
+import useJurisdiction from 'hooks/useJurisdiction';
 
 /**
  * Hook for work with laws.
  *
- * @typedef {import('../classes/Rule').default} Rule
+ * @typedef {import('../classes/JurisdictionRule').JurisdictionRule} Rule
  */
 export default function useLaw() {
   const { getAction } = useAction();
-  const { getRules } = useRule();
+  const { getJusirsdictionRules } = useJurisdiction();
 
   /**
    * Get laws by specified rules.
@@ -41,14 +41,12 @@ export default function useLaw() {
   /**
    * Get laws by specified jurisdiction.
    *
-   * TODO: Use jurisdiction param.
-   *
    * @param {string} jurisdiction Jurisdiction id (address).
    * @returns {Promise.<Map.<string,Law>>} A map with laws.
    */
   // eslint-disable-next-line no-unused-vars
   let getLawsByJurisdiction = async function (jurisdiction) {
-    const rules = await getRules();
+    const rules = await getJusirsdictionRules(null, jurisdiction, null);
     const laws = await getLawsByRules(rules);
     return laws;
   };

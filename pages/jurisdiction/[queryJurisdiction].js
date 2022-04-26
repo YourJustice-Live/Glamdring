@@ -31,9 +31,7 @@ export default function Jurisdiction() {
 
   async function loadData() {
     try {
-      const jurisdiction = await getJurisdiction(
-        queryJurisdiction.toLowerCase(),
-      );
+      const jurisdiction = await getJurisdiction(queryJurisdiction);
       setJurisdiction(jurisdiction);
     } catch (error) {
       showToastError(error);

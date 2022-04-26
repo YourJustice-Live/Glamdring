@@ -1,7 +1,7 @@
 /**
- * Class for the rule.
+ * Class for the jurisdiction rule.
  */
-export default class Rule {
+export default class JurisdictionRule {
   constructor(
     id,
     ruleId,

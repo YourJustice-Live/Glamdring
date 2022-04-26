@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import RuleEffects from 'components/rule/RuleEffects';
-import useRule from 'hooks/useRule';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
 
 /**
@@ -22,7 +22,7 @@ export default function CaseRuleSelect(props) {
   const propsLaws = props.formContext?.laws;
   const propsFormCategory = props.formContext?.formData?.category;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
-  const { isRuleInCategory } = useRule();
+  const { isJurisdictionRuleInCategory } = useJurisdiction();
   const [items, setItems] = useState([]);
 
   /**
@@ -34,7 +34,7 @@ export default function CaseRuleSelect(props) {
       [...propsLaws.keys()].forEach((key) => {
         if (propsLaws.get(key).action.guid === propsFormActionGuid) {
           propsLaws.get(key).rules.forEach((rule) => {
-            if (isRuleInCategory(rule, propsFormCategory)) {
+            if (isJurisdictionRuleInCategory(rule, propsFormCategory)) {
               items.push(rule);
             }
           });

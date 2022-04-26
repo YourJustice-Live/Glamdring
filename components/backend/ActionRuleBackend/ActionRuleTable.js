@@ -8,7 +8,7 @@ import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import useAction from 'hooks/useAction';
 import useDialogContext from 'hooks/useDialogContext';
-import useRule from 'hooks/useRule';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import ActionManageDialog from './ActionManageDialog';
@@ -21,7 +21,8 @@ export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
-  const { getRulesByActionGuid, isRuleInCategory } = useRule();
+  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
+    useJurisdiction();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
 
@@ -103,12 +104,12 @@ export default function ActionRuleTable({ sx }) {
       headerName: 'Rule Category',
       width: 140,
       valueGetter: (params) => {
-        return isRuleInCategory(params.row.rule, 'positive')
+        return isJurisdictionRuleInCategory(params.row.rule, 'positive')
           ? 'Positive'
           : 'Negative';
       },
       renderCell: (params) => {
-        return isRuleInCategory(params.row.rule, 'positive') ? (
+        return isJurisdictionRuleInCategory(params.row.rule, 'positive') ? (
           <Typography sx={{ color: 'success.main' }}>Positive</Typography>
         ) : (
           <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
@@ -223,7 +224,11 @@ export default function ActionRuleTable({ sx }) {
       const rows = [];
       const actions = await getActions();
       for (const action of actions) {
-        const actionRules = await getRulesByActionGuid(action.guid);
+        const actionRules = await getJusirsdictionRules(
+          null,
+          null,
+          action.guid,
+        );
         if (actionRules) {
           for (const rule of actionRules) {
             rows.push({ action: action, rule: rule });

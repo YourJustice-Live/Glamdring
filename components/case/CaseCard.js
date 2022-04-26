@@ -1,8 +1,8 @@
 import { Card, CardContent, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
-import useRule from 'hooks/useRule';
 import { useEffect, useState } from 'react';
 import CaseMeta from './CaseMeta';
 import CaseParticipants from './CaseParticipants';
@@ -13,13 +13,13 @@ import CaseVerdictCancellation from './CaseVerdictCancellation';
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
-  const { getRulesByIds } = useRule();
+  const { getJusirsdictionRules } = useJurisdiction();
   const { getLawsByRules } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
 
   async function loadData() {
     const ruleIds = caseObject.rules.map((rule) => rule.id);
-    const rules = await getRulesByIds(ruleIds);
+    const rules = await getJusirsdictionRules(ruleIds, null, null);
     const laws = await getLawsByRules(rules);
     setCaseLaws(laws);
   }

@@ -43,7 +43,7 @@ export function Web3Provider({ children }) {
       setInstance(instance);
       setProvider(provider);
       if (accounts) {
-        const account = accounts[0].toLowerCase();
+        const account = accounts[0];
         setAccount(account);
         setAccountProfile(await getProfile(account));
       }
