@@ -13,9 +13,9 @@ export default function Layout({ children, title, enableSidebar }) {
       </Head>
       <Header />
       <Container>
-        <Box sx={{ display: 'flex', py: 4 }}>
+        <Box sx={{ display: 'flex' }}>
           {enableSidebar && <Sidebar />}
-          <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{ flexGrow: 1, py: 4 }}>
             <Toolbar />
             {children}
           </Box>
