@@ -9,7 +9,6 @@ import {
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import { capitalize } from 'lodash';
-import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -23,11 +22,13 @@ export default function CaseEventCard({ caseEvent }) {
         <Stack direction="row" spacing={1}>
           <Typography variant="body2">Case Address: </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            <NextLink href={`/case/${caseEvent.caseEntity.id}`} passHref>
-              <Link underline="none" target="_blank">
-                {formatAddress(caseEvent.caseEntity.id)}
-              </Link>
-            </NextLink>
+            <Link
+              href={`/case/${caseEvent.caseEntity.id}`}
+              underline="none"
+              target="_blank"
+            >
+              {formatAddress(caseEvent.caseEntity.id)}
+            </Link>
           </Typography>
         </Stack>
         {/* Case name */}

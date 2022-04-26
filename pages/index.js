@@ -25,7 +25,7 @@ export default function Index() {
   }, []);
 
   return (
-    <Layout showAccountNavigation={!!account}>
+    <Layout enableSidebar={!!account}>
       {!account && (
         <Box sx={{ px: 4, py: 18, textAlign: 'center' }}>
           <Typography variant="h1" gutterBottom>

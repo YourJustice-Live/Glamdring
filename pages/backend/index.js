@@ -11,7 +11,7 @@ export default function Backend() {
   const { account } = useWeb3Context();
 
   return (
-    <Layout title={'YourJustice / Backend'} showAccountNavigation={!!account}>
+    <Layout title={'YourJustice / Backend'} enableSidebar={!!account}>
       <CaseBackend />
       <RoleBackend sx={{ mt: 12 }} />
       <ActionRuleBackend sx={{ mt: 12 }} />

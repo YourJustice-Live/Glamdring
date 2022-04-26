@@ -14,7 +14,7 @@ export default function Sandbox() {
   }
 
   return (
-    <Layout title={'Sandbox'} showAccountNavigation={!!account}>
+    <Layout title={'Sandbox'} enableSidebar={!!account}>
       <Stack spacing={2}>
         <Typography>Welcome to Sandbox!</Typography>
         <Button variant="contained" onClick={play}>

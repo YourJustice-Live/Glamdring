@@ -3,7 +3,6 @@ import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import { capitalize } from 'lodash';
-import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
@@ -28,11 +27,13 @@ function CaseAddress({ caseObject, sx }) {
       <Typography variant="body2">Address: </Typography>
       {caseObject && (
         <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-          <NextLink href={`/case/${caseObject.id}`} passHref>
-            <Link underline="none" target="_blank">
-              {formatAddress(caseObject.id)}
-            </Link>
-          </NextLink>
+          <Link
+            href={`/case/${caseObject.id}`}
+            underline="none"
+            target="_blank"
+          >
+            {formatAddress(caseObject.id)}
+          </Link>
         </Typography>
       )}
     </Stack>

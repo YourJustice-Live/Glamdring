@@ -49,7 +49,7 @@ export default function Case() {
   }, [queryCase]);
 
   return (
-    <Layout title={'YourJustice / Case'} showAccountNavigation={!!account}>
+    <Layout title={'YourJustice / Case'} enableSidebar={!!account}>
       <Box>
         <Typography variant="h1" gutterBottom>
           Case

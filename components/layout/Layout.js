@@ -1,13 +1,10 @@
-import Head from 'next/head';
 import { Box, Container, Toolbar } from '@mui/material';
-import {
-  DrawerAccountNavigation,
-  PaperAccountNavigation,
-} from 'components/layout/AccountNavigation';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
+import { Sidebar } from 'components/layout/Sidebar';
+import Head from 'next/head';
 
-export default function Layout({ children, title, showAccountNavigation }) {
+export default function Layout({ children, title, enableSidebar }) {
   return (
     <>
       <Head>
@@ -17,18 +14,9 @@ export default function Layout({ children, title, showAccountNavigation }) {
       <Header />
       <Container>
         <Box sx={{ display: 'flex', py: 4 }}>
-          {showAccountNavigation && (
-            <DrawerAccountNavigation
-              sx={{ display: { xs: 'none', md: 'block' } }}
-            />
-          )}
+          {enableSidebar && <Sidebar />}
           <Box sx={{ flexGrow: 1 }}>
             <Toolbar />
-            {showAccountNavigation && (
-              <PaperAccountNavigation
-                sx={{ display: { xs: 'block', md: 'none' } }}
-              />
-            )}
             {children}
           </Box>
         </Box>

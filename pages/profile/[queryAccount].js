@@ -15,7 +15,7 @@ export default function Profile() {
   const { account } = useWeb3Context();
 
   return (
-    <Layout title={'YourJustice / Profile'} showAccountNavigation={!!account}>
+    <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <Box>
         <Typography variant="h1" gutterBottom>
           Profile

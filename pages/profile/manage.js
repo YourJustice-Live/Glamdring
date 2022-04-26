@@ -6,7 +6,7 @@ import ProfileManageComponent from 'components/profile/ProfileManage';
  */
 export default function ProfileManage() {
   return (
-    <Layout title={'YourJustice / Profile Manage'} showAccountNavigation={true}>
+    <Layout title={'YourJustice / Profile Manage'} enableSidebar={true}>
       <ProfileManageComponent />
     </Layout>
   );

@@ -40,7 +40,7 @@ export default function Events() {
   }, []);
 
   return (
-    <Layout title={'YourJustice / Events'} showAccountNavigation={!!account}>
+    <Layout title={'YourJustice / Events'} enableSidebar={!!account}>
       <Box>
         <Typography variant="h1" gutterBottom>
           Events

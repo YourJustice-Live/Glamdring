@@ -164,7 +164,7 @@ export default function Navigation() {
           </Box>
         )}
 
-        {/* Menu button and menu */}
+        {/* Menu button and menu component */}
         {account && (
           <>
             <Tooltip title="Open settings">
@@ -205,7 +205,7 @@ export default function Navigation() {
                 sx={{
                   mx: '15px',
                   my: '10px',
-                  pb: '10px',
+                  pb: '14px',
                   borderBottom: '1px solid gray',
                   borderColor: 'grey.200',
                 }}
@@ -213,16 +213,44 @@ export default function Navigation() {
                 <span>{formatAddress(account)}</span>
               </Box>
               {accountProfile && (
-                <MenuItem
-                  onClick={() => {
-                    handleCloseUserMenu();
-                  }}
-                >
+                <MenuItem onClick={handleCloseUserMenu}>
                   <Link href="/profile" passHref>
                     <Typography>Profile</Typography>
                   </Link>
                 </MenuItem>
               )}
+              {accountProfile && (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href="/profile/manage" passHref>
+                    <Typography>Profile Manage</Typography>
+                  </Link>
+                </MenuItem>
+              )}
+              {!accountProfile && (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link href="/profile/manage" passHref>
+                    <Typography>Create Profile</Typography>
+                  </Link>
+                </MenuItem>
+              )}
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link href="/jurisdiction" passHref>
+                  <Typography>Jurisdiction</Typography>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Link href="/backend" passHref>
+                  <Typography>Backend</Typography>
+                </Link>
+              </MenuItem>
+              <Box
+                sx={{
+                  mx: '15px',
+                  my: '10px',
+                  borderBottom: '1px solid gray',
+                  borderColor: 'grey.200',
+                }}
+              />
               <MenuItem onClick={disconnectWallet}>
                 <Typography textAlign="center">Disconnect Wallet</Typography>
               </MenuItem>

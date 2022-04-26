@@ -46,10 +46,7 @@ export default function Jurisdiction() {
   }, [queryJurisdiction]);
 
   return (
-    <Layout
-      title={'YourJustice / Jurisdiction'}
-      showAccountNavigation={!!account}
-    >
+    <Layout title={'YourJustice / Jurisdiction'} enableSidebar={!!account}>
       {/* Meta */}
       <Box>
         <JurisdictionMeta jurisdiction={jurisdiction} />
