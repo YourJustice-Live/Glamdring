@@ -256,10 +256,13 @@ function getFindJurisdictionEntitiesQuery(ids) {
         id
         roleId
         accounts
+        accountsCount
       }
       rules {
         id
       }
+      rulesCount
+      casesCount
     }
   }`;
 }

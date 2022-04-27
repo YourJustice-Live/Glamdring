@@ -27,6 +27,8 @@ export default function useJurisdiction() {
       jurisdictionEntity.name,
       jurisdictionEntity.roles,
       jurisdictionEntity.rules,
+      jurisdictionEntity.rulesCount,
+      jurisdictionEntity.casesCount,
     );
     return jurisdiction;
   };
