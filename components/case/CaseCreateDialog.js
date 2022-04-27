@@ -24,8 +24,9 @@ import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconWallet } from 'icons';
+import { IconProfile, IconWallet } from 'icons';
 import { capitalize } from 'lodash';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -38,14 +39,22 @@ export default function CaseCreateDialog({
   isClose,
   onClose,
 }) {
-  const { accountProfile, connectWallet } = useWeb3Context();
+  const STATUS = {
+    isLoading: 0,
+    isAccountRequired: 1,
+    isAccountProfileRequired: 2,
+    isFormAvailable: 3,
+    isFormSubmitting: 4,
+  };
+
+  const router = useRouter();
+  const { account, accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const { getJurisdiction } = useJurisdiction();
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState(STATUS.isLoading);
   const [jurisdiction, setJurisdiction] = useState(null);
   const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
@@ -193,10 +202,10 @@ export default function CaseCreateDialog({
           process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
         ),
       );
+      setStatus(STATUS.isFormAvailable);
     } catch (error) {
       showToastError(error);
-    } finally {
-      setIsLoading(false);
+      close();
     }
   }
 
@@ -256,7 +265,7 @@ export default function CaseCreateDialog({
 
   async function handleSubmit({ formData: submittedFormData }) {
     try {
-      setIsSubmitting(true);
+      setStatus(STATUS.isFormSubmitting);
       setFormData(submittedFormData);
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
@@ -313,89 +322,32 @@ export default function CaseCreateDialog({
       close();
     } catch (error) {
       showToastError(error);
-      setIsSubmitting(false);
+      setStatus(STATUS.isFormAvailable);
     }
   }
 
   useEffect(() => {
-    loadData();
+    if (!account) {
+      setStatus(STATUS.isAccountRequired);
+    } else if (!accountProfile) {
+      setStatus(STATUS.isAccountProfileRequired);
+    } else {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <>
-      {accountProfile ? (
-        <Dialog open={isOpen} onClose={close}>
-          <DialogTitle>Create New Case</DialogTitle>
-          <DialogContent>
-            {isLoading ? (
-              <Typography>Loading...</Typography>
-            ) : (
-              <>
-                <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
-                  <Typography sx={{ fontWeight: 'bold' }}>
-                    Jurisdiction
-                  </Typography>
-                  <Avatar
-                    sx={{
-                      width: 22,
-                      height: 22,
-                      bgcolor: 'primary.main',
-                      fontSize: 14,
-                    }}
-                    src={jurisdiction.image}
-                  >
-                    J
-                  </Avatar>
-                  <Typography>{jurisdiction.name}</Typography>
-                </Stack>
-                <Divider sx={{ mt: 1.5 }} />
-                <Form
-                  schema={schema}
-                  uiSchema={uiSchema}
-                  formData={formData}
-                  onChange={handleChange}
-                  onSubmit={handleSubmit}
-                  widgets={widgets}
-                  formContext={{
-                    laws: jurisdictionLaws,
-                    formData: formData,
-                  }}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <LoadingButton
-                        loading
-                        loadingPosition="start"
-                        startIcon={<Save />}
-                        variant="outlined"
-                      >
-                        Submitting
-                      </LoadingButton>
-                    </>
-                  ) : (
-                    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                      <Button variant="contained" type="submit">
-                        Create Case
-                      </Button>
-                      <Button variant="outlined" onClick={close}>
-                        Cancel
-                      </Button>
-                    </Stack>
-                  )}
-                </Form>
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
-      ) : (
-        <Dialog open={isOpen} onClose={close}>
-          <DialogTitle>Create New Case</DialogTitle>
-          <DialogContent>
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>Create New Case</DialogTitle>
+      <DialogContent>
+        {/* Loading message */}
+        {status === STATUS.isLoading && <Typography>Loading...</Typography>}
+        {/* Message to connect account */}
+        {status === STATUS.isAccountRequired && (
+          <>
             <Typography>
-              To create case and add score you need to connect wallet and create
-              own profile.
+              To create case and add score you need to connect wallet.
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -408,9 +360,86 @@ export default function CaseCreateDialog({
             >
               Connect Wallet
             </Button>
-          </DialogContent>
-        </Dialog>
-      )}
-    </>
+          </>
+        )}
+        {/* Message to create profile */}
+        {status === STATUS.isAccountProfileRequired && (
+          <>
+            <Typography>
+              To create case and add score you need to create profile.
+            </Typography>
+            <Button
+              sx={{ mt: 4 }}
+              variant="contained"
+              onClick={() => {
+                router.push('/profile/manage');
+                close();
+              }}
+              startIcon={
+                <IconProfile hexColor={palette.primary.contrastText} />
+              }
+            >
+              Create Profile
+            </Button>
+          </>
+        )}
+        {/* Form to create case */}
+        {status >= STATUS.isFormAvailable && (
+          <>
+            <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+              <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
+              <Avatar
+                sx={{
+                  width: 22,
+                  height: 22,
+                  bgcolor: 'primary.main',
+                  fontSize: 14,
+                }}
+                src={jurisdiction.image}
+              >
+                J
+              </Avatar>
+              <Typography>{jurisdiction.name}</Typography>
+            </Stack>
+            <Divider sx={{ mt: 1.5 }} />
+            <Form
+              schema={schema}
+              uiSchema={uiSchema}
+              formData={formData}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              widgets={widgets}
+              formContext={{
+                laws: jurisdictionLaws,
+                formData: formData,
+              }}
+              disabled={status === STATUS.isFormSubmitting}
+            >
+              {status === STATUS.isFormSubmitting ? (
+                <>
+                  <LoadingButton
+                    loading
+                    loadingPosition="start"
+                    startIcon={<Save />}
+                    variant="outlined"
+                  >
+                    Submitting
+                  </LoadingButton>
+                </>
+              ) : (
+                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                  <Button variant="contained" type="submit">
+                    Create Case
+                  </Button>
+                  <Button variant="outlined" onClick={close}>
+                    Cancel
+                  </Button>
+                </Stack>
+              )}
+            </Form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
