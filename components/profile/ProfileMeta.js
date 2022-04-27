@@ -6,13 +6,16 @@ import {
 import { Avatar, Button, Skeleton, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
+import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
+import { getRating } from 'utils/reputation';
 
 /**
  * A component with profile meta (image, name, email, socials).
@@ -75,8 +78,45 @@ export default function ProfileMeta({ account }) {
             <b>Twitter: </b>{' '}
             {getTraitValue(profileMetadata, traitTypes.twitter) || 'none'}
           </Typography>
+          {/* Ratings */}
+          <Stack spacing={1} sx={{ mt: 4 }}>
+            {/* Total rating */}
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              <Typography sx={{ mr: 1, fontWeight: 'bold' }}>
+                Total Rating:
+              </Typography>
+              <Typography sx={{ color: 'success.main', mr: 1 }}>
+                {`+${profile.avatarNftTotalPositiveRating}`}
+              </Typography>
+              <Typography sx={{ color: 'danger.main' }}>
+                {`-${profile.avatarNftTotalNegativeRating}`}
+              </Typography>
+            </Box>
+            {/* Rating by domains */}
+            {Object.values(REPUTATION_DOMAIN).map((domain, index) => (
+              <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Typography sx={{ mr: 1 }}>
+                  {`${capitalize(domain.name)} Rating:`}
+                </Typography>
+                <Typography sx={{ color: 'success.main', mr: 1 }}>
+                  {`+${getRating(
+                    profile,
+                    domain.id,
+                    REPUTATION_RATING.positive.id,
+                  )}`}
+                </Typography>
+                <Typography sx={{ color: 'danger.main' }}>
+                  {`-${getRating(
+                    profile,
+                    domain.id,
+                    REPUTATION_RATING.negative.id,
+                  )}`}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
           {/* Actions */}
-          <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
+          <Stack direction="row" spacing={2} sx={{ mt: 8 }}>
             <Button
               variant="contained"
               color="success"

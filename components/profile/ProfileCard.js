@@ -15,15 +15,10 @@ import {
   Typography,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import {
-  REPUTATION_DOMAIN_ID,
-  REPUTATION_RATING_ID,
-} from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
-import { getRating } from 'utils/reputation';
 
 /**
  * A component with a card with profile.
@@ -50,22 +45,11 @@ export default function ProfileCard({ profile }) {
             {/* Details */}
             <Box sx={{ flex: '1' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography sx={{ mr: 1 }}>Case:</Typography>
                 <Typography sx={{ color: 'success.main', mr: 1 }}>
-                  +
-                  {getRating(
-                    profile,
-                    REPUTATION_DOMAIN_ID.environment,
-                    REPUTATION_RATING_ID.positive,
-                  )}
+                  {`+${profile.avatarNftTotalPositiveRating}`}
                 </Typography>
                 <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                  -
-                  {getRating(
-                    profile,
-                    REPUTATION_DOMAIN_ID.environment,
-                    REPUTATION_RATING_ID.negative,
-                  )}
+                  {`-${profile.avatarNftTotalNegativeRating}`}
                 </Typography>
               </Box>
               <NextLink href={`/profile/${profile.account}`} passHref>

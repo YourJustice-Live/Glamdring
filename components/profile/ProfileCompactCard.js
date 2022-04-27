@@ -1,13 +1,8 @@
 import { PersonOutlined } from '@mui/icons-material';
 import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
-import {
-  REPUTATION_DOMAIN_ID,
-  REPUTATION_RATING_ID,
-} from 'constants/contracts';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
-import { getRating } from 'utils/reputation';
 
 /**
  * A component with a compact card with profile.
@@ -73,22 +68,12 @@ export default function ProfileCompactCard({
               <Typography
                 sx={{ color: 'success.main', fontWeight: 'bold', ml: 1.5 }}
               >
-                +
-                {getRating(
-                  profile || accountProfile,
-                  REPUTATION_DOMAIN_ID.environment,
-                  REPUTATION_RATING_ID.positive,
-                )}
+                {`+${(profile || accountProfile).avatarNftTotalPositiveRating}`}
               </Typography>
               <Typography
                 sx={{ color: 'danger.main', fontWeight: 'bold', ml: 1 }}
               >
-                -
-                {getRating(
-                  profile || accountProfile,
-                  REPUTATION_DOMAIN_ID.environment,
-                  REPUTATION_RATING_ID.negative,
-                )}
+                {`-${(profile || accountProfile).avatarNftTotalNegativeRating}`}
               </Typography>
             </>
           )}

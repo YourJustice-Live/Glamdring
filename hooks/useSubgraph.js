@@ -190,6 +190,8 @@ function getFindAvatarNftEntitiesQuery(accounts) {
           positiveRating
           negativeRating
         }
+        totalNegativeRating
+        totalPositiveRating
       }
     }`;
 }
@@ -210,6 +212,8 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
         positiveRating
         negativeRating
       } 
+      totalNegativeRating
+      totalPositiveRating
     }
     result2: avatarNftEntities(where: {uriFirstName_contains_nocase: "${searchQuery}"}) {
       id
@@ -225,6 +229,8 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
         positiveRating
         negativeRating
       }
+      totalNegativeRating
+      totalPositiveRating
     }
     result3: avatarNftEntities(where: {uriLastName_contains_nocase: "${searchQuery}"}) {
       id
@@ -240,6 +246,8 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
         positiveRating
         negativeRating
       }
+      totalNegativeRating
+      totalPositiveRating
     }
   }`;
 }
