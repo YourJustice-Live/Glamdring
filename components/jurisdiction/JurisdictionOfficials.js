@@ -2,6 +2,7 @@ import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -11,24 +12,23 @@ import { useEffect, useState } from 'react';
  */
 export default function JurisdictionOfficials({ jurisdiction }) {
   const { showToastError } = useToasts();
+  const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [judgeProfiles, setJudgeProfiles] = useState(null);
   const [adminProfiles, setAdminProfiles] = useState(null);
 
   async function loadData() {
     try {
-      const judgeRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
+      const judgeAccounts = getJurisdictionRoleAccounts(
+        jurisdiction,
+        JURISDICTION_ROLE.judge.id,
       );
-      const adminRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.admin.id,
+      const adminAccounts = getJurisdictionRoleAccounts(
+        jurisdiction,
+        JURISDICTION_ROLE.admin.id,
       );
-      setJudgeProfiles(
-        judgeRole?.accounts ? await getProfiles(judgeRole.accounts) : [],
-      );
-      setAdminProfiles(
-        adminRole?.accounts ? await getProfiles(adminRole.accounts) : [],
-      );
+      setJudgeProfiles(await getProfiles(judgeAccounts));
+      setAdminProfiles(await getProfiles(adminAccounts));
     } catch (error) {
       showToastError(error);
     }

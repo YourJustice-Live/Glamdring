@@ -43,15 +43,16 @@ export default function CaseCreateDialog({
     isLoading: 0,
     isAccountRequired: 1,
     isAccountProfileRequired: 2,
-    isFormAvailable: 3,
-    isFormSubmitting: 4,
+    isJoiningToJurisdictionRequired: 3,
+    isFormAvailable: 4,
+    isFormSubmitting: 5,
   };
 
   const router = useRouter();
   const { account, accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { getJurisdiction } = useJurisdiction();
+  const { getJurisdiction, isAccountHasJurisdictionRole } = useJurisdiction();
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
@@ -192,11 +193,22 @@ export default function CaseCreateDialog({
 
   async function loadData() {
     try {
-      setJurisdiction(
-        await getJurisdiction(
-          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        ),
+      const jurisdiction = await getJurisdiction(
+        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
       );
+      // Check that account has jurisdiction role
+      if (
+        !isAccountHasJurisdictionRole(
+          jurisdiction,
+          account,
+          JURISDICTION_ROLE.member.id,
+        )
+      ) {
+        setStatus(STATUS.isJoiningToJurisdictionRequired);
+        return;
+      }
+      // Load rest of data for form
+      setJurisdiction(jurisdiction);
       setJurisdictionLaws(
         await getLawsByJurisdiction(
           process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
@@ -380,6 +392,26 @@ export default function CaseCreateDialog({
               }
             >
               Create Profile
+            </Button>
+          </>
+        )}
+        {/* Message to join to jurisdiction */}
+        {status === STATUS.isJoiningToJurisdictionRequired && (
+          <>
+            <Typography>
+              To create case and add score you need to join jurisdiction.
+            </Typography>
+            <Button
+              sx={{ mt: 4 }}
+              variant="contained"
+              onClick={() => {
+                router.push(
+                  `/jurisdiction/${process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS}`,
+                );
+                close();
+              }}
+            >
+              Open Jurisdiction
             </Button>
           </>
         )}

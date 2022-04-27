@@ -69,6 +69,20 @@ export default function useJurisdiction() {
   };
 
   /**
+   * Get accounts for specified jurisdiction role.
+   *
+   * @param {Jurisdiction} jurisdiction Jurisdiction.
+   * @param {string} role Role id.
+   * @returns {Array.<string>} Array with accounts.
+   */
+  let getJurisdictionRoleAccounts = function (jurisdiction, role) {
+    const jurisdictionRole = jurisdiction?.roles?.find(
+      (element) => element?.roleId === role,
+    );
+    return jurisdictionRole?.accounts || [];
+  };
+
+  /**
    * Checking that the jurisdiction rule is in a category.
    *
    * @param {JurisdictionRule} rule Jurisdiction rule.
@@ -95,9 +109,26 @@ export default function useJurisdiction() {
     }
   };
 
+  /**
+   * Check that the account has a specified jurisdiction role.
+   *
+   * @param {Jurisdiction} jurisdiction Jurisdiction.
+   * @param {string} account Account address.
+   * @param {string} role Role id.
+   * @returns {boolean} Result of checking.
+   */
+  let isAccountHasJurisdictionRole = function (jurisdiction, account, role) {
+    const jurisdictionRole = jurisdiction?.roles?.find(
+      (element) => element?.roleId === role,
+    );
+    return jurisdictionRole?.accounts?.includes(account?.toLowerCase());
+  };
+
   return {
     getJurisdiction,
     getJusirsdictionRules,
+    getJurisdictionRoleAccounts,
     isJurisdictionRuleInCategory,
+    isAccountHasJurisdictionRole,
   };
 }
