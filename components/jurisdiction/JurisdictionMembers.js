@@ -1,5 +1,6 @@
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -9,18 +10,18 @@ import { useEffect, useState } from 'react';
  */
 export default function JurisdictionMembers({ jurisdiction }) {
   const { showToastError } = useToasts();
+  const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
 
   const [memberProfiles, setMemberProfiles] = useState();
 
   async function loadData() {
     try {
-      const memberRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.member.id,
+      const memberAccounts = getJurisdictionRoleAccounts(
+        jurisdiction,
+        JURISDICTION_ROLE.member.id,
       );
-      setMemberProfiles(
-        memberRole?.accounts ? await getProfiles(memberRole.accounts) : [],
-      );
+      setMemberProfiles(await getProfiles(memberAccounts));
     } catch (error) {
       showToastError(error);
     }

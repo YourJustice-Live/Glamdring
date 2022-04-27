@@ -12,6 +12,7 @@ import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useDialogContext from 'hooks/useDialogContext';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconProfile } from 'icons';
@@ -27,6 +28,7 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
   const { join, leave } = useJuridictionContract();
   const { account, accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const { isAccountHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
 
@@ -57,10 +59,13 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
 
   useEffect(() => {
     if (jurisdiction && account) {
-      const memberRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.member.id,
+      setIsMember(
+        isAccountHasJurisdictionRole(
+          jurisdiction,
+          account,
+          JURISDICTION_ROLE.member.id,
+        ),
       );
-      setIsMember(memberRole.accounts.includes(account.toLowerCase()));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);
