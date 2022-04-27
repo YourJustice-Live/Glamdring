@@ -7,6 +7,7 @@ import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
 import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
 import Layout from 'components/layout/Layout';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -24,6 +25,8 @@ export default function Jurisdiction() {
   const { getJurisdiction } = useJurisdiction();
   const [tabValue, setTabValue] = useState('1');
   const [jurisdiction, setJurisdiction] = useState(null);
+  const [officialsCount, setOfficialsCount] = useState(null);
+  const [citizensCount, setCitizensCount] = useState(null);
 
   const handleChange = (_, newTabValue) => {
     setTabValue(newTabValue);
@@ -32,7 +35,22 @@ export default function Jurisdiction() {
   async function loadData() {
     try {
       const jurisdiction = await getJurisdiction(queryJurisdiction);
+      const judgeRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
+      );
+      const adminRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.admin.id,
+      );
+      const memberRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.member.id,
+      );
       setJurisdiction(jurisdiction);
+      setOfficialsCount(
+        judgeRole?.accountsCount && adminRole?.accountsCount
+          ? judgeRole.accountsCount + adminRole.accountsCount
+          : null,
+      );
+      setCitizensCount(memberRole?.accountsCount);
     } catch (error) {
       showToastError(error);
     }
@@ -56,10 +74,34 @@ export default function Jurisdiction() {
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
             <TabList onChange={handleChange}>
-              <Tab label="Cases" value="1" />
-              <Tab label="Officials" value="2" />
-              <Tab label="Citizen" value="3" />
-              <Tab label="Laws" value="4" />
+              <Tab
+                label={
+                  jurisdiction?.casesCount
+                    ? `Cases: ${jurisdiction.casesCount}`
+                    : 'Cases'
+                }
+                value="1"
+              />
+              <Tab
+                label={
+                  officialsCount ? `Officials: ${officialsCount}` : 'Officials'
+                }
+                value="2"
+              />
+              <Tab
+                label={
+                  citizensCount ? `Citizens: ${citizensCount}` : 'Citizens'
+                }
+                value="3"
+              />
+              <Tab
+                label={
+                  jurisdiction?.rulesCount
+                    ? `Laws: ${jurisdiction.rulesCount}`
+                    : 'Laws'
+                }
+                value="4"
+              />
             </TabList>
           </Box>
           {/* Cases */}
