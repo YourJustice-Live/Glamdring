@@ -1,12 +1,23 @@
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Button, Divider, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useDialogContext from 'hooks/useDialogContext';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconProfile } from 'icons';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -14,13 +25,20 @@ import { useEffect, useState } from 'react';
 export default function JurisdictionMeta({ jurisdiction, sx }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { join, leave } = useJuridictionContract();
-  const { account } = useWeb3Context();
+  const { account, accountProfile } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
 
   async function joinOrLeave() {
     try {
       setIsJoiningOrLeaving(true);
+      // Check that account has profile
+      if (!accountProfile) {
+        showDialog(<ProfileRequireDialog onClose={closeDialog} />);
+        return;
+      }
+      // Use contract
       let transaction;
       if (isMember) {
         transaction = await leave();
@@ -86,5 +104,37 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
         </>
       )}
     </Box>
+  );
+}
+
+function ProfileRequireDialog({ isClose, onClose }) {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(!isClose);
+
+  function close() {
+    setIsOpen(false);
+    onClose();
+  }
+
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>Join to Jurisdiction</DialogTitle>
+      <DialogContent>
+        <Typography>
+          To join the jurisdiction, you need to create a profile.
+        </Typography>
+        <Button
+          sx={{ mt: 4 }}
+          variant="contained"
+          onClick={() => {
+            router.push('/profile/manage');
+            close();
+          }}
+          startIcon={<IconProfile hexColor={palette.primary.contrastText} />}
+        >
+          Create Profile
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }
