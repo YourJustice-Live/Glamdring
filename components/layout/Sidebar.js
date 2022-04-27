@@ -99,7 +99,7 @@ export function Sidebar() {
                 <Link underline="none">Profile</Link>
               </NextLink>
               <NextLink href="/profile/manage" passHref>
-                <Link underline="none">Profile Editor</Link>
+                <Link underline="none">Profile Manage</Link>
               </NextLink>
             </>
           ) : (
