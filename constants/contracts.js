@@ -1,13 +1,31 @@
-export const REPUTATION_DOMAIN_ID = {
-  environment: 0,
-  personal: 1,
-  community: 2,
-  professional: 3,
+export const REPUTATION_DOMAIN = {
+  environment: {
+    id: 0,
+    name: 'environment',
+  },
+  personal: {
+    id: 1,
+    name: 'personal',
+  },
+  community: {
+    id: 2,
+    name: 'community',
+  },
+  professional: {
+    id: 3,
+    name: 'professional',
+  },
 };
 
-export const REPUTATION_RATING_ID = {
-  negative: 0,
-  positive: 1,
+export const REPUTATION_RATING = {
+  negative: {
+    id: 0,
+    name: 'negative',
+  },
+  positive: {
+    id: 1,
+    name: 'positive',
+  },
 };
 
 export const JURISDICTION_ROLE = {

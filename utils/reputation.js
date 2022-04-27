@@ -1,28 +1,28 @@
-import { REPUTATION_RATING_ID } from 'constants/contracts';
+import { REPUTATION_RATING } from 'constants/contracts';
 
 /**
  * Get a rating for specified profile, domain id and rating id.
  *
  * @param {object} profile Profile.
- * @param {number} domainId Domain ID.
- * @param {number} ratingId Rating ID.
- * @returns {number} Rating.
+ * @param {number} domain Domain ID.
+ * @param {number} rating Rating ID.
+ * @returns {string} Rating.
  */
-export function getRating(profile, domainId, ratingId) {
-  let rating = 0;
+export function getRating(profile, domain, rating) {
+  let result = '0';
   profile?.avatarNftReputations?.forEach((reputation) => {
     if (
-      reputation.domain === domainId &&
-      ratingId === REPUTATION_RATING_ID.negative
+      reputation.domain === domain &&
+      rating === REPUTATION_RATING.negative.id
     ) {
-      rating = reputation.negativeRating;
+      result = reputation.negativeRating;
     }
     if (
-      reputation.domain === domainId &&
-      ratingId === REPUTATION_RATING_ID.positive
+      reputation.domain === domain &&
+      rating === REPUTATION_RATING.positive.id
     ) {
-      rating = reputation.positiveRating;
+      result = reputation.positiveRating;
     }
   });
-  return rating;
+  return result;
 }

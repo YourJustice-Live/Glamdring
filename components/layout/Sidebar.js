@@ -9,14 +9,9 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  REPUTATION_DOMAIN_ID,
-  REPUTATION_RATING_ID,
-} from 'constants/contracts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
-import { getRating } from 'utils/reputation';
 
 /**
  * A component with a sidebar (drawer).
@@ -60,20 +55,10 @@ export function Sidebar() {
               <Box sx={{ flex: '1' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                   <Typography sx={{ color: 'success.main', mr: 1 }}>
-                    +
-                    {getRating(
-                      accountProfile,
-                      REPUTATION_DOMAIN_ID.environment,
-                      REPUTATION_RATING_ID.positive,
-                    )}
+                    {`+${accountProfile.avatarNftTotalPositiveRating}`}
                   </Typography>
                   <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                    -
-                    {getRating(
-                      accountProfile,
-                      REPUTATION_DOMAIN_ID.environment,
-                      REPUTATION_RATING_ID.negative,
-                    )}
+                    {`-${accountProfile.avatarNftTotalNegativeRating}`}
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${accountProfile.account}`} passHref>

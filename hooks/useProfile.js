@@ -71,5 +71,7 @@ function createProfileObject(avatarNftEntity) {
     avatarNftEntity.uriFirstName,
     avatarNftEntity.uriLastName,
     avatarNftEntity.reputations,
+    avatarNftEntity.totalNegativeRating,
+    avatarNftEntity.totalPositiveRating,
   );
 }
