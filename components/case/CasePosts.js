@@ -2,6 +2,7 @@ import { Button, Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
+import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
@@ -14,16 +15,7 @@ import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
 export default function CasePosts({ caseObject, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
-
-  function isAccountHasRole(account, caseObject) {
-    let result = false;
-    caseObject.roles.forEach((role) => {
-      if (role.accounts.includes(account)) {
-        result = true;
-      }
-    });
-    return result;
-  }
+  const { isAccountHasAnyCaseRole } = useCase();
 
   return (
     <Box sx={{ ...sx }}>
@@ -119,7 +111,7 @@ export default function CasePosts({ caseObject, sx }) {
           )}
           {/* Add comment post form */}
           {caseObject.stage === CASE_STAGE.open.id &&
-            isAccountHasRole(account, caseObject) && (
+            isAccountHasAnyCaseRole(caseObject, account) && (
               <Button
                 variant="outlined"
                 onClick={() =>

@@ -2,6 +2,7 @@ import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
+import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { hexStringToJson } from 'utils/converters';
@@ -14,13 +15,7 @@ import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 export default function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
-
-  function isAccountCaseJudge(account, caseObject) {
-    const judgeRole = caseObject.roles.find(
-      (role) => role.roleId === CASE_ROLE.judge.id,
-    );
-    return judgeRole?.accounts?.includes(account);
-  }
+  const { isAccountHasCaseRole } = useCase();
 
   return (
     <Box sx={{ ...sx }}>
@@ -103,7 +98,7 @@ export default function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
           )}
           {/* Forms to add verdict or cancel case */}
           {caseObject.stage === CASE_STAGE.verdict.id &&
-            isAccountCaseJudge(account, caseObject) && (
+            isAccountHasCaseRole(caseObject, account, CASE_ROLE.judge.id) && (
               <Stack direction="row" spacing={1}>
                 <Button
                   variant="outlined"

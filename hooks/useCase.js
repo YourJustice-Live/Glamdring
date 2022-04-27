@@ -97,9 +97,43 @@ export default function useCase() {
     return caseEvents;
   };
 
+  /**
+   * Check that the account has any role in specified case.
+   *
+   * @param {Case} caseObject Case.
+   * @param {string} account Account address.
+   * @returns {boolean} Result of checking.
+   */
+  let isAccountHasAnyCaseRole = function (caseObject, account) {
+    let result = false;
+    caseObject?.roles?.forEach((role) => {
+      if (role.accounts?.includes(account?.toLowerCase())) {
+        result = true;
+      }
+    });
+    return result;
+  };
+
+  /**
+   * Check that the account has a specified case role.
+   *
+   * @param {Case} caseObject Case
+   * @param {*} account Account address.
+   * @param {*} role Role id.
+   * @returns {boolean} Result of checking.
+   */
+  let isAccountHasCaseRole = function (caseObject, account, role) {
+    const caseRole = caseObject?.roles?.find(
+      (element) => element.roleId === role,
+    );
+    return caseRole?.accounts?.includes(account.toLowerCase());
+  };
+
   return {
     getCase,
     getCases,
     getCaseEvents,
+    isAccountHasAnyCaseRole,
+    isAccountHasCaseRole,
   };
 }
