@@ -9,14 +9,26 @@ export default function useSubgraph() {
    * Find the Avatar NFTs for all or only for the specified accounts.
    *
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
+   * @param {string} jurisdiction Jurisdiction address.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
-  let findAvatarNftEntities = async function (accounts, first = 10, skip = 0) {
+  let findAvatarNftEntities = async function (
+    accounts,
+    jurisdiction,
+    first = 10,
+    skip = 0,
+  ) {
     const fixedAccounts = accounts
       ? accounts.map((account) => account.toLowerCase())
       : null;
+    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
-      getFindAvatarNftEntitiesQuery(fixedAccounts, first, skip),
+      getFindAvatarNftEntitiesQuery(
+        fixedAccounts,
+        fixedJurisdiction,
+        first,
+        skip,
+      ),
     );
     return response.avatarNftEntities;
   };
@@ -166,9 +178,12 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-function getFindAvatarNftEntitiesQuery(accounts, first, skip) {
+function getFindAvatarNftEntitiesQuery(accounts, jurisdiction, first, skip) {
   let accountsFilter = accounts ? `owner_in: ["${accounts.join('","')}"]` : '';
-  let filterParams = `where: {${accountsFilter}}`;
+  let jurisdictionFilter = jurisdiction
+    ? `jurisdictions_contains: ["${jurisdiction}"]`
+    : '';
+  let filterParams = `where: {${accountsFilter}, ${jurisdictionFilter}}`;
   let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{

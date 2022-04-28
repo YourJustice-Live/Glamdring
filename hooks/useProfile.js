@@ -24,10 +24,14 @@ export default function useProfile() {
    * Get profiles.
    *
    * @param {Array.<string>} accounts If not null, then the function returns the profiles for the specified accounts.
+   * @param {string} jurisdiction Jurisdiction address.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
-  let getProfiles = async function (accounts) {
-    const avatarNftEntities = await findAvatarNftEntities(accounts);
+  let getProfiles = async function (accounts, jurisdiction) {
+    const avatarNftEntities = await findAvatarNftEntities(
+      accounts,
+      jurisdiction,
+    );
     return avatarNftEntities.map((avatarNftEntity) =>
       createProfileObject(avatarNftEntity),
     );
