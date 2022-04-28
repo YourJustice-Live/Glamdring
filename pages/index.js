@@ -15,7 +15,7 @@ export default function Index() {
   useEffect(() => {
     async function loadData() {
       try {
-        setProfiles(await getProfiles());
+        setProfiles(await getProfiles(null, null, 20, 0));
       } catch (error) {
         showToastError(error);
       }

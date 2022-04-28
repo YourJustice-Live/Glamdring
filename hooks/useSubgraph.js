@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { PROFILE_ORDER } from 'constants/subgraph';
 import { unionWith } from 'lodash';
 
 /**
@@ -10,6 +11,7 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
    * @param {string} jurisdiction Jurisdiction address.
+   * @param {string} order avatars order.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
   let findAvatarNftEntities = async function (
@@ -17,6 +19,7 @@ export default function useSubgraph() {
     jurisdiction,
     first = 10,
     skip = 0,
+    order = PROFILE_ORDER.byPositiveRating,
   ) {
     const fixedAccounts = accounts
       ? accounts.map((account) => account.toLowerCase())
@@ -28,6 +31,7 @@ export default function useSubgraph() {
         fixedJurisdiction,
         first,
         skip,
+        order,
       ),
     );
     return response.avatarNftEntities;
@@ -178,13 +182,19 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-function getFindAvatarNftEntitiesQuery(accounts, jurisdiction, first, skip) {
+function getFindAvatarNftEntitiesQuery(
+  accounts,
+  jurisdiction,
+  first,
+  skip,
+  order,
+) {
   let accountsFilter = accounts ? `owner_in: ["${accounts.join('","')}"]` : '';
   let jurisdictionFilter = jurisdiction
     ? `jurisdictions_contains: ["${jurisdiction}"]`
     : '';
   let filterParams = `where: {${accountsFilter}, ${jurisdictionFilter}}`;
-  let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
+  let sortParams = `orderBy: ${order}, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
       avatarNftEntities(${filterParams}, ${sortParams}, ${paginationParams}) {

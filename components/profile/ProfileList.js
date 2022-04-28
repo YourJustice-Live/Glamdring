@@ -4,9 +4,9 @@ import ProfileCard from 'components/profile/ProfileCard';
 /**
  * A component with a list of profiles.
  */
-export default function ProfileList({ profiles }) {
+export default function ProfileList({ profiles, sx }) {
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{ ...sx }}>
       {!profiles && (
         <>
           {Array(3)
