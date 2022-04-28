@@ -2,7 +2,7 @@ import axios from 'axios';
 import { unionWith } from 'lodash';
 
 /**
- * TODO: Move query fields to constants
+ * Hook to work with subgraph.
  */
 export default function useSubgraph() {
   /**
@@ -11,18 +11,20 @@ export default function useSubgraph() {
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
-  let findAvatarNftEntities = async function (accounts) {
+  let findAvatarNftEntities = async function (accounts, first = 10, skip = 0) {
     const fixedAccounts = accounts
       ? accounts.map((account) => account.toLowerCase())
       : null;
     const response = await makeSubgraphQuery(
-      getFindAvatarNftEntitiesQuery(fixedAccounts),
+      getFindAvatarNftEntitiesQuery(fixedAccounts, first, skip),
     );
     return response.avatarNftEntities;
   };
 
   /**
    * Find the Avatar NFTs by part of address, first name, second, name.
+   *
+   * TODO: Add pagination.
    *
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs.
@@ -164,19 +166,13 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-function getFindAvatarNftEntitiesQuery(accounts) {
-  let queryParams = `first: 100`;
-  if (accounts && accounts.length == 0) {
-    queryParams = `where: {owner: ""}`;
-  }
-  if (accounts && accounts.length == 1) {
-    queryParams = `where: {owner: "${accounts[0]}"}`;
-  }
-  if (accounts && accounts.length > 1) {
-    queryParams = `first: 100, where: {owner_in: ["${accounts.join('","')}"]}`;
-  }
+function getFindAvatarNftEntitiesQuery(accounts, first, skip) {
+  let accountsFilter = accounts ? `owner_in: ["${accounts.join('","')}"]` : '';
+  let filterParams = `where: {${accountsFilter}}`;
+  let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
+  let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
-      avatarNftEntities(${queryParams}) {
+      avatarNftEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
         id
         owner
         uri
