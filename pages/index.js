@@ -6,6 +6,7 @@ import { PROFILE_ORDER } from 'constants/subgraph';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconUsers } from 'icons/IconUsers';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +17,7 @@ export default function Index() {
   const [tabValue, setTabValue] = useState(PROFILE_ORDER.byPositiveRating);
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
+  const [profilesCount, setProfilesCount] = useState(null);
 
   const handleTabChange = (_, newTabValue) => {
     setTabValue(newTabValue);
@@ -23,8 +25,24 @@ export default function Index() {
 
   async function loadData() {
     try {
+      // Load profiles
       setProfiles(null);
       setProfiles(await getProfiles(null, null, 12, 0, tabValue));
+      // Define profiles counts
+      if (!profilesCount) {
+        const lastProfiles = await getProfiles(
+          null,
+          null,
+          1,
+          0,
+          PROFILE_ORDER.byTokenId,
+        );
+        setProfilesCount(
+          lastProfiles && lastProfiles.length > 0
+            ? lastProfiles[0].avatarNftId
+            : null,
+        );
+      }
     } catch (error) {
       showToastError(error);
     }
@@ -56,7 +74,16 @@ export default function Index() {
           <Tab value={PROFILE_ORDER.byPositiveRating} label="Light Side" />
           <Tab value={PROFILE_ORDER.byNegativeRating} label="Dark Side" />
         </Tabs>
-        <ProfileList profiles={profiles} sx={{ mt: 2 }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconUsers size={24} />
+            <Typography variant="h3" sx={{ ml: 1 }}>
+              People
+            </Typography>
+          </Box>
+          {profilesCount && <Typography>Total: {profilesCount}</Typography>}
+        </Box>
+        <ProfileList profiles={profiles} sx={{ mt: 0 }} />
       </Box>
     </Layout>
   );
