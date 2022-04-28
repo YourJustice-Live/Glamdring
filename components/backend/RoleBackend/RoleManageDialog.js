@@ -11,6 +11,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
+import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
@@ -34,13 +35,17 @@ export default function RoleManageDialog({ isAssign, isClose, onClose }) {
       role: {
         type: 'string',
         title: 'Role',
-        default: JURISDICTION_ROLE.member,
+        default: JURISDICTION_ROLE.member.name,
         enum: [
-          JURISDICTION_ROLE.member,
-          JURISDICTION_ROLE.judge,
-          JURISDICTION_ROLE.admin,
+          JURISDICTION_ROLE.member.name,
+          JURISDICTION_ROLE.judge.name,
+          JURISDICTION_ROLE.admin.name,
         ],
-        enumNames: ['Member', 'Judge', 'Admin'],
+        enumNames: [
+          capitalize(JURISDICTION_ROLE.member.name),
+          capitalize(JURISDICTION_ROLE.judge.name),
+          capitalize(JURISDICTION_ROLE.admin.name),
+        ],
       },
     },
   };
