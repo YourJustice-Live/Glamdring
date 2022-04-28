@@ -38,23 +38,25 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the Avatar NFTs by part of address, first name, second, name.
-   *
-   * TODO: Add pagination.
+   * Find the avatar nft entities by part of address, first name, second name.
    *
    * @param {string} searchQuery Search query.
-   * @returns {Promise.<Array.<{object}>>} Avatar NFTs.
+   * @returns {Promise.<Array.<{object}>>} Some of the avatar nft entities that match the search query.
    */
   let findAvatarNftEntitiesBySearchQuery = async function (searchQuery) {
     const response = await makeSubgraphQuery(
       getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery),
     );
-    return unionWith(
+    const unitedResults = unionWith(
       response.result1,
       response.result2,
       response.result3,
       (entity1, entity2) => entity1.id === entity2.id,
     );
+    const sortedResults = unitedResults.sort((a, b) =>
+      Number(a?.totalPositiveRating) < Number(b?.totalPositiveRating) ? 1 : -1,
+    );
+    return sortedResults;
   };
 
   /**
@@ -218,57 +220,37 @@ function getFindAvatarNftEntitiesQuery(
 }
 
 function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
+  let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}"}`;
+  let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}"}`;
+  let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}"}`;
+  let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
+  let paginationParams = `first: 5, skip: 0`;
+  let fields = `
+    id
+    owner
+    uri
+    uriData
+    uriImage
+    uriFirstName
+    uriLastName
+    reputations {
+      id
+      domain
+      positiveRating
+      negativeRating
+    } 
+    totalNegativeRating
+    totalPositiveRating
+  `;
   return `{
-    result1: avatarNftEntities(where: {owner_contains_nocase: "${searchQuery}"}) {
-      id
-      owner
-      uri
-      uriData
-      uriImage
-      uriFirstName
-      uriLastName
-      reputations {
-        id
-        domain
-        positiveRating
-        negativeRating
-      } 
-      totalNegativeRating
-      totalPositiveRating
+    result1: avatarNftEntities(${filterParams1}, ${sortParams}, ${paginationParams}) {
+      ${fields}
     }
-    result2: avatarNftEntities(where: {uriFirstName_contains_nocase: "${searchQuery}"}) {
-      id
-      owner
-      uri
-      uriData
-      uriImage
-      uriFirstName
-      uriLastName
-      reputations {
-        id
-        domain
-        positiveRating
-        negativeRating
-      }
-      totalNegativeRating
-      totalPositiveRating
+    result2: avatarNftEntities(${filterParams2}, ${sortParams}, ${paginationParams}) {
+      ${fields}
     }
-    result3: avatarNftEntities(where: {uriLastName_contains_nocase: "${searchQuery}"}) {
-      id
-      owner
-      uri
-      uriData
-      uriImage
-      uriFirstName
-      uriLastName
-      reputations {
-        id
-        domain
-        positiveRating
-        negativeRating
-      }
-      totalNegativeRating
-      totalPositiveRating
+    result3: avatarNftEntities(${filterParams3}, ${sortParams}, ${paginationParams}) {
+      ${fields}
     }
   }`;
 }
