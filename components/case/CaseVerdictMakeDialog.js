@@ -103,7 +103,7 @@ export default function CaseVerdictMakeDialog({
         (caseRules, caseLaw) => [...caseRules, ...caseLaw.rules],
         [],
       );
-      setRuleids(caseLawRules.map((rule) => rule.id));
+      setRuleids(caseLawRules.map((rule) => rule.ruleId));
       setRuleNames(
         caseLawRules.map(
           (rule) =>
