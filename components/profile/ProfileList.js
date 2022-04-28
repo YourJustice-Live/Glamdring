@@ -12,7 +12,7 @@ export default function ProfileList({ profiles, sx }) {
           {Array(3)
             .fill()
             .map((_, index) => (
-              <Grid key={index} item xs={12} md={4}>
+              <Grid key={index} item xs={12} md={6}>
                 <ProfileCard />
               </Grid>
             ))}

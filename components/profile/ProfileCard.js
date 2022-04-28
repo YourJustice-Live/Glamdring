@@ -109,8 +109,23 @@ export default function ProfileCard({ profile }) {
         </CardContent>
       ) : (
         <CardContent>
-          <Skeleton variant="circular" sx={{ mb: 2 }} width={82} height={82} />
-          <Skeleton variant="rectangular" height={64} />
+          <Stack direction="row" spacing={2}>
+            <Skeleton
+              variant="circular"
+              width={82}
+              height={82}
+              sx={{ borderRadius: '16px' }}
+            />
+            <Box>
+              <Skeleton variant="rectangular" width={164} height={24} />
+              <Skeleton
+                variant="rectangular"
+                width={82}
+                height={16}
+                sx={{ mt: 1 }}
+              />
+            </Box>
+          </Stack>
         </CardContent>
       )}
     </Card>
