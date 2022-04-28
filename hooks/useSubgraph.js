@@ -1,28 +1,46 @@
 import axios from 'axios';
+import { PROFILE_ORDER } from 'constants/subgraph';
 import { unionWith } from 'lodash';
 
 /**
- * TODO: Move query fields to constants
+ * Hook to work with subgraph.
  */
 export default function useSubgraph() {
   /**
    * Find the Avatar NFTs for all or only for the specified accounts.
    *
    * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
+   * @param {string} jurisdiction Jurisdiction address.
+   * @param {string} order avatars order.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
    */
-  let findAvatarNftEntities = async function (accounts) {
+  let findAvatarNftEntities = async function (
+    accounts,
+    jurisdiction,
+    first = 10,
+    skip = 0,
+    order = PROFILE_ORDER.byPositiveRating,
+  ) {
     const fixedAccounts = accounts
       ? accounts.map((account) => account.toLowerCase())
       : null;
+    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
-      getFindAvatarNftEntitiesQuery(fixedAccounts),
+      getFindAvatarNftEntitiesQuery(
+        fixedAccounts,
+        fixedJurisdiction,
+        first,
+        skip,
+        order,
+      ),
     );
     return response.avatarNftEntities;
   };
 
   /**
    * Find the Avatar NFTs by part of address, first name, second, name.
+   *
+   * TODO: Add pagination.
    *
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<{object}>>} Avatar NFTs.
@@ -164,19 +182,22 @@ async function makeSubgraphQuery(query) {
   }
 }
 
-function getFindAvatarNftEntitiesQuery(accounts) {
-  let queryParams = `first: 100`;
-  if (accounts && accounts.length == 0) {
-    queryParams = `where: {owner: ""}`;
-  }
-  if (accounts && accounts.length == 1) {
-    queryParams = `where: {owner: "${accounts[0]}"}`;
-  }
-  if (accounts && accounts.length > 1) {
-    queryParams = `first: 100, where: {owner_in: ["${accounts.join('","')}"]}`;
-  }
+function getFindAvatarNftEntitiesQuery(
+  accounts,
+  jurisdiction,
+  first,
+  skip,
+  order,
+) {
+  let accountsFilter = accounts ? `owner_in: ["${accounts.join('","')}"]` : '';
+  let jurisdictionFilter = jurisdiction
+    ? `jurisdictions_contains: ["${jurisdiction}"]`
+    : '';
+  let filterParams = `where: {${accountsFilter}, ${jurisdictionFilter}}`;
+  let sortParams = `orderBy: ${order}, orderDirection: desc`;
+  let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
-      avatarNftEntities(${queryParams}) {
+      avatarNftEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
         id
         owner
         uri

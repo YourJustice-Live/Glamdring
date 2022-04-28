@@ -24,10 +24,26 @@ export default function useProfile() {
    * Get profiles.
    *
    * @param {Array.<string>} accounts If not null, then the function returns the profiles for the specified accounts.
+   * @param {string} jurisdiction Jurisdiction address.
+   * @param {number} first The number of profiles to getting.
+   * @param {number} skip The number of profiles to skip.
+   * @param {String} order Profiles order. See subgraph constants.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
-  let getProfiles = async function (accounts) {
-    const avatarNftEntities = await findAvatarNftEntities(accounts);
+  let getProfiles = async function (
+    accounts,
+    jurisdiction,
+    first,
+    skip,
+    order,
+  ) {
+    const avatarNftEntities = await findAvatarNftEntities(
+      accounts,
+      jurisdiction,
+      first,
+      skip,
+      order,
+    );
     return avatarNftEntities.map((avatarNftEntity) =>
       createProfileObject(avatarNftEntity),
     );
@@ -35,6 +51,8 @@ export default function useProfile() {
 
   /**
    * Get profiles by part of address, first name, second, name.
+   *
+   * TODO: Add pagination.
    *
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
