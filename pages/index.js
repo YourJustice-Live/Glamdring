@@ -1,13 +1,16 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material';
+import ProfileSelect from 'components/form/widget/ProfileSelect';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { PROFILE_ORDER } from 'constants/subgraph';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export default function Index() {
+  const router = useRouter();
   const { showToastError } = useToasts();
   const { account } = useWeb3Context();
   const [tabValue, setTabValue] = useState(PROFILE_ORDER.byPositiveRating);
@@ -34,13 +37,19 @@ export default function Index() {
 
   return (
     <Layout enableSidebar={!!account}>
-      <Box sx={{ px: 4, mt: 8, textAlign: 'center' }}>
+      <Box sx={{ px: 4, mt: 12, textAlign: 'center' }}>
         <Typography variant="h1" gutterBottom>
           Check or impact reputation of crypto people!
         </Typography>
         <Typography>
           Who was involved in the activities that made you uncomfortable?
         </Typography>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+        <ProfileSelect
+          sx={{ width: { xs: 1, md: 580 } }}
+          onChange={(account) => router.push(`/profile/${account}`)}
+        />
       </Box>
       <Box sx={{ mt: 12 }}>
         <Tabs value={tabValue} onChange={handleTabChange} centered>
