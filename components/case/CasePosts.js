@@ -1,22 +1,13 @@
-import { Button, Link, Paper, Stack, Typography } from '@mui/material';
+import { Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_STAGE } from 'constants/contracts';
-import useCase from 'hooks/useCase';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
 import { hexStringToJson } from 'utils/converters';
-import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
 
 /**
  * A component with a case posts.
  */
 export default function CasePosts({ caseObject, sx }) {
-  const { account } = useWeb3Context();
-  const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasAnyCaseRole } = useCase();
-
   return (
     <Box sx={{ ...sx }}>
       {caseObject && (
@@ -109,23 +100,6 @@ export default function CasePosts({ caseObject, sx }) {
               ))}
             </>
           )}
-          {/* Add comment post form */}
-          {caseObject.stage === CASE_STAGE.open.id &&
-            isAccountHasAnyCaseRole(caseObject, account) && (
-              <Button
-                variant="outlined"
-                onClick={() =>
-                  showDialog(
-                    <CaseCommentPostAddDialog
-                      caseObject={caseObject}
-                      onClose={closeDialog}
-                    />,
-                  )
-                }
-              >
-                Add Comment Post
-              </Button>
-            )}
         </Stack>
       )}
     </Box>
