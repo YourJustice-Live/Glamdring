@@ -4,8 +4,8 @@ import CaseComments from 'components/case/CaseComments';
 import CaseEvidence from 'components/case/CaseEvidence';
 import CaseMeta from 'components/case/CaseMeta';
 import CaseParticipants from 'components/case/CaseParticipants';
-import CasePosts from 'components/case/CasePosts';
 import CaseVerdictCancellation from 'components/case/CaseVerdictCancellation';
+import CaseConfirmations from 'components/case/CaseConfirmations';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
 import useCase from 'hooks/useCase';
@@ -89,10 +89,10 @@ export default function Case() {
       </Box>
       <Box sx={{ mt: 12 }}>
         <Typography variant="h1" gutterBottom>
-          Case Posts
+          Confirmations
         </Typography>
         <Divider sx={{ mb: 3 }} />
-        <CasePosts caseObject={caseObject} />
+        <CaseConfirmations caseObject={caseObject} />
       </Box>
       <Box sx={{ mt: 12, mb: 6 }}>
         <Typography variant="h1" gutterBottom>

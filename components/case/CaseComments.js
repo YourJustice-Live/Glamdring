@@ -8,29 +8,33 @@ import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
-import CaseCommentPostAddDialog from './CaseCommentPostAddDialog';
+import CasePostAddDialog from './CasePostAddDialog';
 
 /**
  * A component with case comment posts.
  */
 export default function CaseComments({ caseObject, sx }) {
   const { account } = useWeb3Context();
-  const [commentPosts, setCommentsPosts] = useState(null);
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasAnyCaseRole } = useCase();
+  const [commentPosts, setCommentsPosts] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
       const commentPosts = caseObject.posts.filter(
         (post) => post.uriType === POST_TYPE.comment,
       );
-      setCommentsPosts(commentPosts);
+      const sortedCommentPosts = commentPosts.sort((a, b) =>
+        a?.createdDate?.localeCompare(b?.createdDate),
+      );
+      setCommentsPosts(sortedCommentPosts);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
 
   return (
     <Box sx={{ ...sx }}>
+      {/* Comments */}
       {commentPosts && commentPosts.length > 0 ? (
         <Stack spacing={1}>
           {commentPosts.map((post, index) => (
@@ -44,7 +48,11 @@ export default function CaseComments({ caseObject, sx }) {
               </Stack>
               {/* Message */}
               <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 'bold' }}
+                  gutterBottom
+                >
                   {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
                 </Typography>
                 <Typography variant="body2">
@@ -58,15 +66,16 @@ export default function CaseComments({ caseObject, sx }) {
         <Typography>None</Typography>
       )}
       {/* Add comment post form */}
-      {caseObject.stage === CASE_STAGE.open.id &&
+      {caseObject?.stage === CASE_STAGE.open.id &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"
               onClick={() =>
                 showDialog(
-                  <CaseCommentPostAddDialog
+                  <CasePostAddDialog
                     caseObject={caseObject}
+                    postType={POST_TYPE.comment}
                     onClose={closeDialog}
                   />,
                 )

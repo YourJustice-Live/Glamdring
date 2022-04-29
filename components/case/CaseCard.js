@@ -5,10 +5,10 @@ import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import { useEffect, useState } from 'react';
 import CaseComments from './CaseComments';
+import CaseConfirmations from './CaseConfirmations';
 import CaseEvidence from './CaseEvidence';
 import CaseMeta from './CaseMeta';
 import CaseParticipants from './CaseParticipants';
-import CasePosts from './CasePosts';
 import CaseVerdictCancellation from './CaseVerdictCancellation';
 
 /**
@@ -71,10 +71,10 @@ export default function CaseCard({ caseObject }) {
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
-            Case Posts
+            Confirmations
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CasePosts caseObject={caseObject} />
+          <CaseConfirmations caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6, mb: 3 }}>
           <Typography variant="h3" gutterBottom>
