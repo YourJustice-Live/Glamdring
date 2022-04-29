@@ -4,6 +4,7 @@ import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import { useEffect, useState } from 'react';
+import CaseEvidence from './CaseEvidence';
 import CaseMeta from './CaseMeta';
 import CaseParticipants from './CaseParticipants';
 import CasePosts from './CasePosts';
@@ -52,6 +53,13 @@ export default function CaseCard({ caseObject }) {
           </Typography>
           <Divider sx={{ mb: 3 }} />
           <CaseParticipants caseObject={caseObject} />
+        </Box>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Evidence
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseEvidence caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>

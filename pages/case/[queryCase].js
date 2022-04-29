@@ -1,5 +1,6 @@
 import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import CaseEvidence from 'components/case/CaseEvidence';
 import CaseMeta from 'components/case/CaseMeta';
 import CaseParticipants from 'components/case/CaseParticipants';
 import CasePosts from 'components/case/CasePosts';
@@ -70,6 +71,13 @@ export default function Case() {
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <CaseParticipants caseObject={caseObject} />
+      </Box>
+      <Box sx={{ mt: 12 }}>
+        <Typography variant="h1" gutterBottom>
+          Evidence
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
+        <CaseEvidence caseObject={caseObject} />
       </Box>
       <Box sx={{ mt: 12 }}>
         <Typography variant="h1" gutterBottom>
