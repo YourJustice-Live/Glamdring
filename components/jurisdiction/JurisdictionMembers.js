@@ -46,7 +46,7 @@ export default function JurisdictionMembers({ jurisdiction }) {
 
   useEffect(() => {
     if (jurisdiction) {
-      loadData();
+      loadData(1, 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction, selectedOrder]);
