@@ -126,7 +126,7 @@ export default function useCase() {
     const caseRole = caseObject?.roles?.find(
       (element) => element.roleId === role,
     );
-    return caseRole?.accounts?.includes(account.toLowerCase());
+    return caseRole?.accounts?.includes(account?.toLowerCase());
   };
 
   return {
