@@ -57,7 +57,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
                     }}
                     gutterBottom
                   >
-                    {isConfirmed ? 'Сonfirm' : 'Deny'}
+                    Witness {isConfirmed ? 'confirmed' : 'denied'} case
                   </Typography>
                   <Typography
                     variant="body2"
