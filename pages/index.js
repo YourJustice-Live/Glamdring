@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Pagination, Tab, Tabs, Typography } from '@mui/material';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
@@ -18,16 +18,33 @@ export default function Index() {
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
   const [profilesCount, setProfilesCount] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageCount, setCurrentPageCount] = useState(1);
+  const pageSize = 12;
 
   const handleTabChange = (_, newTabValue) => {
     setTabValue(newTabValue);
   };
 
-  async function loadData() {
+  async function loadData(page = currentPage, pageCount = currentPageCount) {
     try {
-      // Load profiles
+      // Update states
+      setCurrentPage(page);
+      setCurrentPageCount(pageCount);
       setProfiles(null);
-      setProfiles(await getProfiles(null, null, 12, 0, tabValue));
+      // Load profiles
+      const profiles = await getProfiles(
+        null,
+        null,
+        pageSize,
+        (page - 1) * pageSize,
+        tabValue,
+      );
+      setProfiles(profiles);
+      // Add next page to pagination if possible
+      if (page == pageCount && profiles.length === pageSize) {
+        setCurrentPageCount(pageCount + 1);
+      }
       // Define profiles counts
       if (!profilesCount) {
         const lastProfiles = await getProfiles(
@@ -49,7 +66,7 @@ export default function Index() {
   }
 
   useEffect(() => {
-    loadData();
+    loadData(1, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabValue]);
 
@@ -84,6 +101,13 @@ export default function Index() {
           {profilesCount && <Typography>Total: {profilesCount}</Typography>}
         </Box>
         <ProfileList profiles={profiles} sx={{ mt: 0 }} />
+        <Pagination
+          color="primary"
+          sx={{ mt: 2 }}
+          count={currentPageCount}
+          page={currentPage}
+          onChange={(_, page) => loadData(page)}
+        />
       </Box>
     </Layout>
   );
