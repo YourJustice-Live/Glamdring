@@ -4,7 +4,7 @@ import CaseComments from 'components/case/CaseComments';
 import CaseEvidence from 'components/case/CaseEvidence';
 import CaseMeta from 'components/case/CaseMeta';
 import CaseParticipants from 'components/case/CaseParticipants';
-import CaseVerdictCancellation from 'components/case/CaseVerdictCancellation';
+import CaseJudging from 'components/case/CaseJudging';
 import CaseConfirmations from 'components/case/CaseConfirmations';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
@@ -61,14 +61,14 @@ export default function Case() {
       </Box>
       <Box sx={{ mt: 12 }}>
         <Typography variant="h1" gutterBottom>
-          Case Laws
+          Laws
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <LawList laws={caseLaws} />
       </Box>
       <Box sx={{ mt: 12 }}>
         <Typography variant="h1" gutterBottom>
-          Case Participants
+          Participants
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <CaseParticipants caseObject={caseObject} />
@@ -96,10 +96,10 @@ export default function Case() {
       </Box>
       <Box sx={{ mt: 12, mb: 6 }}>
         <Typography variant="h1" gutterBottom>
-          Case Verdict or Cancellation
+          Judging
         </Typography>
         <Divider sx={{ mb: 3 }} />
-        <CaseVerdictCancellation caseObject={caseObject} caseLaws={caseLaws} />
+        <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
       </Box>
     </Layout>
   );

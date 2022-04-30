@@ -376,6 +376,7 @@ function getFindCaseEntitiesQuery(
       verdictUriData
       verdictConfirmedRules {
         id
+        ruleId
       }
       cancellationAuthor
       cancellationUri
