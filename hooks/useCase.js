@@ -118,8 +118,8 @@ export default function useCase() {
    * Check that the account has a specified case role.
    *
    * @param {Case} caseObject Case
-   * @param {*} account Account address.
-   * @param {*} role Role id.
+   * @param {string} account Account address.
+   * @param {string} role Role id.
    * @returns {boolean} Result of checking.
    */
   let isAccountHasCaseRole = function (caseObject, account, role) {

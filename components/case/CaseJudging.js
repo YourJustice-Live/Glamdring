@@ -12,7 +12,7 @@ import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 /**
  * A component with a case verdict or cancellation.
  */
-export default function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
+export default function CaseJudging({ caseObject, caseLaws, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasCaseRole } = useCase();
@@ -35,65 +35,79 @@ export default function CaseVerdictCancellation({ caseObject, caseLaws, sx }) {
           {/* Verdict */}
           {caseObject.stage === CASE_STAGE.closed.id && (
             <Paper sx={{ p: 2 }}>
+              {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">Type:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  Verdict
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">Judge:</Typography>
                 <ProfileCompactCard account={caseObject.verdictAuthor} />
+                <Typography variant="body2">(Judge)</Typography>
               </Stack>
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Message:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {/* Content */}
+              <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'success.main', mr: 0.5 }}
+                  >
+                    Judge made verdict
+                  </Typography>
+                  <Typography variant="body2">(Confirmed Rules:</Typography>
+                  {caseObject.verdictConfirmedRules.length > 0 ? (
+                    <>
+                      {caseObject.verdictConfirmedRules.map(
+                        (confirmedRule, index) => (
+                          <Chip
+                            key={index}
+                            label={`ID: ${confirmedRule.ruleId}`}
+                            size="small"
+                            sx={{ ml: 0.5 }}
+                          />
+                        ),
+                      )}
+                    </>
+                  ) : (
+                    <Typography variant="body2">None</Typography>
+                  )}
+                  <Typography variant="body2">)</Typography>
+                </Box>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 'bold', mt: 0.5 }}
+                >
                   {hexStringToJson(caseObject.verdictUriData)?.verdictMessage ||
                     'Unknown'}
                 </Typography>
-              </Stack>
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography variant="body2">Confirmed Rules:</Typography>
-                {caseObject.verdictConfirmedRules.length > 0 ? (
-                  <>
-                    {caseObject.verdictConfirmedRules.map(
-                      (confirmedRule, index) => (
-                        <Chip
-                          key={index}
-                          label={`ID: ${confirmedRule.id}`}
-                          size="small"
-                        />
-                      ),
-                    )}
-                  </>
-                ) : (
-                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                    None
-                  </Typography>
-                )}
-              </Stack>
+              </Paper>
             </Paper>
           )}
           {/* Cancellation */}
           {caseObject.stage === CASE_STAGE.cancelled.id && (
             <Paper sx={{ p: 2 }}>
+              {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">Type:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                  Cancellation
-                </Typography>
-              </Stack>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">Judge:</Typography>
                 <ProfileCompactCard account={caseObject.cancellationAuthor} />
+                <Typography variant="body2">(Judge)</Typography>
               </Stack>
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2">Message:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {/* Content */}
+              <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 'bold', color: 'danger.main', mr: 0.5 }}
+                >
+                  Judge cancelled case
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 'bold', mt: 0.5 }}
+                >
                   {hexStringToJson(caseObject.cancellationUriData)
                     ?.cancellationMessage || 'Unknown'}
                 </Typography>
-              </Stack>
+              </Paper>
             </Paper>
           )}
           {/* Forms to add verdict or cancel case */}

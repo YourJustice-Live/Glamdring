@@ -4,10 +4,12 @@ import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import { useEffect, useState } from 'react';
+import CaseComments from './CaseComments';
+import CaseConfirmations from './CaseConfirmations';
+import CaseEvidence from './CaseEvidence';
 import CaseMeta from './CaseMeta';
 import CaseParticipants from './CaseParticipants';
-import CasePosts from './CasePosts';
-import CaseVerdictCancellation from './CaseVerdictCancellation';
+import CaseJudging from './CaseJudging';
 
 /**
  * A component with a card with case.
@@ -32,43 +34,48 @@ export default function CaseCard({ caseObject }) {
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 4 }}>
-        <Box>
-          <Typography variant="h3" gutterBottom>
-            Case
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseMeta caseObject={caseObject} />
-        </Box>
+        <CaseMeta caseObject={caseObject} />
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
-            Case Laws
+            Laws
           </Typography>
           <Divider sx={{ mb: 3 }} />
           <LawList laws={caseLaws} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
-            Case Participants
+            Participants
           </Typography>
           <Divider sx={{ mb: 3 }} />
           <CaseParticipants caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6 }}>
           <Typography variant="h3" gutterBottom>
-            Case Posts
+            Evidence
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CasePosts caseObject={caseObject} />
+          <CaseEvidence caseObject={caseObject} />
+        </Box>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Comments
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseComments caseObject={caseObject} />
+        </Box>
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h3" gutterBottom>
+            Confirmations
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
+          <CaseConfirmations caseObject={caseObject} />
         </Box>
         <Box sx={{ mt: 6, mb: 3 }}>
           <Typography variant="h3" gutterBottom>
-            Case Verdict or Cancellation
+            Judging
           </Typography>
           <Divider sx={{ mb: 3 }} />
-          <CaseVerdictCancellation
-            caseObject={caseObject}
-            caseLaws={caseLaws}
-          />
+          <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
         </Box>
       </CardContent>
     </Card>
