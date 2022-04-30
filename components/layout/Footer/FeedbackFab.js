@@ -122,8 +122,9 @@ function FeedbackPostDialog({ isClose, onClose }) {
         >
           <Box sx={{ mt: 1 }}>
             <ReCAPTCHA
+              size="compact"
               ref={recaptchaRef}
-              sitekey="6LfzkrIfAAAAAIMcRr3rv78_T7aPP6HOzqdSez3B"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             />
           </Box>
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
