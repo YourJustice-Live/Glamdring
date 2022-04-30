@@ -9,12 +9,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import useDialogContext from 'hooks/useDialogContext';
-import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
+import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import useDialogContext from 'hooks/useDialogContext';
 import useFormSubmit from 'hooks/useFormSubmit';
+import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { createRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 /**
  * A component with a footer feedback floating action button.
@@ -46,6 +48,7 @@ function FeedbackPostDialog({ isClose, onClose }) {
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
+  const recaptchaRef = createRef();
 
   const schema = {
     type: 'object',
@@ -80,6 +83,9 @@ function FeedbackPostDialog({ isClose, onClose }) {
 
   async function submit({ formData }) {
     try {
+      if (!recaptchaRef.current.getValue()) {
+        throw new Error('Invalid CAPTCHA');
+      }
       setFormData(formData);
       setIsLoading(true);
       submitFeedback(account, formData.feedback, formData.contact);
@@ -114,6 +120,12 @@ function FeedbackPostDialog({ isClose, onClose }) {
           onSubmit={submit}
           disabled={isLoading}
         >
+          <Box sx={{ mt: 1 }}>
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey="6LfzkrIfAAAAAIMcRr3rv78_T7aPP6HOzqdSez3B"
+            />
+          </Box>
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (
               <LoadingButton
