@@ -1,3 +1,4 @@
+import { MenuOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -62,7 +63,7 @@ export default function Navigation() {
           variant="h3"
           noWrap
           component="div"
-          sx={{ mr: 6, display: { xs: 'none', md: 'flex', fontSize: '3rem' } }}
+          sx={{ mr: 6, display: { xs: 'none', md: 'flex' }, fontSize: '3rem' }}
         >
           <Link href="/">
             <a style={{ display: 'flex' }}>
@@ -101,12 +102,20 @@ export default function Navigation() {
           component="div"
           sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
         >
-          <Logo />
+          <Link href="/">
+            <a style={{ display: 'flex' }}>
+              <Logo />
+            </a>
+          </Link>
         </Typography>
 
-        {/* Key button */}
+        {/* Desktop key button */}
         <Box
-          sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row-reverse' }}
+          sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'flex' },
+            flexDirection: 'row-reverse',
+          }}
         >
           {account && accountProfile && (
             <Button
@@ -165,98 +174,102 @@ export default function Navigation() {
         )}
 
         {/* Menu button and menu component */}
-        {account && (
-          <>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
-                <Avatar
-                  src={accountProfile?.avatarNftUriImage}
-                  sx={{ bgcolor: 'grey.50', width: 36, height: 36 }}
-                >
-                  <IconProfile hexColor={palette.grey[600]} />
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              id="menu-appbar"
-              sx={{
-                mt: '45px',
-                padding: '15px',
-                [`& .MuiPaper-root`]: {
-                  padding: 0,
-                  borderRadius: '15px',
-                  overflow: 'hidden',
-                },
-              }}
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+        <Tooltip title="Open Menu">
+          <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
+            <Avatar
+              src={accountProfile?.avatarNftUriImage}
+              sx={{ bgcolor: 'grey.50', width: 36, height: 36 }}
             >
-              <Box
-                sx={{
-                  mx: '15px',
-                  my: '10px',
-                  pb: '14px',
-                  borderBottom: '1px solid gray',
-                  borderColor: 'grey.200',
-                }}
-              >
-                <span>{formatAddress(account)}</span>
-              </Box>
-              {accountProfile && (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link href="/profile" passHref>
-                    <Typography>Profile</Typography>
-                  </Link>
-                </MenuItem>
+              {account ? (
+                <IconProfile hexColor={palette.grey[600]} />
+              ) : (
+                <MenuOutlined sx={{ color: palette.grey[600] }} />
               )}
-              {accountProfile && (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link href="/profile/manage" passHref>
-                    <Typography>Profile Manage</Typography>
-                  </Link>
-                </MenuItem>
-              )}
-              {!accountProfile && (
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link href="/profile/manage" passHref>
-                    <Typography>Create Profile</Typography>
-                  </Link>
-                </MenuItem>
-              )}
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Link href="/jurisdiction" passHref>
-                  <Typography>Jurisdiction</Typography>
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Link href="/backend" passHref>
-                  <Typography>Backend</Typography>
-                </Link>
-              </MenuItem>
-              <Box
-                sx={{
-                  mx: '15px',
-                  my: '10px',
-                  borderBottom: '1px solid gray',
-                  borderColor: 'grey.200',
-                }}
-              />
-              <MenuItem onClick={disconnectWallet}>
-                <Typography textAlign="center">Disconnect Wallet</Typography>
-              </MenuItem>
-            </Menu>
-          </>
-        )}
+            </Avatar>
+          </IconButton>
+        </Tooltip>
+        <Menu
+          id="menu"
+          sx={{
+            mt: '45px',
+            padding: '15px',
+            [`& .MuiPaper-root`]: {
+              padding: 0,
+              borderRadius: '15px',
+              overflow: 'hidden',
+            },
+          }}
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          {/* Menu items */}
+          {!account && (
+            <MenuItem onClick={connectWallet}>
+              <Typography textAlign="center">Connect Wallet</Typography>
+            </MenuItem>
+          )}
+          {account && (
+            <Box
+              sx={{
+                mx: '15px',
+                my: '10px',
+                pb: '14px',
+                borderBottom: '1px solid gray',
+                borderColor: 'grey.200',
+              }}
+            >
+              <span>{formatAddress(account)}</span>
+            </Box>
+          )}
+          {account && accountProfile && (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href="/profile" passHref>
+                <Typography>Profile</Typography>
+              </Link>
+            </MenuItem>
+          )}
+          {account && accountProfile && (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href="/profile/manage" passHref>
+                <Typography>Profile Manage</Typography>
+              </Link>
+            </MenuItem>
+          )}
+          {account && !accountProfile && (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href="/profile/manage" passHref>
+                <Typography>Create Profile</Typography>
+              </Link>
+            </MenuItem>
+          )}
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/jurisdiction" passHref>
+              <Typography>Jurisdiction</Typography>
+            </Link>
+          </MenuItem>
+          {accountProfile && (
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href="/backend" passHref>
+                <Typography>Backend</Typography>
+              </Link>
+            </MenuItem>
+          )}
+          {account && (
+            <MenuItem onClick={disconnectWallet}>
+              <Typography textAlign="center">Disconnect Wallet</Typography>
+            </MenuItem>
+          )}
+        </Menu>
       </Toolbar>
     </AppBar>
   );
