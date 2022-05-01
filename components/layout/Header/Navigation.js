@@ -79,7 +79,7 @@ export default function Navigation() {
               lineHeight: '2.3em',
             }}
           >
-            v.0.1
+            v.{process.env.NEXT_PUBLIC_VERSION}
           </Typography>
           <Divider
             orientation="horizontal"
