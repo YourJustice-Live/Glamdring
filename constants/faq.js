@@ -1,9 +1,9 @@
-import HowToUseYourJustice from 'components/faq/HowToUseYourJustice';
+import HowItWorks from 'components/faq/HowItWorks';
 
 export const QUESTION = [
   {
-    title: 'How to use YourJustice?',
-    path: 'how-to-use-yourjustice',
-    answer: <HowToUseYourJustice />,
+    title: 'How it works?',
+    path: 'how-it-works',
+    answer: <HowItWorks />,
   },
 ];
