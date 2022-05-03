@@ -257,6 +257,11 @@ export default function Navigation() {
               <Typography>Jurisdiction</Typography>
             </Link>
           </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/faq" passHref>
+              <Typography>FAQ</Typography>
+            </Link>
+          </MenuItem>
           {accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/backend" passHref>
