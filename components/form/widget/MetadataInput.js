@@ -14,11 +14,14 @@ import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 /**
- * A widget for entering any data, publishing it to IPFS and getting a URI.
+ * A widget for entering metadata, publishing it to IPFS and getting a URI.
  */
-export default function DataUriInput(props) {
+export default function MetadataInput(props) {
   const propsLabel = props.label;
-  const propsValue = props.value; // Data URI
+  const propsSubLabel = props.options?.subLabel;
+  const propsValue = props.value; // Metadata URI
+  const propsFields = props.options?.fields || [];
+  const propsRequiredFields = props.options?.requiredFields || [];
   const propsOnChange = props.onChange;
 
   const { showToastError } = useToasts();
@@ -30,25 +33,17 @@ export default function DataUriInput(props) {
 
   /**
    * Default form schema.
-   *
-   * TODO: Use additional properties for generate complex schema (https://rjsf-team.github.io/react-jsonschema-form/).
    */
   const formSchema = {
     type: 'object',
+    required: [...propsRequiredFields],
     properties: {
-      name: {
-        type: 'string',
-        title: 'Name',
-      },
-      description: {
-        type: 'string',
-        title: 'Description',
-      },
+      ...propsFields,
     },
   };
 
   /**
-   * Initiate the form data by loading data from the props uri.
+   * Initiate the form data by loading metadata from the props uri.
    */
   async function initFormData() {
     try {
@@ -64,7 +59,7 @@ export default function DataUriInput(props) {
   }
 
   /**
-   * Open the form to entering data.
+   * Open the form to entering metadata.
    */
   async function openForm() {
     setIsFormOpen(true);
@@ -86,6 +81,7 @@ export default function DataUriInput(props) {
       closeForm();
       setFormData(formData);
       const { url } = await uploadJsonToIPFS(formData);
+      console.log('[Dev] url', url);
       propsOnChange(url);
     } catch (error) {
       showToastError(error);
@@ -101,7 +97,12 @@ export default function DataUriInput(props) {
 
   return (
     <>
-      <Typography variant="h5">{propsLabel}</Typography>
+      <Typography variant="h5" gutterBottom>
+        {propsLabel}
+      </Typography>
+      <Typography variant="body2" gutterBottom>
+        {propsSubLabel}
+      </Typography>
       <Divider sx={{ mb: 2 }} />
       {isLoading ? (
         <Typography>Loading...</Typography>
@@ -112,12 +113,14 @@ export default function DataUriInput(props) {
           </Paper>
           {/* Button for open dialog with form */}
           <Button variant="outlined" onClick={openForm}>
-            Edit data
+            Edit Metadata
           </Button>
           {/* Dialog with form */}
           <Dialog open={isFormOpen} onClose={closeForm}>
-            <DialogTitle>Edit data</DialogTitle>
+            <DialogTitle>{propsLabel}</DialogTitle>
             <DialogContent>
+              <Typography gutterBottom>{propsSubLabel}</Typography>
+              <Divider sx={{ mb: 0 }} />
               <Form
                 schema={formSchema}
                 formData={formData}
@@ -125,7 +128,7 @@ export default function DataUriInput(props) {
               >
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">
-                    Edit data
+                    Edit Metadata
                   </Button>
                   <Button variant="outlined" onClick={closeForm}>
                     Cancel

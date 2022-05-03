@@ -124,7 +124,11 @@ export default function CaseCreateDialog({
             type: 'string',
           },
         },
-        required: ['subjectProfileAccount', 'affectedProfileAccount'],
+        required: [
+          'subjectProfileAccount',
+          'affectedProfileAccount',
+          formRule?.confirmation?.evidence && 'evidencePostUri',
+        ],
       },
     },
   };
@@ -162,6 +166,9 @@ export default function CaseCreateDialog({
     },
     evidencePostUri: {
       'ui:widget': 'CaseEvidencePostInput',
+      'ui:options': {
+        subLabel: formRule?.rule?.uriData?.evidenceDescription,
+      },
     },
     witnessProfileAccounts: {
       'ui:widget': 'CaseWitnessesSelect',
