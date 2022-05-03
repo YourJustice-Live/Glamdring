@@ -100,6 +100,13 @@ export default function ActionRuleTable({ sx }) {
       valueGetter: (params) => `${params.row.rule?.rule.uriData?.description}`,
     },
     {
+      field: 'ruleUriDataEvidenceDescription',
+      headerName: 'Rule URI Data Evidence Description',
+      width: 200,
+      valueGetter: (params) =>
+        `${params.row.rule?.rule.uriData?.evidenceDescription}`,
+    },
+    {
       field: 'ruleCategory',
       headerName: 'Rule Category',
       width: 140,

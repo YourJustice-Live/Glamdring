@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import DataUriInput from 'components/form/widget/DataUriInput';
+import MetadataInput from 'components/form/widget/MetadataInput';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
@@ -57,7 +57,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
           },
           uri: {
             type: 'string',
-            title: 'Additional Data',
+            title: 'Metadata',
             default: '',
           },
           effects: {
@@ -126,7 +126,26 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
       },
       uri: {
         'ui:emptyValue': '',
-        'ui:widget': 'DataUriInput',
+        'ui:widget': 'MetadataInput',
+        'ui:options': {
+          subLabel:
+            'Rule name, description, evidence description, examples, requirements',
+          fields: {
+            name: {
+              type: 'string',
+              title: 'Name',
+            },
+            description: {
+              type: 'string',
+              title: 'Description',
+            },
+            evidenceDescription: {
+              type: 'string',
+              title: 'Evidence description, examples, requirements',
+            },
+          },
+          requiredFields: ['name', 'description'],
+        },
       },
       effects: {
         environmental: { 'ui:widget': 'updown' },
@@ -147,7 +166,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
   };
 
   const widgets = {
-    DataUriInput: DataUriInput,
+    MetadataInput: MetadataInput,
   };
 
   function close() {
