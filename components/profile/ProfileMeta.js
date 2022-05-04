@@ -10,6 +10,7 @@ import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
@@ -89,29 +90,20 @@ export default function ProfileMeta({ account }) {
                 {`-${profile.avatarNftTotalNegativeRating}`}
               </Typography>
             </Box>
-            {/* TODO: Fix next block for new contracts */}
             {/* Rating by domains */}
-            {/* {Object.values(REPUTATION_DOMAIN).map((domain, index) => (
+            {profile.avatarNftReputations?.map((reputation, index) => (
               <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
                 <Typography sx={{ mr: 1 }}>
-                  {`${capitalize(domain.name)} Rating:`}
+                  {`${capitalize(reputation.domain)} Rating:`}
                 </Typography>
                 <Typography sx={{ color: 'success.main', mr: 1 }}>
-                  {`+${getRating(
-                    profile,
-                    domain.id,
-                    REPUTATION_RATING.positive.id,
-                  )}`}
+                  +{reputation.positiveRating}
                 </Typography>
-                <Typography sx={{ color: 'danger.main' }}>
-                  {`-${getRating(
-                    profile,
-                    domain.id,
-                    REPUTATION_RATING.negative.id,
-                  )}`}
+                <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                  +{reputation.negativeRating}
                 </Typography>
               </Box>
-            ))} */}
+            ))}
           </Stack>
           {/* Actions */}
           <Stack direction="row" spacing={2} sx={{ mt: 8 }}>
