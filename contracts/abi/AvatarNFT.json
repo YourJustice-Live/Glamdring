@@ -64,6 +64,49 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "domain",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "rating",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "name": "OpinionChange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -90,20 +133,20 @@
       },
       {
         "indexed": false,
-        "internalType": "enum DataTypes.Domain",
+        "internalType": "string",
         "name": "domain",
-        "type": "uint8"
+        "type": "string"
       },
       {
         "indexed": false,
-        "internalType": "enum DataTypes.Rating",
+        "internalType": "bool",
         "name": "rating",
-        "type": "uint8"
+        "type": "bool"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "socre",
+        "name": "score",
         "type": "uint256"
       }
     ],
@@ -218,6 +261,19 @@
         "type": "uint256"
       }
     ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
     "name": "getApproved",
     "outputs": [
       {
@@ -232,19 +288,92 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
       },
       {
-        "internalType": "enum DataTypes.Domain",
+        "internalType": "string",
         "name": "domain",
-        "type": "uint8"
+        "type": "string"
       },
       {
-        "internalType": "enum DataTypes.Rating",
+        "internalType": "bool",
         "name": "rating",
-        "type": "uint8"
+        "type": "bool"
+      }
+    ],
+    "name": "getRepForDomain",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "domain",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "rating",
+        "type": "bool"
+      }
+    ],
+    "name": "getRepForDomain",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "domain",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "rating",
+        "type": "bool"
       }
     ],
     "name": "getRepForDomain",
@@ -395,14 +524,14 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum DataTypes.Domain",
+        "internalType": "string",
         "name": "domain",
-        "type": "uint8"
+        "type": "string"
       },
       {
-        "internalType": "enum DataTypes.Rating",
+        "internalType": "bool",
         "name": "rating",
-        "type": "uint8"
+        "type": "bool"
       },
       {
         "internalType": "uint8",
@@ -514,6 +643,43 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "tokenByAddress",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenOwnerAdd",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

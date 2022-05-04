@@ -262,7 +262,7 @@ export default function Navigation() {
               <Typography>FAQ</Typography>
             </Link>
           </MenuItem>
-          {accountProfile && (
+          {account && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/backend" passHref>
                 <Typography>Backend</Typography>

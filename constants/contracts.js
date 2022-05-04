@@ -1,29 +1,25 @@
 export const REPUTATION_DOMAIN = {
   environment: {
-    id: 0,
     name: 'environment',
   },
   personal: {
-    id: 1,
     name: 'personal',
   },
   community: {
-    id: 2,
     name: 'community',
   },
   professional: {
-    id: 3,
     name: 'professional',
   },
 };
 
 export const REPUTATION_RATING = {
   negative: {
-    id: 0,
+    direction: false,
     name: 'negative',
   },
   positive: {
-    id: 1,
+    direction: true,
     name: 'positive',
   },
 };

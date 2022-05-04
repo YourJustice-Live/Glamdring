@@ -3,13 +3,21 @@ import {
   DataObjectOutlined,
   ModeEditOutline,
 } from '@mui/icons-material';
-import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
+import { REPUTATION_RATING } from 'constants/contracts';
 import useAction from 'hooks/useAction';
 import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
+import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import ActionManageDialog from './ActionManageDialog';
 import RuleManageDialog from './RuleManageDialog';
@@ -124,28 +132,35 @@ export default function ActionRuleTable({ sx }) {
       },
     },
     {
-      field: 'ruleEffectsEnvironmental',
-      headerName: 'Rule Effects Environmental',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.effects.environmental}`,
-    },
-    {
-      field: 'ruleEffectsProfessional',
-      headerName: 'Rule Effects Professional',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.effects.professional}`,
-    },
-    {
-      field: 'ruleEffectsSocial',
-      headerName: 'Rule Effects Social',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.effects.social}`,
-    },
-    {
-      field: 'ruleEffectsPersonal',
-      headerName: 'Rule Effects Personal',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.effects.personal}`,
+      field: 'ruleEffects',
+      headerName: 'Rule Effects',
+      width: 320,
+      valueGetter: (params) => JSON.stringify(params.row.rule?.effects),
+      renderCell: (params) => (
+        <Stack>
+          {params.row.rule?.effects.map((effect, index) => {
+            return (
+              <Stack key={index} direction="row" spacing={2}>
+                <Typography variant="body2">
+                  {capitalize(effect.name)}
+                </Typography>
+                <Typography variant="body2">|</Typography>
+                {effect.direction === REPUTATION_RATING.positive.direction ? (
+                  <Typography variant="body2" sx={{ color: 'success.main' }}>
+                    Is Positive
+                  </Typography>
+                ) : (
+                  <Typography variant="body2" sx={{ color: 'danger.main' }}>
+                    Is Negative
+                  </Typography>
+                )}
+                <Typography variant="body2">|</Typography>
+                <Typography variant="body2">Value: {effect.value}</Typography>
+              </Stack>
+            );
+          })}
+        </Stack>
+      ),
     },
     {
       field: 'ruleConfirmationRuling',
@@ -236,7 +251,7 @@ export default function ActionRuleTable({ sx }) {
           null,
           action.guid,
         );
-        if (actionRules) {
+        if (actionRules?.length > 0) {
           for (const rule of actionRules) {
             rows.push({ action: action, rule: rule });
           }

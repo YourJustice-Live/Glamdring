@@ -297,13 +297,14 @@ function getFindJurisdictionRuleEntitiesQuery(ids, jurisdiction, actionGuid) {
       uri
       uriData
       negation
-      effectsEnvironmental
-      effectsProfessional
-      effectsSocial
-      effectsPersonal
       confirmationRuling
       confirmationEvidence
       confirmationWitness
+      effects {
+        name
+        direction
+        value
+      }
     }
   }`;
 }
@@ -333,13 +334,14 @@ function getFindActionEntitiesQuery(guids) {
         affected
         uri
         negation
-        effectsEnvironmental
-        effectsProfessional
-        effectsSocial
-        effectsPersonal
         confirmationRuling
         confirmationEvidence
         confirmationWitness
+        effects {
+          name
+          direction
+          value
+        }
       }
     }
   }`;

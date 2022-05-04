@@ -46,9 +46,7 @@ export default function Jurisdiction() {
       );
       setJurisdiction(jurisdiction);
       setOfficialsCount(
-        judgeRole?.accountsCount && adminRole?.accountsCount
-          ? judgeRole.accountsCount + adminRole.accountsCount
-          : null,
+        (judgeRole?.accountsCount || 0) + (adminRole?.accountsCount || 0),
       );
       setCitizensCount(memberRole?.accountsCount);
     } catch (error) {

@@ -326,7 +326,6 @@ export default function CaseCreateDialog({
           role: CASE_ROLE.judge.name,
         });
       }
-      console.log('[Dev] caseRoles', caseRoles);
       // Define case posts
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {

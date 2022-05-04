@@ -6,16 +6,13 @@ import {
 import { Avatar, Button, Skeleton, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
-import { getRating } from 'utils/reputation';
 
 /**
  * A component with profile meta (image, name, email, socials).
@@ -92,8 +89,9 @@ export default function ProfileMeta({ account }) {
                 {`-${profile.avatarNftTotalNegativeRating}`}
               </Typography>
             </Box>
+            {/* TODO: Fix next block for new contracts */}
             {/* Rating by domains */}
-            {Object.values(REPUTATION_DOMAIN).map((domain, index) => (
+            {/* {Object.values(REPUTATION_DOMAIN).map((domain, index) => (
               <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
                 <Typography sx={{ mr: 1 }}>
                   {`${capitalize(domain.name)} Rating:`}
@@ -113,7 +111,7 @@ export default function ProfileMeta({ account }) {
                   )}`}
                 </Typography>
               </Box>
-            ))}
+            ))} */}
           </Stack>
           {/* Actions */}
           <Stack direction="row" spacing={2} sx={{ mt: 8 }}>
