@@ -385,6 +385,7 @@ function getFindCaseEntitiesQuery(
       cancellationUriData
       rules {
         id
+        ruleId
       }
       roles {
         id
