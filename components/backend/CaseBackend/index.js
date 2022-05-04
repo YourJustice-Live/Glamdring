@@ -16,6 +16,9 @@ export default function CaseBackend({ sx }) {
         <Typography variant="h2" gutterBottom>
           Backend for Cases
         </Typography>
+        <Typography gutterBottom>
+          A place where users with the appropriate roles can manage cases.
+        </Typography>
         <Divider />
       </Box>
       <Box sx={{ mt: 2.5 }}>
