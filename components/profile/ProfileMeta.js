@@ -72,8 +72,8 @@ export default function ProfileMeta({ account }) {
           </Typography>
           {/* Edit profile button */}
           {account?.toLowerCase() === connectedAccount?.toLowerCase() && (
-            <Box sx={{ mt: 2 }}>
-              <NextLink href={`/profile/manage`} passHref>
+            <Box sx={{ mt: 4 }}>
+              <NextLink href={`/profile/edit`} passHref>
                 <Button variant="outlined">Edit Profile</Button>
               </NextLink>
             </Box>

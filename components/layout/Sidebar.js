@@ -79,11 +79,16 @@ export function Sidebar() {
         {/* Links */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
           {accountProfile ? (
-            <NextLink href="/profile" passHref>
-              <Link underline="none">Profile</Link>
-            </NextLink>
+            <>
+              <NextLink href="/profile" passHref>
+                <Link underline="none">Profile</Link>
+              </NextLink>
+              <NextLink href="/profile/invite" passHref>
+                <Link underline="none">Invite Person</Link>
+              </NextLink>
+            </>
           ) : (
-            <NextLink href="/profile/manage" passHref>
+            <NextLink href="/profile/create" passHref>
               <Link underline="none">Create Profile</Link>
             </NextLink>
           )}
