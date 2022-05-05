@@ -1,7 +1,6 @@
 import { Divider, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ImageBox from './ImageBox';
-import VideoBox from './VideoBox';
 
 /**
  * A component with the answer to the question.
@@ -35,10 +34,6 @@ export default function HowItWorks() {
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752654/FAQ/How%20It%20Works/animation-1_tb1acs.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752659/FAQ/How%20It%20Works/video-1_jhg2fm.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
-          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -47,10 +42,6 @@ export default function HowItWorks() {
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-2_jgxpmv.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
-          />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752824/FAQ/How%20It%20Works/video-2_aauoa4.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -72,10 +63,6 @@ export default function HowItWorks() {
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752815/FAQ/How%20It%20Works/animation-3_dknjcj.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
-          />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752825/FAQ/How%20It%20Works/video-3_rergif.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -105,10 +92,6 @@ export default function HowItWorks() {
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-4_b9dyl3.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
-          />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752822/FAQ/How%20It%20Works/video-4_ljnxgw.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -140,10 +123,6 @@ export default function HowItWorks() {
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-5_pev2tn.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
-          />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752826/FAQ/How%20It%20Works/video-5_ubtpqf.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -178,10 +157,6 @@ export default function HowItWorks() {
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752817/FAQ/How%20It%20Works/animation-6_sj6lom.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752830/FAQ/How%20It%20Works/video-6_z1y3xk.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
-          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -191,10 +166,6 @@ export default function HowItWorks() {
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-7_y6fqo0.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
-          />
-          <VideoBox
-            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752822/FAQ/How%20It%20Works/video-7_aiflxe.mp4"
-            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
