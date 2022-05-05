@@ -22,6 +22,8 @@ import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a card with profile.
+ *
+ * TODO: Don't display "None" text if name is not exists. But what to show instead of it?
  */
 export default function ProfileCard({ profile }) {
   const { accountProfile } = useWeb3Context();

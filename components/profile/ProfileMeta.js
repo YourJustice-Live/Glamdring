@@ -24,6 +24,8 @@ import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
  * A component with profile meta (image, name, email, socials).
+ *
+ * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
  */
 export default function ProfileMeta({ account }) {
   const { accountProfile } = useWeb3Context();

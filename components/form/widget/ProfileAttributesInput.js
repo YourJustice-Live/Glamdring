@@ -4,6 +4,8 @@ import { traitTypes } from 'utils/metadata';
 
 /**
  * A widget for input profile attributes (traits).
+ *
+ * TODO: Maybe first name and second name should be required?
  */
 export default function ProfileAttributesInput(props) {
   const propsDisabled = props.disabled;

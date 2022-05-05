@@ -112,7 +112,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
             ruling: {
               type: 'string',
               title: 'Ruling',
-              default: '',
+              default: 'judge',
             },
             evidence: {
               type: 'boolean',
@@ -138,6 +138,9 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
       affected: {
         'ui:emptyValue': '',
         'ui:placeholder': 'investor',
+      },
+      negation: {
+        'ui:disabled': true,
       },
       uri: {
         'ui:emptyValue': '',
@@ -170,8 +173,8 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
     },
     confirmation: {
       ruling: {
-        'ui:emptyValue': '',
         'ui:placeholder': 'judge',
+        'ui:disabled': true,
       },
       witness: {
         'ui:widget': 'updown',

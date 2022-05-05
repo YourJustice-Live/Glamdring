@@ -81,7 +81,6 @@ export default function MetadataInput(props) {
       closeForm();
       setFormData(formData);
       const { url } = await uploadJsonToIPFS(formData);
-      console.log('[Dev] url', url);
       propsOnChange(url);
     } catch (error) {
       showToastError(error);
