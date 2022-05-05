@@ -15,6 +15,10 @@ export default function RoleBackend({ sx }) {
         <Typography variant="h2" gutterBottom>
           Backend for Jurisdiction Roles
         </Typography>
+        <Typography gutterBottom>
+          A place where users with the appropriate roles can manage jursdiction
+          roles.
+        </Typography>
         <Divider />
       </Box>
       <Box sx={{ mt: 2.5 }}>

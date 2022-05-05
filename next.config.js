@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ['drive.google.com'],
+  },
   webpack: (config) => {
     // Fix for rjsf (https://github.com/rjsf-team/react-jsonschema-form/issues/2762)
     config.resolve.fallback = {

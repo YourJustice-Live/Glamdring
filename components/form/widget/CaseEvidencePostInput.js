@@ -24,6 +24,8 @@ import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
  */
 export default function CaseEvidencePostInput(props) {
   const propsLabel = props.label;
+  const propsSubLabel = props.options?.subLabel;
+  const propsRequired = props.required;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const { showToastError } = useToasts();
@@ -103,6 +105,9 @@ export default function CaseEvidencePostInput(props) {
   return (
     <>
       <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
+      <Typography variant="body2">
+        {propsSubLabel || 'Any file you deem necessary'} {propsRequired && '*'}
+      </Typography>
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       {evidencePost ? (
         <>
@@ -133,7 +138,7 @@ export default function CaseEvidencePostInput(props) {
           disabled={propsDisabled}
           onClick={openDialog}
         >
-          Add
+          Add Evidence
         </Button>
       )}
       {/* Dialog for input title and file */}
@@ -142,8 +147,11 @@ export default function CaseEvidencePostInput(props) {
         onClose={isUploadingToIpfs ? null : closeDialog}
         fullWidth
       >
-        <DialogTitle>Add Evidence</DialogTitle>
+        <DialogTitle>Evidence</DialogTitle>
         <DialogContent>
+          {/* Sublabel */}
+          <Typography gutterBottom>{propsSubLabel}</Typography>
+          <Divider sx={{ my: 1.5 }} />
           {/* Title */}
           <TextField
             label="Title"

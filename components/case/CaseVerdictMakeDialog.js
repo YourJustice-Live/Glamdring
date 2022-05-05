@@ -78,12 +78,11 @@ export default function CaseVerdictMakeDialog({
         new VerdictMetadata(formData.message),
       );
       // Create verdict using confirmed rules
-      const verdict = [];
-      ruleIds.forEach((ruleId) => {
-        verdict.push({
-          ruleId: ruleId,
-          decision: formData.confirmedRules.includes(ruleId),
-        });
+      const verdict = caseObject?.rules?.map((caseRule, index) => {
+        return {
+          ruleId: index + 1,
+          decision: formData.confirmedRules.includes(caseRule.ruleId),
+        };
       });
       // Use contract
       await setStageClosed(caseObject.id, verdict, verdictMetadataUri);

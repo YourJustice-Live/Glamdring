@@ -56,22 +56,30 @@ export default function useJuridictionContract() {
     return await getContract(provider?.getSigner()).roleRemove(account, role);
   }
 
-  async function addRule(rule, confirmation) {
+  async function addRule(rule, confirmation, effects) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).ruleAdd(rule, confirmation);
+    return await getContract(provider?.getSigner()).ruleAdd(
+      rule,
+      confirmation,
+      effects,
+    );
   }
 
-  async function updateRule(id, rule) {
+  async function updateRule(id, rule, effects) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).ruleUpdate(id, rule);
+    return await getContract(provider?.getSigner()).ruleUpdate(
+      id,
+      rule,
+      effects,
+    );
   }
 
   /**

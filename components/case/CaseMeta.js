@@ -82,7 +82,7 @@ function CaseStage({ caseObject, sx }) {
         stageName = capitalize(stage.name);
       }
     }
-    return stageName;
+    return stageName || 'Unknown';
   }
 
   return (

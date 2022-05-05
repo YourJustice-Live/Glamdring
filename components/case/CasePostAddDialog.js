@@ -20,6 +20,8 @@ import { useState } from 'react';
 
 /**
  * A component with dialog for add case post (comment, confirmation).
+ *
+ * TODO: Automatically define account roles
  */
 export default function CasePostAddDialog({
   caseObject,

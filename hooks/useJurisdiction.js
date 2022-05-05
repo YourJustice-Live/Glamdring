@@ -2,6 +2,7 @@ import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
+import { REPUTATION_RATING } from 'constants/contracts';
 
 /**
  * Hook for work with jurisdiction.
@@ -57,13 +58,10 @@ export default function useJurisdiction() {
           ruleEntity.negation,
           ruleEntity.uri,
           hexStringToJson(ruleEntity.uriData),
-          ruleEntity.effectsEnvironmental,
-          ruleEntity.effectsProfessional,
-          ruleEntity.effectsSocial,
-          ruleEntity.effectsPersonal,
           ruleEntity.confirmationRuling,
           ruleEntity.confirmationEvidence,
           ruleEntity.confirmationWitness,
+          ruleEntity.effects,
         ),
     );
   };
@@ -90,20 +88,16 @@ export default function useJurisdiction() {
    * @returns {boolean} Result of checking.
    */
   let isJurisdictionRuleInCategory = function (rule, category) {
-    if (category === 'positive') {
-      return (
-        rule?.rule?.effects?.environmental >= 0 &&
-        rule?.rule?.effects?.professional >= 0 &&
-        rule?.rule?.effects?.social >= 0 &&
-        rule?.rule?.effects?.personal >= 0
-      );
-    } else if (category === 'negative') {
-      return (
-        rule?.rule?.effects?.environmental < 0 ||
-        rule?.rule?.effects?.professional < 0 ||
-        rule?.rule?.effects?.social < 0 ||
-        rule?.rule?.effects?.personal < 0
-      );
+    if (rule?.effects && category === 'positive') {
+      let isRulePositive = true;
+      for (const effect of rule.effects) {
+        if (effect.direction != REPUTATION_RATING.positive.direction) {
+          isRulePositive = false;
+        }
+      }
+      return isRulePositive;
+    } else if (rule?.effects && category === 'negative') {
+      return !isJurisdictionRuleInCategory(rule, 'positive');
     } else {
       return false;
     }

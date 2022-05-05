@@ -79,7 +79,7 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
       {jurisdiction && (
         <>
           <Typography gutterBottom>{jurisdiction.name}</Typography>
-          {account && isMember !== null && (
+          {accountProfile && isMember !== null && (
             <>
               <Typography gutterBottom variant="body2">
                 {isMember ? 'Account is Member' : 'Account is Not Member'}

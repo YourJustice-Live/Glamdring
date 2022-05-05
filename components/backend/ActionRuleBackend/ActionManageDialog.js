@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import DataUriInput from 'components/form/widget/DataUriInput';
+import MetadataInput from 'components/form/widget/MetadataInput';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
@@ -64,7 +64,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       }),
       uri: {
         type: 'string',
-        title: 'Additional Data',
+        title: 'Metadata',
         default: '',
       },
     },
@@ -91,12 +91,26 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
     },
     uri: {
       'ui:emptyValue': '',
-      'ui:widget': 'DataUriInput',
+      'ui:widget': 'MetadataInput',
+      'ui:options': {
+        subLabel: 'Action name and description',
+        fields: {
+          name: {
+            type: 'string',
+            title: 'Name',
+          },
+          description: {
+            type: 'string',
+            title: 'Description',
+          },
+        },
+        requiredFields: ['name', 'description'],
+      },
     },
   };
 
   const widgets = {
-    DataUriInput: DataUriInput,
+    MetadataInput: MetadataInput,
   };
 
   async function close() {

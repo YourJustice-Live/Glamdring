@@ -209,6 +209,9 @@ function getFindAvatarNftEntitiesQuery(
         uriLastName
         reputations {
           id
+          jurisdiction {
+            id
+          }
           domain
           positiveRating
           negativeRating
@@ -235,6 +238,9 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
     uriLastName
     reputations {
       id
+      jurisdiction {
+        id
+      }
       domain
       positiveRating
       negativeRating
@@ -297,13 +303,14 @@ function getFindJurisdictionRuleEntitiesQuery(ids, jurisdiction, actionGuid) {
       uri
       uriData
       negation
-      effectsEnvironmental
-      effectsProfessional
-      effectsSocial
-      effectsPersonal
       confirmationRuling
       confirmationEvidence
       confirmationWitness
+      effects {
+        name
+        direction
+        value
+      }
     }
   }`;
 }
@@ -333,13 +340,14 @@ function getFindActionEntitiesQuery(guids) {
         affected
         uri
         negation
-        effectsEnvironmental
-        effectsProfessional
-        effectsSocial
-        effectsPersonal
         confirmationRuling
         confirmationEvidence
         confirmationWitness
+        effects {
+          name
+          direction
+          value
+        }
       }
     }
   }`;
@@ -383,6 +391,7 @@ function getFindCaseEntitiesQuery(
       cancellationUriData
       rules {
         id
+        ruleId
       }
       roles {
         id

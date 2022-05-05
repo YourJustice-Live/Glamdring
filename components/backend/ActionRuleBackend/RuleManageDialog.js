@@ -8,10 +8,12 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import DataUriInput from 'components/form/widget/DataUriInput';
+import MetadataInput from 'components/form/widget/MetadataInput';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
+import { capitalize } from 'lodash';
 
 /**
  * A dialog for adding a rule or updating a specified rule.
@@ -57,33 +59,46 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
           },
           uri: {
             type: 'string',
-            title: 'Additional Data',
+            title: 'Metadata',
             default: '',
           },
-          effects: {
-            type: 'object',
-            title: 'Effects',
-            properties: {
-              environmental: {
-                type: 'integer',
-                title: 'Environmental',
-                default: 0,
-              },
-              professional: {
-                type: 'integer',
-                title: 'Professional',
-                default: 0,
-              },
-              social: {
-                type: 'integer',
-                title: 'Social',
-                default: 0,
-              },
-              personal: {
-                type: 'integer',
-                title: 'Personal',
-                default: 0,
-              },
+        },
+      },
+      effects: {
+        type: 'array',
+        minItems: 1,
+        title: 'Effects',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              title: 'Domain',
+              default: REPUTATION_DOMAIN.environment.name,
+              enum: [
+                REPUTATION_DOMAIN.environment.name,
+                REPUTATION_DOMAIN.personal.name,
+                REPUTATION_DOMAIN.community.name,
+                REPUTATION_DOMAIN.professional.name,
+              ],
+              enumNames: [
+                capitalize(REPUTATION_DOMAIN.environment.name),
+                capitalize(REPUTATION_DOMAIN.personal.name),
+                capitalize(REPUTATION_DOMAIN.community.name),
+                capitalize(REPUTATION_DOMAIN.professional.name),
+              ],
+            },
+            value: {
+              type: 'integer',
+              title: 'Value',
+              default: 0,
+              minimum: 0,
+              maximum: 20,
+            },
+            direction: {
+              type: 'boolean',
+              title: 'Is Positive',
+              default: REPUTATION_RATING.negative.direction,
             },
           },
         },
@@ -97,7 +112,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
             ruling: {
               type: 'string',
               title: 'Ruling',
-              default: '',
+              default: 'judge',
             },
             evidence: {
               type: 'boolean',
@@ -124,21 +139,42 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
         'ui:emptyValue': '',
         'ui:placeholder': 'investor',
       },
+      negation: {
+        'ui:disabled': true,
+      },
       uri: {
         'ui:emptyValue': '',
-        'ui:widget': 'DataUriInput',
+        'ui:widget': 'MetadataInput',
+        'ui:options': {
+          subLabel:
+            'Rule name, description, evidence description, examples, requirements',
+          fields: {
+            name: {
+              type: 'string',
+              title: 'Name',
+            },
+            description: {
+              type: 'string',
+              title: 'Description',
+            },
+            evidenceDescription: {
+              type: 'string',
+              title: 'Evidence description, examples, requirements',
+            },
+          },
+          requiredFields: ['name', 'description'],
+        },
       },
-      effects: {
-        environmental: { 'ui:widget': 'updown' },
-        professional: { 'ui:widget': 'updown' },
-        social: { 'ui:widget': 'updown' },
-        personal: { 'ui:widget': 'updown' },
+    },
+    effects: {
+      items: {
+        value: { 'ui:widget': 'range' },
       },
     },
     confirmation: {
       ruling: {
-        'ui:emptyValue': '',
         'ui:placeholder': 'judge',
+        'ui:disabled': true,
       },
       witness: {
         'ui:widget': 'updown',
@@ -147,7 +183,7 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
   };
 
   const widgets = {
-    DataUriInput: DataUriInput,
+    MetadataInput: MetadataInput,
   };
 
   function close() {
@@ -162,9 +198,9 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
       setFormData(formData);
       setIsLoading(true);
       if (rule) {
-        await updateRule(formData.ruleId, formData.rule);
+        await updateRule(formData.ruleId, formData.rule, formData.effects);
       } else {
-        await addRule(formData.rule, formData.confirmation);
+        await addRule(formData.rule, formData.confirmation, formData.effects);
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();
