@@ -3,10 +3,16 @@ import {
   IndeterminateCheckBoxOutlined,
   PersonOutlined,
 } from '@mui/icons-material';
-import { Avatar, Button, Skeleton, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Link,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useDialogContext from 'hooks/useDialogContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
@@ -15,7 +21,6 @@ import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
-import { getRating } from 'utils/reputation';
 
 /**
  * A component with profile meta (image, name, email, socials).
@@ -93,24 +98,33 @@ export default function ProfileMeta({ account }) {
               </Typography>
             </Box>
             {/* Rating by domains */}
-            {Object.values(REPUTATION_DOMAIN).map((domain, index) => (
+            {profile.avatarNftReputations?.map((reputation, index) => (
               <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography sx={{ mr: 1 }}>
-                  {`${capitalize(domain.name)} Rating:`}
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Jurisdiction:
+                </Typography>
+                <Typography sx={{ mr: 3 }}>
+                  <Link
+                    href={`/jurisdiction/${reputation.jurisdiction.id}`}
+                    underline="none"
+                  >
+                    {formatAddress(reputation.jurisdiction.id)}
+                  </Link>
+                </Typography>
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Domain:
+                </Typography>
+                <Typography sx={{ mr: 3 }}>
+                  {capitalize(reputation.domain)}
+                </Typography>
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Rating:
                 </Typography>
                 <Typography sx={{ color: 'success.main', mr: 1 }}>
-                  {`+${getRating(
-                    profile,
-                    domain.id,
-                    REPUTATION_RATING.positive.id,
-                  )}`}
+                  +{reputation.positiveRating}
                 </Typography>
-                <Typography sx={{ color: 'danger.main' }}>
-                  {`-${getRating(
-                    profile,
-                    domain.id,
-                    REPUTATION_RATING.negative.id,
-                  )}`}
+                <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                  -{reputation.negativeRating}
                 </Typography>
               </Box>
             ))}

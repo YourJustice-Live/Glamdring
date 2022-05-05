@@ -1,16 +1,8 @@
 [
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "hub",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "actionRepo",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "hub", "type": "address" },
+      { "internalType": "address", "name": "actionRepo", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -126,6 +118,49 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "domain",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "rating",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "name": "OpinionChange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -139,6 +174,32 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      }
+    ],
+    "name": "ParentAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      }
+    ],
+    "name": "ParentRemoved",
     "type": "event"
   },
   {
@@ -208,30 +269,24 @@
       },
       {
         "indexed": false,
-        "internalType": "int8",
-        "name": "environmental",
-        "type": "int8"
+        "internalType": "bool",
+        "name": "direction",
+        "type": "bool"
       },
       {
         "indexed": false,
-        "internalType": "int8",
-        "name": "personal",
-        "type": "int8"
+        "internalType": "uint8",
+        "name": "value",
+        "type": "uint8"
       },
       {
         "indexed": false,
-        "internalType": "int8",
-        "name": "social",
-        "type": "int8"
-      },
-      {
-        "indexed": false,
-        "internalType": "int8",
-        "name": "professional",
-        "type": "int8"
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
       }
     ],
-    "name": "RuleEffects",
+    "name": "RuleEffect",
     "type": "event"
   },
   {
@@ -342,96 +397,64 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "guid",
-        "type": "bytes32"
-      }
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "bytes32", "name": "guid", "type": "bytes32" }
     ],
     "name": "GUIDHas",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "actionRepo",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint256", "name": "id", "type": "uint256" }
     ],
     "name": "balanceOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "accounts",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "ids",
-        "type": "uint256[]"
-      }
+      { "internalType": "address[]", "name": "accounts", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }
     ],
     "name": "balanceOfBatch",
     "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
-      },
+      { "internalType": "address", "name": "caseContract", "type": "address" }
+    ],
+    "name": "caseDisable",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "caseContract", "type": "address" }
+    ],
+    "name": "caseHas",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "name_", "type": "string" },
       {
         "components": [
           {
@@ -439,11 +462,7 @@
             "name": "jurisdiction",
             "type": "address"
           },
-          {
-            "internalType": "uint256",
-            "name": "ruleId",
-            "type": "uint256"
-          }
+          { "internalType": "uint256", "name": "ruleId", "type": "uint256" }
         ],
         "internalType": "struct DataTypes.RuleRef[]",
         "name": "addRules",
@@ -451,16 +470,8 @@
       },
       {
         "components": [
-          {
-            "internalType": "address",
-            "name": "account",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "role",
-            "type": "string"
-          }
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "string", "name": "role", "type": "string" }
         ],
         "internalType": "struct DataTypes.InputRole[]",
         "name": "assignRoles",
@@ -468,16 +479,8 @@
       },
       {
         "components": [
-          {
-            "internalType": "string",
-            "name": "entRole",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
-            "type": "string"
-          }
+          { "internalType": "string", "name": "entRole", "type": "string" },
+          { "internalType": "string", "name": "uri", "type": "string" }
         ],
         "internalType": "struct Jurisdiction.PostInput[]",
         "name": "posts",
@@ -485,28 +488,13 @@
       }
     ],
     "name": "caseMake",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
-      },
+      { "internalType": "string", "name": "name_", "type": "string" },
       {
         "components": [
           {
@@ -514,11 +502,7 @@
             "name": "jurisdiction",
             "type": "address"
           },
-          {
-            "internalType": "uint256",
-            "name": "ruleId",
-            "type": "uint256"
-          }
+          { "internalType": "uint256", "name": "ruleId", "type": "uint256" }
         ],
         "internalType": "struct DataTypes.RuleRef[]",
         "name": "addRules",
@@ -526,16 +510,8 @@
       },
       {
         "components": [
-          {
-            "internalType": "address",
-            "name": "account",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "role",
-            "type": "string"
-          }
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "string", "name": "role", "type": "string" }
         ],
         "internalType": "struct DataTypes.InputRole[]",
         "name": "assignRoles",
@@ -543,16 +519,8 @@
       },
       {
         "components": [
-          {
-            "internalType": "string",
-            "name": "entRole",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
-            "type": "string"
-          }
+          { "internalType": "string", "name": "entRole", "type": "string" },
+          { "internalType": "string", "name": "uri", "type": "string" }
         ],
         "internalType": "struct Jurisdiction.PostInput[]",
         "name": "posts",
@@ -560,48 +528,19 @@
       }
     ],
     "name": "caseMakeOpen",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
     "name": "confirmationGet",
     "outputs": [
       {
         "components": [
-          {
-            "internalType": "string",
-            "name": "ruling",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "evidence",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "witness",
-            "type": "uint256"
-          }
+          { "internalType": "string", "name": "ruling", "type": "string" },
+          { "internalType": "bool", "name": "evidence", "type": "bool" },
+          { "internalType": "uint256", "name": "witness", "type": "uint256" }
         ],
         "internalType": "struct DataTypes.Confirmation",
         "name": "",
@@ -609,51 +548,28 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "ruling",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "evidence",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "witness",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct DataTypes.Confirmation",
-        "name": "confirmation",
-        "type": "tuple"
-      }
-    ],
-    "name": "confirmationSet",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "contractURI",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
+    "name": "effectsGet",
     "outputs": [
       {
-        "internalType": "string",
+        "components": [
+          { "internalType": "string", "name": "name", "type": "string" },
+          { "internalType": "uint8", "name": "value", "type": "uint8" },
+          { "internalType": "bool", "name": "direction", "type": "bool" }
+        ],
+        "internalType": "struct DataTypes.Effect[]",
         "name": "",
-        "type": "string"
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -661,44 +577,65 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "caseId",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "contractAddr", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "string", "name": "domain", "type": "string" },
+      { "internalType": "bool", "name": "rating", "type": "bool" }
     ],
-    "name": "getCaseById",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "name": "getRepForDomain",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "chainId", "type": "uint256" },
+      { "internalType": "address", "name": "contractAddr", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "string", "name": "domain", "type": "string" },
+      { "internalType": "bool", "name": "rating", "type": "bool" }
+    ],
+    "name": "getRepForDomain",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "string", "name": "domain", "type": "string" },
+      { "internalType": "bool", "name": "rating", "type": "bool" }
+    ],
+    "name": "getRepForDomain",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "address", "name": "operator", "type": "address" }
     ],
     "name": "isApprovedForAll",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "contractAddr", "type": "address" }
     ],
+    "name": "isParent",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "contractAddr", "type": "address" }
+    ],
+    "name": "isParentRec",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -719,26 +656,14 @@
   {
     "inputs": [],
     "name": "name",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -751,16 +676,21 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "role",
-        "type": "string"
-      }
+      { "internalType": "address", "name": "contractAddr", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "string", "name": "domain", "type": "string" },
+      { "internalType": "bool", "name": "rating", "type": "bool" },
+      { "internalType": "uint8", "name": "amount", "type": "uint8" }
+    ],
+    "name": "repAdd",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "string", "name": "role", "type": "string" }
     ],
     "name": "roleAssign",
     "outputs": [],
@@ -769,59 +699,36 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "role",
-        "type": "string"
-      }
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "string", "name": "roleOld", "type": "string" },
+      { "internalType": "string", "name": "roleNew", "type": "string" }
     ],
+    "name": "roleChange",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "role", "type": "string" }],
     "name": "roleExist",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "role",
-        "type": "string"
-      }
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "string", "name": "role", "type": "string" }
     ],
     "name": "roleHas",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "role",
-        "type": "string"
-      }
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "string", "name": "role", "type": "string" }
     ],
     "name": "roleRemove",
     "outputs": [],
@@ -832,53 +739,10 @@
     "inputs": [
       {
         "components": [
-          {
-            "internalType": "bytes32",
-            "name": "about",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "string",
-            "name": "affected",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "negation",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
-            "type": "string"
-          },
-          {
-            "components": [
-              {
-                "internalType": "int8",
-                "name": "environmental",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "personal",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "social",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "professional",
-                "type": "int8"
-              }
-            ],
-            "internalType": "struct DataTypes.Effects",
-            "name": "effects",
-            "type": "tuple"
-          }
+          { "internalType": "bytes32", "name": "about", "type": "bytes32" },
+          { "internalType": "string", "name": "affected", "type": "string" },
+          { "internalType": "bool", "name": "negation", "type": "bool" },
+          { "internalType": "string", "name": "uri", "type": "string" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "rule",
@@ -886,97 +750,40 @@
       },
       {
         "components": [
-          {
-            "internalType": "string",
-            "name": "ruling",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "evidence",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "witness",
-            "type": "uint256"
-          }
+          { "internalType": "string", "name": "ruling", "type": "string" },
+          { "internalType": "bool", "name": "evidence", "type": "bool" },
+          { "internalType": "uint256", "name": "witness", "type": "uint256" }
         ],
         "internalType": "struct DataTypes.Confirmation",
         "name": "confirmation",
         "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "string", "name": "name", "type": "string" },
+          { "internalType": "uint8", "name": "value", "type": "uint8" },
+          { "internalType": "bool", "name": "direction", "type": "bool" }
+        ],
+        "internalType": "struct DataTypes.Effect[]",
+        "name": "effects",
+        "type": "tuple[]"
       }
     ],
     "name": "ruleAdd",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
     "name": "ruleGet",
     "outputs": [
       {
         "components": [
-          {
-            "internalType": "bytes32",
-            "name": "about",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "string",
-            "name": "affected",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "negation",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
-            "type": "string"
-          },
-          {
-            "components": [
-              {
-                "internalType": "int8",
-                "name": "environmental",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "personal",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "social",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "professional",
-                "type": "int8"
-              }
-            ],
-            "internalType": "struct DataTypes.Effects",
-            "name": "effects",
-            "type": "tuple"
-          }
+          { "internalType": "bytes32", "name": "about", "type": "bytes32" },
+          { "internalType": "string", "name": "affected", "type": "string" },
+          { "internalType": "bool", "name": "negation", "type": "bool" },
+          { "internalType": "string", "name": "uri", "type": "string" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "",
@@ -988,64 +795,27 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
       {
         "components": [
-          {
-            "internalType": "bytes32",
-            "name": "about",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "string",
-            "name": "affected",
-            "type": "string"
-          },
-          {
-            "internalType": "bool",
-            "name": "negation",
-            "type": "bool"
-          },
-          {
-            "internalType": "string",
-            "name": "uri",
-            "type": "string"
-          },
-          {
-            "components": [
-              {
-                "internalType": "int8",
-                "name": "environmental",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "personal",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "social",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "professional",
-                "type": "int8"
-              }
-            ],
-            "internalType": "struct DataTypes.Effects",
-            "name": "effects",
-            "type": "tuple"
-          }
+          { "internalType": "bytes32", "name": "about", "type": "bytes32" },
+          { "internalType": "string", "name": "affected", "type": "string" },
+          { "internalType": "bool", "name": "negation", "type": "bool" },
+          { "internalType": "string", "name": "uri", "type": "string" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "rule",
         "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "string", "name": "name", "type": "string" },
+          { "internalType": "uint8", "name": "value", "type": "uint8" },
+          { "internalType": "bool", "name": "direction", "type": "bool" }
+        ],
+        "internalType": "struct DataTypes.Effect[]",
+        "name": "effects",
+        "type": "tuple[]"
       }
     ],
     "name": "ruleUpdate",
@@ -1055,31 +825,11 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "ids",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "safeBatchTransferFrom",
     "outputs": [],
@@ -1088,31 +838,11 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
+      { "internalType": "address", "name": "from", "type": "address" },
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -1121,16 +851,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "approved",
-        "type": "bool"
-      }
+      { "internalType": "address", "name": "operator", "type": "address" },
+      { "internalType": "bool", "name": "approved", "type": "bool" }
     ],
     "name": "setApprovalForAll",
     "outputs": [],
@@ -1139,43 +861,23 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes4",
-        "name": "interfaceId",
-        "type": "bytes4"
-      }
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
     ],
     "name": "supportsInterface",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "symbol",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -1183,40 +885,41 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
     "name": "uniqueMembers",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+      { "internalType": "address[]", "name": "", "type": "address[]" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "uri",
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
+    "name": "uniqueMembersCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "role", "type": "string" }],
+    "name": "uniqueRoleMembers",
     "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
+      { "internalType": "address[]", "name": "", "type": "address[]" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "role", "type": "string" }],
+    "name": "uniqueRoleMembersCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "uri",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   }

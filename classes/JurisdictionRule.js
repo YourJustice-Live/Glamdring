@@ -10,13 +10,10 @@ export default class JurisdictionRule {
     ruleNegation,
     ruleUri,
     ruleUriData,
-    ruleEffectsEnvironmental,
-    ruleEffectsProfessional,
-    ruleEffectsSocial,
-    ruleEffectsPersonal,
     confirmationRuling,
     confirmationEvidence,
     confirmationWitness,
+    effects,
   ) {
     this.id = id;
     this.ruleId = ruleId;
@@ -26,17 +23,12 @@ export default class JurisdictionRule {
       negation: ruleNegation,
       uri: ruleUri,
       uriData: ruleUriData,
-      effects: {
-        environmental: ruleEffectsEnvironmental,
-        professional: ruleEffectsProfessional,
-        social: ruleEffectsSocial,
-        personal: ruleEffectsPersonal,
-      },
     };
     this.confirmation = {
       ruling: confirmationRuling,
       evidence: confirmationEvidence,
       witness: confirmationWitness,
     };
+    this.effects = effects;
   }
 }

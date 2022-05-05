@@ -149,6 +149,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "ruleId",
+        "type": "uint256"
+      }
+    ],
+    "name": "RuleConfirmed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "enum DataTypes.CaseStage",
         "name": "stage",
         "type": "uint8"
@@ -423,6 +436,11 @@
         "internalType": "struct DataTypes.InputRole[]",
         "name": "assignRoles",
         "type": "tuple[]"
+      },
+      {
+        "internalType": "address",
+        "name": "container",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -639,33 +657,6 @@
             "internalType": "string",
             "name": "uri",
             "type": "string"
-          },
-          {
-            "components": [
-              {
-                "internalType": "int8",
-                "name": "environmental",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "personal",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "social",
-                "type": "int8"
-              },
-              {
-                "internalType": "int8",
-                "name": "professional",
-                "type": "int8"
-              }
-            ],
-            "internalType": "struct DataTypes.Effects",
-            "name": "effects",
-            "type": "tuple"
           }
         ],
         "internalType": "struct DataTypes.Rule",
@@ -707,6 +698,42 @@
         "internalType": "struct DataTypes.Confirmation",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "ruleRefId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ruleGetEffects",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint8",
+            "name": "value",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bool",
+            "name": "direction",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DataTypes.Effect[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -920,6 +947,63 @@
       }
     ],
     "name": "uniqueMembers",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "uniqueMembersCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "role",
+        "type": "string"
+      }
+    ],
+    "name": "uniqueRoleMembers",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "role",
+        "type": "string"
+      }
+    ],
+    "name": "uniqueRoleMembersCount",
     "outputs": [
       {
         "internalType": "uint256",

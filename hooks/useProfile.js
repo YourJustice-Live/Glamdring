@@ -52,8 +52,6 @@ export default function useProfile() {
   /**
    * Get profiles by part of address, first name, second, name.
    *
-   * TODO: Add pagination.
-   *
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
