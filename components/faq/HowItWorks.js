@@ -31,13 +31,12 @@ export default function HowItWorks() {
             The first thing to start with is connecting your cryptocurrency
             wallet to our site.
           </Typography>
-          {/* Media 1 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1IP5_1yvXe2MRHhts81nGE66cO1ertxkG"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752654/FAQ/How%20It%20Works/animation-1_tb1acs.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=14V350_n6aYFL17P-2b3nQ13sk6lG7Va_"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752659/FAQ/How%20It%20Works/video-1_jhg2fm.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -45,13 +44,12 @@ export default function HowItWorks() {
           <Typography gutterBottom>
             Great, now let&apos;s switch to the Rinkeby test network.
           </Typography>
-          {/* Media 2 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1sxSIO4yhW9VZ5HyLmPvV6xhRvvDLntbZ"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-2_jgxpmv.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=1z6CsMFfp2xUWm9YJ2lMwdgfHuZHrL2lL"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752824/FAQ/How%20It%20Works/video-2_aauoa4.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -71,13 +69,12 @@ export default function HowItWorks() {
             To do this you just need to copy your wallet number and paste it in
             the line.
           </Typography>
-          {/* Media 3 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1N91lMB6bx9uaMsVhD_-OpXXiCcqmJ_l4"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752815/FAQ/How%20It%20Works/animation-3_dknjcj.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=199k0NODkxKFEpGSo7uW5ci-MPWXEmYWb"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752825/FAQ/How%20It%20Works/video-3_rergif.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -105,13 +102,12 @@ export default function HowItWorks() {
             Once you&apos;re done with that, click &quot;Mint NFT&quot; and sign
             a test contract on the Rinkeby network.
           </Typography>
-          {/* Media 4 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1_LXZDWqmKaKT0iAQDw-dmC4CoDeFtxuI"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-4_b9dyl3.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=1d73hlJoN3-IPRXv7I_YtIAsLMKQpD6Z7"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752822/FAQ/How%20It%20Works/video-4_ljnxgw.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -141,13 +137,12 @@ export default function HowItWorks() {
             about joining a jurisdiction - will go on the blockchain. On this we
             need to sign the contract once again.
           </Typography>
-          {/* Media 5 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=166EM528-nTnF-Fbd6Zf7O3-SJaZRQC96"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-5_pev2tn.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=1ipIpnP-oWEotWkmFzlheFa3_qutfAZvo"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752826/FAQ/How%20It%20Works/video-5_ubtpqf.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -179,13 +174,12 @@ export default function HowItWorks() {
             By the way, don&apos;t forget to set the name of this case and
             choose the rule that is broken within our jurisdiction.
           </Typography>
-          {/* Media 6 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=10x5bad0S_72caQe9Sk5rIoVs7rE8ijrB"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752817/FAQ/How%20It%20Works/animation-6_sj6lom.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=1Lqasuib1GU4t-K1tgwAPv5CnYkjSQ_if"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752830/FAQ/How%20It%20Works/video-6_z1y3xk.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -194,13 +188,12 @@ export default function HowItWorks() {
             Next, we need to select the person who broke the rule. Add a witness
             and evidence, if any.
           </Typography>
-          {/* Media 7 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1AeJ6L0F2h6ifYL3ljK-vg9wvzESsl5RG"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-7_y6fqo0.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
           <VideoBox
-            url="https://drive.google.com/uc?export=download&id=18I6g9x_rivhPc2b4QVNPkNiwIoEpgXWZ"
+            url="https://res.cloudinary.com/yourjustice/video/upload/v1651752822/FAQ/How%20It%20Works/video-7_aiflxe.mp4"
             sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
           />
         </Box>
@@ -213,9 +206,8 @@ export default function HowItWorks() {
             In order for your case to be registered online, you also need to
             sign a contract.
           </Typography>
-          {/* Media 8 */}
           <ImageBox
-            url="https://drive.google.com/uc?export=download&id=1RKPV9clK8mKjSME3vrMLaoY8HfhgZzeF"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752815/FAQ/How%20It%20Works/animation-8_ltznzw.gif"
             sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
           />
         </Box>

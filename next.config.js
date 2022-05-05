@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['drive.google.com'],
+    domains: ['res.cloudinary.com'],
   },
   webpack: (config) => {
     // Fix for rjsf (https://github.com/rjsf-team/react-jsonschema-form/issues/2762)
