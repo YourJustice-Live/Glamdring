@@ -3,7 +3,14 @@ import {
   IndeterminateCheckBoxOutlined,
   PersonOutlined,
 } from '@mui/icons-material';
-import { Avatar, Button, Skeleton, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Link,
+  Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
@@ -93,14 +100,31 @@ export default function ProfileMeta({ account }) {
             {/* Rating by domains */}
             {profile.avatarNftReputations?.map((reputation, index) => (
               <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography sx={{ mr: 1 }}>
-                  {`${capitalize(reputation.domain)} Rating:`}
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Jurisdiction:
+                </Typography>
+                <Typography sx={{ mr: 3 }}>
+                  <Link
+                    href={`/jurisdiction/${reputation.jurisdiction.id}`}
+                    underline="none"
+                  >
+                    {formatAddress(reputation.jurisdiction.id)}
+                  </Link>
+                </Typography>
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Domain:
+                </Typography>
+                <Typography sx={{ mr: 3 }}>
+                  {capitalize(reputation.domain)}
+                </Typography>
+                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
+                  Rating:
                 </Typography>
                 <Typography sx={{ color: 'success.main', mr: 1 }}>
                   +{reputation.positiveRating}
                 </Typography>
                 <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                  +{reputation.negativeRating}
+                  -{reputation.negativeRating}
                 </Typography>
               </Box>
             ))}

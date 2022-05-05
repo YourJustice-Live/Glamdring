@@ -209,6 +209,9 @@ function getFindAvatarNftEntitiesQuery(
         uriLastName
         reputations {
           id
+          jurisdiction {
+            id
+          }
           domain
           positiveRating
           negativeRating
@@ -235,6 +238,9 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
     uriLastName
     reputations {
       id
+      jurisdiction {
+        id
+      }
       domain
       positiveRating
       negativeRating
