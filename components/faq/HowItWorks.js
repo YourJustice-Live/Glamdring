@@ -1,7 +1,7 @@
 import { Divider, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import Image from 'next/image';
-import ReactPlayer from 'react-player';
+import ImageBox from './ImageBox';
+import VideoBox from './VideoBox';
 
 /**
  * A component with the answer to the question.
@@ -31,27 +31,29 @@ export default function HowItWorks() {
             The first thing to start with is connecting your cryptocurrency
             wallet to our site.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=14V350_n6aYFL17P-2b3nQ13sk6lG7Va_"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 1 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1IP5_1yvXe2MRHhts81nGE66cO1ertxkG"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=14V350_n6aYFL17P-2b3nQ13sk6lG7Va_"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
             Great, now let&apos;s switch to the Rinkeby test network.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=1z6CsMFfp2xUWm9YJ2lMwdgfHuZHrL2lL"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 2 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1sxSIO4yhW9VZ5HyLmPvV6xhRvvDLntbZ"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=1z6CsMFfp2xUWm9YJ2lMwdgfHuZHrL2lL"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -69,14 +71,15 @@ export default function HowItWorks() {
             To do this you just need to copy your wallet number and paste it in
             the line.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=199k0NODkxKFEpGSo7uW5ci-MPWXEmYWb"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 3 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1N91lMB6bx9uaMsVhD_-OpXXiCcqmJ_l4"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=199k0NODkxKFEpGSo7uW5ci-MPWXEmYWb"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -102,14 +105,15 @@ export default function HowItWorks() {
             Once you&apos;re done with that, click &quot;Mint NFT&quot; and sign
             a test contract on the Rinkeby network.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=1d73hlJoN3-IPRXv7I_YtIAsLMKQpD6Z7"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 4 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1_LXZDWqmKaKT0iAQDw-dmC4CoDeFtxuI"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=1d73hlJoN3-IPRXv7I_YtIAsLMKQpD6Z7"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -137,14 +141,15 @@ export default function HowItWorks() {
             about joining a jurisdiction - will go on the blockchain. On this we
             need to sign the contract once again.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=1ipIpnP-oWEotWkmFzlheFa3_qutfAZvo"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 5 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=166EM528-nTnF-Fbd6Zf7O3-SJaZRQC96"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=1ipIpnP-oWEotWkmFzlheFa3_qutfAZvo"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -174,28 +179,30 @@ export default function HowItWorks() {
             By the way, don&apos;t forget to set the name of this case and
             choose the rule that is broken within our jurisdiction.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=1Lqasuib1GU4t-K1tgwAPv5CnYkjSQ_if"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 6 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=10x5bad0S_72caQe9Sk5rIoVs7rE8ijrB"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=1Lqasuib1GU4t-K1tgwAPv5CnYkjSQ_if"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
             Next, we need to select the person who broke the rule. Add a witness
             and evidence, if any.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <ReactPlayer
-              url="https://drive.google.com/uc?export=download&id=18I6g9x_rivhPc2b4QVNPkNiwIoEpgXWZ"
-              controls={true}
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          {/* Media 7 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1AeJ6L0F2h6ifYL3ljK-vg9wvzESsl5RG"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
+          <VideoBox
+            url="https://drive.google.com/uc?export=download&id=18I6g9x_rivhPc2b4QVNPkNiwIoEpgXWZ"
+            sx={{ maxWidth: { xs: 1, md: 2 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
@@ -206,16 +213,11 @@ export default function HowItWorks() {
             In order for your case to be registered online, you also need to
             sign a contract.
           </Typography>
-          <Box sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}>
-            <Image
-              src="https://drive.google.com/uc?export=download&id=1RKPV9clK8mKjSME3vrMLaoY8HfhgZzeF"
-              layout="responsive"
-              loading="lazy"
-              width={600}
-              height={360}
-              alt="Animation"
-            />
-          </Box>
+          {/* Media 8 */}
+          <ImageBox
+            url="https://drive.google.com/uc?export=download&id=1RKPV9clK8mKjSME3vrMLaoY8HfhgZzeF"
+            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+          />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom sx={{ fontWeight: 'bold' }}>
