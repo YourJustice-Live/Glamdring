@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileCases from 'components/profile/ProfileCases';
 import ProfileMeta from 'components/profile/ProfileMeta';
+import ProfileRatings from 'components/profile/ProfileRatings';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 
@@ -22,6 +23,13 @@ export default function Profile() {
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <ProfileMeta account={queryAccount} />
+      </Box>
+      <Box sx={{ mt: 12 }}>
+        <Typography variant="h1" gutterBottom>
+          Profile Ratings
+        </Typography>
+        <Divider sx={{ mb: 3 }} />
+        <ProfileRatings account={queryAccount} />
       </Box>
       <Box sx={{ mt: 12 }}>
         <Typography variant="h1" gutterBottom>

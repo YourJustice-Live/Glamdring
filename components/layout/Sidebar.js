@@ -79,14 +79,9 @@ export function Sidebar() {
         {/* Links */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
           {accountProfile ? (
-            <>
-              <NextLink href="/profile" passHref>
-                <Link underline="none">Profile</Link>
-              </NextLink>
-              <NextLink href="/profile/manage" passHref>
-                <Link underline="none">Profile Manage</Link>
-              </NextLink>
-            </>
+            <NextLink href="/profile" passHref>
+              <Link underline="none">Profile</Link>
+            </NextLink>
           ) : (
             <NextLink href="/profile/manage" passHref>
               <Link underline="none">Create Profile</Link>

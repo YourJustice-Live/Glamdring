@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 
 /**
  * A component for create (mint) or edit profile (Avatar NFT).
- *
  */
 export default function ProfileManage() {
   const STATUS = {

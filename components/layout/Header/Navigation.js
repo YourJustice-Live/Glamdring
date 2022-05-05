@@ -238,13 +238,6 @@ export default function Navigation() {
               </Link>
             </MenuItem>
           )}
-          {account && accountProfile && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/manage" passHref>
-                <Typography>Profile Manage</Typography>
-              </Link>
-            </MenuItem>
-          )}
           {account && !accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/profile/manage" passHref>
