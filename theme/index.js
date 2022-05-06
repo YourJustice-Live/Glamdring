@@ -7,5 +7,4 @@ export const theme = createTheme({
   palette,
   typography,
   components,
-  // shadows: ['none'], // Setting Shadows Individually
 });
