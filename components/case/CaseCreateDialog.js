@@ -1,16 +1,20 @@
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
+  Alert,
+  AlertTitle,
   Avatar,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
+  Link,
   Stack,
   Typography,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseNameInput from 'components/form/widget/CaseNameInput';
@@ -19,7 +23,9 @@ import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
+import { FORM } from 'constants/feedbacks';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import useToasts from 'hooks/useToasts';
@@ -50,6 +56,7 @@ export default function CaseCreateDialog({
 
   const router = useRouter();
   const { account, accountProfile, connectWallet } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
   const { getJurisdiction, isAccountHasJurisdictionRole } = useJurisdiction();
@@ -356,7 +363,7 @@ export default function CaseCreateDialog({
   }, []);
 
   return (
-    <Dialog open={isOpen} onClose={close}>
+    <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
       <DialogTitle>Create New Case</DialogTitle>
       <DialogContent>
         {/* Loading message */}
@@ -424,7 +431,7 @@ export default function CaseCreateDialog({
         {/* Form to create case */}
         {status >= STATUS.isFormAvailable && (
           <>
-            <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
               <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
               <Avatar
                 sx={{
@@ -439,7 +446,33 @@ export default function CaseCreateDialog({
               </Avatar>
               <Typography>{jurisdiction.name}</Typography>
             </Stack>
-            <Divider sx={{ mt: 1.5 }} />
+            <Alert
+              severity="info"
+              sx={{ borderRadius: '8px', boxShadow: 'none', mt: 4, mb: 0 }}
+            >
+              <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Link
+                  component="button"
+                  variant="body2"
+                  underline="none"
+                  sx={{ mr: 0.5 }}
+                  onClick={() =>
+                    showDialog(
+                      <FeedbackPostDialog
+                        form={FORM.proposeLaw}
+                        onClose={closeDialog}
+                      />,
+                    )
+                  }
+                >
+                  <strong>Propose</strong>
+                </Link>
+                <Typography variant="body2">
+                  a law that we should add to the jurisdiction.
+                </Typography>
+              </Box>
+            </Alert>
             <Form
               schema={schema}
               uiSchema={uiSchema}

@@ -299,7 +299,7 @@ function JsonViewDialog({ json, isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
-      <DialogTitle>JSON VIew</DialogTitle>
+      <DialogTitle>JSON View</DialogTitle>
       <DialogContent sx={{ p: 4, overflowX: 'scroll' }}>
         <pre>{JSON.stringify(json, null, 2)}</pre>
       </DialogContent>

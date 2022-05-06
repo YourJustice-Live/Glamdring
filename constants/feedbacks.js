@@ -63,6 +63,32 @@ export const FORM = {
   // Propose Law
   proposeLaw: {
     type: 'propose_law',
+    recepients: [EMAIL.dev, EMAIL.law],
+    title: 'Propose Law',
+    description:
+      'What law is missing in the jurisdiction? Describe it so we can add it.',
+    schema: {
+      type: 'object',
+      required: ['proposition'],
+      properties: {
+        proposition: {
+          type: 'string',
+          title: 'Your Proposition',
+        },
+        contact: {
+          type: 'string',
+          title: 'Your Email, Twitter, Telegram, etc',
+        },
+      },
+    },
+    uiSchema: {
+      proposition: {
+        'ui:widget': 'textarea',
+        'ui:options': {
+          rows: 5,
+        },
+      },
+    },
   },
   // Comment Law
   commentLaw: {
