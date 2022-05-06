@@ -6,11 +6,8 @@ import { Button, Link, Skeleton, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
-import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -18,28 +15,9 @@ import { formatAddress } from 'utils/formatters';
  *
  * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
  */
-export default function ProfileRatings({ account }) {
-  const { accountProfile: connectedAccountProfile } = useWeb3Context();
+export default function ProfileRatings({ profile }) {
+  const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
-  const { getProfile } = useProfile();
-  const [profile, setProfile] = useState(null);
-
-  async function loadData() {
-    try {
-      const profile = await getProfile(account);
-      setProfile(profile);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    if (account) {
-      loadData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
 
   return (
     <Box>
@@ -100,7 +78,7 @@ export default function ProfileRatings({ account }) {
                 showDialog(
                   <CaseCreateDialog
                     subjectProfile={profile}
-                    affectedProfile={connectedAccountProfile}
+                    affectedProfile={accountProfile}
                     onClose={closeDialog}
                   />,
                 )
@@ -116,7 +94,7 @@ export default function ProfileRatings({ account }) {
                 showDialog(
                   <CaseCreateDialog
                     subjectProfile={profile}
-                    affectedProfile={connectedAccountProfile}
+                    affectedProfile={accountProfile}
                     onClose={closeDialog}
                   />,
                 )

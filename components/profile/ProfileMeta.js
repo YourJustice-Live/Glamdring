@@ -1,39 +1,16 @@
 import { PersonOutlined } from '@mui/icons-material';
 import { Avatar, Button, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
-import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getTraitValue, traitTypes } from 'utils/metadata';
 
 /**
  * A component with profile meta (image, name, email, socials).
  */
-export default function ProfileMeta({ account }) {
-  const { account: connectedAccount } = useWeb3Context();
-  const { showToastError } = useToasts();
-  const { getProfile } = useProfile();
-  const [profile, setProfile] = useState(null);
-
-  async function loadData() {
-    try {
-      const profile = await getProfile(account);
-      setProfile(profile);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    if (account) {
-      loadData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
-
+export default function ProfileMeta({ profile }) {
+  const { account } = useWeb3Context();
   return (
     <Box>
       {profile ? (
@@ -71,7 +48,7 @@ export default function ProfileMeta({ account }) {
               'none'}
           </Typography>
           {/* Edit profile button */}
-          {account?.toLowerCase() === connectedAccount?.toLowerCase() && (
+          {profile.account?.toLowerCase() === account?.toLowerCase() && (
             <Box sx={{ mt: 4 }}>
               <NextLink href={`/profile/edit`} passHref>
                 <Button variant="outlined">Edit Profile</Button>
