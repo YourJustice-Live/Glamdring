@@ -6,28 +6,30 @@ import qs from 'qs';
  */
 export default function useFormSubmit() {
   /**
-   * Post feedback to formsubmit.io.
+   * Post form to formsubmit.io.
    *
+   * @param {Array.<string>} recepients Emails.
+   * @param {string} type Form type.
    * @param {string} account Account address.
-   * @param {string} feedback Feedback message.
-   * @param {string} contact Feedback contact.
+   * @param {object} data Form data.
    */
-  let submitFeedback = async function (account, feedback, contact) {
-    try {
-      const url = 'https://formsubmit.co/ajax/dev@yourjustice.life';
-      const data = qs.stringify({
-        form: 'submit_feedback',
-        account: account,
-        feedback: feedback,
-        contact: contact,
-      });
-      await axios.post(url, data);
-    } catch (error) {
-      console.error(error);
+  let submitForm = async function (recepients, type, account, data) {
+    for (const recepient of recepients) {
+      try {
+        const postUrl = `https://formsubmit.co/ajax/${recepient}`;
+        const postData = qs.stringify({
+          type: type,
+          account: account,
+          ...data,
+        });
+        await axios.post(postUrl, postData);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   return {
-    submitFeedback,
+    submitForm,
   };
 }

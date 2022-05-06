@@ -1,6 +1,6 @@
 import { Fab } from '@mui/material';
 import useDialogContext from 'hooks/useDialogContext';
-import FeedbackPostDialog from './FeedbackPostDialog';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 
 /**
  * A component with a footer feedback floating action button.

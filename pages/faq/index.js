@@ -1,8 +1,9 @@
 import { Button, Divider, Link, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import FeedbackPostDialog from 'components/layout/Footer/FeedbackPostDialog';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import Layout from 'components/layout/Layout';
 import { QUESTION } from 'constants/faq';
+import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
@@ -48,10 +49,15 @@ export default function Faq() {
           variant="outlined"
           sx={{ mt: 2 }}
           onClick={() =>
-            showDialog(<FeedbackPostDialog onClose={closeDialog} />)
+            showDialog(
+              <FeedbackPostDialog
+                form={FORM.askQuestion}
+                onClose={closeDialog}
+              />,
+            )
           }
         >
-          Post Feedback
+          Ask Question
         </Button>
       </Box>
     </Layout>

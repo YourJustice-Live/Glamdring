@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import FeedbackFab from './FeedbackFab';
+import FeedbackFab from 'components/feedback/FeedbackFab';
 
 /**
  * A component with a footer.
