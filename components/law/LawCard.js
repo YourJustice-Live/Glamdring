@@ -1,9 +1,10 @@
+import { LightbulbOutlined } from '@mui/icons-material';
 import {
   Avatar,
-  Button,
   Card,
   CardContent,
   Chip,
+  Link,
   Paper,
   Stack,
   Typography,
@@ -52,22 +53,30 @@ export default function LawCard({ law, isCommentsEnabled }) {
               </Box>
               {/* Add comment button */}
               {isCommentsEnabled && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() =>
-                    showDialog(
-                      <FeedbackPostDialog
-                        form={FORM.commentLaw}
-                        additionalData={{ rule: rule.ruleId }}
-                        onClose={closeDialog}
-                      />,
-                    )
-                  }
-                  sx={{ mt: 2 }}
-                >
-                  Add Comment
-                </Button>
+                <Box sx={{ display: 'flex', direction: 'row', mt: 3 }}>
+                  <LightbulbOutlined fontSize="small" sx={{ mr: 1 }} />
+                  <Typography variant="body2">
+                    Do you have an idea how to improve the law?
+                    <Link
+                      component="button"
+                      variant="body2"
+                      underline="none"
+                      sx={{ mx: 0.5, pb: 0.3 }}
+                      onClick={() =>
+                        showDialog(
+                          <FeedbackPostDialog
+                            form={FORM.commentLaw}
+                            additionalData={{ rule: rule.ruleId }}
+                            onClose={closeDialog}
+                          />,
+                        )
+                      }
+                    >
+                      <strong>Propose</strong>
+                    </Link>
+                    edits or additions.
+                  </Typography>
+                </Box>
               )}
             </Paper>
           ))}
