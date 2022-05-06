@@ -390,7 +390,7 @@ export default function CaseCreateDialog({
               sx={{ mt: 4 }}
               variant="contained"
               onClick={() => {
-                router.push('/profile/manage');
+                router.push('/profile/create');
                 close();
               }}
               startIcon={

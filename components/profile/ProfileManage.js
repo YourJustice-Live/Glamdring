@@ -1,9 +1,9 @@
 import { Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button, Divider, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import AvatarNftMetadata from 'classes/metadata/AvatarNftMetadata';
-import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
 import ProfilePictureInput from 'components/form/widget/ProfilePictureInput';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
@@ -11,26 +11,32 @@ import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 /**
- * A component for create (mint) or edit profile (Avatar NFT).
+ * A component for create, edit own profile or create profile for another person (aka invite).
  *
+ * @param {{profile: Profile, action: 'createOwnProfile'|'editOwnProfile'|'createAnotherProfile'}} params Params.
  */
-export default function ProfileManage() {
+export default function ProfileManage({
+  profile,
+  action = 'createAnotherProfile',
+}) {
   const STATUS = {
     isAvailable: 'isAvailable',
     isUploadingToIpfs: 'isUploadingToIpfs',
-    isMintingOrUpdating: 'isMintingOrUpdating',
-    isMintingOrUpdatingSuccessed: 'isMintingOrUpdatingSuccessed',
+    isUsingContract: 'isUsingContract',
+    isUsingContractSuccessed: 'isUsingContractSuccessed',
   };
 
   const { showToastSuccessLink, showToastError } = useToasts();
-  const { accountProfile, runProfileUpdater } = useWeb3Context();
+  const { runProfileUpdater } = useWeb3Context();
   const { uploadJsonToIPFS } = useIpfs();
-  const { mint, update } = useAvatarNftContract();
+  const { mint, update, add } = useAvatarNftContract();
   const [status, setStatus] = useState(STATUS.isAvailable);
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState(
+    profile?.avatarNftUriData ? profile.avatarNftUriData : {},
+  );
 
   const schema = {
     type: 'object',
@@ -73,36 +79,39 @@ export default function ProfileManage() {
       const { url } = await uploadJsonToIPFS(
         new AvatarNftMetadata(formData.image, formData.attributes),
       );
-      showToastSuccessLink('Your data uploaded to IPFS!', url);
-      setStatus(STATUS.isMintingOrUpdating);
-      // Update token if account has profile otherwise mint token
-      if (accountProfile) {
-        await update(accountProfile.avatarNftId, url);
-      } else {
+      showToastSuccessLink('Data uploaded to IPFS!', url);
+      // Use contract
+      setStatus(STATUS.isUsingContract);
+      if (action === 'createOwnProfile') {
         await mint(url);
+        runProfileUpdater();
+      } else if (action === 'editOwnProfile') {
+        await update(profile.avatarNftId, url);
+        runProfileUpdater();
+      } else if (action === 'createAnotherProfile') {
+        await add(url);
       }
-      // Show sucess message and run worker for update profile
-      setStatus(STATUS.isMintingOrUpdatingSuccessed);
-      runProfileUpdater();
+      setStatus(STATUS.isUsingContractSuccessed);
     } catch (error) {
       showToastError(error);
     }
   }
 
-  useEffect(() => {
-    setFormData(accountProfile ? accountProfile.avatarNftUriData : {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <>
-      {/* Form for mint or update profile */}
-      {formData && status !== STATUS.isMintingOrUpdatingSuccessed && (
+    <Box>
+      {/* Form for fill profile */}
+      {formData && status !== STATUS.isUsingContractSuccessed && (
         <>
-          <Typography variant="h4" gutterBottom>
-            {accountProfile ? 'Editing Own Profile' : 'Creating Own Profile'}
+          <Typography variant="h1" gutterBottom>
+            {action === 'createOwnProfile' && 'Creating Own Profile'}
+            {action === 'editOwnProfile' && 'Editing Own Profile'}
+            {action === 'createAnotherProfile' && 'Invite Person'}
           </Typography>
-          <Divider sx={{ mb: 1 }} />
+          <Typography gutterBottom>
+            {action === 'createAnotherProfile' &&
+              'Create profile for another person to make it appear in YourJustice.'}
+          </Typography>
+          <Divider sx={{ mb: 3 }} />
           <Form
             schema={schema}
             uiSchema={uiSchema}
@@ -113,7 +122,9 @@ export default function ProfileManage() {
           >
             {status === STATUS.isAvailable && (
               <Button variant="outlined" type="submit">
-                {accountProfile ? 'Save' : 'Create Profile'}
+                {action === 'editOwnProfile'
+                  ? 'Edit Profile'
+                  : 'Create Profile'}
               </Button>
             )}
             {status === STATUS.isUploadingToIpfs && (
@@ -126,28 +137,28 @@ export default function ProfileManage() {
                 Uploading to IPFS
               </LoadingButton>
             )}
-            {status === STATUS.isMintingOrUpdating && (
+            {status === STATUS.isUsingContract && (
               <LoadingButton
                 loading
                 loadingPosition="start"
                 startIcon={<Save />}
                 variant="outlined"
               >
-                {accountProfile ? 'Updating NFT' : 'Minting NFT'}
+                {action === 'editOwnProfile' ? 'Updating NFT' : 'Minting NFT'}
               </LoadingButton>
             )}
           </Form>
         </>
       )}
 
-      {/* Message that the minting or updating was successful */}
-      {formData && status === STATUS.isMintingOrUpdatingSuccessed && (
+      {/* Message that form is submitter */}
+      {formData && status === STATUS.isUsingContractSuccessed && (
         <>
           <Typography variant="h4" gutterBottom>
             Transaction is created!
           </Typography>
           <Typography gutterBottom>
-            {accountProfile
+            {action === 'editOwnProfile'
               ? 'Your profile will be updated soon.'
               : 'Your profile will be minted soon.'}
           </Typography>
@@ -158,9 +169,6 @@ export default function ProfileManage() {
           </Link>
         </>
       )}
-
-      {/* Loading if form data is not already defined */}
-      {!formData && <LoadingBackdrop />}
-    </>
+    </Box>
   );
 }

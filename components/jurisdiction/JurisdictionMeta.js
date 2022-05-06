@@ -132,7 +132,7 @@ function ProfileRequireDialog({ isClose, onClose }) {
           sx={{ mt: 4 }}
           variant="contained"
           onClick={() => {
-            router.push('/profile/manage');
+            router.push('/profile/create');
             close();
           }}
           startIcon={<IconProfile hexColor={palette.primary.contrastText} />}

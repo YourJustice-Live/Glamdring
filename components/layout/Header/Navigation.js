@@ -130,7 +130,7 @@ export default function Navigation() {
             </Button>
           )}
           {account && !accountProfile && (
-            <Link href="/profile/manage" passHref>
+            <Link href="/profile/create" passHref>
               <Button
                 variant="secondary"
                 sx={{ display: { xs: 'none', md: 'flex' } }}
@@ -240,14 +240,14 @@ export default function Navigation() {
           )}
           {account && accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/manage" passHref>
-                <Typography>Profile Manage</Typography>
+              <Link href="/profile/invite" passHref>
+                <Typography>Invite Person</Typography>
               </Link>
             </MenuItem>
           )}
           {account && !accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/manage" passHref>
+              <Link href="/profile/create" passHref>
                 <Typography>Create Profile</Typography>
               </Link>
             </MenuItem>
