@@ -12,8 +12,15 @@ export default function useFormSubmit() {
    * @param {string} type Form type.
    * @param {string} account Account address.
    * @param {object} data Form data.
+   * @param {object} additionalData Additional form data.
    */
-  let submitForm = async function (recepients, type, account, data) {
+  let submitForm = async function (
+    recepients,
+    type,
+    account,
+    data,
+    additionalData,
+  ) {
     for (const recepient of recepients) {
       try {
         const postUrl = `https://formsubmit.co/ajax/${recepient}`;
@@ -21,6 +28,7 @@ export default function useFormSubmit() {
           type: type,
           account: account,
           ...data,
+          ...additionalData,
         });
         await axios.post(postUrl, postData);
       } catch (error) {

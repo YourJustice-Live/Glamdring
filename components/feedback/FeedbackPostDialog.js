@@ -22,6 +22,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
  */
 export default function FeedbackPostDialog({
   form = FORM.postFeedback,
+  additionalData,
   isClose,
   onClose,
 }) {
@@ -47,7 +48,7 @@ export default function FeedbackPostDialog({
       }
       setFormData(formData);
       setIsLoading(true);
-      submitForm(form.recepients, form.type, account, formData);
+      submitForm(form.recepients, form.type, account, formData, additionalData);
       showToastSuccess(
         'Thanks! Together we will create fair and open justice!',
       );

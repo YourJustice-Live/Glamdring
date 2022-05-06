@@ -63,11 +63,34 @@ export const FORM = {
   // Propose Law
   proposeLaw: {
     type: 'propose_law',
-    recepients: [EMAIL.dev],
   },
   // Comment Law
   commentLaw: {
     type: 'comment_law',
-    recepients: [EMAIL.dev],
+    recepients: [EMAIL.dev, EMAIL.law],
+    title: 'Add Comment',
+    description: 'How can we improve this law? What is wrong with it?',
+    schema: {
+      type: 'object',
+      required: ['comment'],
+      properties: {
+        comment: {
+          type: 'string',
+          title: 'Your Comment',
+        },
+        contact: {
+          type: 'string',
+          title: 'Your Email, Twitter, Telegram, etc',
+        },
+      },
+    },
+    uiSchema: {
+      comment: {
+        'ui:widget': 'textarea',
+        'ui:options': {
+          rows: 5,
+        },
+      },
+    },
   },
 };

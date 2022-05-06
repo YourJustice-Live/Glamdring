@@ -4,7 +4,7 @@ import LawCard from './LawCard';
 /**
  * A component with a list of laws.
  */
-export default function LawList({ laws }) {
+export default function LawList({ laws, isCommentsEnabled }) {
   return (
     <Stack spacing={2}>
       {!laws && (
@@ -22,7 +22,11 @@ export default function LawList({ laws }) {
       {laws && laws.size > 0 && (
         <>
           {[...laws.keys()].map((key) => (
-            <LawCard key={key} law={laws.get(key)} />
+            <LawCard
+              key={key}
+              law={laws.get(key)}
+              isCommentsEnabled={isCommentsEnabled}
+            />
           ))}
         </>
       )}
