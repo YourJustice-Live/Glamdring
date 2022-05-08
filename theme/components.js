@@ -26,13 +26,17 @@ export const components = {
       root: {
         textTransform: 'initial',
         fontSize: '1em',
+        borderRadius: '12px',
+        boxShadow: 'none',
+        '&:hover': {
+          boxShadow: 'none',
+        },
       },
     },
     variants: [
       {
         props: { variant: 'primary' },
         style: {
-          borderRadius: '12px',
           color: '#FFFFFF',
           background: '#AD9BF5',
           '& .MuiButton-startIcon svg path': {
@@ -49,7 +53,6 @@ export const components = {
       {
         props: { variant: 'secondary' },
         style: {
-          borderRadius: '12px',
           textTransform: 'none',
           color: '#5E42CC',
           backgroundColor: 'rgba(173, 155, 245, 0.08)',

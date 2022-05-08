@@ -3,6 +3,7 @@ import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
 import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
 import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
+import JurisdictionManagerTools from 'components/jurisdiction/JurisdictionManagerTools';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
 import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
@@ -64,11 +65,11 @@ export default function Jurisdiction() {
   return (
     <Layout title={'YourJustice / Jurisdiction'} enableSidebar={!!account}>
       {/* Meta */}
-      <Box>
-        <JurisdictionMeta jurisdiction={jurisdiction} />
-      </Box>
+      <JurisdictionMeta jurisdiction={jurisdiction} />
+      {/* Manager Tools */}
+      <JurisdictionManagerTools jurisdiction={jurisdiction} sx={{ mt: 4 }} />
       {/* Tabs */}
-      <Box sx={{ width: '100%', mt: 12 }}>
+      <Box sx={{ width: '100%', mt: 4 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
             <TabList onChange={handleChange}>

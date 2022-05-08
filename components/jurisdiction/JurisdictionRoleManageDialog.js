@@ -8,46 +8,51 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { CASE_STAGE } from 'constants/contracts';
-import useCaseContract from 'hooks/contracts/useCaseContract';
+import { JURISDICTION_ROLE } from 'constants/contracts';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for change case stage.
+ * A dialog for assign or remove jurisdiction role for a specified account.
  */
-export default function CaseStageChangeDialog({ isClose, onClose }) {
+export default function RoleManageDialog({ isAssign, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { setStageOpen, setStageVerdict } = useCaseContract();
+  const { assignRole, removeRole } = useJuridictionContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: ['contractAddress', 'stage'],
+    required: ['account', 'role'],
     properties: {
-      contractAddress: {
+      account: {
         type: 'string',
-        title: 'Contract Address',
+        title: 'Account',
       },
-      stage: {
-        type: 'number',
-        title: 'New Stage',
-        default: CASE_STAGE.open.id,
-        enum: [CASE_STAGE.open.id, CASE_STAGE.verdict.id],
+      role: {
+        type: 'string',
+        title: 'Role',
+        default: JURISDICTION_ROLE.member.name,
+        enum: [
+          JURISDICTION_ROLE.member.name,
+          JURISDICTION_ROLE.judge.name,
+          JURISDICTION_ROLE.admin.name,
+        ],
         enumNames: [
-          capitalize(CASE_STAGE.open.name),
-          capitalize(CASE_STAGE.verdict.name),
+          capitalize(JURISDICTION_ROLE.member.name),
+          capitalize(JURISDICTION_ROLE.judge.name),
+          capitalize(JURISDICTION_ROLE.admin.name),
         ],
       },
     },
   };
 
   const uiSchema = {
-    contractAddress: {
-      'ui:placeholder': '0xfd3...',
+    account: {
+      'ui:placeholder': '0x430...',
     },
   };
 
@@ -62,11 +67,10 @@ export default function CaseStageChangeDialog({ isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      if (formData.stage === CASE_STAGE.open.id) {
-        await setStageOpen(formData.contractAddress);
-      }
-      if (formData.stage === CASE_STAGE.verdict.id) {
-        await setStageVerdict(formData.contractAddress);
+      if (isAssign) {
+        await assignRole(formData.account, formData.role);
+      } else {
+        await removeRole(formData.account, formData.role);
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();
@@ -77,8 +81,8 @@ export default function CaseStageChangeDialog({ isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
-      <DialogTitle>Change Case Stage</DialogTitle>
+    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
+      <DialogTitle>{isAssign ? 'Assign Role' : 'Remove Role'}</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -100,7 +104,7 @@ export default function CaseStageChangeDialog({ isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Change Stage
+                  {isAssign ? 'Assign Role' : 'Remove Role'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

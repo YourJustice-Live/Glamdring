@@ -50,31 +50,23 @@ export default function useAvatarNftContract() {
   }
 
   /**
-   * Add positive or negative reputation to Avatar NFT.
+   * Mint Avatar NFT for NOT current account.
    *
-   * @param {number} tokenId Token ID.
-   * @param {number} domainId Domain ID.
-   * @param {number} ratingId Rating ID.
-   * @param {number} amount Amount.
+   * @param {string} tokenUrl New URL to token metadata.
    * @returns Transaction.
    */
-  async function addReputation(tokenId, domainId, ratingId, amount) {
+  async function add(tokenUrl) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
     ) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).repAdd(
-      tokenId,
-      domainId,
-      ratingId,
-      amount,
-    );
+    return await getContract(provider?.getSigner()).add(tokenUrl);
   }
 
   return {
     mint,
     update,
-    addReputation,
+    add,
   };
 }

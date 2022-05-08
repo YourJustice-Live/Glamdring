@@ -3,6 +3,10 @@ import JurisdictionRule from 'classes/JurisdictionRule';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
 import { REPUTATION_RATING } from 'constants/contracts';
+import {
+  FAKE_JURISDICTION_DESCRIPTION,
+  FAKE_JURISDICTION_IMAGE,
+} from 'constants/fakes';
 
 /**
  * Hook for work with jurisdiction.
@@ -13,6 +17,8 @@ export default function useJurisdiction() {
 
   /**
    * Get a jurisdiction.
+   *
+   * TODO: Do not use fake data
    *
    * @param {string} id Jurisdiction id (address).
    * @returns {Promise.<Jurisdiction>} A jurisdiction or null.
@@ -25,7 +31,9 @@ export default function useJurisdiction() {
     const jurisdictionEntity = jurisdictionEntities[0];
     const jurisdiction = new Jurisdiction(
       jurisdictionEntity.id,
+      jurisdictionEntity.image || FAKE_JURISDICTION_IMAGE,
       jurisdictionEntity.name,
+      jurisdictionEntity.description || FAKE_JURISDICTION_DESCRIPTION,
       jurisdictionEntity.roles,
       jurisdictionEntity.rules,
       jurisdictionEntity.rulesCount,

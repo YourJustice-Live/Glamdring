@@ -130,7 +130,7 @@ export default function Navigation() {
             </Button>
           )}
           {account && !accountProfile && (
-            <Link href="/profile/manage" passHref>
+            <Link href="/profile/create" passHref>
               <Button
                 variant="secondary"
                 sx={{ display: { xs: 'none', md: 'flex' } }}
@@ -232,6 +232,16 @@ export default function Navigation() {
             </Box>
           )}
           {account && accountProfile && (
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                showDialog(<CaseCreateDialog onClose={closeDialog} />);
+              }}
+            >
+              <Typography>Create Case</Typography>
+            </MenuItem>
+          )}
+          {account && accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/profile" passHref>
                 <Typography>Profile</Typography>
@@ -240,15 +250,15 @@ export default function Navigation() {
           )}
           {account && accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/manage" passHref>
-                <Typography>Profile Manage</Typography>
+              <Link href="/profile/invite" passHref>
+                <Typography>Invite Person</Typography>
               </Link>
             </MenuItem>
           )}
           {account && !accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/manage" passHref>
-                <Typography>Create Profile</Typography>
+              <Link href="/profile/create" passHref>
+                <Typography>Create Own Profile</Typography>
               </Link>
             </MenuItem>
           )}
@@ -262,13 +272,6 @@ export default function Navigation() {
               <Typography>FAQ</Typography>
             </Link>
           </MenuItem>
-          {account && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/backend" passHref>
-                <Typography>Backend</Typography>
-              </Link>
-            </MenuItem>
-          )}
           {account && (
             <MenuItem onClick={disconnectWallet}>
               <Typography textAlign="center">Disconnect Wallet</Typography>

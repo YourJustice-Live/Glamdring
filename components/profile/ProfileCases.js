@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 /**
  * A component with profile cases.
  */
-export default function ProfileCases({ account }) {
+export default function ProfileCases({ profile }) {
   const { showToastError } = useToasts();
   const { getCases } = useCase();
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +29,7 @@ export default function ProfileCases({ account }) {
         null,
         process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
         selectedStage,
-        account,
+        profile.account,
         pageSize,
         (page - 1) * pageSize,
       );
@@ -44,9 +44,11 @@ export default function ProfileCases({ account }) {
   }
 
   useEffect(() => {
-    loadData(1, 1);
+    if (profile) {
+      loadData(1, 1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStage]);
+  }, [profile, selectedStage]);
 
   return (
     <Box>

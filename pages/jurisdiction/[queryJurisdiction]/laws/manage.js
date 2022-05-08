@@ -1,21 +1,26 @@
-import { Button, Divider, Stack, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import ActionManageDialog from 'components/law/ActionManageDialog';
+import ActionRuleTable from 'components/law/ActionRuleTable';
+import RuleManageDialog from 'components/law/RuleManageDialog';
+import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/useDialogContext';
-import ActionManageDialog from './ActionManageDialog';
-import ActionRuleTable from './ActionRuleTable';
-import RuleManageDialog from './RuleManageDialog';
+import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
- * A component with a backend for actions and rules.
+ * Page for manage jurisdiction laws.
  */
-export default function ActionRuleBackend({ sx }) {
+export default function JurisdictionLawsManage() {
+  const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
-    <Box sx={{ ...sx }}>
+    <Layout
+      title={'YourJustice / Jurisdiction Laws Manage'}
+      enableSidebar={!!account}
+    >
       <Box>
         <Typography variant="h2" gutterBottom>
-          Backend for Actions and Rules
+          Jurisdiction Laws Manager
         </Typography>
         <Typography gutterBottom>
           A place where users with the appropriate roles can manage action and
@@ -40,6 +45,6 @@ export default function ActionRuleBackend({ sx }) {
         </Button>
       </Stack>
       <ActionRuleTable sx={{ mt: 2.5 }} />
-    </Box>
+    </Layout>
   );
 }

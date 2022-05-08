@@ -1,171 +1,44 @@
 import {
-  AddBoxOutlined,
-  IndeterminateCheckBoxOutlined,
+  Circle,
+  FacebookRounded,
+  Instagram,
+  Language,
+  MailOutlineRounded,
   PersonOutlined,
+  Telegram,
+  Twitter,
 } from '@mui/icons-material';
 import {
   Avatar,
   Button,
+  Divider,
   Link,
   Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import useDialogContext from 'hooks/useDialogContext';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
+import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { capitalize } from 'lodash';
-import { useEffect, useState } from 'react';
+import { IconProfile } from 'icons';
+import NextLink from 'next/link';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
-import { getTraitValue, traitTypes } from 'utils/metadata';
+import { getTraitValue } from 'utils/metadata';
 
 /**
- * A component with profile meta (image, name, email, socials).
+ * A component with profile meta (image, name, links).
  *
- * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
+ * TODO: add emoji and multiline support for description.
  */
-export default function ProfileMeta({ account }) {
-  const { accountProfile } = useWeb3Context();
-  const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
-  const { getProfile } = useProfile();
-  const [profile, setProfile] = useState(null);
-  const [profileMetadata, setProfileMetadata] = useState(null);
-
-  async function loadData() {
-    try {
-      const profile = await getProfile(account);
-      const profileMedata = profile.avatarNftUriData;
-      setProfile(profile);
-      setProfileMetadata(profileMedata);
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
-  useEffect(() => {
-    if (account) {
-      loadData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
-
+export default function ProfileMeta({ profile }) {
   return (
     <Box>
-      {profile && profileMetadata ? (
+      {profile ? (
         <>
-          {/* Avatar */}
-          <Avatar
-            sx={{ width: 128, height: 128, my: 3 }}
-            src={profileMetadata.image}
-          >
-            <PersonOutlined />
-          </Avatar>
-          {/* Traits */}
-          <Typography gutterBottom>
-            <b>Account: </b>
-            {formatAddress(profile?.account) || 'none'}
-          </Typography>
-          <Typography gutterBottom>
-            <b>First Name: </b>
-            {getTraitValue(profileMetadata, traitTypes.firstName) || 'none'}
-          </Typography>
-          <Typography gutterBottom>
-            <b>Last Name:</b>{' '}
-            {getTraitValue(profileMetadata, traitTypes.lastName) || 'none'}
-          </Typography>
-          <Typography gutterBottom>
-            <b>Email: </b>{' '}
-            {getTraitValue(profileMetadata, traitTypes.email) || 'none'}
-          </Typography>
-          <Typography gutterBottom>
-            <b>Twitter: </b>{' '}
-            {getTraitValue(profileMetadata, traitTypes.twitter) || 'none'}
-          </Typography>
-          {/* Ratings */}
-          <Stack spacing={1} sx={{ mt: 4 }}>
-            {/* Total rating */}
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-              <Typography sx={{ mr: 1, fontWeight: 'bold' }}>
-                Total Rating:
-              </Typography>
-              <Typography sx={{ color: 'success.main', mr: 1 }}>
-                {`+${profile.avatarNftTotalPositiveRating}`}
-              </Typography>
-              <Typography sx={{ color: 'danger.main' }}>
-                {`-${profile.avatarNftTotalNegativeRating}`}
-              </Typography>
-            </Box>
-            {/* Rating by domains */}
-            {profile.avatarNftReputations?.map((reputation, index) => (
-              <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
-                  Jurisdiction:
-                </Typography>
-                <Typography sx={{ mr: 3 }}>
-                  <Link
-                    href={`/jurisdiction/${reputation.jurisdiction.id}`}
-                    underline="none"
-                  >
-                    {formatAddress(reputation.jurisdiction.id)}
-                  </Link>
-                </Typography>
-                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
-                  Domain:
-                </Typography>
-                <Typography sx={{ mr: 3 }}>
-                  {capitalize(reputation.domain)}
-                </Typography>
-                <Typography sx={{ mr: 0.5, fontWeight: 'bold' }}>
-                  Rating:
-                </Typography>
-                <Typography sx={{ color: 'success.main', mr: 1 }}>
-                  +{reputation.positiveRating}
-                </Typography>
-                <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                  -{reputation.negativeRating}
-                </Typography>
-              </Box>
-            ))}
-          </Stack>
-          {/* Actions */}
-          <Stack direction="row" spacing={2} sx={{ mt: 8 }}>
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<AddBoxOutlined />}
-              onClick={() =>
-                showDialog(
-                  <CaseCreateDialog
-                    subjectProfile={profile}
-                    affectedProfile={accountProfile}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Add Score
-            </Button>
-            <Button
-              variant="contained"
-              color="danger"
-              startIcon={<IndeterminateCheckBoxOutlined />}
-              onClick={() =>
-                showDialog(
-                  <CaseCreateDialog
-                    subjectProfile={profile}
-                    affectedProfile={accountProfile}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Add Score
-            </Button>
-          </Stack>
+          <ProfileTop profile={profile} />
+          <Divider sx={{ mt: 1, mb: 3 }} />
+          <ProfileMain profile={profile} />
         </>
       ) : (
         <>
@@ -185,4 +58,161 @@ export default function ProfileMeta({ account }) {
       )}
     </Box>
   );
+}
+
+function ProfileTop({ profile, sx }) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        ...sx,
+      }}
+    >
+      <IconProfile hexColor={palette.text.secondary} size={18} />
+      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+        HUMAN
+      </Typography>
+      <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
+      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+        {formatAddress(profile?.account) || 'none'}
+      </Typography>
+    </Box>
+  );
+}
+
+function ProfileMain({ profile, sx }) {
+  const firstName =
+    getTraitValue(
+      profile.avatarNftUriData?.attributes,
+      PROFILE_TRAIT_TYPE.firstName,
+    ) || 'None';
+  const lastName =
+    getTraitValue(
+      profile.avatarNftUriData?.attributes,
+      PROFILE_TRAIT_TYPE.lastName,
+    ) || 'None';
+  const description = getTraitValue(
+    profile.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.description,
+  );
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        alignItems: { md: 'center' },
+        ...sx,
+      }}
+    >
+      <ProfileAvatar profile={profile} />
+      <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
+        <Typography variant="h2">
+          {firstName} {lastName}
+        </Typography>
+        {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
+        <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />
+        <ProfileEditButton profile={profile} sx={{ mt: 1 }} />
+      </Box>
+    </Box>
+  );
+}
+
+function ProfileAvatar({ profile, sx }) {
+  return (
+    <Box sx={{ ...sx }}>
+      <Avatar
+        sx={{
+          bgcolor: 'grey.50',
+          width: 164,
+          height: 164,
+          borderRadius: '24px',
+        }}
+        src={profile?.avatarNftUriData?.image}
+      >
+        <PersonOutlined />
+      </Avatar>
+    </Box>
+  );
+}
+
+function ProfileLinks({ profile, sx }) {
+  const email = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.email,
+  );
+  const site = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.site,
+  );
+  const twitter = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.twitter,
+  );
+  const telegram = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.telegram,
+  );
+  const facebook = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.facebook,
+  );
+  const instagram = getTraitValue(
+    profile?.avatarNftUriData?.attributes,
+    PROFILE_TRAIT_TYPE.instagram,
+  );
+
+  return (
+    <Stack direction="row" spacing={2} sx={{ ...sx }}>
+      {email && (
+        <Link href={`mailto:${email}`} target="_blank">
+          <MailOutlineRounded />
+        </Link>
+      )}
+      {site && (
+        <Link href={site} target="_blank">
+          <Language />
+        </Link>
+      )}
+      {twitter && (
+        <Link href={`https://twitter.com/${twitter}`} target="_blank">
+          <Twitter />
+        </Link>
+      )}
+      {telegram && (
+        <Link href={`https://t.me/${telegram}`} target="_blank">
+          <Telegram />
+        </Link>
+      )}
+      {facebook && (
+        <Link href={`https://facebook.com/${facebook}`} target="_blank">
+          <FacebookRounded />
+        </Link>
+      )}
+      {instagram && (
+        <Link href={`https://instagram.com/${instagram}`} target="_blank">
+          <Instagram />
+        </Link>
+      )}
+    </Stack>
+  );
+}
+
+function ProfileEditButton({ profile, sx }) {
+  const { account } = useWeb3Context();
+  if (profile?.account?.toLowerCase() === account?.toLowerCase()) {
+    return (
+      <Box sx={{ ...sx }}>
+        <NextLink href={`/profile/edit`} passHref>
+          <Button size="small" variant="outlined">
+            Edit Profile
+          </Button>
+        </NextLink>
+      </Box>
+    );
+  } else {
+    return <></>;
+  }
 }

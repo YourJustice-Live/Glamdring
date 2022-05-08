@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material';
-import RuleEffects from 'components/rule/RuleEffects';
+import RuleEffects from 'components/law/RuleEffects';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
 

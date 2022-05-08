@@ -23,7 +23,7 @@ import ActionManageDialog from './ActionManageDialog';
 import RuleManageDialog from './RuleManageDialog';
 
 /**
- * A component with a table with actions and rules.
+ * A component with a table with actions and jurisdiction rules.
  */
 export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
@@ -299,7 +299,7 @@ function JsonViewDialog({ json, isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
-      <DialogTitle>JSON VIew</DialogTitle>
+      <DialogTitle>JSON View</DialogTitle>
       <DialogContent sx={{ p: 4, overflowX: 'scroll' }}>
         <pre>{JSON.stringify(json, null, 2)}</pre>
       </DialogContent>

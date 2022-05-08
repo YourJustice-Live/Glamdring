@@ -1,11 +1,13 @@
-import { Save } from '@mui/icons-material';
+import { Circle, Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
+  Avatar,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
   Divider,
+  Skeleton,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -15,19 +17,111 @@ import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconProfile } from 'icons';
+import { IconFlag, IconPassport, IconProfile } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
  */
 export default function JurisdictionMeta({ jurisdiction, sx }) {
-  const { showToastSuccess, showToastError } = useToasts();
-  const { join, leave } = useJuridictionContract();
+  return (
+    <Box sx={{ ...sx }}>
+      {jurisdiction ? (
+        <>
+          <JurisdictionTop jurisdiction={jurisdiction} />
+          <Divider sx={{ mt: 1, mb: 3 }} />
+          <JurisdictionMain jurisdiction={jurisdiction} />
+        </>
+      ) : (
+        <>
+          <Skeleton
+            variant="rectangular"
+            height={24}
+            width={256}
+            sx={{ mb: 1 }}
+          />
+          <Skeleton
+            variant="rectangular"
+            height={24}
+            width={256}
+            sx={{ mb: 1 }}
+          />
+        </>
+      )}
+    </Box>
+  );
+}
+
+function JurisdictionTop({ jurisdiction, sx }) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        ...sx,
+      }}
+    >
+      <IconFlag hexColor={palette.text.secondary} size={18} />
+      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+        JURISDICTION
+      </Typography>
+      <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
+      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
+        {formatAddress(jurisdiction?.id) || 'none'}
+      </Typography>
+    </Box>
+  );
+}
+
+function JurisdictionMain({ jurisdiction, sx }) {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        alignItems: { md: 'center' },
+        ...sx,
+      }}
+    >
+      <JurisdictionAvatar jurisdiction={jurisdiction} />
+      <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
+        <Typography variant="h2">{jurisdiction.name}</Typography>
+        {jurisdiction.description && (
+          <Typography sx={{ mt: 1 }}>{jurisdiction.description}</Typography>
+        )}
+        <JurisdictionActions jurisdiction={jurisdiction} sx={{ mt: 2 }} />
+      </Box>
+    </Box>
+  );
+}
+
+function JurisdictionAvatar({ jurisdiction, sx }) {
+  return (
+    <Box sx={{ ...sx }}>
+      <Avatar
+        sx={{
+          bgcolor: 'primary.main',
+          width: 164,
+          height: 164,
+          borderRadius: '24px',
+        }}
+        src={jurisdiction?.image}
+      >
+        J
+      </Avatar>
+    </Box>
+  );
+}
+
+function JurisdictionActions({ jurisdiction, sx }) {
   const { account, accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const { showToastSuccess, showToastError } = useToasts();
+  const { join, leave } = useJuridictionContract();
   const { isAccountHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
@@ -58,7 +152,7 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
   }
 
   useEffect(() => {
-    if (jurisdiction && account) {
+    if (account && jurisdiction) {
       setIsMember(
         isAccountHasJurisdictionRole(
           jurisdiction,
@@ -70,46 +164,40 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);
 
-  return (
-    <Box sx={{ ...sx }}>
-      <Typography variant="h1" gutterBottom>
-        Jurisdiction
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
-      {jurisdiction && (
-        <>
-          <Typography gutterBottom>{jurisdiction.name}</Typography>
-          {accountProfile && isMember !== null && (
-            <>
-              <Typography gutterBottom variant="body2">
-                {isMember ? 'Account is Member' : 'Account is Not Member'}
-              </Typography>
-              <Box sx={{ mt: 3 }}>
-                {isJoiningOrLeaving ? (
-                  <LoadingButton
-                    loading
-                    loadingPosition="start"
-                    startIcon={<Save />}
-                    variant="outlined"
-                  >
-                    {isMember ? 'Leaving' : 'Joining'}
-                  </LoadingButton>
-                ) : (
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={joinOrLeave}
-                  >
-                    {isMember ? 'Leave' : 'Join'}
-                  </Button>
-                )}
-              </Box>
-            </>
-          )}
-        </>
-      )}
-    </Box>
-  );
+  if (account && isMember !== null) {
+    return (
+      <Box sx={{ ...sx }}>
+        {isJoiningOrLeaving ? (
+          <LoadingButton
+            loading
+            loadingPosition="start"
+            startIcon={<Save />}
+            variant="outlined"
+          >
+            {isMember ? 'Leaving' : 'Joining'}
+          </LoadingButton>
+        ) : (
+          <Button
+            variant={isMember ? 'outlined' : 'contained'}
+            type="submit"
+            startIcon={
+              <IconPassport
+                hexColor={
+                  isMember ? palette.primary.main : palette.primary.contrastText
+                }
+              />
+            }
+            sx={{ px: 6 }}
+            onClick={joinOrLeave}
+          >
+            {isMember ? 'Leave' : 'Join'}
+          </Button>
+        )}
+      </Box>
+    );
+  } else {
+    return <></>;
+  }
 }
 
 function ProfileRequireDialog({ isClose, onClose }) {
@@ -132,7 +220,7 @@ function ProfileRequireDialog({ isClose, onClose }) {
           sx={{ mt: 4 }}
           variant="contained"
           onClick={() => {
-            router.push('/profile/manage');
+            router.push('/profile/create');
             close();
           }}
           startIcon={<IconProfile hexColor={palette.primary.contrastText} />}

@@ -83,12 +83,12 @@ export function Sidebar() {
               <NextLink href="/profile" passHref>
                 <Link underline="none">Profile</Link>
               </NextLink>
-              <NextLink href="/profile/manage" passHref>
-                <Link underline="none">Profile Manage</Link>
+              <NextLink href="/profile/invite" passHref>
+                <Link underline="none">Invite Person</Link>
               </NextLink>
             </>
           ) : (
-            <NextLink href="/profile/manage" passHref>
+            <NextLink href="/profile/create" passHref>
               <Link underline="none">Create Profile</Link>
             </NextLink>
           )}
@@ -97,9 +97,6 @@ export function Sidebar() {
           </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>
-          </NextLink>
-          <NextLink href="/backend" passHref>
-            <Link underline="none">Backend</Link>
           </NextLink>
         </Stack>
       </Box>

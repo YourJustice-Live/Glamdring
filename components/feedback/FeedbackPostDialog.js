@@ -6,57 +6,33 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { CASE_ROLE } from 'constants/contracts';
-import useCaseContract from 'hooks/contracts/useCaseContract';
+import { FORM } from 'constants/feedbacks';
+import useFormSubmit from 'hooks/useFormSubmit';
 import useToasts from 'hooks/useToasts';
-import { capitalize } from 'lodash';
-import { useState } from 'react';
+import useWeb3Context from 'hooks/useWeb3Context';
+import { createRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 /**
- * A dialog for assign a role to a specified account
+ * A dialog for post feedback.
  */
-export default function CaseRoleAssignDialog({ isClose, onClose }) {
+export default function FeedbackPostDialog({
+  form = FORM.postFeedback,
+  additionalData,
+  isClose,
+  onClose,
+}) {
+  const { account } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
-  const { assignRole } = useCaseContract();
+  const { submitForm } = useFormSubmit();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
-
-  const schema = {
-    type: 'object',
-    required: ['contractAddress', 'account', 'role'],
-    properties: {
-      contractAddress: {
-        type: 'string',
-        title: 'Contract Address',
-      },
-      account: {
-        type: 'string',
-        title: 'Account',
-      },
-      role: {
-        type: 'string',
-        title: 'Role',
-        default: CASE_ROLE.witness.name,
-        enum: [CASE_ROLE.witness.name, CASE_ROLE.judge.name],
-        enumNames: [
-          capitalize(CASE_ROLE.witness.name),
-          capitalize(CASE_ROLE.judge.name),
-        ],
-      },
-    },
-  };
-
-  const uiSchema = {
-    contractAddress: {
-      'ui:placeholder': '0xfd3...',
-    },
-    account: {
-      'ui:placeholder': '0x430...',
-    },
-  };
+  const recaptchaRef = createRef();
 
   async function close() {
     setFormData({});
@@ -67,14 +43,15 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
 
   async function submit({ formData }) {
     try {
+      if (!recaptchaRef.current.getValue()) {
+        throw new Error('Invalid CAPTCHA');
+      }
       setFormData(formData);
       setIsLoading(true);
-      await assignRole(
-        formData.contractAddress,
-        formData.account,
-        formData.role,
+      submitForm(form.recepients, form.type, account, formData, additionalData);
+      showToastSuccess(
+        'Thanks! Together we will create fair and open justice!',
       );
-      showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
       showToastError(error);
@@ -83,16 +60,29 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
-      <DialogTitle>Assign Case Role</DialogTitle>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : onClose}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle>{form.title}</DialogTitle>
       <DialogContent>
+        <Typography>{form.description}</Typography>
         <Form
-          schema={schema}
+          schema={form.schema}
+          uiSchema={form.uiSchema}
           formData={formData}
-          uiSchema={uiSchema}
           onSubmit={submit}
           disabled={isLoading}
         >
+          <Box sx={{ mt: 1 }}>
+            <ReCAPTCHA
+              size="compact"
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+            />
+          </Box>
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (
               <LoadingButton
@@ -106,7 +96,7 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Assign Role
+                  Post
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel
