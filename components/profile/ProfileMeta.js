@@ -108,11 +108,11 @@ function ProfileMain({ profile, sx }) {
       }}
     >
       <ProfileAvatar profile={profile} />
-      <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 2 } }}>
+      <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
         <Typography variant="h2">
           {firstName} {lastName}
         </Typography>
-        <Typography sx={{ mt: 1 }}>{description}</Typography>
+        {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
         <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />
         <ProfileEditButton profile={profile} sx={{ mt: 1 }} />
       </Box>
