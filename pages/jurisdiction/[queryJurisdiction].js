@@ -67,7 +67,7 @@ export default function Jurisdiction() {
       {/* Meta */}
       <JurisdictionMeta jurisdiction={jurisdiction} />
       {/* Manager Tools */}
-      <JurisdictionManagerTools sx={{ mt: 4 }} />
+      <JurisdictionManagerTools jurisdiction={jurisdiction} sx={{ mt: 4 }} />
       {/* Tabs */}
       <Box sx={{ width: '100%', mt: 4 }}>
         <TabContext value={tabValue}>

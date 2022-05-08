@@ -8,14 +8,14 @@ import { palette } from 'theme/palette';
 /**
  * A component with jurisdiction manager tools.
  */
-export default function JurisdictionManagerTools({ sx }) {
+export default function JurisdictionManagerTools({ jurisdiction, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const router = useRouter();
 
   return (
     <>
-      {account && (
+      {account && jurisdiction && (
         <Paper
           variant="outlined"
           sx={{ p: 3, background: palette.grey[50], ...sx }}
@@ -54,7 +54,9 @@ export default function JurisdictionManagerTools({ sx }) {
             <Button
               variant="outlined"
               type="submit"
-              onClick={() => router.push('/jurisdiction/laws/manage')}
+              onClick={() =>
+                router.push(`/jurisdiction/${jurisdiction.id}/laws/manage`)
+              }
             >
               Manage Laws
             </Button>
