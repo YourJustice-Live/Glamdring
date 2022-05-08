@@ -38,23 +38,11 @@ export default function Profile() {
 
   return (
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
-      <Box>
+      <ProfileMeta profile={profile} />
+      <ProfileRatings profile={profile} sx={{ mt: 6 }} />
+      <Box sx={{ mt: 8 }}>
         <Typography variant="h1" gutterBottom>
-          Profile
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <ProfileMeta profile={profile} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Profile Ratings
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <ProfileRatings profile={profile} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Profile Cases
+          Cases
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <ProfileCases profile={profile} />
