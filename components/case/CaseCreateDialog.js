@@ -32,6 +32,8 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
+ *
+ * TODO: Use custom widget for category selector.
  */
 export default function CaseCreateDialog({
   subjectProfile,

@@ -1,12 +1,18 @@
 import { ArrowForwardOutlined } from '@mui/icons-material';
 import {
+  Alert,
+  AlertTitle,
   Box,
   Divider,
+  Link,
   List,
   ListItemButton,
   ListItemIcon,
   Typography,
 } from '@mui/material';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
+import { FORM } from 'constants/feedbacks';
+import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
 
@@ -19,6 +25,7 @@ export default function CaseActionSelect(props) {
   const propsOnChange = props.onChange;
   const propsLaws = props.formContext?.laws;
   const propsFormCategory = props.formContext?.formData?.category;
+  const { showDialog, closeDialog } = useDialogContext();
   const { isJurisdictionRuleInCategory } = useJurisdiction();
   const [items, setItems] = useState([]);
 
@@ -77,6 +84,33 @@ export default function CaseActionSelect(props) {
           </ListItemButton>
         ))}
       </List>
+      <Alert
+        severity="info"
+        sx={{ borderRadius: '8px', boxShadow: 'none', mt: 1, mb: 0 }}
+      >
+        <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant="body2">
+            <Link
+              component="button"
+              variant="body2"
+              underline="none"
+              sx={{ mr: 0.5, pb: 0.3 }}
+              onClick={() =>
+                showDialog(
+                  <FeedbackPostDialog
+                    form={FORM.proposeLaw}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            >
+              <strong>Propose</strong>
+            </Link>
+            a law that we should add to the jurisdiction.
+          </Typography>
+        </Box>
+      </Alert>
     </Box>
   );
 }
