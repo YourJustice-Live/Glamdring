@@ -8,30 +8,26 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { CASE_ROLE } from 'constants/contracts';
-import useCaseContract from 'hooks/contracts/useCaseContract';
+import { JURISDICTION_ROLE } from 'constants/contracts';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for assign a role to a specified account
+ * A dialog for assign or remove jurisdiction role for a specified account.
  */
-export default function CaseRoleAssignDialog({ isClose, onClose }) {
+export default function RoleManageDialog({ isAssign, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { assignRole } = useCaseContract();
+  const { assignRole, removeRole } = useJuridictionContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: ['contractAddress', 'account', 'role'],
+    required: ['account', 'role'],
     properties: {
-      contractAddress: {
-        type: 'string',
-        title: 'Contract Address',
-      },
       account: {
         type: 'string',
         title: 'Account',
@@ -39,20 +35,22 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
       role: {
         type: 'string',
         title: 'Role',
-        default: CASE_ROLE.witness.name,
-        enum: [CASE_ROLE.witness.name, CASE_ROLE.judge.name],
+        default: JURISDICTION_ROLE.member.name,
+        enum: [
+          JURISDICTION_ROLE.member.name,
+          JURISDICTION_ROLE.judge.name,
+          JURISDICTION_ROLE.admin.name,
+        ],
         enumNames: [
-          capitalize(CASE_ROLE.witness.name),
-          capitalize(CASE_ROLE.judge.name),
+          capitalize(JURISDICTION_ROLE.member.name),
+          capitalize(JURISDICTION_ROLE.judge.name),
+          capitalize(JURISDICTION_ROLE.admin.name),
         ],
       },
     },
   };
 
   const uiSchema = {
-    contractAddress: {
-      'ui:placeholder': '0xfd3...',
-    },
     account: {
       'ui:placeholder': '0x430...',
     },
@@ -69,11 +67,11 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      await assignRole(
-        formData.contractAddress,
-        formData.account,
-        formData.role,
-      );
+      if (isAssign) {
+        await assignRole(formData.account, formData.role);
+      } else {
+        await removeRole(formData.account, formData.role);
+      }
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -84,7 +82,7 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
-      <DialogTitle>Assign Case Role</DialogTitle>
+      <DialogTitle>{isAssign ? 'Assign Role' : 'Remove Role'}</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -106,7 +104,7 @@ export default function CaseRoleAssignDialog({ isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Assign Role
+                  {isAssign ? 'Assign Role' : 'Remove Role'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

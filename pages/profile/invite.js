@@ -19,7 +19,7 @@ export default function ProfileInvite() {
             Feature is under development
           </Typography>
           <Typography gutterBottom>
-            The ability to invite another persons will appear very soon..
+            The ability to invite another persons will appear very soon
           </Typography>
         </Box>
       )}

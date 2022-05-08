@@ -273,13 +273,6 @@ export default function Navigation() {
             </Link>
           </MenuItem>
           {account && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/backend" passHref>
-                <Typography>Backend</Typography>
-              </Link>
-            </MenuItem>
-          )}
-          {account && (
             <MenuItem onClick={disconnectWallet}>
               <Typography textAlign="center">Disconnect Wallet</Typography>
             </MenuItem>

@@ -23,7 +23,7 @@ import ActionManageDialog from './ActionManageDialog';
 import RuleManageDialog from './RuleManageDialog';
 
 /**
- * A component with a table with actions and rules.
+ * A component with a table with actions and jurisdiction rules.
  */
 export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();

@@ -98,9 +98,6 @@ export function Sidebar() {
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>
           </NextLink>
-          <NextLink href="/backend" passHref>
-            <Link underline="none">Backend</Link>
-          </NextLink>
         </Stack>
       </Box>
     </Drawer>
