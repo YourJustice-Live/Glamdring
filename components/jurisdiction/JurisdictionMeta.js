@@ -6,9 +6,12 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import RoleManageDialog from 'components/jurisdiction/JurisdictionRoleManageDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useDialogContext from 'hooks/useDialogContext';
@@ -24,10 +27,10 @@ import { palette } from 'theme/palette';
  * A component with jurisdiction meta (title, image, etc).
  */
 export default function JurisdictionMeta({ jurisdiction, sx }) {
-  const { showToastSuccess, showToastError } = useToasts();
-  const { join, leave } = useJuridictionContract();
   const { account, accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const { showToastSuccess, showToastError } = useToasts();
+  const { join, leave } = useJuridictionContract();
   const { isAccountHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
@@ -58,7 +61,7 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
   }
 
   useEffect(() => {
-    if (jurisdiction && account) {
+    if (account && jurisdiction) {
       setIsMember(
         isAccountHasJurisdictionRole(
           jurisdiction,
@@ -72,39 +75,76 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
 
   return (
     <Box sx={{ ...sx }}>
-      <Typography variant="h1" gutterBottom>
-        Jurisdiction
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
       {jurisdiction && (
         <>
-          <Typography gutterBottom>{jurisdiction.name}</Typography>
-          {accountProfile && isMember !== null && (
-            <>
-              <Typography gutterBottom variant="body2">
-                {isMember ? 'Account is Member' : 'Account is Not Member'}
+          <Typography variant="h1" gutterBottom>
+            {jurisdiction.name}
+          </Typography>
+          <Divider />
+          {/* Join and leave */}
+          {account && isMember !== null && (
+            <Box sx={{ mt: 3 }}>
+              {isJoiningOrLeaving ? (
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<Save />}
+                  variant="outlined"
+                >
+                  {isMember ? 'Leaving' : 'Joining'}
+                </LoadingButton>
+              ) : (
+                <Button variant="contained" type="submit" onClick={joinOrLeave}>
+                  {isMember ? 'Leave' : 'Join'}
+                </Button>
+              )}
+            </Box>
+          )}
+          {/* Manager tools */}
+          {account && (
+            <Paper
+              variant="outlined"
+              sx={{ p: 3, mt: 4, background: palette.grey[50] }}
+            >
+              <Typography variant="h4" gutterBottom>
+                Manager Tools
               </Typography>
-              <Box sx={{ mt: 3 }}>
-                {isJoiningOrLeaving ? (
-                  <LoadingButton
-                    loading
-                    loadingPosition="start"
-                    startIcon={<Save />}
-                    variant="outlined"
-                  >
-                    {isMember ? 'Leaving' : 'Joining'}
-                  </LoadingButton>
-                ) : (
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={joinOrLeave}
-                  >
-                    {isMember ? 'Leave' : 'Join'}
-                  </Button>
-                )}
-              </Box>
-            </>
+              <Typography gutterBottom>
+                A place where users with the appropriate roles can manage this
+                jurisdiction
+              </Typography>
+              <Divider />
+              <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  onClick={() =>
+                    showDialog(
+                      <RoleManageDialog
+                        isAssign={true}
+                        onClose={closeDialog}
+                      />,
+                    )
+                  }
+                >
+                  Assign Role
+                </Button>
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  onClick={() =>
+                    showDialog(
+                      <RoleManageDialog
+                        isAssign={false}
+                        onClose={closeDialog}
+                      />,
+                    )
+                  }
+                >
+                  Remove Role
+                </Button>
+              </Stack>
+            </Paper>
           )}
         </>
       )}

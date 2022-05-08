@@ -15,7 +15,7 @@ import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for assign or remove role for a specified account.
+ * A dialog for assign or remove jurisdiction role for a specified account.
  */
 export default function RoleManageDialog({ isAssign, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();

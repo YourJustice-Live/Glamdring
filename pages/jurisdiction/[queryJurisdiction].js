@@ -68,7 +68,7 @@ export default function Jurisdiction() {
         <JurisdictionMeta jurisdiction={jurisdiction} />
       </Box>
       {/* Tabs */}
-      <Box sx={{ width: '100%', mt: 12 }}>
+      <Box sx={{ width: '100%', mt: 4 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
             <TabList onChange={handleChange}>
