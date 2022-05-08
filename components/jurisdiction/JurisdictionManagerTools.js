@@ -28,7 +28,11 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
             jurisdiction
           </Typography>
           <Divider />
-          <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={2}
+            sx={{ mt: 2 }}
+          >
             <Button
               variant="outlined"
               type="submit"
