@@ -26,5 +26,5 @@ export default function JurisdictionLaws({ jurisdiction }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);
 
-  return <LawList laws={laws} />;
+  return <LawList laws={laws} isCommentsEnabled={true} />;
 }

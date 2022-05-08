@@ -1,19 +1,26 @@
+import { LightbulbOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Card,
   CardContent,
   Chip,
+  Link,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import RuleEffects from 'components/rule/RuleEffects';
+import { FORM } from 'constants/feedbacks';
+import useDialogContext from 'hooks/useDialogContext';
 
 /**
  * A component with a card with law.
  */
-export default function LawCard({ law }) {
+export default function LawCard({ law, isCommentsEnabled }) {
+  const { showDialog, closeDialog } = useDialogContext();
+
   return (
     <Card elevation={1}>
       {/* Avatar with name */}
@@ -44,6 +51,33 @@ export default function LawCard({ law }) {
               <Box sx={{ mt: 2 }}>
                 <RuleEffects rule={rule} />
               </Box>
+              {/* Add comment button */}
+              {isCommentsEnabled && (
+                <Box sx={{ display: 'flex', direction: 'row', mt: 3 }}>
+                  <LightbulbOutlined fontSize="small" sx={{ mr: 1 }} />
+                  <Typography variant="body2">
+                    Do you have an idea how to improve the law?
+                    <Link
+                      component="button"
+                      variant="body2"
+                      underline="none"
+                      sx={{ mx: 0.5, pb: 0.3 }}
+                      onClick={() =>
+                        showDialog(
+                          <FeedbackPostDialog
+                            form={FORM.commentLaw}
+                            additionalData={{ rule: rule.ruleId }}
+                            onClose={closeDialog}
+                          />,
+                        )
+                      }
+                    >
+                      <strong>Propose</strong>
+                    </Link>
+                    edits or additions.
+                  </Typography>
+                </Box>
+              )}
             </Paper>
           ))}
         </Stack>

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import { FORM } from 'constants/feedbacks';
 import useFormSubmit from 'hooks/useFormSubmit';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -19,29 +20,19 @@ import ReCAPTCHA from 'react-google-recaptcha';
 /**
  * A dialog for post feedback.
  */
-export default function FeedbackPostDialog({ isClose, onClose }) {
+export default function FeedbackPostDialog({
+  form = FORM.postFeedback,
+  additionalData,
+  isClose,
+  onClose,
+}) {
   const { account } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
-  const { submitFeedback } = useFormSubmit();
+  const { submitForm } = useFormSubmit();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
   const recaptchaRef = createRef();
-
-  const schema = {
-    type: 'object',
-    required: ['feedback'],
-    properties: {
-      feedback: {
-        type: 'string',
-        title: 'Your Feedback',
-      },
-      contact: {
-        type: 'string',
-        title: 'Your Email, Twitter, Telegram, etc',
-      },
-    },
-  };
 
   async function close() {
     setFormData({});
@@ -50,15 +41,6 @@ export default function FeedbackPostDialog({ isClose, onClose }) {
     onClose();
   }
 
-  const uiSchema = {
-    feedback: {
-      'ui:widget': 'textarea',
-      'ui:options': {
-        rows: 5,
-      },
-    },
-  };
-
   async function submit({ formData }) {
     try {
       if (!recaptchaRef.current.getValue()) {
@@ -66,8 +48,10 @@ export default function FeedbackPostDialog({ isClose, onClose }) {
       }
       setFormData(formData);
       setIsLoading(true);
-      submitFeedback(account, formData.feedback, formData.contact);
-      showToastSuccess('Thanks for your feedback!');
+      submitForm(form.recepients, form.type, account, formData, additionalData);
+      showToastSuccess(
+        'Thanks! Together we will create fair and open justice!',
+      );
       close();
     } catch (error) {
       showToastError(error);
@@ -82,19 +66,13 @@ export default function FeedbackPostDialog({ isClose, onClose }) {
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>Post Feedback</DialogTitle>
+      <DialogTitle>{form.title}</DialogTitle>
       <DialogContent>
-        <Typography gutterBottom>
-          Do you have ideas how to improve the app? Maybe you are having
-          questions or problems? Post feedback.
-        </Typography>
-        <Typography sx={{ fontWeight: 'bold' }}>
-          Together we will create fair and open justice!
-        </Typography>
+        <Typography>{form.description}</Typography>
         <Form
-          schema={schema}
+          schema={form.schema}
+          uiSchema={form.uiSchema}
           formData={formData}
-          uiSchema={uiSchema}
           onSubmit={submit}
           disabled={isLoading}
         >

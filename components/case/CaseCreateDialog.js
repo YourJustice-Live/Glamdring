@@ -32,6 +32,8 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with a dialog to create a case.
+ *
+ * TODO: Use custom widget for category selector.
  */
 export default function CaseCreateDialog({
   subjectProfile,
@@ -356,7 +358,7 @@ export default function CaseCreateDialog({
   }, []);
 
   return (
-    <Dialog open={isOpen} onClose={close}>
+    <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
       <DialogTitle>Create New Case</DialogTitle>
       <DialogContent>
         {/* Loading message */}
@@ -424,7 +426,7 @@ export default function CaseCreateDialog({
         {/* Form to create case */}
         {status >= STATUS.isFormAvailable && (
           <>
-            <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
               <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
               <Avatar
                 sx={{
@@ -439,7 +441,7 @@ export default function CaseCreateDialog({
               </Avatar>
               <Typography>{jurisdiction.name}</Typography>
             </Stack>
-            <Divider sx={{ mt: 1.5 }} />
+            <Divider sx={{ mt: 1.5, mb: 4 }} />
             <Form
               schema={schema}
               uiSchema={uiSchema}
