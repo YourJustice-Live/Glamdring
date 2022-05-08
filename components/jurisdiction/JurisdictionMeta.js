@@ -29,6 +29,7 @@ import { palette } from 'theme/palette';
 export default function JurisdictionMeta({ jurisdiction, sx }) {
   const { account, accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const router = useRouter();
   const { showToastSuccess, showToastError } = useToasts();
   const { join, leave } = useJuridictionContract();
   const { isAccountHasJurisdictionRole } = useJurisdiction();
@@ -114,7 +115,7 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
                 jurisdiction
               </Typography>
               <Divider />
-              <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                 <Button
                   variant="outlined"
                   type="submit"
@@ -142,6 +143,13 @@ export default function JurisdictionMeta({ jurisdiction, sx }) {
                   }
                 >
                   Remove Role
+                </Button>
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  onClick={() => router.push('/jurisdiction/laws/manage')}
+                >
+                  Manage Laws
                 </Button>
               </Stack>
             </Paper>

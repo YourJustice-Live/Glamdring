@@ -16,7 +16,7 @@ import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import { capitalize } from 'lodash';
 
 /**
- * A dialog for adding a rule or updating a specified rule.
+ * A dialog for adding a jurisdiction rule or updating a specified rule.
  */
 export default function RuleManageDialog({ about, rule, isClose, onClose }) {
   const { showToastSuccess, showToastError } = useToasts();

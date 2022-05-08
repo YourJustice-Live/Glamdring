@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
-import RuleEffects from 'components/rule/RuleEffects';
+import RuleEffects from 'components/law/RuleEffects';
 import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/useDialogContext';
 
