@@ -1,4 +1,4 @@
-import { ArrowForwardOutlined } from '@mui/icons-material';
+import { ArrowForwardOutlined, InfoOutlined } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -15,6 +15,7 @@ import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * A widget to select case action.
@@ -86,7 +87,14 @@ export default function CaseActionSelect(props) {
       </List>
       <Alert
         severity="info"
-        sx={{ borderRadius: '8px', boxShadow: 'none', mt: 1, mb: 0 }}
+        icon={<InfoOutlined color="primary" />}
+        sx={{
+          borderRadius: '8px',
+          background: palette.grey[50],
+          boxShadow: 'none',
+          mt: 1,
+          mb: 0,
+        }}
       >
         <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
