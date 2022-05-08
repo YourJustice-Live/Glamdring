@@ -6,7 +6,6 @@ export const PROFILE_TRAIT_TYPE = {
   site: 'Site',
   twitter: 'Twitter',
   telegram: 'Telegram',
-  discord: 'Discord',
   facebook: 'Facebook',
   instagram: 'Instagram',
 };

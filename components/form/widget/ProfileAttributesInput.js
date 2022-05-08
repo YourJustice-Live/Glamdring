@@ -1,9 +1,9 @@
 import {
   FacebookRounded,
   Instagram,
+  Language,
   Telegram,
   Twitter,
-  WebAssetOutlined,
 } from '@mui/icons-material';
 import {
   Divider,
@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
-import { IconDiscord } from 'icons';
 import { useEffect, useState } from 'react';
 import { getTraitValue } from 'utils/metadata';
 
@@ -138,7 +137,7 @@ export default function ProfileAttributesInput(props) {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <WebAssetOutlined color="primary" />
+                    <Language color="primary" />
                   </InputAdornment>
                 ),
               }}
@@ -175,24 +174,6 @@ export default function ProfileAttributesInput(props) {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Telegram color="primary" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              variant="outlined"
-              onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.discord}
-              name={PROFILE_TRAIT_TYPE.discord}
-              disabled={propsDisabled}
-              value={
-                getTraitValue(attributes, PROFILE_TRAIT_TYPE.discord) || ''
-              }
-              placeholder="username"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconDiscord />
                   </InputAdornment>
                 ),
               }}

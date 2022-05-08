@@ -13,6 +13,8 @@ import { palette } from 'theme/palette';
 
 /**
  * A widget for input a profile picture, upload it to IPFS, and get URI.
+ *
+ * TODO: Add button to remove picture.
  */
 export default function ProfilePictureInput(props) {
   const propsDisabled = props.disabled;

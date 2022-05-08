@@ -40,7 +40,7 @@ export default function Profile() {
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <ProfileMeta profile={profile} />
       <ProfileRatings profile={profile} sx={{ mt: 6 }} />
-      <Box sx={{ mt: 12 }}>
+      <Box sx={{ mt: 8 }}>
         <Typography variant="h1" gutterBottom>
           Cases
         </Typography>
