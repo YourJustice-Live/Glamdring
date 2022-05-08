@@ -1,7 +1,9 @@
 export { IconChart } from './IconChart';
 export { IconClose } from './IconClose';
+export { IconFlag } from './IconFlag';
 export { IconHome } from './IconHome';
 export { IconNotification } from './IconNotification';
+export { IconPassport } from './IconPassport';
 export { IconPlus } from './IconPlus';
 export { IconProfile } from './IconProfile';
 export { IconWallet } from './IconWallet';
