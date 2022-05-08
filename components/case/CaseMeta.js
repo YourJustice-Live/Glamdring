@@ -1,7 +1,8 @@
-import { Link, Stack, Typography } from '@mui/material';
+import { Button, Link, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
+import useCaseContract from 'hooks/contracts/useCaseContract';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -75,6 +76,8 @@ function CaseAdmin({ caseObject, sx }) {
 }
 
 function CaseStage({ caseObject, sx }) {
+  const { setStageVerdict } = useCaseContract();
+
   function getStageName(caseObject) {
     let stageName = caseObject.stage;
     for (const stage of Object.values(CASE_STAGE)) {
@@ -86,12 +89,26 @@ function CaseStage({ caseObject, sx }) {
   }
 
   return (
-    <Stack direction="row" spacing={1} sx={{ ...sx }}>
+    <Stack direction="row" spacing={1} alignItems="center" sx={{ ...sx }}>
       <Typography variant="body2">Stage: </Typography>
       {caseObject && (
-        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-          {getStageName(caseObject)}
-        </Typography>
+        <>
+          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            {getStageName(caseObject)}
+          </Typography>
+          {caseObject.stage === CASE_STAGE.open.id && (
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{ fontSize: 14 }}
+              onClick={() => {
+                setStageVerdict(caseObject.id);
+              }}
+            >
+              Set Verdict Stage
+            </Button>
+          )}
+        </>
       )}
     </Stack>
   );
