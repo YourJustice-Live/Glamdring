@@ -232,6 +232,16 @@ export default function Navigation() {
             </Box>
           )}
           {account && accountProfile && (
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                showDialog(<CaseCreateDialog onClose={closeDialog} />);
+              }}
+            >
+              <Typography>Create Case</Typography>
+            </MenuItem>
+          )}
+          {account && accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/profile" passHref>
                 <Typography>Profile</Typography>
@@ -248,7 +258,7 @@ export default function Navigation() {
           {account && !accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/profile/create" passHref>
-                <Typography>Create Profile</Typography>
+                <Typography>Create Own Profile</Typography>
               </Link>
             </MenuItem>
           )}
