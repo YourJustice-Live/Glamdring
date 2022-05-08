@@ -1,6 +1,21 @@
+import {
+  FacebookRounded,
+  Instagram,
+  Telegram,
+  Twitter,
+  WebAssetOutlined,
+} from '@mui/icons-material';
+import {
+  Divider,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
+import { IconDiscord } from 'icons';
 import { useEffect, useState } from 'react';
-import { Divider, Stack, TextField, Typography } from '@mui/material';
-import { traitTypes } from 'utils/metadata';
+import { getTraitValue } from 'utils/metadata';
 
 /**
  * A widget for input profile attributes (traits).
@@ -21,7 +36,7 @@ export default function ProfileAttributesInput(props) {
         if (attribute.trait_type === eventTargetName) {
           return {
             trait_type: attribute.trait_type,
-            value: eventTargetValue,
+            value: eventTargetValue || '',
           };
         } else {
           return attribute;
@@ -31,43 +46,20 @@ export default function ProfileAttributesInput(props) {
   }
 
   useEffect(() => {
-    // Init attributes using parent's props
-    if (!attributes) {
-      setAttributes([
-        {
-          trait_type: traitTypes.firstName,
-          value:
-            propsAttributes.find(
-              (attribute) => attribute?.trait_type === traitTypes.firstName,
-            )?.value || '',
-        },
-        {
-          trait_type: traitTypes.lastName,
-          value:
-            propsAttributes.find(
-              (attribute) => attribute?.trait_type === traitTypes.lastName,
-            )?.value || '',
-        },
-        {
-          trait_type: traitTypes.email,
-          value:
-            propsAttributes.find(
-              (attribute) => attribute?.trait_type === traitTypes.email,
-            )?.value || '',
-        },
-        {
-          trait_type: traitTypes.twitter,
-          value:
-            propsAttributes.find(
-              (attribute) => attribute?.trait_type === traitTypes.twitter,
-            )?.value || '',
-        },
-      ]);
-    }
+    // Init attributes using parent's props or default values
+    const attributes = Object.values(PROFILE_TRAIT_TYPE).map((traitType) => {
+      return {
+        trait_type: traitType,
+        value: getTraitValue(propsAttributes, traitType) || '',
+      };
+    });
+    setAttributes(attributes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     // Update parent's props
-    else {
-      propsOnChange(attributes);
-    }
+    propsOnChange(attributes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attributes]);
 
@@ -75,67 +67,174 @@ export default function ProfileAttributesInput(props) {
     <>
       {attributes ? (
         <>
-          <Typography variant="h5">Profile Picture</Typography>
-          <Divider sx={{ mb: 3 }} />
-          <Stack spacing={1} sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ mb: 4 }}>
+            Public Profile
+          </Typography>
+          <Stack spacing={2}>
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={traitTypes.firstName}
-              name={traitTypes.firstName}
+              label={PROFILE_TRAIT_TYPE.firstName}
+              name={PROFILE_TRAIT_TYPE.firstName}
               disabled={propsDisabled}
               value={
-                attributes.find(
-                  (attribute) => attribute?.trait_type === traitTypes.firstName,
-                )?.value
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.firstName) || ''
               }
               required
             />
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={traitTypes.lastName}
-              name={traitTypes.lastName}
+              label={PROFILE_TRAIT_TYPE.lastName}
+              name={PROFILE_TRAIT_TYPE.lastName}
               disabled={propsDisabled}
               value={
-                attributes.find(
-                  (attribute) => attribute?.trait_type === traitTypes.lastName,
-                )?.value
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.lastName) || ''
               }
+              required
             />
-          </Stack>
-          <Typography variant="h5">Public Contacts</Typography>
-          <Divider sx={{ mb: 3 }} />
-          <Stack spacing={1} sx={{ mb: 4 }}>
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={traitTypes.email}
-              name={traitTypes.email}
+              label={PROFILE_TRAIT_TYPE.description}
+              name={PROFILE_TRAIT_TYPE.description}
               disabled={propsDisabled}
               value={
-                attributes.find(
-                  (attribute) => attribute?.trait_type === traitTypes.email,
-                )?.value
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.description) || ''
               }
+              multiline
+              rows={4}
             />
           </Stack>
-          <Typography variant="h5">Links</Typography>
-          <Divider sx={{ mb: 3 }} />
-          <Stack spacing={1} sx={{ mb: 2 }}>
+          <Divider sx={{ my: 4 }} />
+          <Typography variant="h4" sx={{ mb: 4 }}>
+            Contacts
+          </Typography>
+          <Stack spacing={2}>
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={traitTypes.twitter}
-              name={traitTypes.twitter}
+              label={PROFILE_TRAIT_TYPE.email}
+              name={PROFILE_TRAIT_TYPE.email}
               disabled={propsDisabled}
-              value={
-                attributes.find(
-                  (attribute) => attribute?.trait_type === traitTypes.twitter,
-                )?.value
-              }
+              value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) || ''}
+              placeholder="email@site.com"
             />
           </Stack>
+          <Divider sx={{ my: 4 }} />
+          <Typography variant="h4" sx={{ mb: 4 }}>
+            Links
+          </Typography>
+          <Stack spacing={2}>
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.site}
+              name={PROFILE_TRAIT_TYPE.site}
+              disabled={propsDisabled}
+              value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.site) || ''}
+              placeholder="https://site.com"
+              type="url"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <WebAssetOutlined color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.twitter}
+              name={PROFILE_TRAIT_TYPE.twitter}
+              disabled={propsDisabled}
+              value={
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.twitter) || ''
+              }
+              placeholder="username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Twitter color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.telegram}
+              name={PROFILE_TRAIT_TYPE.telegram}
+              disabled={propsDisabled}
+              value={
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.telegram) || ''
+              }
+              placeholder="username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Telegram color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.discord}
+              name={PROFILE_TRAIT_TYPE.discord}
+              disabled={propsDisabled}
+              value={
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.discord) || ''
+              }
+              placeholder="username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconDiscord />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.facebook}
+              name={PROFILE_TRAIT_TYPE.facebook}
+              disabled={propsDisabled}
+              value={
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.facebook) || ''
+              }
+              placeholder="username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FacebookRounded color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              variant="outlined"
+              onChange={onChange}
+              label={PROFILE_TRAIT_TYPE.instagram}
+              name={PROFILE_TRAIT_TYPE.instagram}
+              disabled={propsDisabled}
+              value={
+                getTraitValue(attributes, PROFILE_TRAIT_TYPE.instagram) || ''
+              }
+              placeholder="username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Instagram color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+          <Divider sx={{ mt: 4, mb: 3 }} />
         </>
       ) : (
         <></>

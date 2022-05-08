@@ -56,9 +56,6 @@ export default function ProfileManage({
   const uiSchema = {
     image: {
       'ui:widget': 'ProfilePictureInput',
-      'ui:options': {
-        size: 128,
-      },
     },
     attributes: {
       'ui:widget': 'ProfileAttributesInput',
@@ -121,7 +118,7 @@ export default function ProfileManage({
             disabled={status !== STATUS.isAvailable ? true : false}
           >
             {status === STATUS.isAvailable && (
-              <Button variant="outlined" type="submit">
+              <Button variant="contained" type="submit">
                 {action === 'editOwnProfile'
                   ? 'Edit Profile'
                   : 'Create Profile'}

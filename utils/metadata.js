@@ -1,21 +1,13 @@
-export const traitTypes = {
-  firstName: 'First Name',
-  lastName: 'Last Name',
-  email: 'Email',
-  twitter: 'Twitter',
-};
-
 /**
- * Get a trait value from attributes of specified metadata.
+ * Get a trait value from metadata attributes.
  *
- * @param {object} metadata Specified metadata.
+ * @param {Array.<object>} attributes Metadata attributes.
  * @param {string} traitType Type of trait.
  * @returns Value of trait.
  */
-export function getTraitValue(metadata, traitType) {
-  return (
-    metadata?.attributes?.find(
-      (attribute) => attribute?.trait_type === traitType,
-    )?.value || null
+export function getTraitValue(attributes, traitType) {
+  const attribute = attributes?.find(
+    (attribute) => attribute?.trait_type === traitType,
   );
+  return attribute?.value || null;
 }

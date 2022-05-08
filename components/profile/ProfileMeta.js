@@ -1,16 +1,18 @@
 import { PersonOutlined } from '@mui/icons-material';
 import { Avatar, Button, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/useWeb3Context';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
-import { getTraitValue, traitTypes } from 'utils/metadata';
+import { getTraitValue } from 'utils/metadata';
 
 /**
  * A component with profile meta (image, name, email, socials).
  */
 export default function ProfileMeta({ profile }) {
   const { account } = useWeb3Context();
+
   return (
     <Box>
       {profile ? (
@@ -29,23 +31,31 @@ export default function ProfileMeta({ profile }) {
           </Typography>
           <Typography gutterBottom>
             <b>First Name: </b>
-            {getTraitValue(profile.avatarNftUriData, traitTypes.firstName) ||
-              'none'}
+            {getTraitValue(
+              profile.avatarNftUriData?.attributes,
+              PROFILE_TRAIT_TYPE.firstName,
+            ) || 'None'}
           </Typography>
           <Typography gutterBottom>
             <b>Last Name:</b>{' '}
-            {getTraitValue(profile.avatarNftUriData, traitTypes.lastName) ||
-              'none'}
+            {getTraitValue(
+              profile.avatarNftUriData?.attributes,
+              PROFILE_TRAIT_TYPE.lastName,
+            ) || 'None'}
           </Typography>
           <Typography gutterBottom>
             <b>Email: </b>{' '}
-            {getTraitValue(profile.avatarNftUriData, traitTypes.email) ||
-              'none'}
+            {getTraitValue(
+              profile.avatarNftUriData?.attributes,
+              PROFILE_TRAIT_TYPE.email,
+            ) || 'None'}
           </Typography>
           <Typography gutterBottom>
             <b>Twitter: </b>{' '}
-            {getTraitValue(profile.avatarNftUriData, traitTypes.twitter) ||
-              'none'}
+            {getTraitValue(
+              profile.avatarNftUriData?.attributes,
+              PROFILE_TRAIT_TYPE.twitter,
+            ) || 'None'}
           </Typography>
           {/* Edit profile button */}
           {profile.account?.toLowerCase() === account?.toLowerCase() && (

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { PersonOutlined } from '@mui/icons-material';
 import {
   Avatar,
   CircularProgress,
@@ -9,18 +7,21 @@ import {
 } from '@mui/material';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
+import { IconProfile } from 'icons';
+import { useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * A widget for input a profile picture, upload it to IPFS, and get URI.
  */
 export default function ProfilePictureInput(props) {
-  const propsSize = props.options.size || 128;
   const propsDisabled = props.disabled;
   const propsPicture = props.value;
   const propsOnChange = props.onChange;
   const { showToastSuccessLink, showToastError } = useToasts();
   const { uploadFileToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
+  const size = 164;
 
   function isFileValid(file) {
     if (!file) {
@@ -69,18 +70,25 @@ export default function ProfilePictureInput(props) {
 
   return (
     <>
-      <Typography variant="h5">Profile Picture</Typography>
-      <Divider sx={{ mb: 2 }} />
-      <label htmlFor="input" style={{ width: propsSize, height: propsSize }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Profile Picture
+      </Typography>
+      <label htmlFor="input" style={{ width: size, height: size }}>
         <Avatar
           sx={{
             cursor: !isLoading && !propsDisabled ? 'pointer' : null,
-            width: propsSize,
-            height: propsSize,
+            bgcolor: 'grey.50',
+            width: size,
+            height: size,
+            borderRadius: '24px',
           }}
           src={!isLoading ? propsPicture : null}
         >
-          {isLoading ? <CircularProgress /> : <PersonOutlined />}
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <IconProfile hexColor={palette.grey[600]} />
+          )}
         </Avatar>
         <Input
           onChange={onChange}
@@ -91,6 +99,7 @@ export default function ProfilePictureInput(props) {
           disabled={isLoading || propsDisabled}
         />
       </label>
+      <Divider sx={{ mt: 4 }} />
     </>
   );
 }
