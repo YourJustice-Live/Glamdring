@@ -16,6 +16,10 @@ export const FORM = {
           type: 'string',
           title: 'Your Feedback',
         },
+        name: {
+          type: 'string',
+          title: 'Your Name',
+        },
         contact: {
           type: 'string',
           title: 'Your Email, Twitter, Telegram, etc',
@@ -44,6 +48,10 @@ export const FORM = {
         question: {
           type: 'string',
           title: 'Your Question',
+        },
+        name: {
+          type: 'string',
+          title: 'Your Name',
         },
         contact: {
           type: 'string',
@@ -75,6 +83,10 @@ export const FORM = {
           type: 'string',
           title: 'Your Proposition',
         },
+        name: {
+          type: 'string',
+          title: 'Your Name',
+        },
         contact: {
           type: 'string',
           title: 'Your Email, Twitter, Telegram, etc',
@@ -103,6 +115,10 @@ export const FORM = {
         comment: {
           type: 'string',
           title: 'Your Comment',
+        },
+        name: {
+          type: 'string',
+          title: 'Your Name',
         },
         contact: {
           type: 'string',
