@@ -117,6 +117,7 @@ export default function JurisdictionCases({ jurisdiction }) {
   );
 }
 
+// TODO: Create a common component with filter dialog
 function FiltersDialog({ filters, onChange, isClose, onClose }) {
   const [formData, setFormData] = useState(filters || {});
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -193,7 +194,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
   async function submit({ formData }) {
     // Clear form data
     Object.keys(formData).forEach((key) => {
-      if (formData[key] === null || formData[key] == undefined) {
+      if (formData[key] === null || formData[key] === undefined) {
         delete formData[key];
       }
     });

@@ -22,7 +22,7 @@ export default function CaseStageSelect(props) {
 
   return (
     <Box>
-      {propsLabel && (
+      {propsLabel && propsLabel !== '' && (
         <>
           <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
           <Divider sx={{ mt: 1.5, mb: 2.5 }} />

@@ -29,9 +29,9 @@ export default function Jurisdiction() {
   const [officialsCount, setOfficialsCount] = useState(null);
   const [citizensCount, setCitizensCount] = useState(null);
 
-  const handleChange = (_, newTabValue) => {
+  function handleChange(_, newTabValue) {
     setTabValue(newTabValue);
-  };
+  }
 
   async function loadData() {
     try {
@@ -72,7 +72,11 @@ export default function Jurisdiction() {
       <Box sx={{ width: '100%', mt: 4 }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-            <TabList onChange={handleChange}>
+            <TabList
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="auto"
+            >
               <Tab
                 label={
                   jurisdiction?.casesCount
