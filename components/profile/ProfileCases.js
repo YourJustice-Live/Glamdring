@@ -25,14 +25,13 @@ export default function ProfileCases({ profile }) {
       setCurrentPageCount(pageCount);
       setCases(null);
       // Load cases for page
-      const cases = await getCases(
-        null,
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        selectedStage,
-        profile.account,
-        pageSize,
-        (page - 1) * pageSize,
-      );
+      const cases = await getCases({
+        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        stage: selectedStage,
+        participant: profile.account,
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+      });
       setCases(cases);
       // Add next page to pagination if possible
       if (page == pageCount && cases.length === pageSize) {

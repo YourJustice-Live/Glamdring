@@ -1,5 +1,6 @@
 export { IconChart } from './IconChart';
 export { IconClose } from './IconClose';
+export { IconFilter } from './IconFilter';
 export { IconFlag } from './IconFlag';
 export { IconHome } from './IconHome';
 export { IconNotification } from './IconNotification';

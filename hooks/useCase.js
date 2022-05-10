@@ -17,27 +17,53 @@ export default function useCase() {
    * @returns {Promise.<Case>} A case or null.
    */
   let getCase = async function (id) {
-    const cases = await getCases([id], null, null, null, null, null);
+    const cases = await getCases({ ids: [id] });
     return cases && cases.length > 0 ? cases[0] : null;
   };
 
   /**
    * Get cases.
    *
-   * @param {Array.<string>} ids A list with case ids (addresses).
-   * @param {string} jurisdiction Jurisdiction address.
-   * @param {number} stage Case stage.
-   * @param {string} admin Account that must an admin in the case.
-   * @param {number} first The number of cases to getting.
-   * @param {number} skip The number of options to skip.
+   * @param {Object} params Params.
+   * @param {Array.<string>} params.ids A list with case ids (addresses).
+   * @param {string} params.jurisdiction Jurisdiction address.
+   * @param {number} params.stage Case stage id.
+   * @param {string} params.participant Account that must a participant in the case.
+   * @param {string} params.admin Account that must an admin in the case.
+   * @param {string} params.subject Account that must a subject in the case.
+   * @param {string} params.plaintiff Account that must a plaintiff in the case.
+   * @param {string} params.judge Account that must a judge in the case.
+   * @param {string} params.witness Account that must a witness in the case.
+   * @param {string} params.affected Account that must an affected in the case.
+   * @param {number} params.first The number of cases to getting.
+   * @param {number} params.skip The number of options to skip.
    * @returns {Promise.<Array.<Case>>} A list with cases.
    */
-  let getCases = async function (ids, jurisdiction, stage, admin, first, skip) {
+  let getCases = async function ({
+    ids,
+    jurisdiction,
+    stage,
+    participant,
+    admin,
+    subject,
+    plaintiff,
+    judge,
+    witness,
+    affected,
+    first,
+    skip,
+  }) {
     const caseEntities = await findCaseEntities(
       ids,
       jurisdiction,
       stage,
+      participant,
       admin,
+      subject,
+      plaintiff,
+      judge,
+      witness,
+      affected,
       first,
       skip,
     );
@@ -99,25 +125,7 @@ export default function useCase() {
    * @returns {boolean} Result of checking.
    */
   let isAccountHasAnyCaseRole = function (caseObject, account) {
-    if (caseObject?.adminAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    if (caseObject?.subjectAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    if (caseObject?.plaintiffAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    if (caseObject?.judgeAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    if (caseObject?.witnessAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    if (caseObject?.affectedAccounts?.includes(account.toLowerCase())) {
-      return true;
-    }
-    return false;
+    return caseObject?.participantAccounts?.includes(account.toLowerCase());
   };
 
   /**

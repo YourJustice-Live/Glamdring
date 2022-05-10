@@ -18,14 +18,11 @@ export default function Events() {
 
   async function loadData() {
     try {
-      const cases = await getCases(
-        null,
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        null,
-        account,
-        100,
-        0,
-      );
+      const cases = await getCases({
+        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        first: 100,
+        skip: 0,
+      });
       const caseIds = cases.map((caseObject) => caseObject.id);
       const caseEvents = await getCaseEvents(caseIds);
       setCaseEvents(caseEvents);
