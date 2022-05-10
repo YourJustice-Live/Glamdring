@@ -16,8 +16,7 @@ export default function JurisdictionCases({ jurisdiction }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCount, setCurrentPageCount] = useState(1);
   const [selectedStage, setSelectedStage] = useState(null);
-  const [selectedParticipantAccount, setSelectedParticipantAccount] =
-    useState(null);
+  const [selectedAdminAccount, setSelectedAdminAccount] = useState(null);
   const pageSize = 5;
 
   async function loadData(page = currentPage, pageCount = currentPageCount) {
@@ -31,7 +30,7 @@ export default function JurisdictionCases({ jurisdiction }) {
         null,
         jurisdiction.id,
         selectedStage,
-        selectedParticipantAccount,
+        selectedAdminAccount,
         pageSize,
         (page - 1) * pageSize,
       );
@@ -50,7 +49,7 @@ export default function JurisdictionCases({ jurisdiction }) {
       loadData(1, 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction, selectedParticipantAccount, selectedStage]);
+  }, [jurisdiction, selectedAdminAccount, selectedStage]);
 
   return (
     <Box>
@@ -65,7 +64,7 @@ export default function JurisdictionCases({ jurisdiction }) {
         <ProfileSelect
           size="small"
           sx={{ flexGrow: 4 }}
-          onChange={(account) => setSelectedParticipantAccount(account)}
+          onChange={(account) => setSelectedAdminAccount(account)}
         />
         <CaseStageSelect
           size="small"

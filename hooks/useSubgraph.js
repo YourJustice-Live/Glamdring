@@ -115,7 +115,7 @@ export default function useSubgraph() {
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} jurisdiction Jurisdiction address.
    * @param {number} stage Case stage.
-   * @param {string} participantAccount Account that must be a participant in the case.
+   * @param {string} admin Account that must an admin in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
@@ -124,18 +124,19 @@ export default function useSubgraph() {
     ids,
     jurisdiction,
     stage,
-    participantAccount,
+    admin,
     first = 5,
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
+    const fixedAdmin = admin ? admin.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
         fixedIds,
         fixedJurisdiction,
         stage,
-        participantAccount,
+        fixedAdmin,
         first,
         skip,
       ),
@@ -357,7 +358,7 @@ function getFindCaseEntitiesQuery(
   ids,
   jurisdiction,
   stage,
-  participantAccount,
+  admin,
   first,
   skip,
 ) {
@@ -365,11 +366,9 @@ function getFindCaseEntitiesQuery(
   let jurisdictionFilter = jurisdiction
     ? `jurisdiction: "${jurisdiction}"`
     : '';
-  let participantAccountFilter = participantAccount
-    ? `participantAccounts_contains: ["${participantAccount}"]`
-    : '';
+  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
   let stageFilter = stage !== null ? `stage: ${stage}` : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${participantAccountFilter}, ${stageFilter}}`;
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${adminFilter}, ${stageFilter}}`;
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -393,11 +392,6 @@ function getFindCaseEntitiesQuery(
         id
         ruleId
       }
-      roles {
-        id
-        roleId
-        accounts
-      }
       posts {
         id
         author
@@ -407,6 +401,12 @@ function getFindCaseEntitiesQuery(
         uriData
         uriType
       }
+      adminAccounts
+      subjectAccounts
+      plaintiffAccounts
+      judgeAccounts
+      witnessAccounts
+      affectedAccounts
     }
   }`;
 }

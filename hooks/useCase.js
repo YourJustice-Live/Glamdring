@@ -1,5 +1,6 @@
 import Case from 'classes/Case';
 import CaseEvent from 'classes/CaseEvent';
+import { CASE_ROLE } from 'constants/contracts';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
 
@@ -26,24 +27,17 @@ export default function useCase() {
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} jurisdiction Jurisdiction address.
    * @param {number} stage Case stage.
-   * @param {string} participantAccount Account that must be a participant in the case.
+   * @param {string} admin Account that must an admin in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<Case>>} A list with cases.
    */
-  let getCases = async function (
-    ids,
-    jurisdiction,
-    stage,
-    participantAccount,
-    first,
-    skip,
-  ) {
+  let getCases = async function (ids, jurisdiction, stage, admin, first, skip) {
     const caseEntities = await findCaseEntities(
       ids,
       jurisdiction,
       stage,
-      participantAccount,
+      admin,
       first,
       skip,
     );
@@ -105,13 +99,25 @@ export default function useCase() {
    * @returns {boolean} Result of checking.
    */
   let isAccountHasAnyCaseRole = function (caseObject, account) {
-    let result = false;
-    caseObject?.roles?.forEach((role) => {
-      if (role.accounts?.includes(account?.toLowerCase())) {
-        result = true;
-      }
-    });
-    return result;
+    if (caseObject?.adminAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    if (caseObject?.subjectAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    if (caseObject?.plaintiffAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    if (caseObject?.judgeAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    if (caseObject?.witnessAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    if (caseObject?.affectedAccounts?.includes(account.toLowerCase())) {
+      return true;
+    }
+    return false;
   };
 
   /**
@@ -123,10 +129,25 @@ export default function useCase() {
    * @returns {boolean} Result of checking.
    */
   let isAccountHasCaseRole = function (caseObject, account, role) {
-    const caseRole = caseObject?.roles?.find(
-      (element) => element.roleId === role,
-    );
-    return caseRole?.accounts?.includes(account?.toLowerCase());
+    if (role === CASE_ROLE.admin.id) {
+      return caseObject?.adminAccounts?.includes(account.toLowerCase());
+    }
+    if (role === CASE_ROLE.subject.id) {
+      return caseObject?.subjectAccounts?.includes(account.toLowerCase());
+    }
+    if (role === CASE_ROLE.plaintiff.id) {
+      return caseObject?.plaintiffAccounts?.includes(account.toLowerCase());
+    }
+    if (role === CASE_ROLE.judge.id) {
+      return caseObject?.judgeAccounts?.includes(account.toLowerCase());
+    }
+    if (role === CASE_ROLE.witness.id) {
+      return caseObject?.witnessAccounts?.includes(account.toLowerCase());
+    }
+    if (role === CASE_ROLE.affected.id) {
+      return caseObject?.affectedAccounts?.includes(account.toLowerCase());
+    }
+    return false;
   };
 
   return {

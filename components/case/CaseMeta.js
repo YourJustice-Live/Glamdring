@@ -1,7 +1,7 @@
 import { Button, Link, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
+import { CASE_STAGE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -59,10 +59,7 @@ function CaseAdmin({ caseObject, sx }) {
 
   useEffect(() => {
     if (caseObject) {
-      const adminRoles = caseObject.roles.find(
-        (role) => role.roleId === CASE_ROLE.admin.id,
-      );
-      setAdminAccount(adminRoles.accounts[0]);
+      setAdminAccount(caseObject.adminAccounts[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
