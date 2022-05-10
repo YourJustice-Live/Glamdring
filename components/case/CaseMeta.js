@@ -28,11 +28,7 @@ function CaseAddress({ caseObject, sx }) {
       <Typography variant="body2">Address: </Typography>
       {caseObject && (
         <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-          <Link
-            href={`/case/${caseObject.id}`}
-            underline="none"
-            target="_blank"
-          >
+          <Link href={`/case/${caseObject.id}`} underline="none">
             {formatAddress(caseObject.id)}
           </Link>
         </Typography>
