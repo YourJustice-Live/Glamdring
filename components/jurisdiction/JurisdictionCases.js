@@ -117,7 +117,6 @@ export default function JurisdictionCases({ jurisdiction }) {
   );
 }
 
-// TODO: Create a common component with filter dialog
 function FiltersDialog({ filters, onChange, isClose, onClose }) {
   const [formData, setFormData] = useState(filters || {});
   const [isOpen, setIsOpen] = useState(!isClose);
