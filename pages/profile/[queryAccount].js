@@ -71,10 +71,13 @@ export default function Profile() {
             <ProfileCases profile={profile} />
           </TabPanel>
           <TabPanel value="2" sx={{ px: 0 }}>
-            <p>...</p>
+            <ProfileCases
+              profile={profile}
+              filterPreset="awaitingConfirmation"
+            />
           </TabPanel>
           <TabPanel value="3" sx={{ px: 0 }}>
-            <p>...</p>
+            <ProfileCases profile={profile} filterPreset="awaitingJudging" />
           </TabPanel>
         </TabContext>
       </Box>

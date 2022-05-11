@@ -7,8 +7,11 @@ import {
   Stack,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseList from 'components/case/CaseList';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
+import { CASE_STAGE } from 'constants/contracts';
+import { POST_TYPE } from 'constants/metadata';
 import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/useDialogContext';
 import useToasts from 'hooks/useToasts';
@@ -16,12 +19,16 @@ import { IconFilter } from 'icons';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { MuiForm5 as Form } from '@rjsf/material-ui';
 
 /**
  * A component with profile cases.
+ *
+ * @param {object} params Params.
+ * @param {Profile} params.profile Profile.
+ * @param {'awaitingConfirmation'|'awaitingJudging'} params.filterPreset Filter presett.
+ * @returns Component.
  */
-export default function ProfileCases({ profile }) {
+export default function ProfileCases({ profile, filterPreset }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getCases } = useCase();
@@ -38,19 +45,48 @@ export default function ProfileCases({ profile }) {
       setCurrentPageCount(pageCount);
       setCases(null);
       // Load cases for page
-      const cases = await getCases({
-        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        stage: filters?.stageId,
-        admin: filters?.isAdmin && profile.account,
-        subject: filters?.isSubject && profile.account,
-        plaintiff: filters?.isPlaintiff && profile.account,
-        judge: filters?.isJudge && profile.account,
-        witness: filters?.isWitness && profile.account,
-        affected: filters?.isAffected && profile.account,
-        participant: profile.account,
-        first: pageSize,
-        skip: (page - 1) * pageSize,
-      });
+      let cases = [];
+      if (filterPreset === 'awaitingConfirmation') {
+        cases = await getCases({
+          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          stage: CASE_STAGE.open.id,
+          witness: profile.account,
+          first: 100,
+        });
+        cases = cases.reduce((cases, caseObject) => {
+          const profileConfirmation = caseObject.posts.find(
+            (post) =>
+              post.uriType === POST_TYPE.confirmation &&
+              post.author === profile.account.toLowerCase(),
+          );
+          if (!profileConfirmation) {
+            cases.push(caseObject);
+          }
+          return cases;
+        }, []);
+        console.log('[Dev] cases', cases);
+      } else if (filterPreset === 'awaitingJudging') {
+        cases = await getCases({
+          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          stage: CASE_STAGE.verdict.id,
+          judge: profile.account,
+          first: 100,
+        });
+      } else {
+        cases = await getCases({
+          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          stage: filters?.stageId,
+          admin: filters?.isAdmin && profile.account,
+          subject: filters?.isSubject && profile.account,
+          plaintiff: filters?.isPlaintiff && profile.account,
+          judge: filters?.isJudge && profile.account,
+          witness: filters?.isWitness && profile.account,
+          affected: filters?.isAffected && profile.account,
+          participant: profile.account,
+          first: pageSize,
+          skip: (page - 1) * pageSize,
+        });
+      }
       setCases(cases);
       // Add next page to pagination if possible
       if (page == pageCount && cases.length === pageSize) {
@@ -70,49 +106,52 @@ export default function ProfileCases({ profile }) {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          justifyContent: { md: 'space-between' },
-          alignItems: { md: 'center' },
-        }}
-      >
-        <Button
-          size="small"
-          variant={isEmpty(filters) ? 'outlined' : 'contained'}
-          startIcon={
-            <IconFilter
-              hexColor={
-                isEmpty(filters)
-                  ? palette.primary.main
-                  : palette.primary.contrastText
-              }
-              size={18}
-            />
-          }
-          sx={{ px: 2 }}
-          onClick={() =>
-            showDialog(
-              <FiltersDialog
-                filters={filters}
-                onChange={(filters) => setFilters(filters)}
-                onClose={closeDialog}
-              />,
-            )
-          }
+      {!filterPreset && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: { md: 'space-between' },
+            alignItems: { md: 'center' },
+            mb: 4,
+          }}
         >
-          Filters
-        </Button>
-        <Pagination
-          color="primary"
-          sx={{ mt: { xs: 2, md: 0 } }}
-          count={currentPageCount}
-          page={currentPage}
-          onChange={(_, page) => loadData(page)}
-        />
-      </Box>
-      <CaseList cases={cases} sx={{ mt: 4 }} />
+          <Button
+            size="small"
+            variant={isEmpty(filters) ? 'outlined' : 'contained'}
+            startIcon={
+              <IconFilter
+                hexColor={
+                  isEmpty(filters)
+                    ? palette.primary.main
+                    : palette.primary.contrastText
+                }
+                size={18}
+              />
+            }
+            sx={{ px: 2 }}
+            onClick={() =>
+              showDialog(
+                <FiltersDialog
+                  filters={filters}
+                  onChange={(filters) => setFilters(filters)}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            Filters
+          </Button>
+          <Pagination
+            color="primary"
+            sx={{ mt: { xs: 2, md: 0 } }}
+            count={currentPageCount}
+            page={currentPage}
+            onChange={(_, page) => loadData(page)}
+          />
+        </Box>
+      )}
+      <CaseList cases={cases} />
     </Box>
   );
 }
