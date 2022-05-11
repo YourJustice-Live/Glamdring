@@ -19,11 +19,14 @@ import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
+import { getActionIcon } from 'utils/metadata';
 import ActionManageDialog from './ActionManageDialog';
 import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a table with actions and jurisdiction rules.
+ *
+ * TODO: Load rules by jurisdiction id.
  */
 export default function ActionRuleTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
@@ -76,6 +79,15 @@ export default function ActionRuleTable({ sx }) {
       headerName: 'Action URI Data Description',
       width: 500,
       valueGetter: (params) => `${params.row.action.uriData.description}`,
+    },
+    {
+      field: 'actionUriDataIcon',
+      headerName: 'Action URI Data Icon',
+      width: 100,
+      valueGetter: (params) => `${params.row.action.uriData.icon}`,
+      renderCell: (params) => {
+        return getActionIcon(params.row.action);
+      },
     },
     {
       field: 'ruleId',
@@ -245,11 +257,10 @@ export default function ActionRuleTable({ sx }) {
       setIsLoading(true);
       const rows = [];
       const actions = await getActions();
+      const rules = await getJusirsdictionRules();
       for (const action of actions) {
-        const actionRules = await getJusirsdictionRules(
-          null,
-          null,
-          action.guid,
+        const actionRules = rules.filter(
+          (rule) => rule.rule.about === action.guid,
         );
         if (actionRules?.length > 0) {
           for (const rule of actionRules) {
@@ -280,6 +291,7 @@ export default function ActionRuleTable({ sx }) {
         columns={columns}
         pageSize={50}
         rowsPerPageOptions={[50]}
+        rowHeight={68}
         getRowId={(row) => `${row.action.guid}_${row.rule?.id}`}
         components={{
           Toolbar: GridToolbar,

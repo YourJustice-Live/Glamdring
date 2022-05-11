@@ -64,7 +64,6 @@ export default function ProfileCases({ profile, filterPreset }) {
           }
           return cases;
         }, []);
-        console.log('[Dev] cases', cases);
       } else if (filterPreset === 'awaitingJudging') {
         cases = await getCases({
           jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
