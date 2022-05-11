@@ -12,7 +12,7 @@ import { capitalize, isNumber } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A widget to select case stage.
+ * A widget to select case (id) stage.
  */
 export default function CaseStageSelect(props) {
   const propsLabel = props.label;

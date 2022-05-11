@@ -103,6 +103,10 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
             type: 'string',
             title: 'Description',
           },
+          icon: {
+            type: 'string',
+            title: 'Icon',
+          },
         },
         requiredFields: ['name', 'description'],
       },

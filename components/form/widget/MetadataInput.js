@@ -12,6 +12,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import MetadataIconSelect from './MetadataIconSelect';
 
 /**
  * A widget for entering metadata, publishing it to IPFS and getting a URI.
@@ -40,6 +41,16 @@ export default function MetadataInput(props) {
     properties: {
       ...propsFields,
     },
+  };
+
+  const formUiSchema = {
+    icon: {
+      'ui:widget': 'MetadataIconSelect',
+    },
+  };
+
+  const widgets = {
+    MetadataIconSelect: MetadataIconSelect,
   };
 
   /**
@@ -122,6 +133,8 @@ export default function MetadataInput(props) {
               <Divider sx={{ mb: 0 }} />
               <Form
                 schema={formSchema}
+                uiSchema={formUiSchema}
+                widgets={widgets}
                 formData={formData}
                 onSubmit={submitForm}
               >

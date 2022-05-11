@@ -1,4 +1,4 @@
-import { ArrowForwardOutlined, InfoOutlined } from '@mui/icons-material';
+import { InfoOutlined } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -16,6 +16,7 @@ import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
+import { getActionIcon } from 'utils/metadata';
 
 /**
  * A widget to select case action.
@@ -66,7 +67,8 @@ export default function CaseActionSelect(props) {
             onClick={() => propsOnChange(item.guid)}
           >
             <ListItemIcon>
-              <ArrowForwardOutlined />
+              {getActionIcon(item, 36)}
+              {/* <ArrowForwardOutlined /> */}
             </ListItemIcon>
             <Box
               sx={{

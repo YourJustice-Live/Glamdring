@@ -1,4 +1,3 @@
-import { ArrowForwardOutlined } from '@mui/icons-material';
 import {
   Box,
   Chip,
@@ -11,6 +10,7 @@ import {
 import RuleEffects from 'components/law/RuleEffects';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useEffect, useState } from 'react';
+import { getActionIcon } from 'utils/metadata';
 
 /**
  * A widget to select case rule.
@@ -23,6 +23,7 @@ export default function CaseRuleSelect(props) {
   const propsFormCategory = props.formContext?.formData?.category;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const { isJurisdictionRuleInCategory } = useJurisdiction();
+  const [formAction, setFormAction] = useState(null);
   const [items, setItems] = useState([]);
 
   /**
@@ -33,6 +34,7 @@ export default function CaseRuleSelect(props) {
       const items = [];
       [...propsLaws.keys()].forEach((key) => {
         if (propsLaws.get(key).action.guid === propsFormActionGuid) {
+          setFormAction(formAction);
           propsLaws.get(key).rules.forEach((rule) => {
             if (isJurisdictionRuleInCategory(rule, propsFormCategory)) {
               items.push(rule);
@@ -58,9 +60,7 @@ export default function CaseRuleSelect(props) {
             disabled={propsDisabled}
             onClick={() => propsOnChange(item.ruleId)}
           >
-            <ListItemIcon>
-              <ArrowForwardOutlined />
-            </ListItemIcon>
+            <ListItemIcon>{getActionIcon(formAction, 40)}</ListItemIcon>
             <Box
               sx={{
                 display: 'flex',
