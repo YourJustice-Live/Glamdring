@@ -1,5 +1,4 @@
 import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import CaseEventList from 'components/case/CaseEventList';
 import Layout from 'components/layout/Layout';
 import useCase from 'hooks/useCase';
@@ -38,19 +37,14 @@ export default function Events() {
 
   return (
     <Layout title={'YourJustice / Events'} enableSidebar={!!account}>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Events
-        </Typography>
-        <Divider />
-      </Box>
-      <Box sx={{ mt: 6 }}>
-        <Typography variant="h4" gutterBottom>
-          Recent events that happened in your cases
-        </Typography>
-        <Divider />
-        <CaseEventList caseEvents={caseEvents} sx={{ mt: 2.5 }} />
-      </Box>
+      <Typography variant="h1" gutterBottom>
+        Events
+      </Typography>
+      <Typography gutterBottom>
+        Recent events that happened in cases in which you are a participant
+      </Typography>
+      <Divider />
+      <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />
     </Layout>
   );
 }
