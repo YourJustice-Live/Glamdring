@@ -8,7 +8,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
  * @typedef {import('../classes/JurisdictionRule').JurisdictionRule} Rule
  */
 export default function useLaw() {
-  const { getAction } = useAction();
+  const { getActions } = useAction();
   const { getJusirsdictionRules } = useJurisdiction();
 
   /**
@@ -19,12 +19,19 @@ export default function useLaw() {
    */
   let getLawsByRules = async function (rules) {
     let laws = new Map();
+    const actionGuids = new Set();
+    for (const rule of rules) {
+      actionGuids.add(rule.rule.about);
+    }
+    const actions = await getActions(Array.from(actionGuids));
     for (const rule of rules) {
       try {
         // Find or create law by action (about)
         let law = laws.get(rule.rule.about);
         if (!law) {
-          const action = await getAction(rule.rule.about);
+          const action = actions.find(
+            (action) => action.guid === rule.rule.about,
+          );
           law = new Law(action);
         }
         // Add rule to law
