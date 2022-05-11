@@ -71,42 +71,44 @@ export default function Jurisdiction() {
       {/* Tabs */}
       <Box sx={{ width: '100%', mt: 4 }}>
         <TabContext value={tabValue}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-            <TabList
-              onChange={handleChange}
-              variant="scrollable"
-              scrollButtons="auto"
-            >
-              <Tab
-                label={
-                  jurisdiction?.casesCount
-                    ? `Cases: ${jurisdiction.casesCount}`
-                    : 'Cases'
-                }
-                value="1"
-              />
-              <Tab
-                label={
-                  officialsCount ? `Officials: ${officialsCount}` : 'Officials'
-                }
-                value="2"
-              />
-              <Tab
-                label={
-                  citizensCount ? `Citizens: ${citizensCount}` : 'Citizens'
-                }
-                value="3"
-              />
-              <Tab
-                label={
-                  jurisdiction?.rulesCount
-                    ? `Laws: ${jurisdiction.rulesCount}`
-                    : 'Laws'
-                }
-                value="4"
-              />
-            </TabList>
-          </Box>
+          <TabList
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 2,
+              maxWidth: 'calc(100vw - 32px)',
+            }}
+          >
+            <Tab
+              label={
+                jurisdiction?.casesCount
+                  ? `Cases: ${jurisdiction.casesCount}`
+                  : 'Cases'
+              }
+              value="1"
+            />
+            <Tab
+              label={
+                officialsCount ? `Officials: ${officialsCount}` : 'Officials'
+              }
+              value="2"
+            />
+            <Tab
+              label={citizensCount ? `Citizens: ${citizensCount}` : 'Citizens'}
+              value="3"
+            />
+            <Tab
+              label={
+                jurisdiction?.rulesCount
+                  ? `Laws: ${jurisdiction.rulesCount}`
+                  : 'Laws'
+              }
+              value="4"
+            />
+          </TabList>
           {/* Cases */}
           <TabPanel value="1" sx={{ px: 0 }}>
             <JurisdictionCases jurisdiction={jurisdiction} />

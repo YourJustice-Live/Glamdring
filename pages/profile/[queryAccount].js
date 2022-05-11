@@ -52,17 +52,21 @@ export default function Profile() {
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <TabContext value={tabValue}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-            <TabList
-              onChange={handleChange}
-              variant="scrollable"
-              scrollButtons="auto"
-            >
-              <Tab label="All" value="1" />
-              <Tab label="Awaiting Confirmation" value="2" />
-              <Tab label="Awaiting Judging" value="3" />
-            </TabList>
-          </Box>
+          <TabList
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 2,
+              maxWidth: 'calc(100vw - 32px)',
+            }}
+          >
+            <Tab label="All" value="1" />
+            <Tab label="Awaiting Confirmation" value="2" />
+            <Tab label="Awaiting Judging" value="3" />
+          </TabList>
           <TabPanel value="1" sx={{ px: 0 }}>
             <ProfileCases profile={profile} />
           </TabPanel>
