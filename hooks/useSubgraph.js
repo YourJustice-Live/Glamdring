@@ -114,8 +114,14 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} jurisdiction Jurisdiction address.
-   * @param {number} stage Case stage.
-   * @param {string} participantAccount Account that must be a participant in the case.
+   * @param {number} stage Case stage id.
+   * @param {string} participant Account that must a participant in the case.
+   * @param {string} admin Account that must an admin in the case.
+   * @param {string} subject Account that must a subject in the case.
+   * @param {string} plaintiff Account that must a plaintiff in the case.
+   * @param {string} judge Account that must a judge in the case.
+   * @param {string} witness Account that must a witness in the case.
+   * @param {string} affected Account that must an affected in the case.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
@@ -124,18 +130,37 @@ export default function useSubgraph() {
     ids,
     jurisdiction,
     stage,
-    participantAccount,
+    participant,
+    admin,
+    subject,
+    plaintiff,
+    judge,
+    witness,
+    affected,
     first = 5,
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
+    const fixedAdmin = admin ? admin.toLowerCase() : null;
+    const fixedParticipant = participant ? participant.toLowerCase() : null;
+    const fixedSubject = subject ? subject.toLowerCase() : null;
+    const fixedPlaintiff = plaintiff ? plaintiff.toLowerCase() : null;
+    const fixedJudge = judge ? judge.toLowerCase() : null;
+    const fixedWitness = witness ? witness.toLowerCase() : null;
+    const fixedAffected = affected ? affected.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
         fixedIds,
         fixedJurisdiction,
         stage,
-        participantAccount,
+        fixedParticipant,
+        fixedAdmin,
+        fixedSubject,
+        fixedPlaintiff,
+        fixedJudge,
+        fixedWitness,
+        fixedAffected,
         first,
         skip,
       ),
@@ -357,7 +382,13 @@ function getFindCaseEntitiesQuery(
   ids,
   jurisdiction,
   stage,
-  participantAccount,
+  participant,
+  admin,
+  subject,
+  plaintiff,
+  judge,
+  witness,
+  affected,
   first,
   skip,
 ) {
@@ -365,11 +396,22 @@ function getFindCaseEntitiesQuery(
   let jurisdictionFilter = jurisdiction
     ? `jurisdiction: "${jurisdiction}"`
     : '';
-  let participantAccountFilter = participantAccount
-    ? `participantAccounts_contains: ["${participantAccount}"]`
-    : '';
-  let stageFilter = stage !== null ? `stage: ${stage}` : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${participantAccountFilter}, ${stageFilter}}`;
+  let participantFilter = participant
+    ? `participantAccounts_contains: ["${participant}"]`
+    : ``;
+  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
+  let subjectFilter = subject ? `subjectAccounts_contains: ["${subject}"]` : ``;
+  let plaintiffFilter = plaintiff
+    ? `plaintiffAccounts_contains: ["${plaintiff}"]`
+    : ``;
+  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
+  let witnessFilter = witness ? `witnessAccounts_contains: ["${witness}"]` : ``;
+  let affectedFilter = affected
+    ? `affectedAccounts_contains: ["${affected}"]`
+    : ``;
+  let stageFilter =
+    stage !== null && stage !== undefined ? `stage: ${stage}` : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${participantFilter}, ${adminFilter}, ${subjectFilter}, ${plaintiffFilter}, ${judgeFilter}, ${witnessFilter}, ${affectedFilter}, ${stageFilter}}`;
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -393,11 +435,6 @@ function getFindCaseEntitiesQuery(
         id
         ruleId
       }
-      roles {
-        id
-        roleId
-        accounts
-      }
       posts {
         id
         author
@@ -407,6 +444,13 @@ function getFindCaseEntitiesQuery(
         uriData
         uriType
       }
+      participantAccounts
+      adminAccounts
+      subjectAccounts
+      plaintiffAccounts
+      judgeAccounts
+      witnessAccounts
+      affectedAccounts
     }
   }`;
 }

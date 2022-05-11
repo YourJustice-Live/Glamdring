@@ -56,7 +56,6 @@ export default function ProfileCompactCard({
               <Link
                 href={`/profile/${(profile || accountProfile).account}`}
                 underline="none"
-                target="_blank"
               >
                 {(profile || accountProfile).avatarNftUriFirstName || 'None'}{' '}
                 {(profile || accountProfile).avatarNftUriLastName || 'None'}
