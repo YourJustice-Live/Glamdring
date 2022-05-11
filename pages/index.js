@@ -103,7 +103,7 @@ export default function Index() {
         <ProfileList profiles={profiles} sx={{ mt: 0 }} />
         <Pagination
           color="primary"
-          sx={{ mt: 2 }}
+          sx={{ mt: 4 }}
           count={currentPageCount}
           page={currentPage}
           onChange={(_, page) => loadData(page)}
