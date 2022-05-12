@@ -125,7 +125,7 @@ export default function CaseVerdictMakeDialog({
         <Typography>
           Select the rules you confirm and write a message for your verdict.
         </Typography>
-        <Divider sx={{ my: 1.5 }} />
+        <Divider sx={{ mt: 2 }} />
         <Form
           schema={schema}
           uiSchema={uiSchema}

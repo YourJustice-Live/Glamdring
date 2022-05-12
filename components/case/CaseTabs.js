@@ -9,7 +9,7 @@ import CaseJudging from './CaseJudging';
 /**
  * A component with a case tabs (comments, confirmations, judging).
  */
-export default function CaseTabs({ caseObject, sx }) {
+export default function CaseTabs({ caseObject, caseLaws, sx }) {
   const [tabValue, setTabValue] = useState('1');
 
   function handleChange(_, newTabValue) {
@@ -41,7 +41,7 @@ export default function CaseTabs({ caseObject, sx }) {
           <CaseConfirmations caseObject={caseObject} />
         </TabPanel>
         <TabPanel value="3" sx={{ px: { xs: 0, md: '24px' } }}>
-          <CaseJudging caseObject={caseObject} />
+          <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
         </TabPanel>
       </TabContext>
     </Box>

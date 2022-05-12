@@ -47,7 +47,7 @@ export default function CaseCard({ caseObject }) {
           sx={{ mt: 6 }}
         />
         <LawList laws={caseLaws} sx={{ mt: 4 }} />
-        <CaseTabs caseObject={caseObject} sx={{ mt: 3 }} />
+        <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 3 }} />
       </CardContent>
     </Card>
   );
