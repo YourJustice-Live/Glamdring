@@ -42,7 +42,7 @@ export default function HowItWorks() {
             .
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361759/FAQ/how-it-works/animation-1_q4shnh.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-1_mduhsz.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -52,7 +52,7 @@ export default function HowItWorks() {
             networks.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361762/FAQ/how-it-works/animation-2_sn3frn.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-2_xuyfiv.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -68,7 +68,7 @@ export default function HowItWorks() {
             Let connect your cryptocurrency wallet to our site.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361760/FAQ/how-it-works/animation-3_ygdtmy.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-3_ilpkpy.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -77,7 +77,7 @@ export default function HowItWorks() {
             Great, now let&apos;s switch to the Rinkeby test network.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361764/FAQ/how-it-works/animation-4_aix2is.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-4_xilh9k.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -106,7 +106,7 @@ export default function HowItWorks() {
             paste it into the line.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361767/FAQ/how-it-works/animation-5_mztofs.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-5_np25qd.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -135,7 +135,7 @@ export default function HowItWorks() {
             test contract on the Rinkeby network.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361761/FAQ/how-it-works/animation-6_n9kzj7.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-6_oxvyaj.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -166,7 +166,7 @@ export default function HowItWorks() {
             step, we need to sign the contract once again.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361767/FAQ/how-it-works/animation-7_ujxblx.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370350/FAQ/how-it-works/animation-small-7_ebyagy.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -198,7 +198,7 @@ export default function HowItWorks() {
             choose the rule that is broken within our jurisdiction.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361765/FAQ/how-it-works/animation-8_gdcuge.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370348/FAQ/how-it-works/animation-small-8_wdfy0a.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -208,7 +208,7 @@ export default function HowItWorks() {
             and evidence, if any.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361762/FAQ/how-it-works/animation-9_yvgr2w.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370350/FAQ/how-it-works/animation-small-9_rebst6.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
@@ -222,7 +222,7 @@ export default function HowItWorks() {
             sign a contract.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361759/FAQ/how-it-works/animation-10_jhlyzs.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370407/FAQ/how-it-works/animation-small-10_thevxh.gif"
             sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
