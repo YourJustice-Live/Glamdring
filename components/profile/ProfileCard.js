@@ -22,8 +22,6 @@ import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a card with profile.
- *
- * TODO: Don't display "None" text if name is not exists. But what to show instead of it?
  */
 export default function ProfileCard({ profile }) {
   const { accountProfile } = useWeb3Context();
@@ -33,50 +31,65 @@ export default function ProfileCard({ profile }) {
     <Card elevation={1}>
       {profile?.account ? (
         <CardContent sx={{ p: '10px !important' }}>
-          {/* Image and details */}
-          <Stack direction="row" spacing={2} justifyContent="space-between">
-            {/* Image */}
-            <Box sx={{ mr: 2 }}>
-              <Avatar
-                sx={{ width: 82, height: 82, borderRadius: '16px' }}
-                src={profile.avatarNftUriImage}
-              >
-                <PersonOutlined />
-              </Avatar>
-            </Box>
-            {/* Details */}
-            <Box sx={{ flex: '1' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Typography sx={{ color: 'success.main', mr: 1 }}>
-                  {`+${profile.avatarNftTotalPositiveRating}`}
-                </Typography>
-                <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                  {`-${profile.avatarNftTotalNegativeRating}`}
-                </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: { xs: 'flex-start', md: 'space-between' },
+            }}
+          >
+            {/* Image and details */}
+            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+              {/* Image */}
+              <Box sx={{ mr: 2 }}>
+                <NextLink href={`/profile/${profile.account}`} passHref>
+                  <Avatar
+                    sx={{
+                      cursor: 'pointer',
+                      width: 82,
+                      height: 82,
+                      borderRadius: '16px',
+                    }}
+                    src={profile.avatarNftUriImage}
+                  >
+                    <PersonOutlined />
+                  </Avatar>
+                </NextLink>
               </Box>
-              <NextLink href={`/profile/${profile.account}`} passHref>
-                <Link variant="h5" sx={{ mb: 2 }} underline="none">
-                  {profile.avatarNftUriFirstName || 'None'}{' '}
-                  {profile.avatarNftUriLastName || 'None'}
-                </Link>
-              </NextLink>
+              {/* Details */}
               <Box>
-                <Typography>{formatAddress(profile.account)}</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <Typography sx={{ color: 'success.main', mr: 1 }}>
+                    {`+${profile.avatarNftTotalPositiveRating}`}
+                  </Typography>
+                  <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                    {`-${profile.avatarNftTotalNegativeRating}`}
+                  </Typography>
+                </Box>
+                <NextLink href={`/profile/${profile.account}`} passHref>
+                  <Link variant="h5" sx={{ mb: 2 }} underline="none">
+                    {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
+                    {profile.avatarNftUriLastName}
+                  </Link>
+                </NextLink>
+                <Box>
+                  <Typography>{formatAddress(profile.account)}</Typography>
+                </Box>
               </Box>
             </Box>
-
             {/* Actions */}
             <Stack
-              direction="column"
+              direction={{ xs: 'row', md: 'column' }}
               spacing={1}
               justifyContent="center"
-              sx={{ mr: '10px !important' }}
+              sx={{ mr: '10px !important', mt: { xs: 2, md: 0 } }}
             >
               <Button
                 variant="text"
                 color="success"
                 size="small"
                 startIcon={<AddBoxOutlined />}
+                sx={{ flex: { xs: 1, md: 0 } }}
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
@@ -94,6 +107,7 @@ export default function ProfileCard({ profile }) {
                 color="danger"
                 size="small"
                 startIcon={<IndeterminateCheckBoxOutlined />}
+                sx={{ flex: { xs: 1, md: 0 } }}
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
@@ -107,7 +121,7 @@ export default function ProfileCard({ profile }) {
                 Add Score
               </Button>
             </Stack>
-          </Stack>
+          </Box>
         </CardContent>
       ) : (
         <CardContent>

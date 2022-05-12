@@ -1,3 +1,5 @@
+import { ICON } from 'constants/metadata';
+
 /**
  * Get a trait value from metadata attributes.
  *
@@ -10,4 +12,18 @@ export function getTraitValue(attributes, traitType) {
     (attribute) => attribute?.trait_type === traitType,
   );
   return attribute?.value || null;
+}
+
+/**
+ * Get a icon component by action metadata.
+ *
+ * @param {Action} action Action.
+ * @param {number} size Width and height of icon.
+ * @returns Icon Component.
+ */
+export function getActionIcon(action, size = 36) {
+  const icon = Object.values(ICON).find(
+    (icon) => icon.name === action?.uriData?.icon,
+  );
+  return icon?.icon(size) || ICON.default.icon(size);
 }

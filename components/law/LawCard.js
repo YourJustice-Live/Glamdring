@@ -1,6 +1,5 @@
 import { LightbulbOutlined } from '@mui/icons-material';
 import {
-  Avatar,
   Card,
   CardContent,
   Chip,
@@ -14,6 +13,7 @@ import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import RuleEffects from 'components/law/RuleEffects';
 import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/useDialogContext';
+import { getActionIcon } from 'utils/metadata';
 
 /**
  * A component with a card with law.
@@ -25,8 +25,8 @@ export default function LawCard({ law, isCommentsEnabled }) {
     <Card elevation={1}>
       {/* Avatar with name */}
       <CardContent sx={{ p: 4 }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar sx={{ bgcolor: 'primary.main' }}>L</Avatar>
+        <Stack direction="row" alignItems="center" spacing={1.5}>
+          {getActionIcon(law.action, 40)}
           <Typography sx={{ fontWeight: 'bold' }}>
             {law.action.uriData.name}
           </Typography>

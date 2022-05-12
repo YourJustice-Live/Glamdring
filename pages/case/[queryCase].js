@@ -1,11 +1,6 @@
-import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import CaseComments from 'components/case/CaseComments';
-import CaseEvidence from 'components/case/CaseEvidence';
-import CaseMeta from 'components/case/CaseMeta';
-import CaseParticipants from 'components/case/CaseParticipants';
-import CaseJudging from 'components/case/CaseJudging';
-import CaseConfirmations from 'components/case/CaseConfirmations';
+import CaseDetails from 'components/case/CaseDetails';
+import CaseTabs from 'components/case/CaseTabs';
+import CaseTop from 'components/case/CaseTop';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
 import useCase from 'hooks/useCase';
@@ -15,6 +10,7 @@ import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * Page with case data.
@@ -26,7 +22,7 @@ export default function Case() {
   const { showToastError } = useToasts();
   const { getCase } = useCase();
   const { getJusirsdictionRules } = useJurisdiction();
-  const { getLawsByRules } = useLaw();
+  const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseObject, setCaseObject] = useState();
   const [caseLaws, setCaseLaws] = useState(null);
 
@@ -51,56 +47,21 @@ export default function Case() {
   }, [queryCase]);
 
   return (
-    <Layout title={'YourJustice / Case'} enableSidebar={!!account}>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Case
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseMeta caseObject={caseObject} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Laws
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <LawList laws={caseLaws} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Participants
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseParticipants caseObject={caseObject} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Evidence
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseEvidence caseObject={caseObject} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Comments
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseComments caseObject={caseObject} />
-      </Box>
-      <Box sx={{ mt: 12 }}>
-        <Typography variant="h1" gutterBottom>
-          Confirmations
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseConfirmations caseObject={caseObject} />
-      </Box>
-      <Box sx={{ mt: 12, mb: 6 }}>
-        <Typography variant="h1" gutterBottom>
-          Judging
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
-      </Box>
+    <Layout
+      title={'YourJustice / Case'}
+      enableSidebar={!!account}
+      background={
+        caseLaws
+          ? isLawsPositive(caseLaws)
+            ? `linear-gradient(to bottom, ${palette.case.positive}, #FFFFFF)`
+            : `linear-gradient(to bottom, ${palette.case.negative}, #FFFFFF)`
+          : 'none'
+      }
+    >
+      <CaseTop caseObject={caseObject} />
+      <CaseDetails caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 6 }} />
+      <LawList laws={caseLaws} sx={{ mt: 6 }} />
+      <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 4 }} />
     </Layout>
   );
 }

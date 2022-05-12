@@ -4,9 +4,9 @@ import LawCard from './LawCard';
 /**
  * A component with a list of laws.
  */
-export default function LawList({ laws, isCommentsEnabled }) {
+export default function LawList({ laws, isCommentsEnabled, sx }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ ...sx }}>
       {!laws && (
         <>
           <Skeleton

@@ -91,6 +91,8 @@ export default function useJurisdiction() {
   /**
    * Checking that the jurisdiction rule is in a category.
    *
+   * TODO: Replace to function "isJurisdictionRulePositive()"
+   *
    * @param {JurisdictionRule} rule Jurisdiction rule.
    * @param {'positive'|'negative'} category Category.
    * @returns {boolean} Result of checking.

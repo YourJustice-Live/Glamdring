@@ -22,11 +22,7 @@ export default function CaseEventCard({ caseEvent }) {
         <Stack direction="row" spacing={1}>
           <Typography variant="body2">Case Address: </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            <Link
-              href={`/case/${caseEvent.caseEntity.id}`}
-              underline="none"
-              target="_blank"
-            >
+            <Link href={`/case/${caseEvent.caseEntity.id}`} underline="none">
               {formatAddress(caseEvent.caseEntity.id)}
             </Link>
           </Typography>

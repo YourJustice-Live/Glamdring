@@ -11,8 +11,8 @@ export default function ImageBox({ url, sx }) {
         src={url}
         layout="responsive"
         loading="lazy"
-        width={600}
-        height={360}
+        width={1080}
+        height={675}
         alt="Image"
       />
     </Box>

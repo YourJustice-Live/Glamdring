@@ -32,4 +32,8 @@ export const palette = {
     [200]: '#C3D4E6',
     [600]: '#092A51',
   },
+  case: {
+    negative: '#FFF6F8',
+    positive: '#F3FFFB',
+  },
 };

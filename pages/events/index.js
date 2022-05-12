@@ -1,5 +1,4 @@
 import { Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import CaseEventList from 'components/case/CaseEventList';
 import Layout from 'components/layout/Layout';
 import useCase from 'hooks/useCase';
@@ -18,14 +17,11 @@ export default function Events() {
 
   async function loadData() {
     try {
-      const cases = await getCases(
-        null,
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        null,
-        account,
-        100,
-        0,
-      );
+      const cases = await getCases({
+        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        first: 100,
+        skip: 0,
+      });
       const caseIds = cases.map((caseObject) => caseObject.id);
       const caseEvents = await getCaseEvents(caseIds);
       setCaseEvents(caseEvents);
@@ -41,19 +37,14 @@ export default function Events() {
 
   return (
     <Layout title={'YourJustice / Events'} enableSidebar={!!account}>
-      <Box>
-        <Typography variant="h1" gutterBottom>
-          Events
-        </Typography>
-        <Divider />
-      </Box>
-      <Box sx={{ mt: 6 }}>
-        <Typography variant="h4" gutterBottom>
-          Recent events that happened in your cases
-        </Typography>
-        <Divider />
-        <CaseEventList caseEvents={caseEvents} sx={{ mt: 2.5 }} />
-      </Box>
+      <Typography variant="h1" gutterBottom>
+        Events
+      </Typography>
+      <Typography gutterBottom>
+        Recent events that happened in cases in which you are a participant
+      </Typography>
+      <Divider />
+      <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />
     </Layout>
   );
 }

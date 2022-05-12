@@ -63,7 +63,7 @@ export default function CaseComments({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>None</Typography>
+        <Typography>No comments</Typography>
       )}
       {/* Add comment post form */}
       {caseObject?.stage === CASE_STAGE.open.id &&

@@ -6,7 +6,7 @@ import { PROFILE_ORDER } from 'constants/subgraph';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconUsers } from 'icons/IconUsers';
+import { IconUsers } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -103,7 +103,7 @@ export default function Index() {
         <ProfileList profiles={profiles} sx={{ mt: 0 }} />
         <Pagination
           color="primary"
-          sx={{ mt: 2 }}
+          sx={{ mt: 4 }}
           count={currentPageCount}
           page={currentPage}
           onChange={(_, page) => loadData(page)}
