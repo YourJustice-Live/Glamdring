@@ -19,6 +19,44 @@ export default function HowItWorks() {
           ).
         </Typography>
       </Box>
+      {/* Chapter 0 */}
+      <Box sx={{ mb: 6 }}>
+        <Typography variant="h4" gutterBottom>
+          Chapter 0. Choose your crypto-wallet
+        </Typography>
+        <Divider sx={{ mb: 2 }} />
+        <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>
+            We recommend use Metamask. It is easy to use / install.
+          </Typography>
+          <Typography gutterBottom>
+            Metamask is adapted for use with your browser. To install Metamask
+            go to{' '}
+            <Link
+              href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
+              underline="none"
+              target="_blank"
+            >
+              chrome.google.com/webstore
+            </Link>
+            .
+          </Typography>
+          <ImageBox
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361759/FAQ/how-it-works/animation-1_q4shnh.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
+          />
+        </Box>
+        <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>
+            In the Metamask settings, enable the ability to connect to different
+            networks.
+          </Typography>
+          <ImageBox
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361762/FAQ/how-it-works/animation-2_sn3frn.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
+          />
+        </Box>
+      </Box>
       {/* Chapter 1 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
@@ -27,12 +65,11 @@ export default function HowItWorks() {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            The first thing to start with is connecting your cryptocurrency
-            wallet to our site.
+            Let connect your cryptocurrency wallet to our site.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752654/FAQ/How%20It%20Works/animation-1_tb1acs.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361760/FAQ/how-it-works/animation-3_ygdtmy.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -40,8 +77,8 @@ export default function HowItWorks() {
             Great, now let&apos;s switch to the Rinkeby test network.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-2_jgxpmv.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361764/FAQ/how-it-works/animation-4_aix2is.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -53,16 +90,24 @@ export default function HowItWorks() {
               target="_blank"
             >
               rinkebyfaucet.com
+            </Link>{' '}
+            or you can also use{' '}
+            <Link
+              href="https://faucets.chain.link/rinkeby"
+              underline="none"
+              target="_blank"
+            >
+              faucets.chain.link
             </Link>
             .
           </Typography>
           <Typography gutterBottom>
-            To do this you just need to copy your wallet number and paste it in
-            the line.
+            In order to do this, you just need to copy your wallet number and
+            paste it into the line.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752815/FAQ/How%20It%20Works/animation-3_dknjcj.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361767/FAQ/how-it-works/animation-5_mztofs.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -86,17 +131,17 @@ export default function HowItWorks() {
             Upload your avatar and fill in information about yourself.
           </Typography>
           <Typography gutterBottom>
-            Once you&apos;re done with that, click &quot;Mint NFT&quot; and sign
-            a test contract on the Rinkeby network.
+            Once you&apos;re done, click &quot;Create Profile&quot; and sign a
+            test contract on the Rinkeby network.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-4_b9dyl3.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361761/FAQ/how-it-works/animation-6_n9kzj7.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Great and welcome, you are now a new member of the YJ community.
+            Welcome, you are now a new member of the YJ community.
           </Typography>
           <Typography gutterBottom>Now the fun part begins.</Typography>
         </Box>
@@ -110,19 +155,19 @@ export default function HowItWorks() {
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
             Let&apos;s create the first case in which we tell the community
-            about an investor who has defaulted on his obligations to us.
+            about an investor who has defaulted on his obligations towards us.
           </Typography>
           <Typography gutterBottom>
             To do this, we need to click on the &apos;Create Case&apos; button.
           </Typography>
           <Typography gutterBottom>
-            First we need to join the existing jurisdiction. The information
-            about joining a jurisdiction - will go on the blockchain. On this we
-            need to sign the contract once again.
+            First, we need to join the existing jurisdiction. The information
+            about joining a jurisdiction will go on the blockchain. On this
+            step, we need to sign the contract once again.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-5_pev2tn.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361767/FAQ/how-it-works/animation-7_ujxblx.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -140,22 +185,21 @@ export default function HowItWorks() {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            We need to decide whether we want to thank the person or tell bad
-            things about them?
+            We need to decide whether we want to appreciate a person’s act or
+            report a bad action?
           </Typography>
           <Typography gutterBottom>
-            Next, we need to choose an action. Let&apos;s think back to our
-            case. One party to the contract has declassified important
-            information. This seems to fit under the &quot;Violation of the
-            contract with the contractor&quot; action.
+            Next, we need to choose an action. Let&apos;s get back to our case.
+            A member of your team was not focused enough on my idea. This seems
+            to fit under the &quot;Slashed or ignored a good idea&quot; action.
           </Typography>
           <Typography gutterBottom>
             By the way, don&apos;t forget to set the name of this case and
             choose the rule that is broken within our jurisdiction.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752817/FAQ/How%20It%20Works/animation-6_sj6lom.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361765/FAQ/how-it-works/animation-8_gdcuge.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -164,13 +208,13 @@ export default function HowItWorks() {
             and evidence, if any.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752814/FAQ/How%20It%20Works/animation-7_y6fqo0.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361762/FAQ/how-it-works/animation-9_yvgr2w.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Click &quot;Create Case&quot; and voila! You have added your first
+            Click &quot;Create Case&quot; and voilà! You have added your first
             case.
           </Typography>
           <Typography gutterBottom>
@@ -178,13 +222,16 @@ export default function HowItWorks() {
             sign a contract.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1651752815/FAQ/How%20It%20Works/animation-8_ltznzw.gif"
-            sx={{ maxWidth: { xs: 1, md: 3 / 4 }, mt: 2 }}
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1652361759/FAQ/how-it-works/animation-10_jhlyzs.gif"
+            sx={{ maxWidth: 1, mt: 2 }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom sx={{ fontWeight: 'bold' }}>
             We look forward to hearing about your case!
+          </Typography>
+          <Typography gutterBottom>
+            Willing to help? Record a Loom or send us Feedback.
           </Typography>
         </Box>
       </Box>
