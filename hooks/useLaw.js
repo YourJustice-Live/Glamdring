@@ -9,13 +9,14 @@ import useJurisdiction from 'hooks/useJurisdiction';
  */
 export default function useLaw() {
   const { getActions } = useAction();
-  const { getJusirsdictionRules } = useJurisdiction();
+  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
+    useJurisdiction();
 
   /**
    * Get laws by specified rules.
    *
    * @param {Array.<Rule>} rules Rules.
-   * @returns {Promise.<Map.<string,Law>>} A map with laws.
+   * @returns {Promise.<Map.<string,Law>>} A map with laws, where key is action guid.
    */
   let getLawsByRules = async function (rules) {
     let laws = new Map();
@@ -58,8 +59,26 @@ export default function useLaw() {
     return laws;
   };
 
+  /**
+   * Checking that the law has only positive rules.
+   *
+   * @param {Map.<string,Law>} laws A map with laws, where key is action guid.
+   * @returns Boolean.
+   */
+  let isLawsPositive = function (laws) {
+    for (const law of laws?.values() || []) {
+      for (const rule of law?.rules || []) {
+        if (isJurisdictionRuleInCategory(rule, 'negative')) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
   return {
     getLawsByRules,
     getLawsByJurisdiction,
+    isLawsPositive,
   };
 }

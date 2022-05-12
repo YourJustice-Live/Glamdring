@@ -1,22 +1,19 @@
-import { Card, CardContent, Divider, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Card, CardContent } from '@mui/material';
 import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
 import { useEffect, useState } from 'react';
-import CaseComments from './CaseComments';
-import CaseConfirmations from './CaseConfirmations';
-import CaseEvidence from './CaseEvidence';
-import CaseMeta from './CaseMeta';
-import CaseParticipants from './CaseParticipants';
-import CaseJudging from './CaseJudging';
+import { palette } from 'theme/palette';
+import CaseDetails from './CaseDetails';
+import CaseTabs from './CaseTabs';
+import CaseTop from './CaseTop';
 
 /**
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
   const { getJusirsdictionRules } = useJurisdiction();
-  const { getLawsByRules } = useLaw();
+  const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
 
   async function loadData() {
@@ -32,51 +29,25 @@ export default function CaseCard({ caseObject }) {
   }, [caseObject]);
 
   return (
-    <Card elevation={1}>
+    <Card
+      elevation={1}
+      sx={{
+        background: caseLaws
+          ? isLawsPositive(caseLaws)
+            ? `linear-gradient(to bottom, ${palette.case.positive}, #FFFFFF)`
+            : `linear-gradient(to bottom, ${palette.case.negative}, #FFFFFF)`
+          : 'none',
+      }}
+    >
       <CardContent sx={{ p: 4 }}>
-        <CaseMeta caseObject={caseObject} />
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Laws
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <LawList laws={caseLaws} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Participants
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseParticipants caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Evidence
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseEvidence caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Comments
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseComments caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Typography variant="h3" gutterBottom>
-            Confirmations
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseConfirmations caseObject={caseObject} />
-        </Box>
-        <Box sx={{ mt: 6, mb: 3 }}>
-          <Typography variant="h3" gutterBottom>
-            Judging
-          </Typography>
-          <Divider sx={{ mb: 3 }} />
-          <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
-        </Box>
+        <CaseTop caseObject={caseObject} />
+        <CaseDetails
+          caseObject={caseObject}
+          caseLaws={caseLaws}
+          sx={{ mt: 6 }}
+        />
+        <LawList laws={caseLaws} sx={{ mt: 4 }} />
+        <CaseTabs caseObject={caseObject} sx={{ mt: 3 }} />
       </CardContent>
     </Card>
   );

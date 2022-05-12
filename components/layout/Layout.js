@@ -4,9 +4,9 @@ import Header from 'components/layout/Header';
 import { Sidebar } from 'components/layout/Sidebar';
 import Head from 'next/head';
 
-export default function Layout({ children, title, enableSidebar }) {
+export default function Layout({ children, title, enableSidebar, background }) {
   return (
-    <>
+    <Box sx={{ background: background }}>
       <Head>
         <title>{title || 'YourJustice'}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -22,6 +22,6 @@ export default function Layout({ children, title, enableSidebar }) {
         </Box>
       </Container>
       <Footer />
-    </>
+    </Box>
   );
 }

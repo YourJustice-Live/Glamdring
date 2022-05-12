@@ -125,7 +125,7 @@ export default function useCase() {
    * @returns {boolean} Result of checking.
    */
   let isAccountHasAnyCaseRole = function (caseObject, account) {
-    return caseObject?.participantAccounts?.includes(account.toLowerCase());
+    return caseObject?.participantAccounts?.includes(account?.toLowerCase());
   };
 
   /**
