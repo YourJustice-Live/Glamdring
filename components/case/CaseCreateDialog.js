@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -361,8 +362,18 @@ export default function CaseCreateDialog({
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
       <DialogTitle>Create New Case</DialogTitle>
       <DialogContent>
-        {/* Loading message */}
-        {status === STATUS.isLoading && <Typography>Loading...</Typography>}
+        {/* Loading process */}
+        {status === STATUS.isLoading && (
+          <>
+            <Skeleton variant="rectangular" width={196} height={24} />
+            <Skeleton
+              variant="rectangular"
+              width={128}
+              height={18}
+              sx={{ mt: 1.5 }}
+            />
+          </>
+        )}
         {/* Message to connect account */}
         {status === STATUS.isAccountRequired && (
           <>
