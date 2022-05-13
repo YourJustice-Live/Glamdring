@@ -16,30 +16,33 @@ export default function useJurisdiction() {
     useSubgraph();
 
   /**
-   * Get a jurisdiction.
-   *
-   * TODO: Do not use fake data
+   * Get jurisdiction for specified id.
    *
    * @param {string} id Jurisdiction id (address).
    * @returns {Promise.<Jurisdiction>} A jurisdiction or null.
    */
   let getJurisdiction = async function (id) {
-    const jurisdictionEntities = await findJurisdictionEntities([id]);
-    if (!jurisdictionEntities || jurisdictionEntities.length === 0) {
-      return null;
-    }
-    const jurisdictionEntity = jurisdictionEntities[0];
-    const jurisdiction = new Jurisdiction(
-      jurisdictionEntity.id,
-      jurisdictionEntity.image || FAKE_JURISDICTION_IMAGE,
-      jurisdictionEntity.name,
-      jurisdictionEntity.description || FAKE_JURISDICTION_DESCRIPTION,
-      jurisdictionEntity.roles,
-      jurisdictionEntity.rules,
-      jurisdictionEntity.rulesCount,
-      jurisdictionEntity.casesCount,
+    const jurisdictions = await getJurisdictions([id]);
+    return jurisdictions && jurisdictions.length > 0 ? jurisdictions[0] : null;
+  };
+
+  /**
+   * Get jurisdictions.
+   *
+   * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
+   * @param {number} first The number of jurisdictions to getting.
+   * @param {number} skip The number of jurisdictions to skip.
+   * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
+   */
+  let getJurisdictions = async function (ids, first, skip) {
+    const jurisdictionEntities = await findJurisdictionEntities(
+      ids,
+      first,
+      skip,
     );
-    return jurisdiction;
+    return jurisdictionEntities.map((jurisdictionEntity) =>
+      createJurisdictionObject(jurisdictionEntity),
+    );
   };
 
   /**
@@ -130,9 +133,31 @@ export default function useJurisdiction() {
 
   return {
     getJurisdiction,
+    getJurisdictions,
     getJusirsdictionRules,
     getJurisdictionRoleAccounts,
     isJurisdictionRuleInCategory,
     isAccountHasJurisdictionRole,
   };
+}
+
+/**
+ * Convert jurisdiction entity to jurisdiction object.
+ *
+ * TODO: Do not use fake data
+ *
+ * @param {object} jurisdictionEntity Jurisdiction entity.
+ * @returns Jurisdiction object.
+ */
+function createJurisdictionObject(jurisdictionEntity) {
+  return new Jurisdiction(
+    jurisdictionEntity.id,
+    jurisdictionEntity.image || FAKE_JURISDICTION_IMAGE,
+    jurisdictionEntity.name,
+    jurisdictionEntity.description || FAKE_JURISDICTION_DESCRIPTION,
+    jurisdictionEntity.roles,
+    jurisdictionEntity.rules,
+    jurisdictionEntity.rulesCount,
+    jurisdictionEntity.casesCount,
+  );
 }

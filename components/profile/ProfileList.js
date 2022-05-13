@@ -20,7 +20,7 @@ export default function ProfileList({ profiles, sx }) {
       )}
       {profiles && profiles.length === 0 && (
         <Grid item xs={12} md={4}>
-          <Typography>None</Typography>
+          <Typography>No profiles</Typography>
         </Grid>
       )}
       {profiles && profiles.length > 0 && (
