@@ -57,7 +57,7 @@ export default function ProfileCases({ profile, filterPreset }) {
           const profileConfirmation = caseObject.posts.find(
             (post) =>
               post.uriType === POST_TYPE.confirmation &&
-              post.author === profile.account.toLowerCase(),
+              post.author === profile.account?.toLowerCase(),
           );
           if (!profileConfirmation) {
             cases.push(caseObject);
