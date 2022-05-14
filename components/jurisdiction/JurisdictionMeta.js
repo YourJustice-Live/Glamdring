@@ -8,16 +8,18 @@ import {
   DialogTitle,
   Divider,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconFlag, IconPassport, IconProfile } from 'icons';
+import { IconFlag, IconPassport, IconPlus, IconProfile } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
@@ -164,40 +166,57 @@ function JurisdictionActions({ jurisdiction, sx }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);
 
-  if (account && isMember !== null) {
-    return (
-      <Box sx={{ ...sx }}>
-        {isJoiningOrLeaving ? (
-          <LoadingButton
-            loading
-            loadingPosition="start"
-            startIcon={<Save />}
-            variant="outlined"
-          >
-            {isMember ? 'Leaving' : 'Joining'}
-          </LoadingButton>
-        ) : (
-          <Button
-            variant={isMember ? 'outlined' : 'contained'}
-            type="submit"
-            startIcon={
-              <IconPassport
-                hexColor={
-                  isMember ? palette.primary.main : palette.primary.contrastText
-                }
-              />
-            }
-            sx={{ px: 6 }}
-            onClick={joinOrLeave}
-          >
-            {isMember ? 'Leave' : 'Join'}
-          </Button>
-        )}
-      </Box>
-    );
-  } else {
-    return <></>;
-  }
+  return (
+    <Stack direction="row" spacing={1} sx={{ ...sx }}>
+      {account && (
+        <Button
+          variant={isMember ? 'contained' : 'outlined'}
+          startIcon={
+            <IconPlus
+              hexColor={
+                isMember ? palette.primary.contrastText : palette.primary.main
+              }
+            />
+          }
+          onClick={() =>
+            showDialog(
+              <CaseCreateDialog
+                jurisdiction={jurisdiction}
+                onClose={closeDialog}
+              />,
+            )
+          }
+        >
+          Create Case
+        </Button>
+      )}
+      {account && isMember !== null && !isJoiningOrLeaving && (
+        <Button
+          variant={isMember ? 'outlined' : 'contained'}
+          startIcon={
+            <IconPassport
+              hexColor={
+                isMember ? palette.primary.main : palette.primary.contrastText
+              }
+            />
+          }
+          onClick={joinOrLeave}
+        >
+          {isMember ? 'Leave' : 'Join'}
+        </Button>
+      )}
+      {account && isMember !== null && isJoiningOrLeaving && (
+        <LoadingButton
+          loading
+          loadingPosition="start"
+          startIcon={<Save />}
+          variant="outlined"
+        >
+          {isMember ? 'Leaving' : 'Joining'}
+        </LoadingButton>
+      )}
+    </Stack>
+  );
 }
 
 function ProfileRequireDialog({ isClose, onClose }) {

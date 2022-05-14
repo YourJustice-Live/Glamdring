@@ -13,20 +13,10 @@ export default function JurisdictionLink() {
   const { getJurisdiction } = useJurisdiction();
   const [jurisdiction, setJurisdiction] = useState(null);
 
-  async function loadData() {
-    try {
-      setJurisdiction(
-        await getJurisdiction(
-          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        ),
-      );
-    } catch (error) {
-      showToastError(error);
-    }
-  }
-
   useEffect(() => {
-    loadData();
+    getJurisdiction(process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS)
+      .then((jurisdiction) => setJurisdiction(jurisdiction))
+      .catch((error) => showToastError(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

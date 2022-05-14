@@ -37,6 +37,7 @@ import { palette } from 'theme/palette';
  * TODO: Use custom widget for category selector.
  */
 export default function CaseCreateDialog({
+  jurisdiction,
   subjectProfile,
   affectedProfile,
   isClose,
@@ -55,11 +56,10 @@ export default function CaseCreateDialog({
   const { account, accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { getJurisdiction, isAccountHasJurisdictionRole } = useJurisdiction();
+  const { isAccountHasJurisdictionRole } = useJurisdiction();
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
-  const [jurisdiction, setJurisdiction] = useState(null);
   const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
     ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
@@ -203,9 +203,6 @@ export default function CaseCreateDialog({
 
   async function loadData() {
     try {
-      const jurisdiction = await getJurisdiction(
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-      );
       // Check that account has jurisdiction role
       if (
         !isAccountHasJurisdictionRole(
@@ -218,12 +215,7 @@ export default function CaseCreateDialog({
         return;
       }
       // Load rest of data for form
-      setJurisdiction(jurisdiction);
-      setJurisdictionLaws(
-        await getLawsByJurisdiction(
-          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        ),
-      );
+      setJurisdictionLaws(await getLawsByJurisdiction(jurisdiction?.id));
       setStatus(STATUS.isFormAvailable);
     } catch (error) {
       showToastError(error);
@@ -299,7 +291,7 @@ export default function CaseCreateDialog({
       // Define case rules
       const caseRules = [];
       caseRules.push({
-        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        jurisdiction: jurisdiction?.id,
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
@@ -358,11 +350,11 @@ export default function CaseCreateDialog({
       setStatus(STATUS.isAccountRequired);
     } else if (!accountProfile) {
       setStatus(STATUS.isAccountProfileRequired);
-    } else {
+    } else if (jurisdiction) {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
@@ -430,9 +422,7 @@ export default function CaseCreateDialog({
               sx={{ mt: 4 }}
               variant="contained"
               onClick={() => {
-                router.push(
-                  `/jurisdiction/${process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS}`,
-                );
+                router.push(`/jurisdiction/${jurisdiction?.id}`);
                 close();
               }}
             >
