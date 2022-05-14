@@ -1,13 +1,22 @@
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Divider,
+  Link,
+  Stack,
+  Typography,
+} from '@mui/material';
 import ActionManageDialog from 'components/law/ActionManageDialog';
 import ActionRuleTable from 'components/law/ActionRuleTable';
 import RuleManageDialog from 'components/law/RuleManageDialog';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
-import { useRouter } from 'next/router';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 /**
@@ -43,6 +52,14 @@ export default function JurisdictionLawsManage() {
       enableSidebar={!!account}
     >
       <Box>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 6 }}>
+          <NextLink href={`/jurisdiction/${queryJurisdiction}`} passHref>
+            <Link underline="none" color="inherit">
+              {jurisdiction?.name || 'Jurisdiction'}
+            </Link>
+          </NextLink>
+          <Typography color="text.primary">Laws Manager</Typography>
+        </Breadcrumbs>
         <Typography variant="h2" gutterBottom>
           Jurisdiction Laws Manager
         </Typography>
