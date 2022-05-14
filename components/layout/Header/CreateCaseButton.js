@@ -17,7 +17,7 @@ export default function CreateCaseButton() {
   const [jurisdiction, setJurisdiction] = useState(null);
 
   useEffect(() => {
-    getJurisdiction(process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS)
+    getJurisdiction(process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS)
       .then((jurisdiction) => setJurisdiction(jurisdiction))
       .catch((error) => showToastError(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps

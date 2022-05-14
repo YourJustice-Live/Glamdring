@@ -48,7 +48,8 @@ export default function ProfileCases({ profile, filterPreset }) {
       let cases = [];
       if (filterPreset === 'awaitingConfirmation') {
         cases = await getCases({
-          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          jurisdiction:
+            process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
           stage: CASE_STAGE.open.id,
           witness: profile.account,
           first: 100,
@@ -66,14 +67,16 @@ export default function ProfileCases({ profile, filterPreset }) {
         }, []);
       } else if (filterPreset === 'awaitingJudging') {
         cases = await getCases({
-          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          jurisdiction:
+            process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
           stage: CASE_STAGE.verdict.id,
           judge: profile.account,
           first: 100,
         });
       } else {
         cases = await getCases({
-          jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+          jurisdiction:
+            process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
           stage: filters?.stageId,
           admin: filters?.isAdmin && profile.account,
           subject: filters?.isSubject && profile.account,

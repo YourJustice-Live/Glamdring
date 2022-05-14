@@ -32,7 +32,7 @@ export default function useJurisdiction() {
     // Use fake image and description for main jurisdiction contract
     if (
       jurisdictionEntity.id?.toLowerCase() ===
-      process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase()
+      process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase()
     ) {
       jurisdictionImage = FAKE_JURISDICTION_IMAGE;
       jurisdictionDescription = FAKE_JURISDICTION_DESCRIPTION;

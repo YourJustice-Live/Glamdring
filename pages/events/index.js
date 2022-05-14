@@ -18,7 +18,8 @@ export default function Events() {
   async function loadData() {
     try {
       const cases = await getCases({
-        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        jurisdiction:
+          process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
         first: 100,
         skip: 0,
       });
