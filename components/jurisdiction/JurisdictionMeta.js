@@ -137,9 +137,9 @@ function JurisdictionActions({ jurisdiction, sx }) {
       // Use contract
       let transaction;
       if (isMember) {
-        transaction = await leave();
+        transaction = await leave(jurisdiction?.id);
       } else {
-        transaction = await join();
+        transaction = await join(jurisdiction?.id);
       }
       showToastSuccess('Success! Data will be updated soon.');
       await transaction.wait();

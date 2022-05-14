@@ -18,7 +18,7 @@ export default function LawList({ laws, isCommentsEnabled, sx }) {
           <Skeleton variant="rectangular" width={82} height={24} />
         </>
       )}
-      {laws && laws.size === 0 && <Typography>None</Typography>}
+      {laws && laws.size === 0 && <Typography>No laws</Typography>}
       {laws && laws.size > 0 && (
         <>
           {[...laws.keys()].map((key) => (

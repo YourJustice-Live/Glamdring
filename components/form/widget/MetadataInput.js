@@ -12,6 +12,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import ImageInput from './ImageInput';
 import MetadataIconSelect from './MetadataIconSelect';
 
 /**
@@ -44,12 +45,16 @@ export default function MetadataInput(props) {
   };
 
   const formUiSchema = {
+    image: {
+      'ui:widget': 'ImageInput',
+    },
     icon: {
       'ui:widget': 'MetadataIconSelect',
     },
   };
 
   const widgets = {
+    ImageInput: ImageInput,
     MetadataIconSelect: MetadataIconSelect,
   };
 
@@ -126,7 +131,7 @@ export default function MetadataInput(props) {
             Edit Metadata
           </Button>
           {/* Dialog with form */}
-          <Dialog open={isFormOpen} onClose={closeForm}>
+          <Dialog open={isFormOpen} onClose={closeForm} maxWidth="xs" fullWidth>
             <DialogTitle>{propsLabel}</DialogTitle>
             <DialogContent>
               <Typography gutterBottom>{propsSubLabel}</Typography>

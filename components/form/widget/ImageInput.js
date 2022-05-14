@@ -1,24 +1,21 @@
-import {
-  Avatar,
-  CircularProgress,
-  Divider,
-  Input,
-  Typography,
-} from '@mui/material';
+import { Avatar, CircularProgress, Input } from '@mui/material';
+import { Box } from '@mui/system';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { IconProfile } from 'icons';
+import { IconPlus } from 'icons';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
 /**
- * A widget for input a profile picture, upload it to IPFS, and get URI.
+ * A widget for input an image, upload it to IPFS, and get URI.
  *
- * TODO: Add button to remove picture.
+ * TODO: Add button to remove image.
  */
-export default function ProfilePictureInput(props) {
+export default function ImageInput(props) {
   const propsDisabled = props.disabled;
-  const propsPicture = props.value;
+  const propsSx = props.options?.sx;
+  const propsHeader = props.options?.header;
+  const propsImage = props.value;
   const propsOnChange = props.onChange;
   const { showToastSuccessLink, showToastError } = useToasts();
   const { uploadFileToIPFS } = useIpfs();
@@ -62,7 +59,7 @@ export default function ProfilePictureInput(props) {
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
-      showToastSuccessLink('Your picture uploaded to IPFS!', url);
+      showToastSuccessLink('Your image uploaded to IPFS!', url);
     } catch (error) {
       showToastError(error);
     } finally {
@@ -71,10 +68,8 @@ export default function ProfilePictureInput(props) {
   }
 
   return (
-    <>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        Profile Picture
-      </Typography>
+    <Box sx={{ ...propsSx }}>
+      {propsHeader}
       <label htmlFor="input" style={{ width: size, height: size }}>
         <Avatar
           sx={{
@@ -84,12 +79,12 @@ export default function ProfilePictureInput(props) {
             height: size,
             borderRadius: '24px',
           }}
-          src={!isLoading ? propsPicture : null}
+          src={!isLoading ? propsImage : null}
         >
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <IconProfile hexColor={palette.grey[600]} />
+            <IconPlus hexColor={palette.grey[600]} />
           )}
         </Avatar>
         <Input
@@ -101,7 +96,6 @@ export default function ProfilePictureInput(props) {
           disabled={isLoading || propsDisabled}
         />
       </label>
-      <Divider sx={{ mt: 4 }} />
-    </>
+    </Box>
   );
 }

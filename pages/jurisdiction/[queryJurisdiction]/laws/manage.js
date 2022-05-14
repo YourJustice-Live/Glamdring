@@ -5,13 +5,37 @@ import RuleManageDialog from 'components/law/RuleManageDialog';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { useRouter } from 'next/router';
+import useJurisdiction from 'hooks/useJurisdiction';
+import useToasts from 'hooks/useToasts';
+import { useEffect, useState } from 'react';
 
 /**
  * Page for manage jurisdiction laws.
  */
 export default function JurisdictionLawsManage() {
+  const router = useRouter();
+  const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const { showToastError } = useToasts();
+  const { getJurisdiction } = useJurisdiction();
+  const [jurisdiction, setJurisdiction] = useState(null);
+
+  async function loadData() {
+    try {
+      setJurisdiction(await getJurisdiction(queryJurisdiction));
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  useEffect(() => {
+    if (queryJurisdiction) {
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryJurisdiction]);
 
   return (
     <Layout
@@ -44,7 +68,7 @@ export default function JurisdictionLawsManage() {
           Add Rule
         </Button>
       </Stack>
-      <ActionRuleTable sx={{ mt: 2.5 }} />
+      <ActionRuleTable jurisdiction={jurisdiction} sx={{ mt: 2.5 }} />
     </Layout>
   );
 }

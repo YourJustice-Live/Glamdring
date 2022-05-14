@@ -1,7 +1,9 @@
 import { Box, Pagination } from '@mui/material';
 import ProfileOrderSelect from 'components/form/widget/ProfileOrderSelect';
 import ProfileList from 'components/profile/ProfileList';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import { PROFILE_ORDER } from 'constants/subgraph';
+import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -11,6 +13,7 @@ import { useEffect, useState } from 'react';
  */
 export default function JurisdictionMembers({ jurisdiction }) {
   const { showToastError } = useToasts();
+  const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [memberProfiles, setMemberProfiles] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,9 +30,13 @@ export default function JurisdictionMembers({ jurisdiction }) {
       setCurrentPageCount(pageCount);
       setMemberProfiles(null);
       // Load member profiles for page
+      const memberAccounts = getJurisdictionRoleAccounts(
+        jurisdiction,
+        JURISDICTION_ROLE.member.id,
+      );
       const memberProfiles = await getProfiles(
+        memberAccounts,
         null,
-        jurisdiction.id,
         pageSize,
         (page - 1) * pageSize,
         selectedOrder,
@@ -63,7 +70,7 @@ export default function JurisdictionMembers({ jurisdiction }) {
       >
         <ProfileOrderSelect
           size="small"
-          sx={{ flexGrow: 1, ml: { md: 1 }, mt: { xs: 1, md: 0 } }}
+          sx={{ flexGrow: 1, mt: { xs: 1, md: 0 } }}
           value={selectedOrder}
           onChange={(order) => setSelectedOrder(order)}
         />

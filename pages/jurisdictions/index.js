@@ -1,6 +1,8 @@
-import { Box, Pagination, Typography } from '@mui/material';
+import { Box, Button, Pagination, Typography } from '@mui/material';
 import JurisdictionList from 'components/jurisdiction/JurisdictionList';
+import JurisdictionManageDialog from 'components/jurisdiction/JurisdictionManageDialog';
 import Layout from 'components/layout/Layout';
+import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -12,8 +14,9 @@ import { palette } from 'theme/palette';
  * Page with list of all jurisdictions.
  */
 export default function Jurisdictions() {
-  const { showToastError } = useToasts();
   const { account } = useWeb3Context();
+  const { showDialog, closeDialog } = useDialogContext();
+  const { showToastError } = useToasts();
   const { getJurisdictions } = useJurisdiction();
   const [jurisdictions, setJurisdictions] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,6 +58,16 @@ export default function Jurisdictions() {
           Jurisdictions
         </Typography>
       </Box>
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={() =>
+          showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
+        }
+        sx={{ mt: 3 }}
+      >
+        Create Jurisdiction
+      </Button>
       <JurisdictionList jurisdictions={jurisdictions} sx={{ mt: 0 }} />
       <Pagination
         color="primary"

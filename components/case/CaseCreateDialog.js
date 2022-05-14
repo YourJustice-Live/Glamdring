@@ -338,7 +338,13 @@ export default function CaseCreateDialog({
         });
       }
       // Make case
-      await makeCase(caseName, caseRules, caseRoles, casePosts);
+      await makeCase(
+        jurisdiction?.id,
+        caseName,
+        caseRules,
+        caseRoles,
+        casePosts,
+      );
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

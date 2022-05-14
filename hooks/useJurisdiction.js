@@ -1,12 +1,14 @@
 import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
 import useSubgraph from 'hooks/useSubgraph';
+import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
 import { hexStringToJson } from 'utils/converters';
 import { REPUTATION_RATING } from 'constants/contracts';
 import {
   FAKE_JURISDICTION_DESCRIPTION,
   FAKE_JURISDICTION_IMAGE,
 } from 'constants/fakes';
+import useIpfs from './useIpfs';
 
 /**
  * Hook for work with jurisdiction.
@@ -14,6 +16,49 @@ import {
 export default function useJurisdiction() {
   const { findJurisdictionEntities, findJurisdictionRuleEntities } =
     useSubgraph();
+  const { getUri } = useJurisdictionContract();
+  const { loadJsonFromIPFS } = useIpfs();
+
+  /**
+   * Convert jurisdiction entity to jurisdiction object.
+   *
+   * @param {object} jurisdictionEntity Jurisdiction entity.
+   * @returns Jurisdiction object.
+   */
+  async function createJurisdictionObject(jurisdictionEntity) {
+    let jurisdictionImage;
+    let jurisdictionDescription;
+    // Use fake image and description for main jurisdiction contract
+    if (
+      jurisdictionEntity.id?.toLowerCase() ===
+      process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase()
+    ) {
+      jurisdictionImage = FAKE_JURISDICTION_IMAGE;
+      jurisdictionDescription = FAKE_JURISDICTION_DESCRIPTION;
+    }
+    // Load image and description using jurisdiction uri
+    else {
+      try {
+        const uri = await getUri(jurisdictionEntity.id);
+        const uriJson = await loadJsonFromIPFS(uri);
+        jurisdictionImage = uriJson?.image;
+        jurisdictionDescription = uriJson?.description;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // Return jurisdiction object
+    return new Jurisdiction(
+      jurisdictionEntity.id,
+      jurisdictionImage,
+      jurisdictionEntity.name,
+      jurisdictionDescription,
+      jurisdictionEntity.roles,
+      jurisdictionEntity.rules,
+      jurisdictionEntity.rulesCount,
+      jurisdictionEntity.casesCount,
+    );
+  }
 
   /**
    * Get jurisdiction for specified id.
@@ -35,14 +80,16 @@ export default function useJurisdiction() {
    * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
    */
   let getJurisdictions = async function (ids, first, skip) {
+    const jurisdictions = [];
     const jurisdictionEntities = await findJurisdictionEntities(
       ids,
       first,
       skip,
     );
-    return jurisdictionEntities.map((jurisdictionEntity) =>
-      createJurisdictionObject(jurisdictionEntity),
-    );
+    for (const jurisdictionEntity of jurisdictionEntities) {
+      jurisdictions.push(await createJurisdictionObject(jurisdictionEntity));
+    }
+    return jurisdictions;
   };
 
   /**
@@ -139,25 +186,4 @@ export default function useJurisdiction() {
     isJurisdictionRuleInCategory,
     isAccountHasJurisdictionRole,
   };
-}
-
-/**
- * Convert jurisdiction entity to jurisdiction object.
- *
- * TODO: Do not use fake data
- *
- * @param {object} jurisdictionEntity Jurisdiction entity.
- * @returns Jurisdiction object.
- */
-function createJurisdictionObject(jurisdictionEntity) {
-  return new Jurisdiction(
-    jurisdictionEntity.id,
-    jurisdictionEntity.image || FAKE_JURISDICTION_IMAGE,
-    jurisdictionEntity.name,
-    jurisdictionEntity.description || FAKE_JURISDICTION_DESCRIPTION,
-    jurisdictionEntity.roles,
-    jurisdictionEntity.rules,
-    jurisdictionEntity.rulesCount,
-    jurisdictionEntity.casesCount,
-  );
 }

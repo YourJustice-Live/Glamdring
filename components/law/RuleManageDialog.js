@@ -18,7 +18,13 @@ import { capitalize } from 'lodash';
 /**
  * A dialog for adding a jurisdiction rule or updating a specified rule.
  */
-export default function RuleManageDialog({ about, rule, isClose, onClose }) {
+export default function RuleManageDialog({
+  jurisdiction,
+  about,
+  rule,
+  isClose,
+  onClose,
+}) {
   const { showToastSuccess, showToastError } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
   const [formData, setFormData] = useState(rule || {});
@@ -198,9 +204,19 @@ export default function RuleManageDialog({ about, rule, isClose, onClose }) {
       setFormData(formData);
       setIsLoading(true);
       if (rule) {
-        await updateRule(formData.ruleId, formData.rule, formData.effects);
+        await updateRule(
+          jurisdiction?.id,
+          formData.ruleId,
+          formData.rule,
+          formData.effects,
+        );
       } else {
-        await addRule(formData.rule, formData.confirmation, formData.effects);
+        await addRule(
+          jurisdiction?.id,
+          formData.rule,
+          formData.confirmation,
+          formData.effects,
+        );
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();

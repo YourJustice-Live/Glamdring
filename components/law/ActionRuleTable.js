@@ -25,10 +25,8 @@ import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a table with actions and jurisdiction rules.
- *
- * TODO: Load rules by jurisdiction id.
  */
-export default function ActionRuleTable({ sx }) {
+export default function ActionRuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
@@ -216,6 +214,7 @@ export default function ActionRuleTable({ sx }) {
           onClick={() =>
             showDialog(
               <RuleManageDialog
+                jurisdiction={jurisdiction}
                 about={params.row.action.guid}
                 onClose={closeDialog}
               />,
@@ -243,7 +242,11 @@ export default function ActionRuleTable({ sx }) {
           showInMenu
           onClick={() =>
             showDialog(
-              <RuleManageDialog rule={params.row.rule} onClose={closeDialog} />,
+              <RuleManageDialog
+                jurisdiction={jurisdiction}
+                rule={params.row.rule}
+                onClose={closeDialog}
+              />,
             )
           }
         />,
@@ -257,7 +260,7 @@ export default function ActionRuleTable({ sx }) {
       setIsLoading(true);
       const rows = [];
       const actions = await getActions();
-      const rules = await getJusirsdictionRules();
+      const rules = await getJusirsdictionRules(null, jurisdiction?.id);
       for (const action of actions) {
         const actionRules = rules.filter(
           (rule) => rule.rule.about === action.guid,
@@ -279,9 +282,11 @@ export default function ActionRuleTable({ sx }) {
   }
 
   useEffect(() => {
-    loadData();
+    if (jurisdiction) {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
     <Box sx={{ height: 800, ...sx }}>

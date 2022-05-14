@@ -41,7 +41,11 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               type="submit"
               onClick={() =>
                 showDialog(
-                  <RoleManageDialog isAssign={true} onClose={closeDialog} />,
+                  <RoleManageDialog
+                    jurisdiction={jurisdiction}
+                    isAssign={true}
+                    onClose={closeDialog}
+                  />,
                 )
               }
             >
@@ -52,7 +56,11 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               type="submit"
               onClick={() =>
                 showDialog(
-                  <RoleManageDialog isAssign={false} onClose={closeDialog} />,
+                  <RoleManageDialog
+                    jurisdiction={jurisdiction}
+                    isAssign={false}
+                    onClose={closeDialog}
+                  />,
                 )
               }
             >
