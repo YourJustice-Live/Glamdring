@@ -10,6 +10,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import MetadataInput from 'components/form/widget/MetadataInput';
 import useHubContract from 'hooks/contracts/useHubContract';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
@@ -23,6 +24,7 @@ export default function JurisdictionManageDialog({
 }) {
   const { showToastSuccess, showToastError } = useToasts();
   const { makeJurisdiction } = useHubContract();
+  const { setUri } = useJuridictionContract();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
   const [formData, setFormData] = useState(jurisdiction || {});
@@ -93,7 +95,7 @@ export default function JurisdictionManageDialog({
       setFormData(formData);
       setIsLoading(true);
       if (jurisdiction) {
-        // TODO: Update uri
+        await setUri(jurisdiction?.id, formData.uri);
       } else {
         await makeJurisdiction(formData.name, formData.uri);
       }

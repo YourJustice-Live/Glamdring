@@ -27,6 +27,25 @@ export default function useJuridictionContract() {
     ).contractURI();
   }
 
+  /**
+   * Set uri in jurisdiction contract.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @param {string} uri Uri with jurisdiction metadata.
+   * @returns Transaction.
+   */
+  async function setUri(contractAddress, uri) {
+    if (
+      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
+    ) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).setContractURI(uri);
+  }
+
   async function join(contractAddress) {
     if (
       network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
@@ -119,6 +138,7 @@ export default function useJuridictionContract() {
 
   return {
     getUri,
+    setUri,
     join,
     leave,
     assignRole,

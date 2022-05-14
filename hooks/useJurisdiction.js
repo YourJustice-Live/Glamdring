@@ -26,6 +26,7 @@ export default function useJurisdiction() {
    * @returns Jurisdiction object.
    */
   async function createJurisdictionObject(jurisdictionEntity) {
+    let jurisdictionUri;
     let jurisdictionImage;
     let jurisdictionDescription;
     // Use fake image and description for main jurisdiction contract
@@ -39,8 +40,8 @@ export default function useJurisdiction() {
     // Load image and description using jurisdiction uri
     else {
       try {
-        const uri = await getUri(jurisdictionEntity.id);
-        const uriJson = await loadJsonFromIPFS(uri);
+        jurisdictionUri = await getUri(jurisdictionEntity.id);
+        const uriJson = await loadJsonFromIPFS(jurisdictionUri);
         jurisdictionImage = uriJson?.image;
         jurisdictionDescription = uriJson?.description;
       } catch (error) {
@@ -50,6 +51,7 @@ export default function useJurisdiction() {
     // Return jurisdiction object
     return new Jurisdiction(
       jurisdictionEntity.id,
+      jurisdictionUri,
       jurisdictionImage,
       jurisdictionEntity.name,
       jurisdictionDescription,

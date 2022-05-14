@@ -5,6 +5,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
+import JurisdictionManageDialog from './JurisdictionManageDialog';
 
 /**
  * A component with jurisdiction manager tools.
@@ -36,6 +37,20 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
             spacing={2}
             sx={{ mt: 2 }}
           >
+            <Button
+              variant="outlined"
+              type="submit"
+              onClick={() =>
+                showDialog(
+                  <JurisdictionManageDialog
+                    jurisdiction={jurisdiction}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            >
+              Update Jurisdiction
+            </Button>
             <Button
               variant="outlined"
               type="submit"

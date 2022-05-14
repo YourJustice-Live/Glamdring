@@ -4,6 +4,7 @@
 export default class Jurisdiction {
   constructor(
     id,
+    uri,
     image,
     name,
     description,
@@ -13,6 +14,7 @@ export default class Jurisdiction {
     casesCount,
   ) {
     this.id = id;
+    this.uri = uri;
     this.image = image;
     this.name = name;
     this.description = description;
