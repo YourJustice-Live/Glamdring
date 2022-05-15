@@ -10,7 +10,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
  * TODO: Use contract address as function param instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
  */
 export default function useJuridictionContract() {
-  const { provider, network } = useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -21,45 +21,35 @@ export default function useJuridictionContract() {
   }
 
   async function join() {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).join();
   }
 
   async function leave() {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).leave();
   }
 
   async function assignRole(account, role) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).roleAssign(account, role);
   }
 
   async function removeRole(account, role) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).roleRemove(account, role);
   }
 
   async function addRule(rule, confirmation, effects) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).ruleAdd(
@@ -70,9 +60,7 @@ export default function useJuridictionContract() {
   }
 
   async function updateRule(id, rule, effects) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).ruleUpdate(
@@ -92,9 +80,7 @@ export default function useJuridictionContract() {
    * @returns Transaction.
    */
   async function makeCase(name, rules, roles, posts) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).caseMakeOpen(

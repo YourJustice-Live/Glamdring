@@ -8,7 +8,7 @@ import useWeb3Context from '../useWeb3Context';
  * Hook for ActionRepo Contract.
  */
 export default function useActionRepoContract() {
-  const { provider, network } = useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -26,9 +26,7 @@ export default function useActionRepoContract() {
    * @returns Transaction.
    */
   async function addAction(action, uri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).actionAdd(action, uri);
@@ -42,9 +40,7 @@ export default function useActionRepoContract() {
    * @returns Transaction.
    */
   async function updateActionUri(giud, uri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).actionSetURI(giud, uri);
