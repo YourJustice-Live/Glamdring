@@ -91,6 +91,7 @@ export default function ProfileManage({
       setStatus(STATUS.isUsingContractSuccessed);
     } catch (error) {
       showToastError(error);
+      setStatus(STATUS.isAvailable);
     }
   }
 
