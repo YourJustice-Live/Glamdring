@@ -421,7 +421,10 @@ function getFindCaseEntitiesQuery(
       id
       name
       createdDate
-      jurisdiction
+      jurisdiction {
+        id
+        name
+      }
       stage
       verdictAuthor
       verdictUri
@@ -467,6 +470,10 @@ function getFindCaseEventEntitiesQuery(caseIds) {
       caseEntity {
         id
         name
+        jurisdiction {
+          id
+          name
+        }
       }
       createdDate
       type

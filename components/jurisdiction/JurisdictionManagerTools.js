@@ -15,6 +15,9 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
+  const isJurisdictionMain =
+    jurisdiction?.id?.toLowerCase() ===
+    process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS.toLowerCase();
 
   return (
     <>
@@ -37,20 +40,22 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
             spacing={2}
             sx={{ mt: 2 }}
           >
-            <Button
-              variant="outlined"
-              type="submit"
-              onClick={() =>
-                showDialog(
-                  <JurisdictionManageDialog
-                    jurisdiction={jurisdiction}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Update Jurisdiction
-            </Button>
+            {!isJurisdictionMain && (
+              <Button
+                variant="outlined"
+                type="submit"
+                onClick={() =>
+                  showDialog(
+                    <JurisdictionManageDialog
+                      jurisdiction={jurisdiction}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Update Jurisdiction
+              </Button>
+            )}
             <Button
               variant="outlined"
               type="submit"

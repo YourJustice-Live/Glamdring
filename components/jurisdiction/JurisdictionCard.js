@@ -7,12 +7,26 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import NextLink from 'next/link';
+import { useEffect, useState } from 'react';
 
 /**
  * A component with a card with jurisdiction.
  */
 export default function JurisdictionCard({ jurisdiction }) {
+  const [citizensCount, setCitizensCount] = useState(null);
+
+  useEffect(() => {
+    if (jurisdiction) {
+      const memberRole = jurisdiction.roles.find(
+        (role) => role.roleId === JURISDICTION_ROLE.member.id,
+      );
+      setCitizensCount(memberRole?.accountsCount);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jurisdiction]);
+
   return (
     <Card elevation={1}>
       {jurisdiction ? (
@@ -47,6 +61,11 @@ export default function JurisdictionCard({ jurisdiction }) {
               <Typography variant="body2">
                 {jurisdiction.description}
               </Typography>
+              {citizensCount && (
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {citizensCount} citizens
+                </Typography>
+              )}
             </Box>
           </Box>
         </CardContent>

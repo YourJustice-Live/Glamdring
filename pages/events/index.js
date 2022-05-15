@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 
 /**
  * Page with events for current profile.
+ *
+ * TODO: Optimize function to load events.
  */
 export default function Events() {
   const { account } = useWeb3Context();
@@ -18,8 +20,7 @@ export default function Events() {
   async function loadData() {
     try {
       const cases = await getCases({
-        jurisdiction:
-          process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
+        participant: account,
         first: 100,
         skip: 0,
       });
