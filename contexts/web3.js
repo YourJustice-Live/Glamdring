@@ -21,7 +21,8 @@ export function Web3Provider({ children }) {
   const [instance, setInstance] = useState(null);
   const [provider, setProvider] = useState(null);
   const [account, setAccount] = useState(null);
-  const [network, setNetwork] = useState(null);
+  const [networkChainId, setNetworkChainId] = useState(null);
+  const [isNetworkChainIdCorrect, setIsNetworkChainCorrect] = useState(null);
   const [accountProfile, setAccountProfile] = useState(null);
 
   async function loadContext() {
@@ -32,9 +33,12 @@ export function Web3Provider({ children }) {
       const provider = new ethers.providers.Web3Provider(instance);
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
-      // Add listeners to reconnect the wallet if the user has changed the chain or account
+      const networkChainId = network?.chainId;
+      // Add listeners if the user has changed the chain or account
       if (instance.listenerCount('chainChanged') === 0) {
-        instance.addListener('chainChanged', () => loadContext());
+        instance.addListener('chainChanged', (chainId) =>
+          setNetworkChainId(chainId),
+        );
       }
       if (instance.listenerCount('accountsChanged') === 0) {
         instance.addListener('accountsChanged', () => loadContext());
@@ -47,7 +51,7 @@ export function Web3Provider({ children }) {
         setAccount(account);
         setAccountProfile(await getProfile(account));
       }
-      setNetwork(network);
+      setNetworkChainId(networkChainId);
     } catch (error) {
       console.error(error);
     } finally {
@@ -68,8 +72,9 @@ export function Web3Provider({ children }) {
       setInstance(null);
       setProvider(null);
       setAccount(null);
-      setNetwork(null);
       setAccountProfile(null);
+      setNetworkChainId(null);
+      setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -169,12 +174,22 @@ export function Web3Provider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const isChainIdCorrect =
+      networkChainId?.toString() === process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID;
+    const isChainIdHexCorrect =
+      networkChainId?.toString() ===
+      process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID_HEX;
+    setIsNetworkChainCorrect(isChainIdCorrect || isChainIdHexCorrect);
+  }, [networkChainId]);
+
   const value = {
     state: {
       defaultProvider: defaultProvider,
       provider: provider,
       account: account,
-      network: network,
+      networkChainId: networkChainId,
+      isNetworkChainIdCorrect: isNetworkChainIdCorrect,
       accountProfile: accountProfile,
     },
     loadContext,

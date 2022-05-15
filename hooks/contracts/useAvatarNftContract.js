@@ -8,7 +8,7 @@ import useWeb3Context from '../useWeb3Context';
  * Hook for AvatarNFT Contract.
  */
 export default function useAvatarNftContract() {
-  const { provider, network } = useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -25,9 +25,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function mint(tokenUrl) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).mint(tokenUrl);
@@ -41,9 +39,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function update(tokenId, tokenUrl) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).update(tokenId, tokenUrl);
@@ -56,9 +52,7 @@ export default function useAvatarNftContract() {
    * @returns Transaction.
    */
   async function add(tokenUrl) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).add(tokenUrl);

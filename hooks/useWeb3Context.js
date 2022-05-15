@@ -7,7 +7,8 @@ export default function useWeb3Context() {
   const defaultProvider = web3Context.state.defaultProvider;
   const provider = web3Context.state.provider;
   const account = web3Context.state.account;
-  const network = web3Context.state.network;
+  const networkChainId = web3Context.state.networkChainId;
+  const isNetworkChainIdCorrect = web3Context.state.isNetworkChainIdCorrect;
   const accountProfile = web3Context.state.accountProfile;
 
   const loadContext = web3Context.connectWallet;
@@ -20,7 +21,8 @@ export default function useWeb3Context() {
     defaultProvider,
     provider,
     account,
-    network,
+    networkChainId,
+    isNetworkChainIdCorrect,
     accountProfile,
     loadContext,
     connectWallet,
