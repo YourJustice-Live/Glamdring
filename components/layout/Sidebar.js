@@ -63,8 +63,8 @@ export function Sidebar() {
                 </Box>
                 <NextLink href={`/profile/${accountProfile.account}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'None'}{' '}
-                    {accountProfile.avatarNftUriLastName || 'None'}
+                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
+                    {accountProfile.avatarNftUriLastName}
                   </Link>
                 </NextLink>
                 <Box>
@@ -78,20 +78,14 @@ export function Sidebar() {
         )}
         {/* Links */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
-          {accountProfile ? (
-            <>
-              <NextLink href="/profile" passHref>
-                <Link underline="none">Profile</Link>
-              </NextLink>
-              <NextLink href="/profile/invite" passHref>
-                <Link underline="none">Invite Person</Link>
-              </NextLink>
-            </>
-          ) : (
+          {!accountProfile && (
             <NextLink href="/profile/create" passHref>
-              <Link underline="none">Create Profile</Link>
+              <Link underline="none">Create Own Profile</Link>
             </NextLink>
           )}
+          <NextLink href="/profiles" passHref>
+            <Link underline="none">Profiles</Link>
+          </NextLink>
           <NextLink href="/jurisdictions" passHref>
             <Link underline="none">Jurisdictions</Link>
           </NextLink>

@@ -52,22 +52,23 @@ export default function Jurisdictions() {
 
   return (
     <Layout title={'YourJustice / Jurisdictions'} enableSidebar={!!account}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconPassport size={24} hexColor={palette.text.primary} />
-        <Typography variant="h3" sx={{ ml: 1 }}>
-          Jurisdictions
-        </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconPassport size={24} hexColor={palette.text.primary} />
+          <Typography variant="h3" sx={{ ml: 1 }}>
+            Jurisdictions
+          </Typography>
+        </Box>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() =>
+            showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
+          }
+        >
+          Create
+        </Button>
       </Box>
-      <Button
-        variant="outlined"
-        size="small"
-        onClick={() =>
-          showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
-        }
-        sx={{ mt: 3 }}
-      >
-        Create Jurisdiction
-      </Button>
       <JurisdictionList jurisdictions={jurisdictions} sx={{ mt: 0 }} />
       <Pagination
         color="primary"
