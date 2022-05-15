@@ -10,10 +10,10 @@ export const Web3Context = createContext();
 export function Web3Provider({ children }) {
   const web3ModalRef = useRef();
   const profileWorkerRef = useRef();
-  const isDefaultProviderEnabled = false; // TODO: Require to find out why a lot of requests are sent through the default provider without a reason
+  const isDefaultProviderEnabled = true;
 
   // eslint-disable-next-line prettier/prettier
-  const defaultProvider = isDefaultProviderEnabled ? new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_INFURA_CONNECTION_URL) : null;
+  const defaultProvider = isDefaultProviderEnabled ? new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_INFURA_NETWORK, process.env.NEXT_PUBLIC_INFURA_KEY) : null;
 
   const { getProfile } = useProfile();
 
