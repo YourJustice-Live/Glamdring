@@ -82,7 +82,11 @@ export default function JurisdictionMembers({ jurisdiction }) {
           onChange={(_, page) => loadData(page)}
         />
       </Box>
-      <ProfileList profiles={memberProfiles} sx={{ mt: 2 }} />
+      <ProfileList
+        profiles={memberProfiles}
+        jurisdiction={jurisdiction}
+        sx={{ mt: 2 }}
+      />
     </Box>
   );
 }

@@ -18,6 +18,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
 import {
   IconHome,
   IconNotification,
+  IconPlus,
   IconProfile,
   IconWallet,
   Logo,
@@ -26,7 +27,6 @@ import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
-import CreateCaseButton from './CreateCaseButton';
 import JurisdictionLink from './JurisdictionLink';
 
 /**
@@ -117,7 +117,18 @@ export default function Navigation() {
             flexDirection: 'row-reverse',
           }}
         >
-          {account && accountProfile && <CreateCaseButton />}
+          {account && accountProfile && (
+            <Button
+              variant="secondary"
+              sx={{ display: { xs: 'none', md: 'flex' } }}
+              startIcon={<IconPlus />}
+              onClick={() =>
+                showDialog(<CaseCreateDialog onClose={closeDialog} />)
+              }
+            >
+              Create Case
+            </Button>
+          )}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <Button

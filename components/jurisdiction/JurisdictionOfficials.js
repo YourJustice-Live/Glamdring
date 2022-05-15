@@ -48,14 +48,14 @@ export default function JurisdictionOfficials({ jurisdiction }) {
           Judges
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        <ProfileList profiles={judgeProfiles} />
+        <ProfileList profiles={judgeProfiles} jurisdiction={jurisdiction} />
       </Box>
       <Box sx={{ mt: 6 }}>
         <Typography gutterBottom sx={{ fontWeight: 'bold' }}>
           Admins
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        <ProfileList profiles={adminProfiles} />
+        <ProfileList profiles={adminProfiles} jurisdiction={jurisdiction} />
       </Box>
     </>
   );

@@ -34,10 +34,19 @@ import { palette } from 'theme/palette';
 /**
  * A component with a dialog to create a case.
  *
- * TODO: Use custom widget for category selector.
+ * @typedef {import('../classes/Jurisdiction').Jurisdiction} Jurisdiction
+ * @typedef {import('../classes/Profile').Profile} Profile
+ *
+ * @param {object} params Params.
+ * @param {Jurisdiction} params.jurisdiction Jurisdiction. If not defined then will be used main jurisdiction.
+ * @param {Profile} params.subjectProfile Subject profile. If not defined then this fild will be empty.
+ * @param {Profile} params.affectedProfile Affected profile. If not defined then this fild will be empty.
+ * @param {boolean} params.isClose Init status for dialog.
+ * @param {Function} params.onClose Callback function when dialog is closed.
+ * @returns Dialog component.
  */
 export default function CaseCreateDialog({
-  jurisdiction,
+  jurisdiction: paramsJurisdiction,
   subjectProfile,
   affectedProfile,
   isClose,
@@ -56,10 +65,11 @@ export default function CaseCreateDialog({
   const { account, accountProfile, connectWallet } = useWeb3Context();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { isAccountHasJurisdictionRole } = useJurisdiction();
+  const { getJurisdiction, isAccountHasJurisdictionRole } = useJurisdiction();
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
+  const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
   const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
     ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
@@ -200,6 +210,19 @@ export default function CaseCreateDialog({
     CaseNameInput: CaseNameInput,
     CaseRulingInput: CaseRulingInput,
   };
+
+  async function loadMainJurisdiction() {
+    try {
+      setJurisdiction(
+        await getJurisdiction(
+          process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
+    } catch (error) {
+      showToastError(error);
+      close();
+    }
+  }
 
   async function loadData() {
     try {
@@ -350,7 +373,9 @@ export default function CaseCreateDialog({
       setStatus(STATUS.isAccountRequired);
     } else if (!accountProfile) {
       setStatus(STATUS.isAccountProfileRequired);
-    } else if (jurisdiction) {
+    } else if (!jurisdiction) {
+      loadMainJurisdiction();
+    } else {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

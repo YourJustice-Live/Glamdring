@@ -4,7 +4,7 @@ import ProfileCard from 'components/profile/ProfileCard';
 /**
  * A component with a list of profiles.
  */
-export default function ProfileList({ profiles, sx }) {
+export default function ProfileList({ profiles, jurisdiction, sx }) {
   return (
     <Grid container spacing={3} sx={{ ...sx }}>
       {!profiles && (
@@ -29,7 +29,7 @@ export default function ProfileList({ profiles, sx }) {
             (profile, index) =>
               profile && (
                 <Grid key={index} item xs={12} md={6}>
-                  <ProfileCard profile={profile} />
+                  <ProfileCard profile={profile} jurisdiction={jurisdiction} />
                 </Grid>
               ),
           )}

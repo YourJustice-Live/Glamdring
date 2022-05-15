@@ -23,7 +23,7 @@ import { formatAddress } from 'utils/formatters';
 /**
  * A component with a card with profile.
  */
-export default function ProfileCard({ profile }) {
+export default function ProfileCard({ profile, jurisdiction }) {
   const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -93,6 +93,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}
@@ -111,6 +112,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}
