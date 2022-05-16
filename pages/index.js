@@ -10,6 +10,9 @@ import { IconUsers } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+/**
+ * Main page with profiles from light side and dark side.
+ */
 export default function Index() {
   const router = useRouter();
   const { showToastError } = useToasts();

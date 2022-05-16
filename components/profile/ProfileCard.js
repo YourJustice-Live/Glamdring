@@ -23,7 +23,7 @@ import { formatAddress } from 'utils/formatters';
 /**
  * A component with a card with profile.
  */
-export default function ProfileCard({ profile }) {
+export default function ProfileCard({ profile, jurisdiction }) {
   const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -39,7 +39,13 @@ export default function ProfileCard({ profile }) {
             }}
           >
             {/* Image and details */}
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
               {/* Image */}
               <Box sx={{ mr: 2 }}>
                 <NextLink href={`/profile/${profile.account}`} passHref>
@@ -67,14 +73,12 @@ export default function ProfileCard({ profile }) {
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${profile.account}`} passHref>
-                  <Link variant="h5" sx={{ mb: 2 }} underline="none">
+                  <Link variant="h5" underline="none">
                     {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
                     {profile.avatarNftUriLastName}
                   </Link>
                 </NextLink>
-                <Box>
-                  <Typography>{formatAddress(profile.account)}</Typography>
-                </Box>
+                <Typography>{formatAddress(profile.account)}</Typography>
               </Box>
             </Box>
             {/* Actions */}
@@ -93,6 +97,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}
@@ -111,6 +116,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}

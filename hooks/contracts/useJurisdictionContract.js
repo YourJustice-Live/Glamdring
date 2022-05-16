@@ -5,65 +5,96 @@ import { Contract } from 'ethers';
 import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
- * Hook for Juridiction Contract.
- *
- * TODO: Use contract address as function param instead of "process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS".
+ * Hook for juridiction contract.
  */
 export default function useJuridictionContract() {
-  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
+  const { defaultProvider, provider, isNetworkChainIdCorrect } =
+    useWeb3Context();
 
-  function getContract(signerOrProvider) {
-    return new Contract(
-      process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-      contractAbi,
-      signerOrProvider,
+  function getContract(address, signerOrProvider) {
+    return new Contract(address, contractAbi, signerOrProvider);
+  }
+
+  /**
+   * Get jurisdiction contract uri with metadata.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @returns Transaction,
+   */
+  async function getUri(contractAddress) {
+    return await getContract(
+      contractAddress,
+      provider?.getSigner() || defaultProvider,
+    ).contractURI();
+  }
+
+  /**
+   * Set uri in jurisdiction contract.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @param {string} uri Uri with jurisdiction metadata.
+   * @returns Transaction.
+   */
+  async function setUri(contractAddress, uri) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).setContractURI(uri);
+  }
+
+  async function join(contractAddress) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(contractAddress, provider?.getSigner()).join();
+  }
+
+  async function leave(contractAddress) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(contractAddress, provider?.getSigner()).leave();
+  }
+
+  async function assignRole(contractAddress, account, role) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(contractAddress, provider?.getSigner()).roleAssign(
+      account,
+      role,
     );
   }
 
-  async function join() {
+  async function removeRole(contractAddress, account, role) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).join();
+    return await getContract(contractAddress, provider?.getSigner()).roleRemove(
+      account,
+      role,
+    );
   }
 
-  async function leave() {
+  async function addRule(contractAddress, rule, confirmation, effects) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).leave();
-  }
-
-  async function assignRole(account, role) {
-    if (!isNetworkChainIdCorrect) {
-      throw new WrongNetworkError();
-    }
-    return await getContract(provider?.getSigner()).roleAssign(account, role);
-  }
-
-  async function removeRole(account, role) {
-    if (!isNetworkChainIdCorrect) {
-      throw new WrongNetworkError();
-    }
-    return await getContract(provider?.getSigner()).roleRemove(account, role);
-  }
-
-  async function addRule(rule, confirmation, effects) {
-    if (!isNetworkChainIdCorrect) {
-      throw new WrongNetworkError();
-    }
-    return await getContract(provider?.getSigner()).ruleAdd(
+    return await getContract(contractAddress, provider?.getSigner()).ruleAdd(
       rule,
       confirmation,
       effects,
     );
   }
 
-  async function updateRule(id, rule, effects) {
+  async function updateRule(contractAddress, id, rule, effects) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).ruleUpdate(
+    return await getContract(contractAddress, provider?.getSigner()).ruleUpdate(
       id,
       rule,
       effects,
@@ -73,25 +104,26 @@ export default function useJuridictionContract() {
   /**
    * Make a case in the jurisdiction.
    *
+   * @param {string} contractAddress Jurisdiction contract address.
    * @param {string} name Case name.
    * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
    * @param {Array.<{account : string, role: string}>} roles Case roles.
    * @param {Array.<{entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
    */
-  async function makeCase(name, rules, roles, posts) {
+  async function makeCase(contractAddress, name, rules, roles, posts) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).caseMakeOpen(
-      name,
-      rules,
-      roles,
-      posts,
-    );
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).caseMakeOpen(name, rules, roles, posts);
   }
 
   return {
+    getUri,
+    setUri,
     join,
     leave,
     assignRole,

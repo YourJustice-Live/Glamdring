@@ -11,6 +11,7 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  Link as MuiLink,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
@@ -221,6 +222,8 @@ export default function Navigation() {
           {account && (
             <Box
               sx={{
+                display: 'flex',
+                flexDirection: 'column',
                 mx: '15px',
                 my: '10px',
                 pb: '14px',
@@ -228,7 +231,15 @@ export default function Navigation() {
                 borderColor: 'grey.200',
               }}
             >
-              <span>{formatAddress(account)}</span>
+              {accountProfile && (
+                <Link href={`/profile/${accountProfile.account}`} passHref>
+                  <MuiLink underline="none">
+                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
+                    {accountProfile.avatarNftUriLastName}
+                  </MuiLink>
+                </Link>
+              )}
+              <Typography variant="body2">{formatAddress(account)}</Typography>
             </Box>
           )}
           {account && accountProfile && (
@@ -241,20 +252,6 @@ export default function Navigation() {
               <Typography>Create Case</Typography>
             </MenuItem>
           )}
-          {account && accountProfile && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile" passHref>
-                <Typography>Profile</Typography>
-              </Link>
-            </MenuItem>
-          )}
-          {account && accountProfile && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/invite" passHref>
-                <Typography>Invite Person</Typography>
-              </Link>
-            </MenuItem>
-          )}
           {account && !accountProfile && (
             <MenuItem onClick={handleCloseUserMenu}>
               <Link href="/profile/create" passHref>
@@ -263,8 +260,13 @@ export default function Navigation() {
             </MenuItem>
           )}
           <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/jurisdiction" passHref>
-              <Typography>Jurisdiction</Typography>
+            <Link href="/profiles" passHref>
+              <Typography>Profiles</Typography>
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/jurisdictions" passHref>
+              <Typography>Jurisdictions</Typography>
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>

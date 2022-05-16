@@ -1,49 +1,47 @@
-import { Box, Pagination } from '@mui/material';
+import { Box, Button, Pagination, Typography } from '@mui/material';
 import ProfileOrderSelect from 'components/form/widget/ProfileOrderSelect';
+import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
-import { JURISDICTION_ROLE } from 'constants/contracts';
 import { PROFILE_ORDER } from 'constants/subgraph';
-import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
+import useWeb3Context from 'hooks/useWeb3Context';
+import { IconUsers } from 'icons';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 /**
- * A component with jurisdiction members.
+ * Page with list of all profiles.
  */
-export default function JurisdictionMembers({ jurisdiction }) {
+export default function Profiles() {
+  const { account } = useWeb3Context();
   const { showToastError } = useToasts();
-  const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
-  const [memberProfiles, setMemberProfiles] = useState();
+  const [profiles, setProfiles] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCount, setCurrentPageCount] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState(
     PROFILE_ORDER.byPositiveRating,
   );
-  const pageSize = 10;
+  const pageSize = 16;
 
   async function loadData(page = currentPage, pageCount = currentPageCount) {
     try {
       // Update states
       setCurrentPage(page);
       setCurrentPageCount(pageCount);
-      setMemberProfiles(null);
+      setProfiles(null);
       // Load member profiles for page
-      const memberAccounts = getJurisdictionRoleAccounts(
-        jurisdiction,
-        JURISDICTION_ROLE.member.id,
-      );
-      const memberProfiles = await getProfiles(
-        memberAccounts,
+      const profiles = await getProfiles(
+        null,
         null,
         pageSize,
         (page - 1) * pageSize,
         selectedOrder,
       );
-      setMemberProfiles(memberProfiles);
+      setProfiles(profiles);
       // Add next page to pagination if possible
-      if (page == pageCount && memberProfiles.length === pageSize) {
+      if (page == pageCount && profiles.length === pageSize) {
         setCurrentPageCount(pageCount + 1);
       }
     } catch (error) {
@@ -52,20 +50,32 @@ export default function JurisdictionMembers({ jurisdiction }) {
   }
 
   useEffect(() => {
-    if (jurisdiction) {
-      loadData(1, 1);
-    }
+    loadData(1, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction, selectedOrder]);
+  }, [selectedOrder]);
 
   return (
-    <Box>
+    <Layout title={'YourJustice / Profiles'} enableSidebar={!!account}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconUsers size={24} />
+          <Typography variant="h3" sx={{ ml: 1 }}>
+            Profiles
+          </Typography>
+        </Box>
+        <Link href="/profile/invite" passHref>
+          <Button variant="outlined" size="small">
+            Invite
+          </Button>
+        </Link>
+      </Box>
       <Box
         sx={{
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: { md: 'space-between' },
           alignItems: { md: 'center' },
+          mt: 3,
         }}
       >
         <ProfileOrderSelect
@@ -82,11 +92,7 @@ export default function JurisdictionMembers({ jurisdiction }) {
           onChange={(_, page) => loadData(page)}
         />
       </Box>
-      <ProfileList
-        profiles={memberProfiles}
-        jurisdiction={jurisdiction}
-        sx={{ mt: 2 }}
-      />
-    </Box>
+      <ProfileList profiles={profiles} sx={{ mt: 2 }} />
+    </Layout>
   );
 }

@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import AvatarNftMetadata from 'classes/metadata/AvatarNftMetadata';
 import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
-import ProfilePictureInput from 'components/form/widget/ProfilePictureInput';
+import ImageInput from 'components/form/widget/ImageInput';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
@@ -55,7 +55,14 @@ export default function ProfileManage({
 
   const uiSchema = {
     image: {
-      'ui:widget': 'ProfilePictureInput',
+      'ui:widget': 'ImageInput',
+      'ui:options': {
+        header: (
+          <Typography variant="h4" sx={{ mb: 3 }}>
+            Profile Picture
+          </Typography>
+        ),
+      },
     },
     attributes: {
       'ui:widget': 'ProfileAttributesInput',
@@ -63,7 +70,7 @@ export default function ProfileManage({
   };
 
   const widgets = {
-    ProfilePictureInput: ProfilePictureInput,
+    ImageInput: ImageInput,
     ProfileAttributesInput: ProfileAttributesInput,
   };
 

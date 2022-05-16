@@ -25,10 +25,8 @@ import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a table with actions and jurisdiction rules.
- *
- * TODO: Load rules by jurisdiction id.
  */
-export default function ActionRuleTable({ sx }) {
+export default function ActionRuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
@@ -42,49 +40,49 @@ export default function ActionRuleTable({ sx }) {
       field: 'actionGuid',
       headerName: 'Action GUID',
       width: 100,
-      valueGetter: (params) => `${params.row.action.guid}`,
+      valueGetter: (params) => `${params.row.action.guid || ''}`,
     },
     {
       field: 'actionSubject',
       headerName: 'Action Subject',
       width: 100,
-      valueGetter: (params) => `${params.row.action.action.subject}`,
+      valueGetter: (params) => `${params.row.action.action.subject || ''}`,
     },
     {
       field: 'actionVerb',
       headerName: 'Action Verb',
       width: 400,
-      valueGetter: (params) => `${params.row.action.action.verb}`,
+      valueGetter: (params) => `${params.row.action.action.verb || ''}`,
     },
     {
       field: 'actionObject',
       headerName: 'Action Object',
       width: 100,
-      valueGetter: (params) => `${params.row.action.action.object}`,
+      valueGetter: (params) => `${params.row.action.action.object || ''}`,
     },
     {
       field: 'actionTool',
       headerName: 'Action Tool',
       width: 100,
-      valueGetter: (params) => `${params.row.action.action.tool}`,
+      valueGetter: (params) => `${params.row.action.action.tool || ''}`,
     },
     {
       field: 'actionUriDataName',
       headerName: 'Action URI Data Name',
       width: 300,
-      valueGetter: (params) => `${params.row.action.uriData.name}`,
+      valueGetter: (params) => `${params.row.action.uriData.name || ''}`,
     },
     {
       field: 'actionUriDataDescription',
       headerName: 'Action URI Data Description',
       width: 500,
-      valueGetter: (params) => `${params.row.action.uriData.description}`,
+      valueGetter: (params) => `${params.row.action.uriData.description || ''}`,
     },
     {
       field: 'actionUriDataIcon',
       headerName: 'Action URI Data Icon',
       width: 100,
-      valueGetter: (params) => `${params.row.action.uriData.icon}`,
+      valueGetter: (params) => `${params.row.action.uriData.icon || ''}`,
       renderCell: (params) => {
         return getActionIcon(params.row.action);
       },
@@ -93,54 +91,65 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleId',
       headerName: 'Rule ID',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.ruleId}`,
+      valueGetter: (params) => `${params.row.rule?.ruleId || ''}`,
     },
     {
       field: 'ruleAffected',
       headerName: 'Rule Affected',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.affected}`,
+      valueGetter: (params) => `${params.row.rule?.rule.affected || ''}`,
     },
     {
       field: 'ruleNegation',
       headerName: 'Rule Negation',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.rule.negation}`,
+      valueGetter: (params) => `${params.row.rule?.rule.negation || ''}`,
     },
     {
       field: 'ruleUriDataName',
       headerName: 'Rule URI Data Name',
       width: 300,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData?.name}`,
+      valueGetter: (params) => `${params.row.rule?.rule.uriData?.name || ''}`,
     },
     {
       field: 'ruleUriDataDescription',
       headerName: 'Rule URI Data Description',
       width: 500,
-      valueGetter: (params) => `${params.row.rule?.rule.uriData?.description}`,
+      valueGetter: (params) =>
+        `${params.row.rule?.rule.uriData?.description || ''}`,
     },
     {
       field: 'ruleUriDataEvidenceDescription',
       headerName: 'Rule URI Data Evidence Description',
       width: 200,
       valueGetter: (params) =>
-        `${params.row.rule?.rule.uriData?.evidenceDescription}`,
+        `${params.row.rule?.rule.uriData?.evidenceDescription || ''}`,
     },
     {
       field: 'ruleCategory',
       headerName: 'Rule Category',
       width: 140,
       valueGetter: (params) => {
-        return isJurisdictionRuleInCategory(params.row.rule, 'positive')
-          ? 'Positive'
-          : 'Negative';
+        if (!params.row.rule) {
+          return '';
+        } else if (isJurisdictionRuleInCategory(params.row.rule, 'positive')) {
+          return 'Positive';
+        } else {
+          return 'Negative';
+        }
       },
       renderCell: (params) => {
-        return isJurisdictionRuleInCategory(params.row.rule, 'positive') ? (
-          <Typography sx={{ color: 'success.main' }}>Positive</Typography>
-        ) : (
-          <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
-        );
+        if (!params.row.rule) {
+          return '';
+        } else if (isJurisdictionRuleInCategory(params.row.rule, 'positive')) {
+          return (
+            <Typography sx={{ color: 'success.main' }}>Positive</Typography>
+          );
+        } else {
+          return (
+            <Typography sx={{ color: 'danger.main' }}>Negative</Typography>
+          );
+        }
       },
     },
     {
@@ -178,76 +187,94 @@ export default function ActionRuleTable({ sx }) {
       field: 'ruleConfirmationRuling',
       headerName: 'Rule Confirmation Ruling',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.confirmation.ruling}`,
+      valueGetter: (params) => `${params.row.rule?.confirmation.ruling || ''}`,
     },
     {
       field: 'ruleConfirmationEvidence',
       headerName: 'Rule Confirmation Evidence',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.confirmation.evidence}`,
+      valueGetter: (params) =>
+        `${params.row.rule?.confirmation.evidence || ''}`,
     },
     {
       field: 'ruleConfirmationWitness',
       headerName: 'Rule Confirmation Witness',
       width: 100,
-      valueGetter: (params) => `${params.row.rule?.confirmation.witness}`,
+      valueGetter: (params) => `${params.row.rule?.confirmation.witness || ''}`,
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
       width: 100,
-      getActions: (params) => [
-        <GridActionsCellItem
-          key="viewJson"
-          icon={<DataObjectOutlined />}
-          label="View as JSON"
-          onClick={() =>
-            showDialog(
-              <JsonViewDialog json={params.row} onClose={closeDialog} />,
-            )
-          }
-        />,
-        <GridActionsCellItem
-          key="addRuleToAction"
-          icon={<AddOutlined />}
-          label="Add Rule to Action"
-          showInMenu
-          onClick={() =>
-            showDialog(
-              <RuleManageDialog
-                about={params.row.action.guid}
-                onClose={closeDialog}
-              />,
-            )
-          }
-        />,
-        <GridActionsCellItem
-          key="updateAction"
-          icon={<ModeEditOutline />}
-          label="Update Action"
-          showInMenu
-          onClick={() =>
-            showDialog(
-              <ActionManageDialog
-                action={params.row.action}
-                onClose={closeDialog}
-              />,
-            )
-          }
-        />,
-        <GridActionsCellItem
-          key="updateRule"
-          icon={<ModeEditOutline />}
-          label="Update Rule"
-          showInMenu
-          onClick={() =>
-            showDialog(
-              <RuleManageDialog rule={params.row.rule} onClose={closeDialog} />,
-            )
-          }
-        />,
-      ],
+      getActions: (params) => {
+        const actions = [];
+        actions.push(
+          <GridActionsCellItem
+            key="viewJson"
+            icon={<DataObjectOutlined />}
+            label="View as JSON"
+            onClick={() =>
+              showDialog(
+                <JsonViewDialog json={params.row} onClose={closeDialog} />,
+              )
+            }
+          />,
+        );
+        actions.push(
+          <GridActionsCellItem
+            key="addRuleToAction"
+            icon={<AddOutlined />}
+            label="Add Rule to Action"
+            showInMenu
+            onClick={() =>
+              showDialog(
+                <RuleManageDialog
+                  jurisdiction={jurisdiction}
+                  about={params.row.action.guid}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          />,
+        );
+        actions.push(
+          <GridActionsCellItem
+            key="updateAction"
+            icon={<ModeEditOutline />}
+            label="Update Action"
+            showInMenu
+            onClick={() =>
+              showDialog(
+                <ActionManageDialog
+                  action={params.row.action}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          />,
+        );
+        if (params.row.rule) {
+          actions.push(
+            <GridActionsCellItem
+              key="updateRule"
+              icon={<ModeEditOutline />}
+              label="Update Rule"
+              showInMenu
+              onClick={() =>
+                showDialog(
+                  <RuleManageDialog
+                    jurisdiction={jurisdiction}
+                    rule={params.row.rule}
+                    onClose={closeDialog}
+                  />,
+                )
+              }
+            />,
+          );
+        }
+        return actions;
+      },
     },
   ];
 
@@ -257,7 +284,7 @@ export default function ActionRuleTable({ sx }) {
       setIsLoading(true);
       const rows = [];
       const actions = await getActions();
-      const rules = await getJusirsdictionRules();
+      const rules = await getJusirsdictionRules(null, jurisdiction?.id);
       for (const action of actions) {
         const actionRules = rules.filter(
           (rule) => rule.rule.about === action.guid,
@@ -279,9 +306,11 @@ export default function ActionRuleTable({ sx }) {
   }
 
   useEffect(() => {
-    loadData();
+    if (jurisdiction) {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
     <Box sx={{ height: 800, ...sx }}>
