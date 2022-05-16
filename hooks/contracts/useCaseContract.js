@@ -8,7 +8,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
  * Hook for case contract.
  */
 export default function useCaseContract() {
-  const { provider, network } = useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(address, signerOrProvider) {
     return new Contract(address, contractAbi, signerOrProvider);
@@ -23,9 +23,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function assignRole(contractAddress, account, role) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(contractAddress, provider?.getSigner()).roleAssign(
@@ -43,9 +41,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function addPost(contractAddress, entityRole, uri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(contractAddress, provider?.getSigner()).post(
@@ -61,9 +57,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function setStageOpen(contractAddress) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(
@@ -79,9 +73,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function setStageVerdict(contractAddress) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(
@@ -99,9 +91,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function setStageClosed(contractAddress, verdict, verdictUri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(
@@ -118,9 +108,7 @@ export default function useCaseContract() {
    * @returns Transaction.
    */
   async function setStageCancelled(contractAddress, cancellationUri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(

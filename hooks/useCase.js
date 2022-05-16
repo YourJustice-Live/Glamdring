@@ -138,22 +138,22 @@ export default function useCase() {
    */
   let isAccountHasCaseRole = function (caseObject, account, role) {
     if (role === CASE_ROLE.admin.id) {
-      return caseObject?.adminAccounts?.includes(account.toLowerCase());
+      return caseObject?.adminAccounts?.includes(account?.toLowerCase());
     }
     if (role === CASE_ROLE.subject.id) {
-      return caseObject?.subjectAccounts?.includes(account.toLowerCase());
+      return caseObject?.subjectAccounts?.includes(account?.toLowerCase());
     }
     if (role === CASE_ROLE.plaintiff.id) {
-      return caseObject?.plaintiffAccounts?.includes(account.toLowerCase());
+      return caseObject?.plaintiffAccounts?.includes(account?.toLowerCase());
     }
     if (role === CASE_ROLE.judge.id) {
-      return caseObject?.judgeAccounts?.includes(account.toLowerCase());
+      return caseObject?.judgeAccounts?.includes(account?.toLowerCase());
     }
     if (role === CASE_ROLE.witness.id) {
-      return caseObject?.witnessAccounts?.includes(account.toLowerCase());
+      return caseObject?.witnessAccounts?.includes(account?.toLowerCase());
     }
     if (role === CASE_ROLE.affected.id) {
-      return caseObject?.affectedAccounts?.includes(account.toLowerCase());
+      return caseObject?.affectedAccounts?.includes(account?.toLowerCase());
     }
     return false;
   };
