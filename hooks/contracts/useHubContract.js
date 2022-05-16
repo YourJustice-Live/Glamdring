@@ -8,7 +8,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
  * Hooks for hub contract.
  */
 export default function useHubContract() {
-  const { provider, network } = useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(signerOrProvider) {
     return new Contract(
@@ -26,9 +26,7 @@ export default function useHubContract() {
    * @returns Transaction.
    */
   async function makeJurisdiction(name, uri) {
-    if (
-      network?.chainId?.toString() !== process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID
-    ) {
+    if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(provider?.getSigner()).jurisdictionMake(name, uri);
