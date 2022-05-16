@@ -1,5 +1,5 @@
+import { Backdrop, CircularProgress } from '@mui/material';
 import WalletConnect from '@walletconnect/web3-provider';
-import LoadingBackdrop from 'components/extra/LoadingBackdrop';
 import { ethers } from 'ethers';
 import useProfile from 'hooks/useProfile';
 import { createContext, useEffect, useRef, useState } from 'react';
@@ -204,5 +204,19 @@ export function Web3Provider({ children }) {
       {!isLoading && children}
       {isLoading && <LoadingBackdrop />}
     </Web3Context.Provider>
+  );
+}
+
+function LoadingBackdrop() {
+  return (
+    <Backdrop
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        background: '#FFFFFF',
+      }}
+      open
+    >
+      <CircularProgress size={64} />
+    </Backdrop>
   );
 }
