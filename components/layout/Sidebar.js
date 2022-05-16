@@ -17,7 +17,7 @@ import { formatAddress } from 'utils/formatters';
  * A component with a sidebar (drawer).
  */
 export function Sidebar() {
-  const { accountProfile } = useWeb3Context();
+  const { account, accountProfile } = useWeb3Context();
   const drawerWidth = 280;
 
   return (
@@ -78,7 +78,7 @@ export function Sidebar() {
         )}
         {/* Links */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
-          {!accountProfile && (
+          {account && !accountProfile && (
             <NextLink href="/profile/create" passHref>
               <Link underline="none">Create Own Profile</Link>
             </NextLink>

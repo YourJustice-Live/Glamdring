@@ -1,6 +1,7 @@
 import { Divider, Typography } from '@mui/material';
 import CaseEventList from 'components/case/CaseEventList';
 import Layout from 'components/layout/Layout';
+import ContentProtector from 'components/protector/ContentProtector';
 import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -39,14 +40,19 @@ export default function Events() {
 
   return (
     <Layout title={'YourJustice / Events'} enableSidebar={!!account}>
-      <Typography variant="h1" gutterBottom>
-        Events
-      </Typography>
-      <Typography gutterBottom>
-        Recent events that happened in cases in which you are a participant
-      </Typography>
-      <Divider />
-      <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />
+      <ContentProtector
+        isAccountRequired={true}
+        isAccountProfileRequired={true}
+      >
+        <Typography variant="h1" gutterBottom>
+          Events
+        </Typography>
+        <Typography gutterBottom>
+          Recent events that happened in cases in which you are a participant
+        </Typography>
+        <Divider />
+        <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />
+      </ContentProtector>
     </Layout>
   );
 }
