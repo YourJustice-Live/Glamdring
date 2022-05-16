@@ -1,4 +1,3 @@
-import { PersonOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Drawer,
@@ -10,14 +9,16 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconProfile } from 'icons';
 import NextLink from 'next/link';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a sidebar (drawer).
  */
 export function Sidebar() {
-  const { accountProfile } = useWeb3Context();
+  const { account, accountProfile } = useWeb3Context();
   const drawerWidth = 280;
 
   return (
@@ -45,10 +46,15 @@ export function Sidebar() {
               {/* Profile image */}
               <Box sx={{ mr: 1.5 }}>
                 <Avatar
-                  sx={{ width: 82, height: 82, borderRadius: '16px' }}
+                  sx={{
+                    bgcolor: 'grey.50',
+                    width: 82,
+                    height: 82,
+                    borderRadius: '16px',
+                  }}
                   src={accountProfile.avatarNftUriImage}
                 >
-                  <PersonOutlined />
+                  <IconProfile hexColor={palette.grey[600]} />
                 </Avatar>
               </Box>
               {/* Profile details */}
@@ -63,8 +69,8 @@ export function Sidebar() {
                 </Box>
                 <NextLink href={`/profile/${accountProfile.account}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'None'}{' '}
-                    {accountProfile.avatarNftUriLastName || 'None'}
+                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
+                    {accountProfile.avatarNftUriLastName}
                   </Link>
                 </NextLink>
                 <Box>
@@ -78,22 +84,16 @@ export function Sidebar() {
         )}
         {/* Links */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
-          {accountProfile ? (
-            <>
-              <NextLink href="/profile" passHref>
-                <Link underline="none">Profile</Link>
-              </NextLink>
-              <NextLink href="/profile/invite" passHref>
-                <Link underline="none">Invite Person</Link>
-              </NextLink>
-            </>
-          ) : (
+          {account && !accountProfile && (
             <NextLink href="/profile/create" passHref>
-              <Link underline="none">Create Profile</Link>
+              <Link underline="none">Create Own Profile</Link>
             </NextLink>
           )}
-          <NextLink href="/jurisdiction" passHref>
-            <Link underline="none">Jurisdiction</Link>
+          <NextLink href="/profiles" passHref>
+            <Link underline="none">Profiles</Link>
+          </NextLink>
+          <NextLink href="/jurisdictions" passHref>
+            <Link underline="none">Jurisdictions</Link>
           </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>

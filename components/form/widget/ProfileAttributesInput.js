@@ -66,7 +66,8 @@ export default function ProfileAttributesInput(props) {
     <>
       {attributes ? (
         <>
-          <Typography variant="h4" sx={{ mb: 4 }}>
+          <Divider sx={{ mb: 4 }} />
+          <Typography variant="h4" sx={{ mb: 3 }}>
             Public Profile
           </Typography>
           <Stack spacing={2}>
@@ -106,7 +107,7 @@ export default function ProfileAttributesInput(props) {
             />
           </Stack>
           <Divider sx={{ my: 4 }} />
-          <Typography variant="h4" sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3 }}>
             Contacts
           </Typography>
           <Stack spacing={2}>
@@ -121,7 +122,7 @@ export default function ProfileAttributesInput(props) {
             />
           </Stack>
           <Divider sx={{ my: 4 }} />
-          <Typography variant="h4" sx={{ mb: 4 }}>
+          <Typography variant="h4" sx={{ mb: 3 }}>
             Links
           </Typography>
           <Stack spacing={2}>

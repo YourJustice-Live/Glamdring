@@ -60,15 +60,17 @@ export default function useSubgraph() {
   };
 
   /**
-   * Find the jurisdiction entities by ids (addresses).
+   * Find the jurisdiction entities.
    *
-   * @param {Array.<string>} ids Jurisdction ids (addresses).
+   * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
+   * @param {number} first The number of jurisdictions to getting.
+   * @param {number} skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
    */
-  let findJurisdictionEntities = async function (ids) {
+  let findJurisdictionEntities = async function (ids, first = 10, skip = 0) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const response = await makeSubgraphQuery(
-      getFindJurisdictionEntitiesQuery(fixedIds),
+      getFindJurisdictionEntitiesQuery(fixedIds, first, skip),
     );
     return response.jurisdictionEntities;
   };
@@ -286,10 +288,10 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
   }`;
 }
 
-function getFindJurisdictionEntitiesQuery(ids) {
+function getFindJurisdictionEntitiesQuery(ids, first, skip) {
   let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
   let filterParams = `where: {${idsFilter}}`;
-  let paginationParams = `first: 10`;
+  let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
     jurisdictionEntities(${filterParams}, ${paginationParams}) {
       id
@@ -419,7 +421,10 @@ function getFindCaseEntitiesQuery(
       id
       name
       createdDate
-      jurisdiction
+      jurisdiction {
+        id
+        name
+      }
       stage
       verdictAuthor
       verdictUri
@@ -465,6 +470,10 @@ function getFindCaseEventEntitiesQuery(caseIds) {
       caseEntity {
         id
         name
+        jurisdiction {
+          id
+          name
+        }
       }
       createdDate
       type

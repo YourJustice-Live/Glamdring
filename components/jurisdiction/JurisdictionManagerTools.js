@@ -5,6 +5,7 @@ import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
+import JurisdictionManageDialog from './JurisdictionManageDialog';
 
 /**
  * A component with jurisdiction manager tools.
@@ -14,6 +15,9 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(true);
+  const isJurisdictionMain =
+    jurisdiction?.id?.toLowerCase() ===
+    process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS.toLowerCase();
 
   return (
     <>
@@ -36,12 +40,32 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
             spacing={2}
             sx={{ mt: 2 }}
           >
+            {!isJurisdictionMain && (
+              <Button
+                variant="outlined"
+                type="submit"
+                onClick={() =>
+                  showDialog(
+                    <JurisdictionManageDialog
+                      jurisdiction={jurisdiction}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                Update Jurisdiction
+              </Button>
+            )}
             <Button
               variant="outlined"
               type="submit"
               onClick={() =>
                 showDialog(
-                  <RoleManageDialog isAssign={true} onClose={closeDialog} />,
+                  <RoleManageDialog
+                    jurisdiction={jurisdiction}
+                    isAssign={true}
+                    onClose={closeDialog}
+                  />,
                 )
               }
             >
@@ -52,7 +76,11 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               type="submit"
               onClick={() =>
                 showDialog(
-                  <RoleManageDialog isAssign={false} onClose={closeDialog} />,
+                  <RoleManageDialog
+                    jurisdiction={jurisdiction}
+                    isAssign={false}
+                    onClose={closeDialog}
+                  />,
                 )
               }
             >

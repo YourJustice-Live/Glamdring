@@ -34,9 +34,19 @@ import { palette } from 'theme/palette';
 /**
  * A component with a dialog to create a case.
  *
- * TODO: Use custom widget for category selector.
+ * @typedef {import('../classes/Jurisdiction').Jurisdiction} Jurisdiction
+ * @typedef {import('../classes/Profile').Profile} Profile
+ *
+ * @param {object} params Params.
+ * @param {Jurisdiction} params.jurisdiction Jurisdiction. If not defined then will be used main jurisdiction.
+ * @param {Profile} params.subjectProfile Subject profile. If not defined then this fild will be empty.
+ * @param {Profile} params.affectedProfile Affected profile. If not defined then this fild will be empty.
+ * @param {boolean} params.isClose Init status for dialog.
+ * @param {Function} params.onClose Callback function when dialog is closed.
+ * @returns Dialog component.
  */
 export default function CaseCreateDialog({
+  jurisdiction: paramsJurisdiction,
   subjectProfile,
   affectedProfile,
   isClose,
@@ -59,7 +69,7 @@ export default function CaseCreateDialog({
   const { getLawsByJurisdiction } = useLaw();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
-  const [jurisdiction, setJurisdiction] = useState(null);
+  const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
   const [jurisdictionLaws, setJurisdictionLaws] = useState(null);
   const [formData, setFormData] = useState({
     ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
@@ -201,11 +211,21 @@ export default function CaseCreateDialog({
     CaseRulingInput: CaseRulingInput,
   };
 
+  async function loadMainJurisdiction() {
+    try {
+      setJurisdiction(
+        await getJurisdiction(
+          process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
+        ),
+      );
+    } catch (error) {
+      showToastError(error);
+      close();
+    }
+  }
+
   async function loadData() {
     try {
-      const jurisdiction = await getJurisdiction(
-        process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-      );
       // Check that account has jurisdiction role
       if (
         !isAccountHasJurisdictionRole(
@@ -218,12 +238,7 @@ export default function CaseCreateDialog({
         return;
       }
       // Load rest of data for form
-      setJurisdiction(jurisdiction);
-      setJurisdictionLaws(
-        await getLawsByJurisdiction(
-          process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
-        ),
-      );
+      setJurisdictionLaws(await getLawsByJurisdiction(jurisdiction?.id));
       setStatus(STATUS.isFormAvailable);
     } catch (error) {
       showToastError(error);
@@ -299,7 +314,7 @@ export default function CaseCreateDialog({
       // Define case rules
       const caseRules = [];
       caseRules.push({
-        jurisdiction: process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS,
+        jurisdiction: jurisdiction?.id,
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
@@ -338,7 +353,13 @@ export default function CaseCreateDialog({
         });
       }
       // Make case
-      await makeCase(caseName, caseRules, caseRoles, casePosts);
+      await makeCase(
+        jurisdiction?.id,
+        caseName,
+        caseRules,
+        caseRoles,
+        casePosts,
+      );
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -352,11 +373,13 @@ export default function CaseCreateDialog({
       setStatus(STATUS.isAccountRequired);
     } else if (!accountProfile) {
       setStatus(STATUS.isAccountProfileRequired);
+    } else if (!jurisdiction) {
+      loadMainJurisdiction();
     } else {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jurisdiction]);
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
@@ -424,9 +447,7 @@ export default function CaseCreateDialog({
               sx={{ mt: 4 }}
               variant="contained"
               onClick={() => {
-                router.push(
-                  `/jurisdiction/${process.env.NEXT_PUBLIC_JURISDICTION_CONTRACT_ADDRESS}`,
-                );
+                router.push(`/jurisdiction/${jurisdiction?.id}`);
                 close();
               }}
             >

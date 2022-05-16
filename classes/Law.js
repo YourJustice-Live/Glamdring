@@ -1,7 +1,7 @@
 /**
  * Class for the law (action with rules).
  *
- * @typedef {import('./Action.js').default} Action
+ * @typedef {import('./Action.js').Action} Action
  * @typedef {import('./JurisdictionRule.js').JurisdictionRule} Rule
  */
 export default class Law {

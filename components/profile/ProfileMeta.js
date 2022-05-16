@@ -4,7 +4,6 @@ import {
   Instagram,
   Language,
   MailOutlineRounded,
-  PersonOutlined,
   Telegram,
   Twitter,
 } from '@mui/icons-material';
@@ -132,7 +131,7 @@ function ProfileAvatar({ profile, sx }) {
         }}
         src={profile?.avatarNftUriData?.image}
       >
-        <PersonOutlined />
+        <IconProfile hexColor={palette.grey[600]} />
       </Avatar>
     </Box>
   );

@@ -1,7 +1,6 @@
 import {
   AddBoxOutlined,
   IndeterminateCheckBoxOutlined,
-  PersonOutlined,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -17,13 +16,15 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconProfile } from 'icons';
 import NextLink from 'next/link';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a card with profile.
  */
-export default function ProfileCard({ profile }) {
+export default function ProfileCard({ profile, jurisdiction }) {
   const { accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -39,12 +40,19 @@ export default function ProfileCard({ profile }) {
             }}
           >
             {/* Image and details */}
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
               {/* Image */}
               <Box sx={{ mr: 2 }}>
                 <NextLink href={`/profile/${profile.account}`} passHref>
                   <Avatar
                     sx={{
+                      bgcolor: 'grey.50',
                       cursor: 'pointer',
                       width: 82,
                       height: 82,
@@ -52,7 +60,7 @@ export default function ProfileCard({ profile }) {
                     }}
                     src={profile.avatarNftUriImage}
                   >
-                    <PersonOutlined />
+                    <IconProfile hexColor={palette.grey[600]} />
                   </Avatar>
                 </NextLink>
               </Box>
@@ -67,14 +75,12 @@ export default function ProfileCard({ profile }) {
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${profile.account}`} passHref>
-                  <Link variant="h5" sx={{ mb: 2 }} underline="none">
+                  <Link variant="h5" underline="none">
                     {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
                     {profile.avatarNftUriLastName}
                   </Link>
                 </NextLink>
-                <Box>
-                  <Typography>{formatAddress(profile.account)}</Typography>
-                </Box>
+                <Typography>{formatAddress(profile.account)}</Typography>
               </Box>
             </Box>
             {/* Actions */}
@@ -93,6 +99,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}
@@ -111,6 +118,7 @@ export default function ProfileCard({ profile }) {
                 onClick={() =>
                   showDialog(
                     <CaseCreateDialog
+                      jurisdiction={jurisdiction}
                       subjectProfile={profile}
                       affectedProfile={accountProfile}
                       onClose={closeDialog}

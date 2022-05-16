@@ -8,57 +8,79 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import { JURISDICTION_ROLE } from 'constants/contracts';
+import MetadataInput from 'components/form/widget/MetadataInput';
+import useHubContract from 'hooks/contracts/useHubContract';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for assign or remove jurisdiction role for a specified account.
+ * A dialog for adding a jurisdiction or updating a specified jurisdiction.
  */
-export default function RoleManageDialog({
+export default function JurisdictionManageDialog({
   jurisdiction,
-  isAssign,
   isClose,
   onClose,
 }) {
   const { showToastSuccess, showToastError } = useToasts();
-  const { assignRole, removeRole } = useJuridictionContract();
-  const [formData, setFormData] = useState({});
+  const { makeJurisdiction } = useHubContract();
+  const { setUri } = useJuridictionContract();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
+  const [formData, setFormData] = useState(jurisdiction || {});
 
   const schema = {
     type: 'object',
-    required: ['account', 'role'],
+    required: ['name'],
     properties: {
-      account: {
+      // Show id scheme only for updating a jurisdiction
+      ...(jurisdiction && {
+        id: {
+          type: 'string',
+          title: 'ID (Address)',
+        },
+      }),
+      name: {
         type: 'string',
-        title: 'Account',
+        title: 'Name',
+        default: '',
       },
-      role: {
+      uri: {
         type: 'string',
-        title: 'Role',
-        default: JURISDICTION_ROLE.member.name,
-        enum: [
-          JURISDICTION_ROLE.member.name,
-          JURISDICTION_ROLE.judge.name,
-          JURISDICTION_ROLE.admin.name,
-        ],
-        enumNames: [
-          capitalize(JURISDICTION_ROLE.member.name),
-          capitalize(JURISDICTION_ROLE.judge.name),
-          capitalize(JURISDICTION_ROLE.admin.name),
-        ],
+        title: 'Metadata',
+        default: '',
       },
     },
   };
 
   const uiSchema = {
-    account: {
-      'ui:placeholder': '0x430...',
+    id: {
+      'ui:disabled': true,
     },
+    name: {
+      'ui:disabled': jurisdiction ? true : false,
+    },
+    uri: {
+      'ui:emptyValue': '',
+      'ui:widget': 'MetadataInput',
+      'ui:options': {
+        subLabel: 'Jurisdiction image and description',
+        fields: {
+          image: {
+            type: 'string',
+            title: '',
+          },
+          description: {
+            type: 'string',
+            title: 'Description',
+          },
+        },
+      },
+    },
+  };
+
+  const widgets = {
+    MetadataInput: MetadataInput,
   };
 
   async function close() {
@@ -72,10 +94,10 @@ export default function RoleManageDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
-      if (isAssign) {
-        await assignRole(jurisdiction?.id, formData.account, formData.role);
+      if (jurisdiction) {
+        await setUri(jurisdiction?.id, formData.uri);
       } else {
-        await removeRole(jurisdiction?.id, formData.account, formData.role);
+        await makeJurisdiction(formData.name, formData.uri);
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();
@@ -86,13 +108,16 @@ export default function RoleManageDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
-      <DialogTitle>{isAssign ? 'Assign Role' : 'Remove Role'}</DialogTitle>
+    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+      <DialogTitle>
+        {jurisdiction ? 'Update Jurisdiction' : 'Create Jurisdiction'}
+      </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
           formData={formData}
           uiSchema={uiSchema}
+          widgets={widgets}
           onSubmit={submit}
           disabled={isLoading}
         >
@@ -109,7 +134,7 @@ export default function RoleManageDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {isAssign ? 'Assign Role' : 'Remove Role'}
+                  {jurisdiction ? 'Update Jurisdiction' : 'Create Jurisdiction'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel
