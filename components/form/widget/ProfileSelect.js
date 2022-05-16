@@ -10,6 +10,7 @@ import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A widget to select profile.
@@ -88,9 +89,11 @@ export default function ProfileSelect(props) {
       sx={{ ...propsSx }}
       disabled={isDisabled || propsDisabled}
       getOptionLabel={(option) =>
-        (option.avatarNftUriFirstName || 'None') +
+        (option.avatarNftUriFirstName || 'Anonymous') +
         ' ' +
-        (option.avatarNftUriLastName || 'None')
+        option.avatarNftUriLastName +
+        ' ' +
+        `(${formatAddress(option.account)})`
       }
       filterOptions={(x) => x}
       options={options}
@@ -125,6 +128,7 @@ export default function ProfileSelect(props) {
           <li {...props}>
             <ProfileCompactCard
               profile={option}
+              disableAddress={false}
               disableLink={true}
               sx={{ my: 0.6 }}
             />
