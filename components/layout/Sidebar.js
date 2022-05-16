@@ -1,4 +1,3 @@
-import { PersonOutlined } from '@mui/icons-material';
 import {
   Avatar,
   Drawer,
@@ -10,7 +9,9 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconProfile } from 'icons';
 import NextLink from 'next/link';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -45,10 +46,15 @@ export function Sidebar() {
               {/* Profile image */}
               <Box sx={{ mr: 1.5 }}>
                 <Avatar
-                  sx={{ width: 82, height: 82, borderRadius: '16px' }}
+                  sx={{
+                    bgcolor: 'grey.50',
+                    width: 82,
+                    height: 82,
+                    borderRadius: '16px',
+                  }}
                   src={accountProfile.avatarNftUriImage}
                 >
-                  <PersonOutlined />
+                  <IconProfile hexColor={palette.grey[600]} />
                 </Avatar>
               </Box>
               {/* Profile details */}

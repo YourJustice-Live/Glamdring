@@ -1,7 +1,6 @@
 import {
   AddBoxOutlined,
   IndeterminateCheckBoxOutlined,
-  PersonOutlined,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -17,7 +16,9 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { IconProfile } from 'icons';
 import NextLink from 'next/link';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -51,6 +52,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                 <NextLink href={`/profile/${profile.account}`} passHref>
                   <Avatar
                     sx={{
+                      bgcolor: 'grey.50',
                       cursor: 'pointer',
                       width: 82,
                       height: 82,
@@ -58,7 +60,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                     }}
                     src={profile.avatarNftUriImage}
                   >
-                    <PersonOutlined />
+                    <IconProfile hexColor={palette.grey[600]} />
                   </Avatar>
                 </NextLink>
               </Box>
