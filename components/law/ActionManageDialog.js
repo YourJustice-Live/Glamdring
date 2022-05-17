@@ -94,7 +94,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       'ui:emptyValue': '',
       'ui:widget': 'MetadataInput',
       'ui:options': {
-        subLabel: 'Action name and description',
+        subLabel: 'Action name, description, icon',
         fields: {
           name: {
             type: 'string',
