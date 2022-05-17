@@ -33,13 +33,13 @@ export default function ProfileRatings({ profile, sx }) {
           {/* Ratings */}
           <Paper variant="outlined" sx={{ p: 4, mt: 2 }}>
             <Typography variant="h2" gutterBottom>
-              Ratings
+              Reputations
             </Typography>
             <Divider sx={{ mb: 3 }} />
 
             {/* Total Rating */}
             <Rating
-              domain="Total Rating"
+              domain="Total Reputation"
               negativeRating={profile.avatarNftTotalNegativeRating}
               positiveRating={profile.avatarNftTotalPositiveRating}
               sx={{ mt: 4 }}
@@ -73,7 +73,7 @@ export default function ProfileRatings({ profile, sx }) {
                 )
               }
             >
-              Add Score
+              Add Reputation
             </Button>
             <Button
               variant="contained"
@@ -90,7 +90,7 @@ export default function ProfileRatings({ profile, sx }) {
                 )
               }
             >
-              Add Score
+              Add Reputation
             </Button>
           </Box>
         </>

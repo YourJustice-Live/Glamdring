@@ -107,7 +107,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                   )
                 }
               >
-                Add Score
+                Add Reputation
               </Button>
               <Button
                 variant="text"
@@ -126,7 +126,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                   )
                 }
               >
-                Add Score
+                Add Reputation
               </Button>
             </Stack>
           </Box>

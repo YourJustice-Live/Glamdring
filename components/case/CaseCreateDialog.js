@@ -401,7 +401,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountRequired && (
           <>
             <Typography>
-              To create case and add score you need to connect wallet.
+              To create case and add reputation you need to connect wallet.
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -420,7 +420,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountProfileRequired && (
           <>
             <Typography>
-              To create case and add score you need to create profile.
+              To create case and add reputation you need to create profile.
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -441,7 +441,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isJoiningToJurisdictionRequired && (
           <>
             <Typography>
-              To create case and add score you need to join jurisdiction.
+              To create case and add reputation you need to join jurisdiction.
             </Typography>
             <Button
               sx={{ mt: 4 }}
