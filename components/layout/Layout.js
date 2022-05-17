@@ -4,15 +4,21 @@ import Header from 'components/layout/Header';
 import { Sidebar } from 'components/layout/Sidebar';
 import Head from 'next/head';
 
-export default function Layout({ children, title, enableSidebar, background }) {
+export default function Layout({
+  children,
+  title = 'YourJustice',
+  enableSidebar = false,
+  maxWidth = 'lg',
+  background,
+}) {
   return (
     <Box sx={{ background: background }}>
       <Head>
-        <title>{title || 'YourJustice'}</title>
+        <title>{title}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <Header />
-      <Container>
+      <Container maxWidth={maxWidth}>
         <Box sx={{ display: 'flex' }}>
           {enableSidebar && <Sidebar />}
           <Box sx={{ flexGrow: 1, py: 4 }}>
