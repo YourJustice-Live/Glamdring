@@ -10,6 +10,7 @@ import { Box } from '@mui/system';
 import useAction from 'hooks/useAction';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import { formatAddress } from 'utils/formatters';
 import { getActionIcon } from 'utils/metadata';
 
 /**
@@ -62,9 +63,12 @@ export default function ActionSelect(props) {
         >
           {actions.map((action, index) => (
             <MenuItem key={index} value={action.guid}>
-              <Stack direction="row" alignItems="center" spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={1.5}>
                 {getActionIcon(action, 28)}
                 <Typography>{action.uriData?.name}</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>
+                  ({formatAddress(action.guid)})
+                </Typography>
               </Stack>
             </MenuItem>
           ))}

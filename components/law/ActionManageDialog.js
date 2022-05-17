@@ -142,7 +142,12 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : close}
+      maxWidth="md"
+      fullWidth
+    >
       <DialogTitle>{action ? 'Update Action' : 'Add Action'}</DialogTitle>
       <DialogContent>
         <Form

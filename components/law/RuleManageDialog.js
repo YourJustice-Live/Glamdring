@@ -229,7 +229,12 @@ export default function RuleManageDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : close}
+      maxWidth="md"
+      fullWidth
+    >
       <DialogTitle>{rule ? 'Update Rule' : 'Add Rule'}</DialogTitle>
       <DialogContent>
         <Form
