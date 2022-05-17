@@ -32,7 +32,7 @@ export default function ProfileInvite() {
             >
               <Construction fontSize="small" />
               <Typography>
-                The ability to invite another persons will appear very soon.
+                The ability to invite other people will be available very soon.
               </Typography>
             </Stack>
           </Box>
