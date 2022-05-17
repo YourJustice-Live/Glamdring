@@ -4,12 +4,12 @@ import {
   Button,
   Divider,
   Link,
-  Stack,
   Typography,
 } from '@mui/material';
 import ActionManageDialog from 'components/law/ActionManageDialog';
-import ActionRuleTable from 'components/law/ActionRuleTable';
+import ActionTable from 'components/law/ActionTable';
 import RuleManageDialog from 'components/law/RuleManageDialog';
+import RuleTable from 'components/law/RuleTable';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
@@ -60,32 +60,54 @@ export default function JurisdictionLawsManage() {
           </NextLink>
           <Typography color="text.primary">Laws Manager</Typography>
         </Breadcrumbs>
-        <Typography variant="h2" gutterBottom>
-          Jurisdiction Laws Manager
-        </Typography>
-        <Typography gutterBottom>
-          A place where users with the appropriate roles can manage action and
-          jurisdiction rules.
-        </Typography>
-        <Divider />
+        {/* Rules */}
+        <Box>
+          <Typography variant="h2" gutterBottom>
+            Jurisdiction Rules
+          </Typography>
+          <Typography gutterBottom>
+            Each law of jurisdiction consists of a general action and a rule
+            that exists only in that jurisdiction.
+          </Typography>
+          <Divider />
+          <Button
+            variant="outlined"
+            onClick={() =>
+              showDialog(
+                <RuleManageDialog
+                  jurisdiction={jurisdiction}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+            sx={{ mt: 2.5 }}
+          >
+            Add Rule
+          </Button>
+          <RuleTable jurisdiction={jurisdiction} sx={{ mt: 2.5 }} />
+        </Box>
+        {/* Actions */}
+        <Box sx={{ mt: 12 }}>
+          <Typography variant="h2" gutterBottom>
+            General Actions
+          </Typography>
+          <Typography gutterBottom>
+            General actions that a jurisdiction admin can use to create their
+            laws for their jurisdiction.
+          </Typography>
+          <Divider />
+          <Button
+            variant="outlined"
+            onClick={() =>
+              showDialog(<ActionManageDialog onClose={closeDialog} />)
+            }
+            sx={{ mt: 2.5 }}
+          >
+            Add Action
+          </Button>
+          <ActionTable sx={{ mt: 2.5 }} />
+        </Box>
       </Box>
-      <Stack direction="row" spacing={2} sx={{ mt: 2.5 }}>
-        <Button
-          variant="outlined"
-          onClick={() =>
-            showDialog(<ActionManageDialog onClose={closeDialog} />)
-          }
-        >
-          Add Action
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => showDialog(<RuleManageDialog onClose={closeDialog} />)}
-        >
-          Add Rule
-        </Button>
-      </Stack>
-      <ActionRuleTable jurisdiction={jurisdiction} sx={{ mt: 2.5 }} />
     </Layout>
   );
 }

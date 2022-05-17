@@ -8,12 +8,13 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import ActionSelect from 'components/form/widget/ActionSelect';
 import MetadataInput from 'components/form/widget/MetadataInput';
+import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
-import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import { capitalize } from 'lodash';
+import { useState } from 'react';
 
 /**
  * A dialog for adding a jurisdiction rule or updating a specified rule.
@@ -33,6 +34,7 @@ export default function RuleManageDialog({
 
   const schema = {
     type: 'object',
+    required: [...(rule ? ['ruleId'] : [])],
     properties: {
       // Show id scheme only for updating a rule
       ...(rule && {
@@ -44,11 +46,11 @@ export default function RuleManageDialog({
       rule: {
         type: 'object',
         title: 'Rule',
-        required: ['about', 'affected'],
+        required: ['about', 'affected', 'uri'],
         properties: {
           about: {
             type: 'string',
-            title: 'About (Action GUID)',
+            title: 'Action',
             ...(about && {
               default: about,
             }),
@@ -56,7 +58,6 @@ export default function RuleManageDialog({
           affected: {
             type: 'string',
             title: 'Affected',
-            default: '',
           },
           negation: {
             type: 'boolean',
@@ -66,7 +67,6 @@ export default function RuleManageDialog({
           uri: {
             type: 'string',
             title: 'Metadata',
-            default: '',
           },
         },
       },
@@ -74,6 +74,7 @@ export default function RuleManageDialog({
         type: 'array',
         minItems: 1,
         title: 'Effects',
+        description: 'At least 1 element must be defined',
         items: {
           type: 'object',
           properties: {
@@ -141,15 +142,16 @@ export default function RuleManageDialog({
       'ui:disabled': true,
     },
     rule: {
+      about: {
+        'ui:widget': 'ActionSelect',
+      },
       affected: {
-        'ui:emptyValue': '',
         'ui:placeholder': 'investor',
       },
       negation: {
         'ui:disabled': true,
       },
       uri: {
-        'ui:emptyValue': '',
         'ui:widget': 'MetadataInput',
         'ui:options': {
           subLabel:
@@ -179,7 +181,6 @@ export default function RuleManageDialog({
     },
     confirmation: {
       ruling: {
-        'ui:placeholder': 'judge',
         'ui:disabled': true,
       },
       witness: {
@@ -189,6 +190,7 @@ export default function RuleManageDialog({
   };
 
   const widgets = {
+    ActionSelect: ActionSelect,
     MetadataInput: MetadataInput,
   };
 
@@ -227,7 +229,12 @@ export default function RuleManageDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : close}
+      maxWidth="md"
+      fullWidth
+    >
       <DialogTitle>{rule ? 'Update Rule' : 'Add Rule'}</DialogTitle>
       <DialogContent>
         <Form
@@ -237,6 +244,7 @@ export default function RuleManageDialog({
           widgets={widgets}
           onSubmit={submit}
           disabled={isLoading}
+          showErrorList={false}
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (

@@ -22,6 +22,7 @@ export default function MetadataInput(props) {
   const propsLabel = props.label;
   const propsSubLabel = props.options?.subLabel;
   const propsValue = props.value; // Metadata URI
+  const propsRequired = props.required;
   const propsFields = props.options?.fields || [];
   const propsRequiredFields = props.options?.requiredFields || [];
   const propsOnChange = props.onChange;
@@ -114,6 +115,7 @@ export default function MetadataInput(props) {
     <>
       <Typography variant="h5" gutterBottom>
         {propsLabel}
+        {propsRequired && ' *'}
       </Typography>
       <Typography variant="body2" gutterBottom>
         {propsSubLabel}
@@ -142,6 +144,7 @@ export default function MetadataInput(props) {
                 widgets={widgets}
                 formData={formData}
                 onSubmit={submitForm}
+                showErrorList={false}
               >
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">

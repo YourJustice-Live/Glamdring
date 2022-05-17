@@ -25,6 +25,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
 
   const schema = {
     type: 'object',
+    required: [...(action ? ['guid'] : []), 'uri'],
     properties: {
       // Show guid scheme only for updating a guid
       ...(action && {
@@ -66,7 +67,6 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       uri: {
         type: 'string',
         title: 'Metadata',
-        default: '',
       },
     },
   };
@@ -91,10 +91,9 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       tool: { 'ui:emptyValue': '' },
     },
     uri: {
-      'ui:emptyValue': '',
       'ui:widget': 'MetadataInput',
       'ui:options': {
-        subLabel: 'Action name and description',
+        subLabel: 'Action name, description, icon',
         fields: {
           name: {
             type: 'string',
@@ -109,7 +108,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
             title: 'Icon',
           },
         },
-        requiredFields: ['name'],
+        requiredFields: ['name', 'icon'],
       },
     },
   };
@@ -143,7 +142,12 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : close}>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : close}
+      maxWidth="md"
+      fullWidth
+    >
       <DialogTitle>{action ? 'Update Action' : 'Add Action'}</DialogTitle>
       <DialogContent>
         <Form
@@ -153,6 +157,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
           widgets={widgets}
           onSubmit={submit}
           disabled={isLoading}
+          showErrorList={false}
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (

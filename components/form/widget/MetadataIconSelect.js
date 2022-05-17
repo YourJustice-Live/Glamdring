@@ -8,19 +8,30 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { ICON } from 'constants/metadata';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * A widget to select icon (name) for metadata.
  */
 export default function MetadataIconSelect(props) {
   const propsValue = props.value;
+  const propsRequired = props.required;
   const propsOnChange = props.onChange;
-  const [value, setValue] = useState(propsValue || ICON.default.name);
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    if (propsValue) {
+      setValue(propsValue);
+    } else {
+      setValue(ICON.default.name);
+      propsOnChange(ICON.default.name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box>
-      <FormControl fullWidth>
+      <FormControl required={propsRequired} fullWidth>
         <InputLabel id="metadata-icon-select-label">Icon</InputLabel>
         <Select
           labelId="metadata-icon-select-label"
@@ -31,6 +42,7 @@ export default function MetadataIconSelect(props) {
             setValue(event.target.value);
             propsOnChange(event.target.value);
           }}
+          disabled={value === ''}
         >
           {Object.values(ICON).map((icon, index) => (
             <MenuItem key={index} value={icon.name}>
