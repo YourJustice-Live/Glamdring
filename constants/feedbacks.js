@@ -81,7 +81,7 @@ export const FORM = {
       properties: {
         proposition: {
           type: 'string',
-          title: 'Your Proposition',
+          title: 'Your Proposal',
         },
         name: {
           type: 'string',
