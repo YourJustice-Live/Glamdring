@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 
 /**
  * A page with an answer for specified question.
+ *
+ * TODO: Use json data instead of component for every question.
  */
 export default function Question() {
   const router = useRouter();
