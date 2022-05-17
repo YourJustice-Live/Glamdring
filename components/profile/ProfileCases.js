@@ -165,7 +165,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
       },
       isSubject: {
         type: 'boolean',
-        title: 'Is Subject',
+        title: 'Is Acted',
       },
       isPlaintiff: {
         type: 'boolean',

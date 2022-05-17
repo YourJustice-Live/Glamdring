@@ -114,7 +114,7 @@ export default function CaseCreateDialog({
         properties: {
           subjectProfileAccount: {
             type: 'string',
-            title: 'Subject',
+            title: 'Acted',
           },
           affectedProfileAccount: {
             type: 'string',

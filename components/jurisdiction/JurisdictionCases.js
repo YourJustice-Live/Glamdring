@@ -130,7 +130,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
       },
       subjectProfileAccount: {
         type: ['string', 'null'],
-        title: 'Subject',
+        title: 'Acted',
       },
       plaintiffProfileAccount: {
         type: ['string', 'null'],

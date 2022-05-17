@@ -45,7 +45,7 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
       {/* Subject */}
       <Box sx={{ mt: 4 }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography sx={{ fontWeight: 'bold' }}>Subject</Typography>
+          <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
           {subjectTitles && (
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               ({subjectTitles.join(' / ')})

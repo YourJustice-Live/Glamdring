@@ -15,7 +15,6 @@ import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
@@ -58,12 +57,12 @@ export default function CasePostAddDialog({
             CASE_ROLE.affected.name,
           ],
           enumNames: [
-            capitalize(CASE_ROLE.admin.name),
-            capitalize(CASE_ROLE.subject.name),
-            capitalize(CASE_ROLE.plaintiff.name),
-            capitalize(CASE_ROLE.judge.name),
-            capitalize(CASE_ROLE.witness.name),
-            capitalize(CASE_ROLE.affected.name),
+            'Admin',
+            'Acted',
+            'Plaintiff',
+            'Affected',
+            'Witness',
+            'Affected',
           ],
         },
       }),

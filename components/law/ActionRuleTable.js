@@ -44,7 +44,7 @@ export default function ActionRuleTable({ jurisdiction, sx }) {
     },
     {
       field: 'actionSubject',
-      headerName: 'Action Subject',
+      headerName: 'Action Acted',
       width: 100,
       valueGetter: (params) => `${params.row.action.action.subject || ''}`,
     },

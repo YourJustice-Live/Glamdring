@@ -44,7 +44,7 @@ export default function RuleManageDialog({
       rule: {
         type: 'object',
         title: 'Rule',
-        required: ['about'],
+        required: ['about', 'affected'],
         properties: {
           about: {
             type: 'string',
@@ -168,7 +168,7 @@ export default function RuleManageDialog({
               title: 'Evidence description, examples, requirements',
             },
           },
-          requiredFields: ['name', 'description'],
+          requiredFields: ['name'],
         },
       },
     },

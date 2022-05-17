@@ -38,10 +38,11 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
         action: {
           type: 'object',
           title: 'Action',
+          required: ['subject', 'verb'],
           properties: {
             subject: {
               type: 'string',
-              title: 'Subject',
+              title: 'Acted',
               default: '',
             },
             verb: {
@@ -108,7 +109,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
             title: 'Icon',
           },
         },
-        requiredFields: ['name', 'description'],
+        requiredFields: ['name'],
       },
     },
   };
