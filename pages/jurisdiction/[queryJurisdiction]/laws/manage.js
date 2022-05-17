@@ -73,7 +73,12 @@ export default function JurisdictionLawsManage() {
           <Button
             variant="outlined"
             onClick={() =>
-              showDialog(<RuleManageDialog onClose={closeDialog} />)
+              showDialog(
+                <RuleManageDialog
+                  jurisdiction={jurisdiction}
+                  onClose={closeDialog}
+                />,
+              )
             }
             sx={{ mt: 2.5 }}
           >
