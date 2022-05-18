@@ -11,10 +11,12 @@ export default function useAction() {
   /**
    * Get action for specified guid.
    *
+   * @param {string} guid Action guid.
    * @returns {Promise.<Action>} A action or null if action not found.
    */
   let getAction = async function (guid) {
-    return (await getActions([guid]))[0];
+    const actions = await getActions([guid]);
+    return actions && actions.length > 0 ? actions[0] : null;
   };
 
   /**

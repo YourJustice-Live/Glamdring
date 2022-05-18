@@ -20,8 +20,7 @@ export default function RuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
-  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
-    useJurisdiction();
+  const { getJurisdictionRules } = useJurisdiction();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
 
@@ -118,19 +117,10 @@ export default function RuleTable({ jurisdiction, sx }) {
       field: 'category',
       headerName: 'Category',
       width: 140,
-      valueGetter: (params) => {
-        if (!params.row.rule) {
-          return '';
-        } else if (isJurisdictionRuleInCategory(params.row.rule, 'positive')) {
-          return 'Positive';
-        } else {
-          return 'Negative';
-        }
-      },
+      valueGetter: (params) =>
+        params.row.rule.isPositive ? 'positive' : 'negative',
       renderCell: (params) => {
-        if (!params.row.rule) {
-          return '';
-        } else if (isJurisdictionRuleInCategory(params.row.rule, 'positive')) {
+        if (params.row.rule.isPositive) {
           return (
             <Typography sx={{ color: 'success.main' }}>Positive</Typography>
           );
@@ -200,7 +190,7 @@ export default function RuleTable({ jurisdiction, sx }) {
       setRows([]);
       setIsLoading(true);
       const rows = [];
-      const rules = await getJusirsdictionRules(null, jurisdiction.id);
+      const rules = await getJurisdictionRules(null, jurisdiction.id);
       const actionGuids = new Set();
       for (const rule of rules) {
         actionGuids.add(rule.rule.about);

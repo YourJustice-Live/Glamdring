@@ -81,12 +81,16 @@ export default function useSubgraph() {
    * @param {Array.<string>} ids A list with jurisdiction rule ids.
    * @param {string} jurisdiction Jurisdiction id (address).
    * @param {string} actionGuid Action id (guid).
+   * @param {bool} isPositive If required to get only positive rules.
+   * @param {bool} isNegative If required to get only negative rules.
    * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
   let findJurisdictionRuleEntities = async function (
     ids,
     jurisdiction,
     actionGuid,
+    isPositive,
+    isNegative,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
@@ -95,9 +99,43 @@ export default function useSubgraph() {
         fixedIds,
         fixedJurisdiction,
         actionGuid,
+        isPositive,
+        isNegative,
       ),
     );
     return response.jurisdictionRuleEntities;
+  };
+
+  /**
+   * Get jurisdiction rule entities by search query.
+   *
+   * @param {string} jurisdiction Jurisdiction id (address).
+   * @param {bool} isPositive If required to get only positive rules.
+   * @param {bool} isNegative If required to get only negative rules.
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<{object}>>} Array with rule entities.
+   */
+  let findJurisdictionRuleEntitiesBySearchQuery = async function (
+    jurisdiction,
+    isPositive,
+    isNegative,
+    searchQuery,
+  ) {
+    const response = await makeSubgraphQuery(
+      getFindJurisdictionRuleEntitiesBySearchQueryQuery(
+        jurisdiction,
+        isPositive,
+        isNegative,
+        searchQuery,
+      ),
+    );
+    const unitedResults = unionWith(
+      response.result1,
+      response.result2,
+      response.result3,
+      (entity1, entity2) => entity1.id === entity2.id,
+    );
+    return unitedResults;
   };
 
   /**
@@ -189,6 +227,7 @@ export default function useSubgraph() {
     findAvatarNftEntitiesBySearchQuery,
     findJurisdictionEntities,
     findJurisdictionRuleEntities,
+    findJurisdictionRuleEntitiesBySearchQuery,
     findActionEntities,
     findCaseEntities,
     findCaseEventEntities,
@@ -311,13 +350,21 @@ function getFindJurisdictionEntitiesQuery(ids, first, skip) {
   }`;
 }
 
-function getFindJurisdictionRuleEntitiesQuery(ids, jurisdiction, actionGuid) {
+function getFindJurisdictionRuleEntitiesQuery(
+  ids,
+  jurisdiction,
+  actionGuid,
+  isPositive,
+  isNegative,
+) {
   let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
   let jurisdictionFilter = jurisdiction
     ? `jurisdiction: "${jurisdiction}"`
     : '';
   let actionGuidFilter = actionGuid ? `about: "${actionGuid}"` : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}}`;
+  let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
+  let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}, ${isPositiveFilter}, ${isNegativeFilter}}`;
   let paginationParams = `first: 100`;
   return `{
     jurisdictionRuleEntities(${filterParams}, ${paginationParams}) {
@@ -338,6 +385,57 @@ function getFindJurisdictionRuleEntitiesQuery(ids, jurisdiction, actionGuid) {
         direction
         value
       }
+      isPositive
+    }
+  }`;
+}
+
+function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
+  jurisdiction,
+  isPositive,
+  isNegative,
+  searchQuery,
+) {
+  let jurisdictionFilter = jurisdiction
+    ? `jurisdiction: "${jurisdiction}"`
+    : '';
+  let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
+  let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
+  let searchQueryFilter1 = `aboutSubject_contains_nocase: "${searchQuery}"`;
+  let searchQueryFilter2 = `aboutUriName_contains_nocase: "${searchQuery}"`;
+  let searchQueryFilter3 = `affected_contains_nocase: "${searchQuery}"`;
+  let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${searchQueryFilter1}}`;
+  let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter2}}`;
+  let filterParams3 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter3}}`;
+  let paginationParams = `first: 20`;
+  let fields = `
+    id
+    about {
+      id
+    }
+    ruleId
+    affected
+    uri
+    uriData
+    negation
+    confirmationRuling
+    confirmationEvidence
+    confirmationWitness
+    effects {
+      name
+      direction
+      value
+    }
+  `;
+  return `{
+    result1: jurisdictionRuleEntities(${filterParams1}, ${paginationParams}) {
+      ${fields}
+    }
+    result2: jurisdictionRuleEntities(${filterParams2}, ${paginationParams}) {
+      ${fields}
+    }
+    result3: jurisdictionRuleEntities(${filterParams3}, ${paginationParams}) {
+      ${fields}
     }
   }`;
 }

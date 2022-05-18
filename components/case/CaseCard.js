@@ -12,13 +12,13 @@ import CaseTop from './CaseTop';
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
-  const { getJusirsdictionRules } = useJurisdiction();
+  const { getJurisdictionRules } = useJurisdiction();
   const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
 
   async function loadData() {
     const ruleIds = caseObject.rules.map((rule) => rule.id);
-    const rules = await getJusirsdictionRules(ruleIds, null, null);
+    const rules = await getJurisdictionRules(ruleIds, null, null);
     const laws = await getLawsByRules(rules);
     setCaseLaws(laws);
   }

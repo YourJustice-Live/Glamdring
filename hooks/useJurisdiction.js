@@ -3,7 +3,6 @@ import JurisdictionRule from 'classes/JurisdictionRule';
 import useSubgraph from 'hooks/useSubgraph';
 import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
 import { hexStringToJson } from 'utils/converters';
-import { REPUTATION_RATING } from 'constants/contracts';
 import {
   FAKE_JURISDICTION_DESCRIPTION,
   FAKE_JURISDICTION_IMAGE,
@@ -14,8 +13,11 @@ import useIpfs from './useIpfs';
  * Hook for work with jurisdiction.
  */
 export default function useJurisdiction() {
-  const { findJurisdictionEntities, findJurisdictionRuleEntities } =
-    useSubgraph();
+  const {
+    findJurisdictionEntities,
+    findJurisdictionRuleEntities,
+    findJurisdictionRuleEntitiesBySearchQuery,
+  } = useSubgraph();
   const { getUri } = useJurisdictionContract();
   const { loadJsonFromIPFS } = useIpfs();
 
@@ -63,6 +65,29 @@ export default function useJurisdiction() {
   }
 
   /**
+   * Convert jurisdiction rule entity to object.
+   *
+   * @param {object} jurisdictionRuleEntity Jurisdiction rule entity.
+   * @returns Jurisdiction rule object.
+   */
+  function createJurisdictionRuleObject(jurisdictionRuleEntity) {
+    return new JurisdictionRule(
+      jurisdictionRuleEntity.id,
+      jurisdictionRuleEntity.ruleId,
+      jurisdictionRuleEntity.about.id,
+      jurisdictionRuleEntity.affected,
+      jurisdictionRuleEntity.negation,
+      jurisdictionRuleEntity.uri,
+      hexStringToJson(jurisdictionRuleEntity.uriData),
+      jurisdictionRuleEntity.confirmationRuling,
+      jurisdictionRuleEntity.confirmationEvidence,
+      jurisdictionRuleEntity.confirmationWitness,
+      jurisdictionRuleEntity.effects,
+      jurisdictionRuleEntity.isPositive,
+    );
+  }
+
+  /**
    * Get jurisdiction for specified id.
    *
    * @param {string} id Jurisdiction id (address).
@@ -95,34 +120,70 @@ export default function useJurisdiction() {
   };
 
   /**
+   * Get jurisdiction rule.
+   *
+   * @param {string} jurisdiction Jurisdiction id (address).
+   * @param {string} ruleId Rule id.
+   * @returns {Promise.<JurisdictionRule>} A jurisdiction rule or null.
+   */
+  let getJurisdictionRule = async function (jurisdiction, ruleId) {
+    const rules = await getJurisdictionRules([`${jurisdiction}_${ruleId}`]);
+    return rules && rules.length > 0 ? rules[0] : null;
+  };
+
+  /**
    * Get jurisdiction rules.
    *
    * @param {Array.<string>} ids A list with jurisdiction rule ids.
    * @param {string} jurisdiction Jurisdiction id (address).
    * @param {string} actionGuid Action id (guid).
-   * @returns {Promise.<Array.<{JurisdictionRule}>>} Array with rule entities.
+   * @param {bool} isPositive If required to get only positive rules.
+   * @param {bool} isNegative If required to get only negative rules.
+   * @returns {Promise.<Array.<{JurisdictionRule}>>} Array with rules.
    */
-  let getJusirsdictionRules = async function (ids, jurisdiction, actionGuid) {
+  let getJurisdictionRules = async function (
+    ids,
+    jurisdiction,
+    actionGuid,
+    isPositive,
+    isNegative,
+  ) {
     const jurisdictionRuleEntities = await findJurisdictionRuleEntities(
       ids,
       jurisdiction,
       actionGuid,
+      isPositive,
+      isNegative,
     );
-    return jurisdictionRuleEntities.map(
-      (ruleEntity) =>
-        new JurisdictionRule(
-          ruleEntity.id,
-          ruleEntity.ruleId,
-          ruleEntity.about.id,
-          ruleEntity.affected,
-          ruleEntity.negation,
-          ruleEntity.uri,
-          hexStringToJson(ruleEntity.uriData),
-          ruleEntity.confirmationRuling,
-          ruleEntity.confirmationEvidence,
-          ruleEntity.confirmationWitness,
-          ruleEntity.effects,
-        ),
+    return jurisdictionRuleEntities.map((ruleEntity) =>
+      createJurisdictionRuleObject(ruleEntity),
+    );
+  };
+
+  /**
+   * Get jurisdiction rules by search query (search by action name, action subject, rule affected).
+   *
+   * @param {string} jurisdiction Jurisdiction id (address).
+   * @param {bool} isPositive If required to get only positive rules.
+   * @param {bool} isNegative If required to get only negative rules.
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<{JurisdictionRule}>>} Array with rules.
+   */
+  let getJurisdictionRulesBySearchQuery = async function (
+    jurisdiction,
+    isPositive,
+    isNegative,
+    searchQuery,
+  ) {
+    const jurisdictionRuleEntities =
+      await findJurisdictionRuleEntitiesBySearchQuery(
+        jurisdiction,
+        isPositive,
+        isNegative,
+        searchQuery,
+      );
+    return jurisdictionRuleEntities.map((ruleEntity) =>
+      createJurisdictionRuleObject(ruleEntity),
     );
   };
 
@@ -138,31 +199,6 @@ export default function useJurisdiction() {
       (element) => element?.roleId === role,
     );
     return jurisdictionRole?.accounts || [];
-  };
-
-  /**
-   * Checking that the jurisdiction rule is in a category.
-   *
-   * TODO: Replace to function "isJurisdictionRulePositive()"
-   *
-   * @param {JurisdictionRule} rule Jurisdiction rule.
-   * @param {'positive'|'negative'} category Category.
-   * @returns {boolean} Result of checking.
-   */
-  let isJurisdictionRuleInCategory = function (rule, category) {
-    if (rule?.effects && category === 'positive') {
-      let isRulePositive = true;
-      for (const effect of rule.effects) {
-        if (effect.direction != REPUTATION_RATING.positive.direction) {
-          isRulePositive = false;
-        }
-      }
-      return isRulePositive;
-    } else if (rule?.effects && category === 'negative') {
-      return !isJurisdictionRuleInCategory(rule, 'positive');
-    } else {
-      return false;
-    }
   };
 
   /**
@@ -183,9 +219,10 @@ export default function useJurisdiction() {
   return {
     getJurisdiction,
     getJurisdictions,
-    getJusirsdictionRules,
+    getJurisdictionRule,
+    getJurisdictionRules,
+    getJurisdictionRulesBySearchQuery,
     getJurisdictionRoleAccounts,
-    isJurisdictionRuleInCategory,
     isAccountHasJurisdictionRole,
   };
 }

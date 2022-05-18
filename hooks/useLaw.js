@@ -9,8 +9,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
  */
 export default function useLaw() {
   const { getActions } = useAction();
-  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
-    useJurisdiction();
+  const { getJurisdictionRules } = useJurisdiction();
 
   /**
    * Get laws by specified rules.
@@ -54,7 +53,7 @@ export default function useLaw() {
    */
   // eslint-disable-next-line no-unused-vars
   let getLawsByJurisdiction = async function (jurisdiction) {
-    const rules = await getJusirsdictionRules(null, jurisdiction, null);
+    const rules = await getJurisdictionRules(null, jurisdiction, null);
     const laws = await getLawsByRules(rules);
     return laws;
   };
@@ -68,7 +67,7 @@ export default function useLaw() {
   let isLawsPositive = function (laws) {
     for (const law of laws?.values() || []) {
       for (const rule of law?.rules || []) {
-        if (isJurisdictionRuleInCategory(rule, 'negative')) {
+        if (!rule.isPositive) {
           return false;
         }
       }
