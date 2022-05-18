@@ -9,7 +9,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
  */
 export default function useLaw() {
   const { getActions } = useAction();
-  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
+  const { getJurisdictionRules, isJurisdictionRuleInCategory } =
     useJurisdiction();
 
   /**
@@ -54,7 +54,7 @@ export default function useLaw() {
    */
   // eslint-disable-next-line no-unused-vars
   let getLawsByJurisdiction = async function (jurisdiction) {
-    const rules = await getJusirsdictionRules(null, jurisdiction, null);
+    const rules = await getJurisdictionRules(null, jurisdiction, null);
     const laws = await getLawsByRules(rules);
     return laws;
   };

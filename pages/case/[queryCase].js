@@ -21,7 +21,7 @@ export default function Case() {
   const { account } = useWeb3Context();
   const { showToastError } = useToasts();
   const { getCase } = useCase();
-  const { getJusirsdictionRules } = useJurisdiction();
+  const { getJurisdictionRules } = useJurisdiction();
   const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseObject, setCaseObject] = useState();
   const [caseLaws, setCaseLaws] = useState(null);
@@ -30,7 +30,7 @@ export default function Case() {
     try {
       const caseObject = await getCase(queryCase);
       const ruleIds = caseObject.rules.map((rule) => rule.id);
-      const rules = await getJusirsdictionRules(ruleIds, null, null);
+      const rules = await getJurisdictionRules(ruleIds, null, null);
       const laws = await getLawsByRules(rules);
       setCaseObject(caseObject);
       setCaseLaws(laws);

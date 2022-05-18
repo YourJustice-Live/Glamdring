@@ -20,7 +20,7 @@ export default function RuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getActions } = useAction();
-  const { getJusirsdictionRules, isJurisdictionRuleInCategory } =
+  const { getJurisdictionRules, isJurisdictionRuleInCategory } =
     useJurisdiction();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
@@ -200,7 +200,7 @@ export default function RuleTable({ jurisdiction, sx }) {
       setRows([]);
       setIsLoading(true);
       const rows = [];
-      const rules = await getJusirsdictionRules(null, jurisdiction.id);
+      const rules = await getJurisdictionRules(null, jurisdiction.id);
       const actionGuids = new Set();
       for (const rule of rules) {
         actionGuids.add(rule.rule.about);

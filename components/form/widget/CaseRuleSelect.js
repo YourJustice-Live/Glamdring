@@ -1,89 +1,97 @@
 import {
   Box,
   Chip,
-  Divider,
   List,
   ListItemButton,
-  ListItemIcon,
+  Skeleton,
   Typography,
 } from '@mui/material';
 import RuleEffects from 'components/law/RuleEffects';
 import useJurisdiction from 'hooks/useJurisdiction';
+import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
-import { getActionIcon } from 'utils/metadata';
 
 /**
- * A widget to select case rule.
+ * A widget to select case rule (ruleId).
  */
 export default function CaseRuleSelect(props) {
+  const propsHeader = props.options?.header;
   const propsValue = props.value;
   const propsDisabled = props.disabled;
+  const propsSx = props.sx;
   const propsOnChange = props.onChange;
-  const propsLaws = props.formContext?.laws;
-  const propsFormCategory = props.formContext?.formData?.category;
+  const propsJurisdiction = props.formContext?.jurisdiction;
+  const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
-  const { isJurisdictionRuleInCategory } = useJurisdiction();
-  const [formAction, setFormAction] = useState(null);
-  const [items, setItems] = useState([]);
+  const { showToastError } = useToasts();
+  const { getJurisdictionRules } = useJurisdiction();
+  const [rules, setRules] = useState(null);
 
-  /**
-   * Get rules from laws by action guid and add it to items if rule in the specified category.
-   */
   useEffect(() => {
-    if (propsLaws && propsFormActionGuid) {
-      const items = [];
-      [...propsLaws.keys()].forEach((key) => {
-        if (propsLaws.get(key).action.guid === propsFormActionGuid) {
-          setFormAction(formAction);
-          propsLaws.get(key).rules.forEach((rule) => {
-            if (isJurisdictionRuleInCategory(rule, propsFormCategory)) {
-              items.push(rule);
-            }
-          });
-        }
-      });
-      setItems(items);
+    if (propsJurisdiction && propsFormActionGuid) {
+      setRules(null);
+      getJurisdictionRules(
+        null,
+        propsJurisdiction.id,
+        propsFormActionGuid,
+        propsFormIsPositive === true,
+        propsFormIsPositive === false,
+      )
+        .then((rules) => setRules(rules))
+        .catch((error) => showToastError(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsLaws, propsFormCategory, propsFormActionGuid]);
+  }, [propsJurisdiction, propsFormIsPositive, propsFormActionGuid]);
 
   return (
-    <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
-      <Divider sx={{ my: 1.5 }} />
-      <List>
-        {items.map((item, index) => (
-          <ListItemButton
-            sx={{ py: 2.4 }}
-            key={index}
-            selected={item.ruleId === propsValue}
-            disabled={propsDisabled}
-            onClick={() => propsOnChange(item.ruleId)}
-          >
-            <ListItemIcon>{getActionIcon(formAction, 40)}</ListItemIcon>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                flexDirection: 'column',
+    <Box sx={{ ...propsSx }}>
+      {propsHeader}
+      {rules ? (
+        <List>
+          {rules.map((rule, index) => (
+            <ListItemButton
+              sx={{ py: 2.4 }}
+              key={index}
+              selected={rule.ruleId === propsValue}
+              disabled={propsDisabled}
+              onClick={() => {
+                propsOnChange(rule.ruleId);
               }}
             >
-              <Typography sx={{ fontWeight: 'bold' }}>
-                {item?.rule?.uriData?.name || 'None Name'}
-              </Typography>
-              <Chip
-                label={`ID: ${item?.ruleId}`}
-                size="small"
-                sx={{ mt: 0.8 }}
-              />
-              <Typography variant="body2" sx={{ mt: 1.2 }}>
-                {item?.rule?.uriData?.description || 'None Description'}
-              </Typography>
-              <RuleEffects rule={item} sx={{ mt: 1.2 }} />
-            </Box>
-          </ListItemButton>
-        ))}
-      </List>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  flexDirection: 'column',
+                }}
+              >
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  {rule?.rule?.uriData?.name || 'None Name'}
+                </Typography>
+                <Chip
+                  label={`ID: ${rule?.ruleId}`}
+                  size="small"
+                  sx={{ mt: 0.8 }}
+                />
+                <Typography variant="body2" sx={{ mt: 1.2 }}>
+                  {rule?.rule?.uriData?.description || 'None Description'}
+                </Typography>
+                <RuleEffects rule={rule} sx={{ mt: 1.2 }} />
+              </Box>
+            </ListItemButton>
+          ))}
+        </List>
+      ) : (
+        <>
+          <Skeleton variant="rectangular" width={196} height={24} />
+          <Skeleton
+            variant="rectangular"
+            width={128}
+            height={18}
+            sx={{ mt: 1.5 }}
+          />
+        </>
+      )}
     </Box>
   );
 }
