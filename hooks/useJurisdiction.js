@@ -3,7 +3,6 @@ import JurisdictionRule from 'classes/JurisdictionRule';
 import useSubgraph from 'hooks/useSubgraph';
 import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
 import { hexStringToJson } from 'utils/converters';
-import { REPUTATION_RATING } from 'constants/contracts';
 import {
   FAKE_JURISDICTION_DESCRIPTION,
   FAKE_JURISDICTION_IMAGE,
@@ -84,6 +83,7 @@ export default function useJurisdiction() {
       jurisdictionRuleEntity.confirmationEvidence,
       jurisdictionRuleEntity.confirmationWitness,
       jurisdictionRuleEntity.effects,
+      jurisdictionRuleEntity.isPositive,
     );
   }
 
@@ -202,31 +202,6 @@ export default function useJurisdiction() {
   };
 
   /**
-   * Checking that the jurisdiction rule is in a category.
-   *
-   * TODO: Replace to function "isJurisdictionRulePositive()"
-   *
-   * @param {JurisdictionRule} rule Jurisdiction rule.
-   * @param {'positive'|'negative'} category Category.
-   * @returns {boolean} Result of checking.
-   */
-  let isJurisdictionRuleInCategory = function (rule, category) {
-    if (rule?.effects && category === 'positive') {
-      let isRulePositive = true;
-      for (const effect of rule.effects) {
-        if (effect.direction != REPUTATION_RATING.positive.direction) {
-          isRulePositive = false;
-        }
-      }
-      return isRulePositive;
-    } else if (rule?.effects && category === 'negative') {
-      return !isJurisdictionRuleInCategory(rule, 'positive');
-    } else {
-      return false;
-    }
-  };
-
-  /**
    * Check that the account has a specified jurisdiction role.
    *
    * @param {Jurisdiction} jurisdiction Jurisdiction.
@@ -248,7 +223,6 @@ export default function useJurisdiction() {
     getJurisdictionRules,
     getJurisdictionRulesBySearchQuery,
     getJurisdictionRoleAccounts,
-    isJurisdictionRuleInCategory,
     isAccountHasJurisdictionRole,
   };
 }

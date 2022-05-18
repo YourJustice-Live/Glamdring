@@ -385,6 +385,7 @@ function getFindJurisdictionRuleEntitiesQuery(
         direction
         value
       }
+      isPositive
     }
   }`;
 }

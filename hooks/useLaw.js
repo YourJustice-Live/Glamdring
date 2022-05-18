@@ -9,8 +9,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
  */
 export default function useLaw() {
   const { getActions } = useAction();
-  const { getJurisdictionRules, isJurisdictionRuleInCategory } =
-    useJurisdiction();
+  const { getJurisdictionRules } = useJurisdiction();
 
   /**
    * Get laws by specified rules.
@@ -68,7 +67,7 @@ export default function useLaw() {
   let isLawsPositive = function (laws) {
     for (const law of laws?.values() || []) {
       for (const rule of law?.rules || []) {
-        if (isJurisdictionRuleInCategory(rule, 'negative')) {
+        if (!rule.isPositive) {
           return false;
         }
       }
