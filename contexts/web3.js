@@ -30,7 +30,7 @@ export function Web3Provider({ children }) {
       // Connect account
       const instance = await web3ModalRef.current.connect();
       setIsLoading(true);
-      const provider = new ethers.providers.Web3Provider(instance);
+      const provider = new ethers.providers.Web3Provider(instance, 'any');
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
       const networkChainId = network?.chainId;
