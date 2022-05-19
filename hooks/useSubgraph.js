@@ -277,6 +277,7 @@ function getFindAvatarNftEntitiesQuery(
           id
           jurisdiction {
             id
+            name
           }
           domain
           positiveRating
@@ -306,6 +307,7 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
       id
       jurisdiction {
         id
+        name
       }
       domain
       positiveRating

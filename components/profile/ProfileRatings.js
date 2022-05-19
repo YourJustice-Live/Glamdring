@@ -4,11 +4,11 @@ import {
 } from '@mui/icons-material';
 import {
   Button,
-  Divider,
   LinearProgress,
   Link,
   Paper,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -16,6 +16,7 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { capitalize } from 'lodash';
+import { palette } from 'theme/palette';
 
 /**
  * A component with profile ratings.
@@ -29,35 +30,28 @@ export default function ProfileRatings({ profile, sx }) {
   return (
     <Box sx={{ ...sx }}>
       {profile ? (
-        <>
-          {/* Ratings */}
-          <Paper variant="outlined" sx={{ p: 4, mt: 2 }}>
-            <Typography variant="h2" gutterBottom>
-              Reputations
-            </Typography>
-            <Divider sx={{ mb: 3 }} />
-
-            {/* Total Rating */}
+        <Paper sx={{ p: 3 }}>
+          {/* Total Rating */}
+          <Rating
+            domain="Total Reputation"
+            negativeRating={profile.avatarNftTotalNegativeRating}
+            positiveRating={profile.avatarNftTotalPositiveRating}
+          />
+          {/* Rating by domains */}
+          {profile.avatarNftReputations?.map((reputation, index) => (
             <Rating
-              domain="Total Reputation"
-              negativeRating={profile.avatarNftTotalNegativeRating}
-              positiveRating={profile.avatarNftTotalPositiveRating}
-              sx={{ mt: 4 }}
+              key={index}
+              domain={capitalize(reputation.domain)}
+              jurisdiction={reputation.jurisdiction}
+              negativeRating={reputation.negativeRating}
+              positiveRating={reputation.positiveRating}
+              totalNegativeRating={profile.avatarNftTotalNegativeRating}
+              totalPositiveRating={profile.avatarNftTotalPositiveRating}
+              sx={{ mt: 2 }}
             />
-            {/* Rating by domains */}
-            {profile.avatarNftReputations?.map((reputation, index) => (
-              <Rating
-                key={index}
-                domain={capitalize(reputation.domain)}
-                jurisdiction={reputation.jurisdiction.id}
-                negativeRating={reputation.negativeRating}
-                positiveRating={reputation.positiveRating}
-                sx={{ mt: 4 }}
-              />
-            ))}
-          </Paper>
+          ))}
           {/* Actions */}
-          <Box sx={{ display: 'flex', mt: 2 }}>
+          <Box sx={{ display: 'flex', mt: 4 }}>
             <Button
               variant="contained"
               color="success"
@@ -93,7 +87,7 @@ export default function ProfileRatings({ profile, sx }) {
               Add Reputation
             </Button>
           </Box>
-        </>
+        </Paper>
       ) : (
         <>
           <Skeleton
@@ -105,7 +99,7 @@ export default function ProfileRatings({ profile, sx }) {
           <Skeleton
             variant="rectangular"
             height={24}
-            width={256}
+            width={164}
             sx={{ mb: 1 }}
           />
         </>
@@ -114,59 +108,88 @@ export default function ProfileRatings({ profile, sx }) {
   );
 }
 
-function Rating({ domain, jurisdiction, negativeRating, positiveRating, sx }) {
-  const negativePercent =
-    (100 * Number(negativeRating)) /
-    (Number(positiveRating) + Number(negativeRating));
-  const positivePercent =
-    (100 * Number(positiveRating)) /
-    (Number(positiveRating) + Number(negativeRating));
+function Rating({
+  domain,
+  jurisdiction,
+  negativeRating,
+  positiveRating,
+  totalNegativeRating,
+  totalPositiveRating,
+  sx,
+}) {
+  const sumRating = Number(negativeRating) + Number(positiveRating);
+  const sumTotalRating =
+    Number(totalNegativeRating) + Number(totalPositiveRating);
+  const negativePercent = (100 * Number(negativeRating)) / sumRating;
 
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: 'column',
         ...sx,
       }}
     >
-      <Box sx={{ minWidth: 100, mr: 2 }}>
-        <Typography>{domain}</Typography>
-        {jurisdiction && (
-          <Typography variant="body2">
-            <Link href={`/jurisdiction/${jurisdiction}`} underline="none">
-              Jurisdiction
-            </Link>
+      {/* Domain and jurisdiction */}
+      <Stack direction="row" alignItems="center" spacing={0.5}>
+        {jurisdiction ? (
+          <>
+            <Typography variant="body2">{domain}</Typography>
+            <Typography variant="body2">
+              (
+              <Link href={`/jurisdiction/${jurisdiction.id}`} underline="none">
+                {jurisdiction.name}
+              </Link>
+              )
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            {domain}
           </Typography>
         )}
+      </Stack>
+      {/* Rating bar */}
+      <Box sx={{ mt: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: sumRating / sumTotalRating,
+          }}
+        >
+          <Typography
+            color="danger.main"
+            sx={{ fontWeight: 'bold', minWidth: 24 }}
+          >
+            -{negativeRating}
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={negativePercent}
+            sx={{
+              flex: 1,
+              height: 18,
+              borderRadius: '12px',
+              ml: 1,
+              mr: 1,
+              '&.MuiLinearProgress-colorPrimary': {
+                background: palette.success.main,
+              },
+              '& .MuiLinearProgress-barColorPrimary': {
+                background: palette.danger.main,
+              },
+            }}
+          />
+          <Typography
+            color="success.main"
+            sx={{ fontWeight: 'bold', minWidth: 24 }}
+          >
+            +{positiveRating}
+          </Typography>
+        </Box>
       </Box>
-      <Box sx={{ flex: 1 }}>
-        <RatingBar
-          value={positivePercent}
-          text={positiveRating}
-          color="success"
-        />
-        <RatingBar
-          value={negativePercent}
-          text={negativeRating}
-          color="danger"
-        />
-      </Box>
-    </Box>
-  );
-}
-
-function RatingBar({ value, text, color }) {
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <LinearProgress
-        variant="determinate"
-        value={value}
-        color={color}
-        sx={{ flex: 1, height: 18, borderRadius: '12px', mr: 1 }}
-      />
-      <Typography>{text}</Typography>
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Divider, Tab, Typography } from '@mui/material';
+import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileCases from 'components/profile/ProfileCases';
@@ -45,12 +45,8 @@ export default function Profile() {
   return (
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <ProfileMeta profile={profile} />
-      <ProfileRatings profile={profile} sx={{ mt: 6 }} />
-      <Box sx={{ width: '100%', mt: 8 }}>
-        <Typography variant="h1" gutterBottom>
-          Cases
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
+      <ProfileRatings profile={profile} sx={{ mt: 4 }} />
+      <Box sx={{ width: '100%', mt: 6 }}>
         <TabContext value={tabValue}>
           <TabList
             onChange={handleChange}
@@ -63,9 +59,9 @@ export default function Profile() {
               maxWidth: 'calc(100vw - 32px)',
             }}
           >
-            <Tab label="All" value="1" />
-            <Tab label="Awaiting Confirmation" value="2" />
-            <Tab label="Awaiting Judging" value="3" />
+            <Tab label="All Cases" value="1" />
+            <Tab label="Cases Awaiting Confirmation" value="2" />
+            <Tab label="Cases Awaiting Judging" value="3" />
           </TabList>
           <TabPanel value="1" sx={{ px: 0 }}>
             <ProfileCases profile={profile} />
