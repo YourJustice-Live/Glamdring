@@ -120,11 +120,9 @@ export default function CaseCreateDialog({
         properties: {
           subjectProfileAccount: {
             type: 'string',
-            title: 'Acted',
           },
           affectedProfileAccount: {
             type: 'string',
-            title: 'Affected',
           },
           evidencePostUri: {
             type: 'string',
@@ -245,13 +243,41 @@ export default function CaseCreateDialog({
     subjectProfileAccount: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
-        subLabel: capitalize(formAction?.action?.subject),
+        header: (
+          <>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
+              {formAction?.action?.subject && (
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  ({capitalize(formAction.action.subject)})
+                </Typography>
+              )}
+            </Stack>
+            <Typography variant="body2">The one who did the action</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
       },
     },
     affectedProfileAccount: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
-        subLabel: capitalize(formRule?.rule?.affected),
+        header: (
+          <>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
+              {formRule?.rule?.affected && (
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  ({capitalize(formRule.rule.affected)})
+                </Typography>
+              )}
+            </Stack>
+            <Typography variant="body2">
+              The one who was affected by the action
+            </Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
       },
     },
     evidencePostUri: {
