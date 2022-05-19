@@ -11,6 +11,7 @@ import RuleEffects from 'components/law/RuleEffects';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import { getActionIcon } from 'utils/metadata';
 
 /**
  * A widget to select case rule (ruleId).
@@ -24,6 +25,7 @@ export default function CaseRuleSelect(props) {
   const propsJurisdiction = props.formContext?.jurisdiction;
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
+  const propsFormAction = props.formContext?.formAction;
   const { showToastError } = useToasts();
   const { getJurisdictionRules } = useJurisdiction();
   const [rules, setRules] = useState(null);
@@ -67,6 +69,7 @@ export default function CaseRuleSelect(props) {
                 }}
               >
                 <Stack direction="row" alignItems="center" spacing={1}>
+                  {getActionIcon(propsFormAction, 28)}
                   <Typography sx={{ fontWeight: 'bold' }}>
                     {rule?.rule?.uriData?.name || 'None Name'}
                   </Typography>

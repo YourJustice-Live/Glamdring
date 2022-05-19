@@ -550,6 +550,7 @@ export default function CaseCreateDialog({
               formContext={{
                 jurisdiction: jurisdiction,
                 formData: formData,
+                formAction: formAction,
               }}
               disabled={status === STATUS.isFormSubmitting}
               showErrorList={false}
