@@ -26,28 +26,28 @@ export default function LawCard({ law, isCommentsEnabled }) {
       {/* Avatar with name */}
       <CardContent sx={{ p: 4 }}>
         <Stack direction="row" alignItems="center" spacing={1.5}>
-          {getActionIcon(law.action, 40)}
+          {getActionIcon(law?.action, 40)}
           <Typography sx={{ fontWeight: 'bold' }}>
-            {law.action.uriData.name}
+            {law?.action?.uriData?.name || 'None Action Name'}
           </Typography>
         </Stack>
         {/* Description */}
-        {law.action.uriData.description && (
+        {law?.action?.uriData?.description && (
           <Box sx={{ mt: 2 }}>
             <Typography>{law.action.uriData.description}</Typography>
           </Box>
         )}
         {/* Rules */}
         <Stack direction="column" spacing={1} sx={{ mt: 3 }}>
-          {law.rules.map((rule, index) => (
+          {law?.rules?.map((rule, index) => (
             <Paper key={index} variant="outlined" sx={{ p: 3 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ fontWeight: 'bold' }}>
-                  {rule.rule.uriData?.name || 'None Name'}
+                  {rule?.rule?.uriData?.name || 'None Name'}
                 </Typography>
-                <Chip label={`ID: ${rule.ruleId}`} size="small" />
+                <Chip label={`ID: ${rule?.ruleId}`} size="small" />
               </Stack>
-              {rule.rule.uriData.description && (
+              {rule?.rule?.uriData?.description && (
                 <Typography sx={{ mt: 1 }}>
                   {rule.rule.uriData.description}
                 </Typography>
