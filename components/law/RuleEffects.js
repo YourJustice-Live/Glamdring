@@ -40,9 +40,10 @@ function RuleEffect({ name, direction, value, sx }) {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        py: 1.2,
-        px: 1.8,
-        borderRadius: '14px',
+        alignItems: 'center',
+        py: 0.6,
+        px: 1.4,
+        borderRadius: '8px',
         backgroundColor:
           direction === REPUTATION_RATING.positive.direction
             ? 'success.main'
@@ -50,7 +51,7 @@ function RuleEffect({ name, direction, value, sx }) {
         ...sx,
       }}
     >
-      <IconChart hexColor={palette.primary.contrastText} />
+      <IconChart hexColor={palette.primary.contrastText} size={14} />
       <Typography variant="body2" sx={{ color: 'primary.contrastText', ml: 1 }}>
         {capitalize(name)}
       </Typography>

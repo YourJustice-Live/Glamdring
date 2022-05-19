@@ -6,7 +6,7 @@ import LawCard from './LawCard';
  */
 export default function LawList({ laws, isCommentsEnabled, sx }) {
   return (
-    <Stack spacing={2} sx={{ ...sx }}>
+    <Stack spacing={4} sx={{ ...sx }}>
       {!laws && (
         <>
           <Skeleton

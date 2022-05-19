@@ -59,8 +59,8 @@ export default function Case() {
       }
     >
       <CaseTop caseObject={caseObject} />
-      <CaseDetails caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 6 }} />
-      <LawList laws={caseLaws} sx={{ mt: 6 }} />
+      <LawList laws={caseLaws} sx={{ mt: 4 }} />
+      <CaseDetails caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 4 }} />
       <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 4 }} />
     </Layout>
   );
