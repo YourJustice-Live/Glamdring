@@ -32,9 +32,11 @@ export default function LawCard({ law, isCommentsEnabled }) {
           </Typography>
         </Stack>
         {/* Description */}
-        <Box sx={{ mt: 2 }}>
-          <Typography>{law.action.uriData.description}</Typography>
-        </Box>
+        {law.action.uriData.description && (
+          <Box sx={{ mt: 2 }}>
+            <Typography>{law.action.uriData.description}</Typography>
+          </Box>
+        )}
         {/* Rules */}
         <Stack direction="column" spacing={1} sx={{ mt: 3 }}>
           {law.rules.map((rule, index) => (
@@ -45,9 +47,11 @@ export default function LawCard({ law, isCommentsEnabled }) {
                 </Typography>
                 <Chip label={`ID: ${rule.ruleId}`} size="small" />
               </Stack>
-              <Typography sx={{ mt: 1 }}>
-                {rule.rule.uriData?.description || 'None Description'}
-              </Typography>
+              {rule.rule.uriData.description && (
+                <Typography sx={{ mt: 1 }}>
+                  {rule.rule.uriData.description}
+                </Typography>
+              )}
               <Box sx={{ mt: 2 }}>
                 <RuleEffects rule={rule} />
               </Box>

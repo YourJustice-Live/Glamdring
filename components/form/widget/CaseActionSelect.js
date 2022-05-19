@@ -128,7 +128,7 @@ export default function CaseActionSelect(props) {
           <TextField
             fullWidth
             {...params}
-            label="Search by action name, acted or affected role"
+            label="Search by action, acted or affected role"
             required={propsRequired}
           />
         )}

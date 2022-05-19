@@ -166,7 +166,7 @@ export default function CaseCreateDialog({
           <>
             <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
             <Typography variant="body2">
-              An action that was done within the law.
+              An action that was done within the law
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -235,7 +235,7 @@ export default function CaseCreateDialog({
           <>
             <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
             <Typography variant="body2">
-              Consequences of acting within the law.
+              Consequences of acting within the law
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>

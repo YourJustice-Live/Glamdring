@@ -4,6 +4,7 @@ import {
   List,
   ListItemButton,
   Skeleton,
+  Stack,
   Typography,
 } from '@mui/material';
 import RuleEffects from 'components/law/RuleEffects';
@@ -65,17 +66,17 @@ export default function CaseRuleSelect(props) {
                   flexDirection: 'column',
                 }}
               >
-                <Typography sx={{ fontWeight: 'bold' }}>
-                  {rule?.rule?.uriData?.name || 'None Name'}
-                </Typography>
-                <Chip
-                  label={`ID: ${rule?.ruleId}`}
-                  size="small"
-                  sx={{ mt: 0.8 }}
-                />
-                <Typography variant="body2" sx={{ mt: 1.2 }}>
-                  {rule?.rule?.uriData?.description || 'None Description'}
-                </Typography>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    {rule?.rule?.uriData?.name || 'None Name'}
+                  </Typography>
+                  <Chip label={`ID: ${rule.ruleId}`} size="small" />
+                </Stack>
+                {rule?.rule?.uriData?.description && (
+                  <Typography variant="body2" sx={{ mt: 1 }}>
+                    {rule.rule.uriData.description}
+                  </Typography>
+                )}
                 <RuleEffects rule={rule} sx={{ mt: 1.2 }} />
               </Box>
             </ListItemButton>
