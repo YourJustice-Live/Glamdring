@@ -62,9 +62,12 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
               <RuleEffects rule={rule} sx={{ mt: 1.5 }} />
               {/* Comment law button */}
               {isCommentsEnabled && (
-                <Box sx={{ display: 'flex', direction: 'row', mt: 3 }}>
-                  <LightbulbOutlined fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="body2">
+                <Box sx={{ display: 'flex', direction: 'row', mt: 2 }}>
+                  <LightbulbOutlined
+                    fontSize="small"
+                    sx={{ mr: 1, color: 'text.secondary' }}
+                  />
+                  <Typography variant="body2" color="text.secondary">
                     Do you have an idea how to improve the law?
                     <Link
                       component="button"
@@ -75,7 +78,7 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
                         showDialog(
                           <FeedbackPostDialog
                             form={FORM.commentLaw}
-                            additionalData={{ rule: rule.ruleId }}
+                            additionalData={{ rule: rule.id }}
                             onClose={closeDialog}
                           />,
                         )
