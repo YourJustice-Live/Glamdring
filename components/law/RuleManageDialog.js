@@ -149,7 +149,7 @@ export default function RuleManageDialog({
         'ui:placeholder': 'investor',
       },
       negation: {
-        'ui:disabled': true,
+        'ui:disabled': false,
       },
       uri: {
         'ui:widget': 'MetadataInput',
