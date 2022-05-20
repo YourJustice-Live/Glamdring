@@ -26,9 +26,7 @@ export default function JurisdictionLink() {
       spacing={1}
       sx={{ ml: 1.5, cursor: jurisdiction ? 'pointer' : null }}
       onClick={() => {
-        if (jurisdiction) {
-          router.push(`/jurisdiction`);
-        }
+        router.push(`/jurisdiction/${jurisdiction?.id || ''}`);
       }}
     >
       {jurisdiction ? (
