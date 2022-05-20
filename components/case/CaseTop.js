@@ -1,8 +1,7 @@
 import { Divider, Link, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_STAGE } from 'constants/contracts';
-import { capitalize } from 'lodash';
+import { CASE_STAGE_STRING } from 'constants/strings';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -15,7 +14,7 @@ export default function CaseTop({ caseObject, sx }) {
     <Box sx={{ ...sx }}>
       <CaseAdressJurisdictionCreatedDate caseObject={caseObject} />
       <Divider sx={{ mt: 1, mb: 1 }} />
-      <CaseAdminStageJurisdiction caseObject={caseObject} />
+      <CaseAdminStage caseObject={caseObject} />
     </Box>
   );
 }
@@ -75,20 +74,14 @@ function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
   );
 }
 
-function CaseAdminStageJurisdiction({ caseObject, sx }) {
+function CaseAdminStage({ caseObject, sx }) {
   const [adminAccount, setAdminAccount] = useState(null);
   const [stageName, setStageName] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
       setAdminAccount(caseObject.adminAccounts[0]);
-      setStageName(
-        capitalize(
-          Object.values(CASE_STAGE).find(
-            (stage) => stage.id === caseObject?.stage,
-          )?.name,
-        ),
-      );
+      setStageName(CASE_STAGE_STRING[caseObject?.stage]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
@@ -114,8 +107,8 @@ function CaseAdminStageJurisdiction({ caseObject, sx }) {
           alignItems: { xs: 'flex-start', md: 'flex-end' },
         }}
       >
-        <Typography variant="body2" sx={{ mt: 0.3 }}>
-          <strong>Stage:</strong> {stageName || 'Unknown'}
+        <Typography variant="body2" sx={{ mt: 0.3, fontWeight: 'bold' }}>
+          {stageName || 'Unknown Case Stage'}
         </Typography>
       </Box>
     </Box>

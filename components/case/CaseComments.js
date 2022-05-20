@@ -67,7 +67,7 @@ export default function CaseComments({ caseObject, sx }) {
         <Typography>No comments</Typography>
       )}
       {/* Add comment post form */}
-      {caseObject?.stage === CASE_STAGE.open.id &&
+      {caseObject?.stage === CASE_STAGE.open &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>
             <Button

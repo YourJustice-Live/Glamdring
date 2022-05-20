@@ -8,7 +8,8 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { CASE_STAGE } from 'constants/contracts';
-import { capitalize, isNumber } from 'lodash';
+import { CASE_STAGE_STRING } from 'constants/strings';
+import { isNumber } from 'lodash';
 import { useState } from 'react';
 
 /**
@@ -40,21 +41,21 @@ export default function CaseStageSelect(props) {
             propsOnChange(event.target.value);
           }}
         >
-          <MenuItem value="">Any</MenuItem>
-          <MenuItem value={CASE_STAGE.draft.id}>
-            {capitalize(CASE_STAGE.draft.name)}
+          <MenuItem value="">Any Stage</MenuItem>
+          <MenuItem value={CASE_STAGE.draft}>
+            {CASE_STAGE_STRING[CASE_STAGE.draft]}
           </MenuItem>
-          <MenuItem value={CASE_STAGE.open.id}>
-            {capitalize(CASE_STAGE.open.name)}
+          <MenuItem value={CASE_STAGE.open}>
+            {CASE_STAGE_STRING[CASE_STAGE.open]}
           </MenuItem>
-          <MenuItem value={CASE_STAGE.verdict.id}>
-            {capitalize(CASE_STAGE.verdict.name)}
+          <MenuItem value={CASE_STAGE.verdict}>
+            {CASE_STAGE_STRING[CASE_STAGE.verdict]}
           </MenuItem>
-          <MenuItem value={CASE_STAGE.closed.id}>
-            {capitalize(CASE_STAGE.closed.name)}
+          <MenuItem value={CASE_STAGE.closed}>
+            {CASE_STAGE_STRING[CASE_STAGE.closed]}
           </MenuItem>
-          <MenuItem value={CASE_STAGE.cancelled.id}>
-            {capitalize(CASE_STAGE.cancelled.name)}
+          <MenuItem value={CASE_STAGE.cancelled}>
+            {CASE_STAGE_STRING[CASE_STAGE.cancelled]}
           </MenuItem>
         </Select>
       </FormControl>
