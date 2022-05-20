@@ -96,12 +96,6 @@ export default function ActionTable({ sx }) {
       width: 100,
       valueGetter: (params) => `${params.row.action.object || 'None'}`,
     },
-    {
-      field: 'tool',
-      headerName: 'Tool',
-      width: 100,
-      valueGetter: (params) => `${params.row.action.tool || 'None'}`,
-    },
   ];
 
   async function loadData() {

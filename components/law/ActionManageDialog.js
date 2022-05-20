@@ -88,7 +88,10 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
         'ui:emptyValue': '',
         'ui:placeholder': 'contract',
       },
-      tool: { 'ui:emptyValue': '' },
+      tool: {
+        'ui:emptyValue': '',
+        'ui:widget': 'hidden',
+      },
     },
     uri: {
       'ui:widget': 'MetadataInput',
