@@ -9,9 +9,8 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconProfile } from 'icons';
+import { IconMember } from 'icons';
 import NextLink from 'next/link';
-import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -47,14 +46,13 @@ export function Sidebar() {
               <Box sx={{ mr: 1.5 }}>
                 <Avatar
                   sx={{
-                    bgcolor: 'grey.50',
                     width: 82,
                     height: 82,
                     borderRadius: '16px',
                   }}
                   src={accountProfile.avatarNftUriImage}
                 >
-                  <IconProfile hexColor={palette.grey[600]} />
+                  <IconMember width="82" height="82" />
                 </Avatar>
               </Box>
               {/* Profile details */}

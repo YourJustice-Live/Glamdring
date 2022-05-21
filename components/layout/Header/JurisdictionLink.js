@@ -1,6 +1,7 @@
 import { Avatar, Skeleton, Stack, Typography } from '@mui/material';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
+import { IconJurisdiction } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -35,12 +36,11 @@ export default function JurisdictionLink() {
             sx={{
               width: 22,
               height: 22,
-              bgcolor: 'primary.main',
               fontSize: 14,
             }}
             src={jurisdiction.image}
           >
-            J
+            <IconJurisdiction width="22" height="22" />
           </Avatar>
           <Typography variant="h5" sx={{ fontWeight: 500 }}>
             {jurisdiction.name}

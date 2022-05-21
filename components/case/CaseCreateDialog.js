@@ -28,7 +28,7 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconProfile, IconWallet } from 'icons';
+import { IconJurisdiction, IconProfile, IconWallet } from 'icons';
 import { capitalize } from 'lodash';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -556,12 +556,11 @@ export default function CaseCreateDialog({
                 sx={{
                   width: 22,
                   height: 22,
-                  bgcolor: 'primary.main',
                   fontSize: 14,
                 }}
                 src={jurisdiction.image}
               >
-                J
+                <IconJurisdiction width="22" height="22" />
               </Avatar>
               <Typography>{jurisdiction.name}</Typography>
             </Stack>

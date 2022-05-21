@@ -19,7 +19,7 @@ import {
 import { Box } from '@mui/system';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconProfile } from 'icons';
+import { IconMember, IconProfile } from 'icons';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
@@ -124,14 +124,13 @@ function ProfileAvatar({ profile, sx }) {
     <Box sx={{ ...sx }}>
       <Avatar
         sx={{
-          bgcolor: 'grey.50',
           width: 164,
           height: 164,
           borderRadius: '24px',
         }}
         src={profile?.avatarNftUriData?.image}
       >
-        <IconProfile hexColor={palette.grey[600]} />
+        <IconMember width="164" height="164" />
       </Avatar>
     </Box>
   );

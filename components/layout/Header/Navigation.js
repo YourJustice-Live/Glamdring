@@ -18,6 +18,7 @@ import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import {
   IconHome,
+  IconMember,
   IconNotification,
   IconPlus,
   IconProfile,
@@ -179,10 +180,10 @@ export default function Navigation() {
           <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
             <Avatar
               src={accountProfile?.avatarNftUriImage}
-              sx={{ bgcolor: 'grey.50', width: 36, height: 36 }}
+              sx={{ width: 36, height: 36 }}
             >
               {account ? (
-                <IconProfile hexColor={palette.grey[600]} />
+                <IconMember width="36" height="36" />
               ) : (
                 <MenuOutlined sx={{ color: palette.grey[600] }} />
               )}

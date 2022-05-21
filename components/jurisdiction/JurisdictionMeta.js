@@ -19,7 +19,13 @@ import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconFlag, IconPassport, IconPlus, IconProfile } from 'icons';
+import {
+  IconFlag,
+  IconJurisdiction,
+  IconPassport,
+  IconPlus,
+  IconProfile,
+} from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
@@ -106,14 +112,13 @@ function JurisdictionAvatar({ jurisdiction, sx }) {
     <Box sx={{ ...sx }}>
       <Avatar
         sx={{
-          bgcolor: 'primary.main',
           width: 164,
           height: 164,
           borderRadius: '24px',
         }}
         src={jurisdiction?.image}
       >
-        J
+        <IconJurisdiction width="164" height="164" />
       </Avatar>
     </Box>
   );
