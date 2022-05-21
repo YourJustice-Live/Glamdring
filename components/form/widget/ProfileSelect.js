@@ -78,10 +78,9 @@ export default function ProfileSelect(props) {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ ...propsSx }}>
       {propsHeader}
       <Autocomplete
-        sx={{ ...propsSx }}
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
           (option.avatarNftUriFirstName || 'Anonymous') +
