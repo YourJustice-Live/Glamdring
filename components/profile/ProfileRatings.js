@@ -111,10 +111,10 @@ export default function ProfileRatings({ profile, sx }) {
 function Rating({
   domain,
   jurisdiction,
-  negativeRating,
-  positiveRating,
-  totalNegativeRating,
-  totalPositiveRating,
+  negativeRating = 0,
+  positiveRating = 0,
+  totalNegativeRating = 0,
+  totalPositiveRating = 0,
   sx,
 }) {
   const sumRating = Number(negativeRating) + Number(positiveRating);
@@ -157,6 +157,7 @@ function Rating({
             flexDirection: 'row',
             alignItems: 'center',
             width: sumRating / sumTotalRating,
+            minWidth: 0.1,
           }}
         >
           <Typography
@@ -171,7 +172,7 @@ function Rating({
             sx={{
               flex: 1,
               height: 18,
-              borderRadius: '12px',
+              borderRadius: '6px',
               ml: 1,
               mr: 1,
               '&.MuiLinearProgress-colorPrimary': {
