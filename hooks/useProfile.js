@@ -16,6 +16,9 @@ export default function useProfile() {
    * @returns {Promise.<Profile>} A profile or null if profile not found.
    */
   let getProfile = async function (account) {
+    if (!account) {
+      return null;
+    }
     const accounts = await getProfiles([account]);
     return accounts && accounts.length > 0 ? accounts[0] : null;
   };

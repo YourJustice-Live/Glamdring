@@ -1,5 +1,6 @@
 import { Backdrop, CircularProgress } from '@mui/material';
 import WalletConnect from '@walletconnect/web3-provider';
+import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
 import useProfile from 'hooks/useProfile';
 import { createContext, useEffect, useRef, useState } from 'react';
@@ -10,16 +11,11 @@ export const Web3Context = createContext();
 export function Web3Provider({ children }) {
   const web3ModalRef = useRef();
   const profileWorkerRef = useRef();
-  const isDefaultProviderEnabled = true;
-
-  // eslint-disable-next-line prettier/prettier
-  const defaultProvider = isDefaultProviderEnabled ? new ethers.providers.InfuraProvider(process.env.NEXT_PUBLIC_INFURA_NETWORK, process.env.NEXT_PUBLIC_INFURA_KEY) : null;
-
   const { getProfile } = useProfile();
-
   const [isLoading, setIsLoading] = useState(true);
   const [instance, setInstance] = useState(null);
   const [provider, setProvider] = useState(null);
+  const [defaultProvider, setDefaultProvider] = useState(null);
   const [account, setAccount] = useState(null);
   const [networkChainId, setNetworkChainId] = useState(null);
   const [isNetworkChainIdCorrect, setIsNetworkChainCorrect] = useState(null);
@@ -30,26 +26,24 @@ export function Web3Provider({ children }) {
       // Connect account
       const instance = await web3ModalRef.current.connect();
       setIsLoading(true);
-      const provider = new ethers.providers.Web3Provider(instance);
+      const provider = new ethers.providers.Web3Provider(instance, 'any');
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
       const networkChainId = network?.chainId;
       // Add listeners if the user has changed the chain or account
-      if (instance.listenerCount('chainChanged') === 0) {
-        instance.addListener('chainChanged', (chainId) =>
-          setNetworkChainId(chainId),
-        );
-      }
-      if (instance.listenerCount('accountsChanged') === 0) {
-        instance.addListener('accountsChanged', () => loadContext());
-      }
+      instance.addListener('chainChanged', (chainId) =>
+        setNetworkChainId(chainId),
+      );
+      instance.addListener('accountsChanged', (accounts) => {
+        if (accounts && accounts.length > 0) {
+          setAccount(accounts[0]);
+        }
+      });
       // Update states
       setInstance(instance);
       setProvider(provider);
-      if (accounts) {
-        const account = accounts[0];
-        setAccount(account);
-        setAccountProfile(await getProfile(account));
+      if (accounts && accounts.length > 0) {
+        setAccount(accounts[0]);
       }
       setNetworkChainId(networkChainId);
     } catch (error) {
@@ -149,6 +143,13 @@ export function Web3Provider({ children }) {
   }
 
   useEffect(() => {
+    if (!defaultProvider && !IS_DEFAULT_PROVIDER_DISABLED) {
+      const infuraProvider = new ethers.providers.InfuraWebSocketProvider(
+        process.env.NEXT_PUBLIC_INFURA_NETWORK,
+        process.env.NEXT_PUBLIC_INFURA_KEY,
+      );
+      setDefaultProvider(infuraProvider);
+    }
     if (!web3ModalRef.current) {
       // Config Web3Modal
       const providerOptions = {
@@ -183,6 +184,15 @@ export function Web3Provider({ children }) {
     setIsNetworkChainCorrect(isChainIdCorrect || isChainIdHexCorrect);
   }, [networkChainId]);
 
+  useEffect(() => {
+    if (account) {
+      getProfile(account).then((accountProfile) =>
+        setAccountProfile(accountProfile),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
+
   const value = {
     state: {
       defaultProvider: defaultProvider,
@@ -192,7 +202,6 @@ export function Web3Provider({ children }) {
       isNetworkChainIdCorrect: isNetworkChainIdCorrect,
       accountProfile: accountProfile,
     },
-    loadContext,
     connectWallet,
     disconnectWallet,
     switchNetwork,

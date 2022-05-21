@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import { IconJurisdiction } from 'icons';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -40,14 +41,13 @@ export default function JurisdictionCard({ jurisdiction }) {
                 <Avatar
                   sx={{
                     cursor: 'pointer',
-                    bgcolor: 'primary.main',
                     width: 82,
                     height: 82,
                     borderRadius: '16px',
                   }}
                   src={jurisdiction.image}
                 >
-                  J
+                  <IconJurisdiction width="82" height="82" />
                 </Avatar>
               </NextLink>
             </Box>

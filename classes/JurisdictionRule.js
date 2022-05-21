@@ -14,6 +14,7 @@ export default class JurisdictionRule {
     confirmationEvidence,
     confirmationWitness,
     effects,
+    isPositive,
   ) {
     this.id = id;
     this.ruleId = ruleId;
@@ -30,5 +31,6 @@ export default class JurisdictionRule {
       witness: confirmationWitness,
     };
     this.effects = effects;
+    this.isPositive = isPositive;
   }
 }

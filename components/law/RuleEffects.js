@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { REPUTATION_RATING } from 'constants/contracts';
 import { IconChart } from 'icons';
+import { capitalize } from 'lodash';
 import { palette } from 'theme/palette';
 
 /**
@@ -12,7 +13,7 @@ export default function RuleEffects({ rule, sx }) {
       sx={{
         display: 'flex',
         alignItems: 'flex-start',
-        flexDirection: 'column',
+        flexDirection: { xs: 'column', md: 'row' },
         ...sx,
       }}
     >
@@ -23,7 +24,7 @@ export default function RuleEffects({ rule, sx }) {
             name={effect.name}
             direction={effect.direction}
             value={effect.value}
-            sx={{ my: 0.8 }}
+            sx={{ mb: { xs: 0.8, md: 0 }, mr: { xs: 0, md: 1 } }}
           />
         ))}
     </Box>
@@ -39,9 +40,10 @@ function RuleEffect({ name, direction, value, sx }) {
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        py: 1.2,
-        px: 1.8,
-        borderRadius: '14px',
+        alignItems: 'center',
+        py: 0.6,
+        px: 1.4,
+        borderRadius: '8px',
         backgroundColor:
           direction === REPUTATION_RATING.positive.direction
             ? 'success.main'
@@ -49,9 +51,9 @@ function RuleEffect({ name, direction, value, sx }) {
         ...sx,
       }}
     >
-      <IconChart hexColor={palette.primary.contrastText} />
+      <IconChart hexColor={palette.primary.contrastText} size={14} />
       <Typography variant="body2" sx={{ color: 'primary.contrastText', ml: 1 }}>
-        {name}
+        {capitalize(name)}
       </Typography>
       <Typography variant="body2" sx={{ color: 'primary.contrastText', ml: 1 }}>
         {direction === REPUTATION_RATING.positive.direction

@@ -37,16 +37,16 @@ export default function CaseJudging({ caseObject, caseLaws, sx }) {
     return (
       <Box sx={{ ...sx }}>
         <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
-        {caseObject?.stage < CASE_STAGE.verdict.id && (
+        {caseObject?.stage < CASE_STAGE.verdict && (
           <CaseRequireVerdictStage caseObject={caseObject} />
         )}
-        {caseObject?.stage === CASE_STAGE.verdict.id && (
+        {caseObject?.stage === CASE_STAGE.verdict && (
           <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
         )}
-        {caseObject?.stage === CASE_STAGE.closed.id && (
+        {caseObject?.stage === CASE_STAGE.closed && (
           <CaseVerdict caseObject={caseObject} />
         )}
-        {caseObject.stage === CASE_STAGE.cancelled.id && (
+        {caseObject.stage === CASE_STAGE.cancelled && (
           <CaseCancellation caseObject={caseObject} />
         )}
       </Box>

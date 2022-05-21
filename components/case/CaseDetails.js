@@ -1,5 +1,5 @@
 import { AttachFileOutlined } from '@mui/icons-material';
-import { Divider, Link, Stack, Typography } from '@mui/material';
+import { Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { POST_TYPE } from 'constants/metadata';
@@ -38,27 +38,35 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
   return (
     <Box sx={{ ...sx }}>
       {/* Name */}
-      <Box>
-        <Typography variant="h2">{caseObject?.name}</Typography>
-        <Divider sx={{ mt: 1 }} />
-      </Box>
-      {/* Subject */}
-      <Box sx={{ mt: 4 }}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography sx={{ fontWeight: 'bold' }}>Subject</Typography>
-          {subjectTitles && (
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ({subjectTitles.join(' / ')})
-            </Typography>
-          )}
-        </Stack>
-        <Stack spacing={1} sx={{ mt: 1.5 }}>
-          {caseObject?.subjectAccounts?.map((account, accountIndex) => (
-            <ProfileCompactCard key={accountIndex} account={account} />
-          ))}
-        </Stack>
+      <Paper sx={{ p: 2.5 }} color="success">
+        <Typography variant="h4">{caseObject?.name}</Typography>
+      </Paper>
+      {/* Subject and affected */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          mt: 4,
+        }}
+      >
+        {/* Subject */}
+        <Box sx={{ width: { xs: 1, md: 1 / 2 } }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
+            {subjectTitles && (
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                ({subjectTitles.join(' / ')})
+              </Typography>
+            )}
+          </Stack>
+          <Stack spacing={1} sx={{ mt: 1.5 }}>
+            {caseObject?.subjectAccounts?.map((account, accountIndex) => (
+              <ProfileCompactCard key={accountIndex} account={account} />
+            ))}
+          </Stack>
+        </Box>
         {/* Affected */}
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ width: { xs: 1, md: 1 / 2 }, mt: { xs: 4, md: 0 } }}>
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
             {affectedTitles && (
@@ -73,34 +81,34 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
             ))}
           </Stack>
         </Box>
-        {/* Evidence */}
-        <Box sx={{ mt: 4 }}>
-          <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
-          {evidencePosts && evidencePosts.length > 0 ? (
-            <Stack spacing={1} sx={{ mt: 1.5 }}>
-              {evidencePosts.map((post, index) => (
-                <Stack
-                  key={index}
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
+      </Box>
+      {/* Evidence */}
+      <Box sx={{ mt: 4 }}>
+        <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
+        {evidencePosts && evidencePosts.length > 0 ? (
+          <Stack spacing={1} sx={{ mt: 1.5 }}>
+            {evidencePosts.map((post, index) => (
+              <Stack
+                key={index}
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
+                <AttachFileOutlined />
+                <Link
+                  href={hexStringToJson(post.uriData)?.evidenceFileUri || '#'}
+                  underline="none"
+                  target="_blank"
+                  variant="body2"
                 >
-                  <AttachFileOutlined />
-                  <Link
-                    href={hexStringToJson(post.uriData)?.evidenceFileUri || '#'}
-                    underline="none"
-                    target="_blank"
-                    variant="body2"
-                  >
-                    {hexStringToJson(post.uriData)?.evidenceTitle || 'Unknown'}
-                  </Link>
-                </Stack>
-              ))}
-            </Stack>
-          ) : (
-            <Typography>None</Typography>
-          )}
-        </Box>
+                  {hexStringToJson(post.uriData)?.evidenceTitle || 'Unknown'}
+                </Link>
+              </Stack>
+            ))}
+          </Stack>
+        ) : (
+          <Typography>None</Typography>
+        )}
       </Box>
     </Box>
   );

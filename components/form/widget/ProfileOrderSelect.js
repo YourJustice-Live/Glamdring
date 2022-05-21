@@ -26,10 +26,10 @@ export default function ProfileOrderSelect(props) {
         }}
       >
         <MenuItem value={PROFILE_ORDER.byPositiveRating}>
-          Order by Positive Rating
+          Order by Positive Reputation
         </MenuItem>
         <MenuItem value={PROFILE_ORDER.byNegativeRating}>
-          Order by Negative Rating
+          Order by Negative Reputation
         </MenuItem>
       </Select>
     </FormControl>

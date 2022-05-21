@@ -16,9 +16,8 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconProfile } from 'icons';
+import { IconMember } from 'icons';
 import NextLink from 'next/link';
-import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -52,7 +51,6 @@ export default function ProfileCard({ profile, jurisdiction }) {
                 <NextLink href={`/profile/${profile.account}`} passHref>
                   <Avatar
                     sx={{
-                      bgcolor: 'grey.50',
                       cursor: 'pointer',
                       width: 82,
                       height: 82,
@@ -60,7 +58,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                     }}
                     src={profile.avatarNftUriImage}
                   >
-                    <IconProfile hexColor={palette.grey[600]} />
+                    <IconMember width="82" heigth="82" />
                   </Avatar>
                 </NextLink>
               </Box>
@@ -107,7 +105,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                   )
                 }
               >
-                Add Score
+                Add Reputation
               </Button>
               <Button
                 variant="text"
@@ -126,7 +124,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                   )
                 }
               >
-                Add Score
+                Add Reputation
               </Button>
             </Stack>
           </Box>

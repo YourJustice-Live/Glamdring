@@ -40,26 +40,11 @@ export const JURISDICTION_ROLE = {
 };
 
 export const CASE_STAGE = {
-  draft: {
-    id: 0,
-    name: 'draft',
-  },
-  open: {
-    id: 1,
-    name: 'open',
-  },
-  verdict: {
-    id: 2,
-    name: 'verdict',
-  },
-  closed: {
-    id: 6,
-    name: 'closed',
-  },
-  cancelled: {
-    id: 7,
-    name: 'cancelled',
-  },
+  draft: 0,
+  open: 1,
+  verdict: 2,
+  closed: 6,
+  cancelled: 7,
 };
 
 export const CASE_ROLE = {

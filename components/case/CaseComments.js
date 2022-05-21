@@ -1,4 +1,4 @@
-import { Button, capitalize, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
@@ -6,6 +6,7 @@ import { POST_TYPE } from 'constants/metadata';
 import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
+import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
@@ -66,7 +67,7 @@ export default function CaseComments({ caseObject, sx }) {
         <Typography>No comments</Typography>
       )}
       {/* Add comment post form */}
-      {caseObject?.stage === CASE_STAGE.open.id &&
+      {caseObject?.stage === CASE_STAGE.open &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>
             <Button

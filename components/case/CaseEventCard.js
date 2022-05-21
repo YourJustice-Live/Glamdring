@@ -7,8 +7,8 @@ import {
   Typography,
 } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
-import { capitalize } from 'lodash';
+import { CASE_ROLE } from 'constants/contracts';
+import { CASE_STAGE_STRING } from 'constants/strings';
 
 /**
  * A component with a card with case event.
@@ -49,11 +49,7 @@ export default function CaseEventCard({ caseEvent }) {
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
               Case stage changed to &quot;
-              {Object.values(CASE_STAGE).map((stage) =>
-                stage.id.toString() === caseEvent.data.stage
-                  ? capitalize(stage.name)
-                  : null,
-              )}
+              {CASE_STAGE_STRING[caseEvent.data.stage]}
               &quot;
             </Typography>
           </Stack>

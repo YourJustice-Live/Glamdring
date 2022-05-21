@@ -1,10 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  Divider,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
@@ -16,8 +10,7 @@ import { formatAddress } from 'utils/formatters';
  * A widget to select profile.
  */
 export default function ProfileSelect(props) {
-  const propsLabel = props.label;
-  const propsSubLabel = props.options?.subLabel;
+  const propsHeader = props.options?.header;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
   const propsSx = props.sx;
@@ -85,56 +78,52 @@ export default function ProfileSelect(props) {
   }, []);
 
   return (
-    <Autocomplete
-      sx={{ ...propsSx }}
-      disabled={isDisabled || propsDisabled}
-      getOptionLabel={(option) =>
-        (option.avatarNftUriFirstName || 'Anonymous') +
-        ' ' +
-        option.avatarNftUriLastName +
-        ' ' +
-        `(${formatAddress(option.account)})`
-      }
-      filterOptions={(x) => x}
-      options={options}
-      value={value}
-      onChange={(_, newValue) => {
-        setValue(newValue);
-        propsOnChange(newValue ? newValue.account : null);
-      }}
-      onInputChange={(_, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      isOptionEqualToValue={(option, value) => option.account === value.account}
-      renderInput={(params) => (
-        <Box>
-          {propsLabel && (
-            <>
-              <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-              <Typography variant="body2">{propsSubLabel}</Typography>
-              <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-            </>
-          )}
+    <Box>
+      {propsHeader}
+      <Autocomplete
+        sx={{ ...propsSx }}
+        disabled={isDisabled || propsDisabled}
+        getOptionLabel={(option) =>
+          (option.avatarNftUriFirstName || 'Anonymous') +
+          ' ' +
+          option.avatarNftUriLastName +
+          ' ' +
+          `(${formatAddress(option.account)})`
+        }
+        filterOptions={(x) => x}
+        options={options}
+        value={value}
+        onChange={(_, newValue) => {
+          setValue(newValue);
+          propsOnChange(newValue ? newValue.account : null);
+        }}
+        onInputChange={(_, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        isOptionEqualToValue={(option, value) =>
+          option.account === value.account
+        }
+        renderInput={(params) => (
           <TextField
             fullWidth
             {...params}
             size={propsSize}
             label="First name, last name, address"
           />
-        </Box>
-      )}
-      renderOption={(props, option) => {
-        return (
-          <li {...props}>
-            <ProfileCompactCard
-              profile={option}
-              disableAddress={false}
-              disableLink={true}
-              sx={{ my: 0.6 }}
-            />
-          </li>
-        );
-      }}
-    />
+        )}
+        renderOption={(props, option) => {
+          return (
+            <li {...props}>
+              <ProfileCompactCard
+                profile={option}
+                disableAddress={false}
+                disableLink={true}
+                sx={{ my: 0.6 }}
+              />
+            </li>
+          );
+        }}
+      />
+    </Box>
   );
 }

@@ -48,7 +48,7 @@ export default function ProfileCases({ profile, filterPreset }) {
       let cases = [];
       if (filterPreset === 'awaitingConfirmation') {
         cases = await getCases({
-          stage: CASE_STAGE.open.id,
+          stage: CASE_STAGE.open,
           witness: profile.account,
           first: 100,
         });
@@ -65,7 +65,7 @@ export default function ProfileCases({ profile, filterPreset }) {
         }, []);
       } else if (filterPreset === 'awaitingJudging') {
         cases = await getCases({
-          stage: CASE_STAGE.verdict.id,
+          stage: CASE_STAGE.verdict,
           judge: profile.account,
           first: 100,
         });
@@ -165,7 +165,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
       },
       isSubject: {
         type: 'boolean',
-        title: 'Is Subject',
+        title: 'Is Acted',
       },
       isPlaintiff: {
         type: 'boolean',

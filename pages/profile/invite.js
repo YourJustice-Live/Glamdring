@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileManage from 'components/profile/ProfileManage';
 import ContentProtector from 'components/protector/ContentProtector';
-import { PROFILE_INVITING_DISABLED } from 'constants/features';
+import { IS_PROFILE_INVITING_DISABLED } from 'constants/features';
 import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
@@ -19,7 +19,7 @@ export default function ProfileInvite() {
         isAccountRequired={true}
         isAccountProfileRequired={true}
       >
-        {PROFILE_INVITING_DISABLED ? (
+        {IS_PROFILE_INVITING_DISABLED ? (
           <Box>
             <Typography variant="h1" gutterBottom>
               Feature is under development

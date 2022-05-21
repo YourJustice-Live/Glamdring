@@ -1,126 +1,170 @@
-import { InfoOutlined } from '@mui/icons-material';
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Divider,
-  Link,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  Typography,
-} from '@mui/material';
-import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
-import { FORM } from 'constants/feedbacks';
-import useDialogContext from 'hooks/useDialogContext';
+import { Autocomplete, Box, TextField, Typography } from '@mui/material';
+import useAction from 'hooks/useAction';
 import useJurisdiction from 'hooks/useJurisdiction';
-import { useEffect, useState } from 'react';
-import { palette } from 'theme/palette';
+import useToasts from 'hooks/useToasts';
+import { throttle, unionWith } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
 
 /**
- * A widget to select case action.
+ * A widget to select case action (guid).
  */
 export default function CaseActionSelect(props) {
-  const propsValue = props.value;
+  const propsHeader = props.options?.header;
+  const propsFooter = props.options?.footer;
   const propsDisabled = props.disabled;
+  const propsRequired = props.required;
+  const propsSx = props.sx;
+  const propsValue = props.value;
   const propsOnChange = props.onChange;
-  const propsLaws = props.formContext?.laws;
-  const propsFormCategory = props.formContext?.formData?.category;
-  const { showDialog, closeDialog } = useDialogContext();
-  const { isJurisdictionRuleInCategory } = useJurisdiction();
-  const [items, setItems] = useState([]);
+  const propsJurisdiction = props.formContext?.jurisdiction;
+  const propsIsPositive = props.formContext?.formData?.isPositive;
+  const { showToastError } = useToasts();
+  const { getActions } = useAction();
+  const { getJurisdictionRulesBySearchQuery } = useJurisdiction();
+  const [value, setValue] = useState(null);
+  const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState([]);
 
   /**
-   * Get actions from laws and add it to items if action has any rule in the specified category.
+   * A function to searching jurisdiction rules by search query that runs once every defined amount of milliseconds.
+   */
+  const searchRules = useMemo(
+    () =>
+      throttle((jurisdiction, isPositive, searchQuery, callback) => {
+        try {
+          getJurisdictionRulesBySearchQuery(
+            jurisdiction.id,
+            isPositive === true,
+            isPositive === false,
+            searchQuery,
+          ).then((rules) => callback(rules));
+        } catch (error) {
+          showToastError(error);
+        }
+      }, 400),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  /**
+   * Load actions by guids and add it to options list.
+   */
+  async function loadActions(actionGuids) {
+    try {
+      // Load actions for input options
+      const actions = await getActions(actionGuids);
+      // Define options
+      let options = [];
+      // Add selected value to option list
+      if (value) {
+        options = [value];
+      }
+      // Add found actions to option list
+      if (actions) {
+        options = unionWith(
+          options,
+          actions,
+          (action1, action2) => action1.guid === action2.guid,
+        );
+      }
+      setOptions(options);
+    } catch (error) {
+      showToastError(error);
+    }
+  }
+
+  /**
+   * Search jurisdiction rules by specified data, then load actions by action guids from found rules.
    */
   useEffect(() => {
-    if (propsLaws) {
-      const items = [];
-      [...propsLaws.keys()].forEach((key) => {
-        let isActionInCategory = false;
-        propsLaws.get(key).rules.forEach((rule) => {
-          if (isJurisdictionRuleInCategory(rule, propsFormCategory)) {
-            isActionInCategory = true;
-          }
-        });
-        if (isActionInCategory) {
-          items.push(propsLaws.get(key).action);
-        }
-      });
-      setItems(items);
-    }
+    let isComponentActive = true;
+    // setOptions([]);
+    searchRules(propsJurisdiction, propsIsPositive, inputValue, (rules) => {
+      if (isComponentActive) {
+        loadActions(rules.map((rule) => rule.rule.about));
+      }
+    });
+    return () => {
+      isComponentActive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsLaws, propsFormCategory]);
+  }, [propsJurisdiction, propsIsPositive, inputValue]);
+
+  /**
+   * Clear options if props changes.
+   */
+  useEffect(() => {
+    setOptions([]);
+  }, [propsJurisdiction, propsIsPositive]);
+
+  /**
+   * Clear value if props value cleared.
+   */
+  useEffect(() => {
+    if (!propsValue) {
+      setValue(null);
+    }
+  }, [propsValue]);
 
   return (
-    <Box>
-      <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
-      <Divider sx={{ my: 1.5 }} />
-      <List>
-        {items.map((item, index) => (
-          <ListItemButton
-            sx={{ py: 2.4 }}
-            key={index}
-            selected={item.guid === propsValue}
-            disabled={propsDisabled}
-            onClick={() => propsOnChange(item.guid)}
-          >
-            <ListItemIcon>
-              {getActionIcon(item, 36)}
-              {/* <ArrowForwardOutlined /> */}
-            </ListItemIcon>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                flexDirection: 'column',
-              }}
-            >
-              <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                {item?.uriData?.name || 'None Name'}
-              </Typography>
-              <Typography variant="body2">
-                {item?.uriData?.description || 'None Description'}
-              </Typography>
-            </Box>
-          </ListItemButton>
-        ))}
-      </List>
-      <Alert
-        severity="info"
-        icon={<InfoOutlined color="primary" />}
-        sx={{
-          borderRadius: '8px',
-          background: palette.grey[50],
-          boxShadow: 'none',
-          mt: 1,
-          mb: 0,
+    <Box sx={{ ...propsSx }}>
+      {propsHeader}
+      <Autocomplete
+        disabled={propsDisabled}
+        getOptionLabel={(option) => option.uriData?.name || 'None Name'}
+        filterOptions={(x) => x}
+        options={options}
+        value={value}
+        onChange={(_, newValue) => {
+          setValue(newValue);
+          propsOnChange(newValue?.guid);
         }}
-      >
-        <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="body2">
-            <Link
-              component="button"
-              variant="body2"
-              underline="none"
-              sx={{ mr: 0.5, pb: 0.3 }}
-              onClick={() =>
-                showDialog(
-                  <FeedbackPostDialog
-                    form={FORM.proposeLaw}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              <strong>Propose</strong>
-            </Link>
-            a law that we should add to the jurisdiction.
-          </Typography>
-        </Box>
-      </Alert>
+        onInputChange={(_, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        isOptionEqualToValue={(option, value) => option.guid === value.guid}
+        renderInput={(params) => (
+          <TextField
+            fullWidth
+            {...params}
+            label="Search by action, acted or affected role"
+            required={propsRequired}
+          />
+        )}
+        renderOption={(props, option) => {
+          return (
+            <li {...props}>
+              <Box
+                sx={{
+                  my: 0.5,
+                  display: 'flex',
+                  flexDirection: { xs: 'column', md: 'row' },
+                  alignItems: { xs: 'flex-start', md: 'center' },
+                }}
+              >
+                {getActionIcon(option, 36)}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    mt: { xs: 1, md: 0 },
+                    ml: { xs: 0, md: 2 },
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
+                    {option.uriData?.name || 'None Name'}
+                  </Typography>
+                  <Typography variant="body2">
+                    {option.uriData?.description}
+                  </Typography>
+                </Box>
+              </Box>
+            </li>
+          );
+        }}
+      />
+      {propsFooter}
     </Box>
   );
 }

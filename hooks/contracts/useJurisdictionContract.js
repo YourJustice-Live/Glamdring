@@ -22,10 +22,11 @@ export default function useJuridictionContract() {
    * @returns Transaction,
    */
   async function getUri(contractAddress) {
-    return await getContract(
-      contractAddress,
-      provider?.getSigner() || defaultProvider,
-    ).contractURI();
+    const signerOrProvider =
+      provider?.getSigner() && isNetworkChainIdCorrect
+        ? provider.getSigner()
+        : defaultProvider;
+    return await getContract(contractAddress, signerOrProvider).contractURI();
   }
 
   /**

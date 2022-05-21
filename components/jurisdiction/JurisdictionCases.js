@@ -4,8 +4,10 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   Pagination,
   Stack,
+  Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseList from 'components/case/CaseList';
@@ -126,27 +128,21 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
     properties: {
       adminProfileAccount: {
         type: ['string', 'null'],
-        title: 'Admin',
       },
       subjectProfileAccount: {
         type: ['string', 'null'],
-        title: 'Subject',
       },
       plaintiffProfileAccount: {
         type: ['string', 'null'],
-        title: 'Plaintiff',
       },
       judgeProfileAccount: {
         type: ['string', 'null'],
-        title: 'Judge',
       },
       witnessProfileAccount: {
         type: ['string', 'null'],
-        title: 'Witness',
       },
       affectedProfileAccount: {
         type: ['string', 'null'],
-        title: 'Affected',
       },
       stageId: {
         type: 'number',
@@ -158,21 +154,69 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
   const uiSchema = {
     adminProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Admin</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     subjectProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     plaintiffProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Plaintiff</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     judgeProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Judge</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     witnessProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Witness</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     affectedProfileAccount: {
       'ui:widget': 'ProfileSelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+      },
     },
     stageId: {
       'ui:widget': 'CaseStageSelect',

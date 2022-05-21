@@ -1,9 +1,8 @@
 import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import { IconProfile } from 'icons';
+import { IconMember } from 'icons';
 import { useEffect, useState } from 'react';
-import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -45,9 +44,9 @@ export default function ProfileCompactCard({
         <>
           <Avatar
             src={(profile || accountProfile).avatarNftUriImage}
-            sx={{ bgcolor: 'grey.50', width: 24, height: 24 }}
+            sx={{ width: 24, height: 24 }}
           >
-            <IconProfile hexColor={palette.grey[600]} size={14} />
+            <IconMember width="24" heigth="24" />
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
             {disableLink ? (
