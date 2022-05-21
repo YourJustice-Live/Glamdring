@@ -60,7 +60,7 @@ export default function CasePostAddDialog({
             'Admin',
             'Acted',
             'Plaintiff',
-            'Affected',
+            'Judge',
             'Witness',
             'Affected',
           ],
