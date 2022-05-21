@@ -20,7 +20,6 @@ import { getActionIcon } from 'utils/metadata';
  */
 export default function LawCard({ law, isCommentsEnabled, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
-
   return (
     <Card elevation={1} sx={{ ...sx }}>
       <CardContent sx={{ p: 2.5 }}>
@@ -46,13 +45,33 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
         <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
           {law?.rules?.map((rule, index) => (
             <Paper key={index} variant="outlined" sx={{ p: 2 }}>
-              {/* Rule name and id */}
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {/* Rule id */}
+              <Chip label={`ID: ${rule?.ruleId || 'None'}`} size="small" />
+              {/* Rule negation and name */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  mt: 1.5,
+                }}
+              >
+                {rule?.rule?.negation && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 'bold',
+                      color: 'danger.primary',
+                      mr: 0.5,
+                    }}
+                  >
+                    NOT
+                  </Typography>
+                )}
+                <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
                   {rule?.rule?.uriData?.name || 'None Rule Name'}
                 </Typography>
-                <Chip label={`ID: ${rule?.ruleId}`} size="small" />
-              </Stack>
+              </Box>
               {/* Rule description */}
               {rule?.rule?.uriData?.description && (
                 <Typography variant="body2" sx={{ mt: 0.3 }}>

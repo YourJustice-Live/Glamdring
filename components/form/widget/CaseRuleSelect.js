@@ -4,13 +4,14 @@ import {
   List,
   ListItemButton,
   Skeleton,
-  Stack,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import RuleEffects from 'components/law/RuleEffects';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import { theme } from 'theme';
 import { getActionIcon } from 'utils/metadata';
 
 /**
@@ -29,6 +30,7 @@ export default function CaseRuleSelect(props) {
   const { showToastError } = useToasts();
   const { getJurisdictionRules } = useJurisdiction();
   const [rules, setRules] = useState(null);
+  const isMediumDevice = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
     if (propsJurisdiction && propsFormActionGuid) {
@@ -53,34 +55,71 @@ export default function CaseRuleSelect(props) {
         <List>
           {rules.map((rule, index) => (
             <ListItemButton
-              sx={{ py: 2.4 }}
               key={index}
               selected={rule.ruleId === propsValue}
               disabled={propsDisabled}
+              alignItems={isMediumDevice ? 'center' : 'flex-start'}
+              sx={{
+                py: 1.8,
+                display: 'flex',
+                flexDirection: {
+                  xs: 'column',
+                  md: 'row',
+                },
+              }}
               onClick={() => {
                 propsOnChange(rule.ruleId);
               }}
             >
+              {/* Action icon */}
+              {getActionIcon(propsFormAction, 36)}
+              {/* Rule details */}
               <Box
                 sx={{
                   display: 'flex',
-                  alignItems: 'flex-start',
                   flexDirection: 'column',
+                  mt: { xs: 1, md: 0 },
+                  ml: { xs: 0, md: 2 },
                 }}
               >
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  {getActionIcon(propsFormAction, 28)}
-                  <Typography sx={{ fontWeight: 'bold' }}>
+                {/* Rule negation, name, id */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    alignItems: { xs: 'flex-start', md: 'center' },
+                  }}
+                >
+                  {rule?.rule?.negation && (
+                    <Typography
+                      sx={{
+                        fontWeight: 'bold',
+                        color: 'danger.primary',
+                        mr: 0.5,
+                      }}
+                    >
+                      NOT
+                    </Typography>
+                  )}
+                  <Typography
+                    sx={{ fontWeight: 'bold', mr: 1, mt: { xs: 0.2, md: 0 } }}
+                  >
                     {rule?.rule?.uriData?.name || 'None Name'}
                   </Typography>
-                  <Chip label={`ID: ${rule.ruleId}`} size="small" />
-                </Stack>
+                  <Chip
+                    label={`ID: ${rule.ruleId}`}
+                    size="small"
+                    sx={{ mt: { xs: 0.5, md: 0 } }}
+                  />
+                </Box>
+                {/* Rule description */}
                 {rule?.rule?.uriData?.description && (
-                  <Typography variant="body2" sx={{ mt: 1 }}>
+                  <Typography variant="body2" sx={{ mt: { xs: 1, md: 0.3 } }}>
                     {rule.rule.uriData.description}
                   </Typography>
                 )}
-                <RuleEffects rule={rule} sx={{ mt: 1.2 }} />
+                {/* Rule effects */}
+                <RuleEffects rule={rule} sx={{ mt: { xs: 1.8, md: 1.2 } }} />
               </Box>
             </ListItemButton>
           ))}

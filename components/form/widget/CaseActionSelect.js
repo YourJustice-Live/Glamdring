@@ -139,8 +139,8 @@ export default function CaseActionSelect(props) {
                 sx={{
                   my: 0.5,
                   display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: { xs: 'column', md: 'row' },
+                  alignItems: { xs: 'flex-start', md: 'center' },
                 }}
               >
                 {getActionIcon(option, 36)}
@@ -148,7 +148,8 @@ export default function CaseActionSelect(props) {
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    ml: 2,
+                    mt: { xs: 1, md: 0 },
+                    ml: { xs: 0, md: 2 },
                   }}
                 >
                   <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
