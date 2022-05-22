@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Stack,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
@@ -16,6 +17,7 @@ import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { createRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { theme } from 'theme';
 
 /**
  * A dialog for post feedback.
@@ -33,6 +35,7 @@ export default function FeedbackPostDialog({
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
   const recaptchaRef = createRef();
+  const isMediumDevice = useMediaQuery(theme.breakpoints.up('md'));
 
   async function close() {
     setFormData({});
@@ -78,7 +81,7 @@ export default function FeedbackPostDialog({
         >
           <Box sx={{ mt: 1 }}>
             <ReCAPTCHA
-              size="compact"
+              size={isMediumDevice ? 'normal' : 'compact'}
               ref={recaptchaRef}
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             />
@@ -95,10 +98,18 @@ export default function FeedbackPostDialog({
               </LoadingButton>
             ) : (
               <>
-                <Button variant="contained" type="submit">
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{ minWidth: 100 }}
+                >
                   Post
                 </Button>
-                <Button variant="outlined" onClick={onClose}>
+                <Button
+                  variant="outlined"
+                  onClick={onClose}
+                  sx={{ minWidth: 100 }}
+                >
                   Cancel
                 </Button>
               </>
