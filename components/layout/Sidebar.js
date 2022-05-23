@@ -97,6 +97,14 @@ export function Sidebar() {
             <Link underline="none">FAQ</Link>
           </NextLink>
         </Stack>
+
+        <button type="button" onClick={() => {
+          throw new Error("Sentry Frontend Error");
+        }}>
+          Throw error
+        </button>
+
+
       </Box>
     </Drawer>
   );
