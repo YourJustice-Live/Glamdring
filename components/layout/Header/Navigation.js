@@ -12,8 +12,10 @@ import {
   Tooltip,
   Typography,
   Link as MuiLink,
+  Badge,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
+import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import {
@@ -26,7 +28,7 @@ import {
   Logo,
 } from 'icons';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 import JurisdictionLink from './JurisdictionLink';
@@ -39,6 +41,8 @@ export default function Navigation() {
   const { account, accountProfile, connectWallet, disconnectWallet } =
     useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
+  const { isAccountHasAwaitingCases } = useCase();
+  const [isAwaitingCasesExist, setIsAwaitingCasesExist] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -46,6 +50,15 @@ export default function Navigation() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    if (account) {
+      isAccountHasAwaitingCases(account).then((result) =>
+        setIsAwaitingCasesExist(result),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
 
   return (
     <AppBar
@@ -267,7 +280,14 @@ export default function Navigation() {
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href="/cases" passHref>
-              <Typography>Cases</Typography>
+              <Badge
+                color="danger"
+                badgeContent={isAwaitingCasesExist ? 1 : 0}
+                variant="dot"
+                sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
+              >
+                <Typography>Cases</Typography>
+              </Badge>
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>

@@ -16,15 +16,26 @@ export default function CaseCard({ caseObject }) {
   const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
 
-  async function loadData() {
-    const ruleIds = caseObject.rules.map((rule) => rule.id);
-    const rules = await getJurisdictionRules(ruleIds, null, null);
-    const laws = await getLawsByRules(rules);
-    setCaseLaws(laws);
+  async function getLawsByCase(caseObject) {
+    let laws;
+    if (caseObject?.rules) {
+      const ruleIds = caseObject.rules.map((rule) => rule.id);
+      const rules = await getJurisdictionRules(ruleIds, null, null);
+      laws = await getLawsByRules(rules);
+    }
+    return laws;
   }
 
   useEffect(() => {
-    loadData();
+    let isComponentActive = true;
+    getLawsByCase(caseObject).then((laws) => {
+      if (isComponentActive) {
+        setCaseLaws(laws);
+      }
+    });
+    return () => {
+      isComponentActive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
 

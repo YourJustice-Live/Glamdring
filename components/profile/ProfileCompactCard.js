@@ -21,13 +21,19 @@ export default function ProfileCompactCard({
   const [accountProfile, setAccountProfile] = useState(null);
 
   useEffect(() => {
+    let isComponentActive = true;
     if (!profile && account) {
       getProfile(account)
         .then((profile) => {
-          setAccountProfile(profile);
+          if (isComponentActive) {
+            setAccountProfile(profile);
+          }
         })
         .catch((error) => showToastError(error));
     }
+    return () => {
+      isComponentActive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, account]);
 

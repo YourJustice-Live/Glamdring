@@ -1,6 +1,6 @@
 import Case from 'classes/Case';
 import CaseEvent from 'classes/CaseEvent';
-import { CASE_ROLE } from 'constants/contracts';
+import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
 
@@ -164,11 +164,58 @@ export default function useCase() {
     return false;
   };
 
+  /**
+   * Check that the account has cases that await his confirmation.
+   *
+   * @param {string} account Account address.
+   * @returns {boolean} Result of checking.
+   */
+  let isAccountHasAwaitingConfirmationCases = async function (account) {
+    const cases = await getCases({
+      stage: CASE_STAGE.open,
+      witness: account,
+      accountWithoutConfirmationPost: account,
+      first: 1,
+    });
+    return cases && cases.length > 0;
+  };
+
+  /**
+   * Check that the account has cases that await his judgment.
+   *
+   * @param {string} account Account address.
+   * @returns {Promise.<boolean>} Result of checking.
+   */
+  let isAccountHasAwaitingJudgingCases = async function (account) {
+    const cases = await getCases({
+      stage: CASE_STAGE.verdict,
+      judge: account,
+      first: 1,
+    });
+    return cases && cases.length > 0;
+  };
+
+  /**
+   * Check that the account has cases that await his judgment.
+   *
+   * @param {string} account Account address.
+   * @returns {Promise.<boolean>} Result of checking.
+   */
+  let isAccountHasAwaitingCases = async function (account) {
+    return (
+      (await isAccountHasAwaitingConfirmationCases(account)) ||
+      (await isAccountHasAwaitingJudgingCases(account))
+    );
+  };
+
   return {
     getCase,
     getCases,
     getCaseEvents,
     isAccountHasAnyCaseRole,
     isAccountHasCaseRole,
+    isAccountHasAwaitingConfirmationCases,
+    isAccountHasAwaitingJudgingCases,
+    isAccountHasAwaitingCases,
   };
 }

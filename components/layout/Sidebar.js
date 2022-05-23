@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Drawer,
   Link,
   Paper,
@@ -8,9 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import useCase from 'hooks/useCase';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
+import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -18,7 +21,18 @@ import { formatAddress } from 'utils/formatters';
  */
 export function Sidebar() {
   const { account, accountProfile } = useWeb3Context();
+  const { isAccountHasAwaitingCases } = useCase();
+  const [isAwaitingCasesExist, setIsAwaitingCasesExist] = useState(false);
   const drawerWidth = 280;
+
+  useEffect(() => {
+    if (account) {
+      isAccountHasAwaitingCases(account).then((result) =>
+        setIsAwaitingCasesExist(result),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
 
   return (
     <Drawer
@@ -91,7 +105,16 @@ export function Sidebar() {
             <Link underline="none">Profiles</Link>
           </NextLink>
           <NextLink href="/cases" passHref>
-            <Link underline="none">Cases</Link>
+            <Link underline="none">
+              <Badge
+                color="danger"
+                badgeContent={isAwaitingCasesExist ? 1 : 0}
+                variant="dot"
+                sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
+              >
+                Cases
+              </Badge>
+            </Link>
           </NextLink>
           <NextLink href="/jurisdictions" passHref>
             <Link underline="none">Jurisdictions</Link>

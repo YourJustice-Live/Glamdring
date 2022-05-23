@@ -23,7 +23,7 @@ import CaseList from './CaseList';
  * A component with a list of cases that supports filters and navigation.
  */
 export default function CaseListObserver({
-  filters: filtersProps,
+  filters,
   isFilterButtonHidden,
   isJurisdictionInputDisabled,
   isParticipantInputDisabled,
@@ -33,48 +33,59 @@ export default function CaseListObserver({
   const { showToastError } = useToasts();
   const { getCases } = useCase();
   const [cases, setCases] = useState(null);
-  const [filters, setFilters] = useState(filtersProps || {});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageCount, setCurrentPageCount] = useState(1);
-  const pageSize = 5;
-
-  async function loadData(page = currentPage, pageCount = currentPageCount) {
-    try {
-      // Update states
-      setCurrentPage(page);
-      setCurrentPageCount(pageCount);
-      setCases(null);
-      // Load cases for page
-      let cases = [];
-      cases = await getCases({
-        searchQuery: filters?.description,
-        jurisdiction: filters?.jurisdictionAddress,
-        stage: filters?.stageId,
-        admin: filters?.adminProfileAccount,
-        subject: filters?.subjectProfileAccount,
-        plaintiff: filters?.plaintiffProfileAccount,
-        judge: filters?.judgeProfileAccount,
-        witness: filters?.witnessProfileAccount,
-        affected: filters?.affectedProfileAccount,
-        accountWithoutConfirmationPost: filters?.accountWithoutConfirmationPost,
-        participant: filters?.participantProfileAccount,
-        first: pageSize,
-        skip: (page - 1) * pageSize,
-      });
-      setCases(cases);
-      // Add next page to pagination if possible
-      if (page == pageCount && cases.length === pageSize) {
-        setCurrentPageCount(pageCount + 1);
-      }
-    } catch (error) {
-      showToastError(error);
-    }
-  }
+  const [params, setParams] = useState({
+    filters: {},
+    page: 1,
+    pageCount: 1,
+    pageSize: 5,
+  });
 
   useEffect(() => {
-    loadData(1, 1);
+    if (filters) {
+      setParams({ ...params, filters: filters });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
+
+  useEffect(() => {
+    let isComponentActive = true;
+    setCases(null);
+    getCases({
+      searchQuery: params.filters.description,
+      jurisdiction: params.filters.jurisdictionAddress,
+      stage: params.filters.stageId,
+      admin: params.filters.adminProfileAccount,
+      subject: params.filters.subjectProfileAccount,
+      plaintiff: params.filters.plaintiffProfileAccount,
+      judge: params.filters.judgeProfileAccount,
+      witness: params.filters.witnessProfileAccount,
+      affected: params.filters.affectedProfileAccount,
+      accountWithoutConfirmationPost:
+        params.filters.accountWithoutConfirmationPost,
+      participant: params.filters.participantProfileAccount,
+      first: params.pageSize,
+      skip: (params.page - 1) * params.pageSize,
+    })
+      .then((cases) => {
+        // Update cases and add next page to pagination if possible
+        if (isComponentActive) {
+          setCases(cases);
+          if (
+            params.page == params.pageCount &&
+            cases.length == params.pageSize
+          ) {
+            setParams({ ...params, pageCount: params.pageCount + 1 });
+          }
+        }
+      })
+      .catch((error) => {
+        showToastError(error);
+      });
+    return () => {
+      isComponentActive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   return (
     <Box sx={{ ...sx }}>
@@ -90,11 +101,11 @@ export default function CaseListObserver({
         {!isFilterButtonHidden && (
           <Button
             size="small"
-            variant={isEmpty(filters) ? 'outlined' : 'contained'}
+            variant={isEmpty(params.filters) ? 'outlined' : 'contained'}
             startIcon={
               <IconFilter
                 hexColor={
-                  isEmpty(filters)
+                  isEmpty(params.filters)
                     ? palette.primary.main
                     : palette.primary.contrastText
                 }
@@ -105,10 +116,17 @@ export default function CaseListObserver({
             onClick={() =>
               showDialog(
                 <FiltersDialog
-                  filters={filters}
+                  filters={params.filters}
                   isJurisdictionInputDisabled={isJurisdictionInputDisabled}
                   isParticipantInputDisabled={isParticipantInputDisabled}
-                  onChange={(filters) => setFilters(filters)}
+                  onChange={(filters) =>
+                    setParams({
+                      ...params,
+                      filters: filters,
+                      page: 1,
+                      pageCount: 1,
+                    })
+                  }
                   onClose={closeDialog}
                 />,
               )
@@ -120,9 +138,9 @@ export default function CaseListObserver({
         <Pagination
           color="primary"
           sx={{ mt: { xs: 2, md: 0 } }}
-          count={currentPageCount}
-          page={currentPage}
-          onChange={(_, page) => loadData(page)}
+          count={params.pageCount}
+          page={params.page}
+          onChange={(_, page) => setParams({ ...params, page: page })}
         />
       </Box>
       <CaseList cases={cases} />
