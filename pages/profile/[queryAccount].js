@@ -1,8 +1,7 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Tab } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import CaseListObserver from 'components/case/CaseListObserver';
 import Layout from 'components/layout/Layout';
-import ProfileCases from 'components/profile/ProfileCases';
 import ProfileMeta from 'components/profile/ProfileMeta';
 import ProfileRatings from 'components/profile/ProfileRatings';
 import useProfile from 'hooks/useProfile';
@@ -21,11 +20,6 @@ export default function Profile() {
   const { showToastError } = useToasts();
   const { getProfile } = useProfile();
   const [profile, setProfile] = useState(null);
-  const [tabValue, setTabValue] = useState('1');
-
-  function handleChange(_, newTabValue) {
-    setTabValue(newTabValue);
-  }
 
   async function loadData() {
     try {
@@ -46,36 +40,18 @@ export default function Profile() {
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <ProfileMeta profile={profile} />
       <ProfileRatings profile={profile} sx={{ mt: 4 }} />
-      <Box sx={{ width: '100%', mt: 6 }}>
-        <TabContext value={tabValue}>
-          <TabList
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 2,
-              maxWidth: 'calc(100vw - 32px)',
-            }}
-          >
-            <Tab label="All Cases" value="1" />
-            <Tab label="Cases Awaiting Confirmation" value="2" />
-            <Tab label="Cases Awaiting Judging" value="3" />
-          </TabList>
-          <TabPanel value="1" sx={{ px: 0 }}>
-            <ProfileCases profile={profile} />
-          </TabPanel>
-          <TabPanel value="2" sx={{ px: 0 }}>
-            <ProfileCases
-              profile={profile}
-              filterPreset="awaitingConfirmation"
-            />
-          </TabPanel>
-          <TabPanel value="3" sx={{ px: 0 }}>
-            <ProfileCases profile={profile} filterPreset="awaitingJudging" />
-          </TabPanel>
-        </TabContext>
+      <Box sx={{ mt: 6 }}>
+        <Typography variant="h1" gutterBottom>
+          Cases
+        </Typography>
+        <Divider />
+        <CaseListObserver
+          filters={{
+            participantProfileAccount: queryAccount,
+          }}
+          isParticipantInputDisabled={true}
+          sx={{ mt: 4 }}
+        />
       </Box>
     </Layout>
   );

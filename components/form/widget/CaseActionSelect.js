@@ -12,6 +12,7 @@ import { getActionIcon } from 'utils/metadata';
 export default function CaseActionSelect(props) {
   const propsHeader = props.options?.header;
   const propsFooter = props.options?.footer;
+  const propsLabel = props.label;
   const propsDisabled = props.disabled;
   const propsRequired = props.required;
   const propsSx = props.sx;
@@ -128,7 +129,8 @@ export default function CaseActionSelect(props) {
           <TextField
             fullWidth
             {...params}
-            label="Search by action, acted or affected role"
+            label={propsLabel || 'Action'}
+            placeholder="Search by action, acted or affected role"
             required={propsRequired}
           />
         )}

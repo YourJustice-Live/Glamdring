@@ -26,6 +26,7 @@ export default function useCase() {
    *
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids A list with case ids (addresses).
+   * @param {string} params.searchQuery A part of case name for searching.
    * @param {string} params.jurisdiction Jurisdiction address.
    * @param {number} params.stage Case stage id.
    * @param {string} params.participant Account that must a participant in the case.
@@ -35,12 +36,14 @@ export default function useCase() {
    * @param {string} params.judge Account that must a judge in the case.
    * @param {string} params.witness Account that must a witness in the case.
    * @param {string} params.affected Account that must an affected in the case.
+   * @param {string} params.accountWithoutConfirmationPost Account that must not have any post with confirmation.
    * @param {number} params.first The number of cases to getting.
    * @param {number} params.skip The number of options to skip.
    * @returns {Promise.<Array.<Case>>} A list with cases.
    */
   let getCases = async function ({
     ids,
+    searchQuery,
     jurisdiction,
     stage,
     participant,
@@ -50,11 +53,13 @@ export default function useCase() {
     judge,
     witness,
     affected,
+    accountWithoutConfirmationPost,
     first,
     skip,
   }) {
     const caseEntities = await findCaseEntities(
       ids,
+      searchQuery,
       jurisdiction,
       stage,
       participant,
@@ -64,6 +69,7 @@ export default function useCase() {
       judge,
       witness,
       affected,
+      accountWithoutConfirmationPost,
       first,
       skip,
     );

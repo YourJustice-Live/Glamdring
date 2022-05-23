@@ -100,6 +100,7 @@ export default function CaseCreateDialog({
       },
       actionGuid: {
         type: 'string',
+        title: '',
       },
     },
     required: ['actionGuid'],
@@ -120,9 +121,11 @@ export default function CaseCreateDialog({
         properties: {
           subjectProfileAccount: {
             type: 'string',
+            title: '',
           },
           affectedProfileAccount: {
             type: 'string',
+            title: '',
           },
           evidencePostUri: {
             type: 'string',

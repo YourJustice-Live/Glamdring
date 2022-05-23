@@ -90,6 +90,9 @@ export function Sidebar() {
           <NextLink href="/profiles" passHref>
             <Link underline="none">Profiles</Link>
           </NextLink>
+          <NextLink href="/cases" passHref>
+            <Link underline="none">Cases</Link>
+          </NextLink>
           <NextLink href="/jurisdictions" passHref>
             <Link underline="none">Jurisdictions</Link>
           </NextLink>

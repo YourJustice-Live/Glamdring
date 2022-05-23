@@ -1,16 +1,13 @@
 import {
-  Box,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   Pagination,
   Stack,
-  Typography,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import CaseList from 'components/case/CaseList';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useCase from 'hooks/useCase';
@@ -20,18 +17,25 @@ import { IconFilter } from 'icons';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
+import CaseList from './CaseList';
 
 /**
- * A component with jurisdiction cases.
+ * A component with a list of cases that supports filters and navigation.
  */
-export default function JurisdictionCases({ jurisdiction }) {
+export default function CaseListObserver({
+  filters: filtersProps,
+  isFilterButtonHidden,
+  isJurisdictionInputDisabled,
+  isParticipantInputDisabled,
+  sx,
+}) {
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getCases } = useCase();
   const [cases, setCases] = useState(null);
+  const [filters, setFilters] = useState(filtersProps || {});
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCount, setCurrentPageCount] = useState(1);
-  const [filters, setFilters] = useState({});
   const pageSize = 5;
 
   async function loadData(page = currentPage, pageCount = currentPageCount) {
@@ -41,8 +45,10 @@ export default function JurisdictionCases({ jurisdiction }) {
       setCurrentPageCount(pageCount);
       setCases(null);
       // Load cases for page
-      const cases = await getCases({
-        jurisdiction: jurisdiction?.id,
+      let cases = [];
+      cases = await getCases({
+        searchQuery: filters?.description,
+        jurisdiction: filters?.jurisdictionAddress,
         stage: filters?.stageId,
         admin: filters?.adminProfileAccount,
         subject: filters?.subjectProfileAccount,
@@ -50,12 +56,14 @@ export default function JurisdictionCases({ jurisdiction }) {
         judge: filters?.judgeProfileAccount,
         witness: filters?.witnessProfileAccount,
         affected: filters?.affectedProfileAccount,
+        accountWithoutConfirmationPost: filters?.accountWithoutConfirmationPost,
+        participant: filters?.participantProfileAccount,
         first: pageSize,
         skip: (page - 1) * pageSize,
       });
       setCases(cases);
       // Add next page to pagination if possible
-      if (page == pageCount && cases?.length === pageSize) {
+      if (page == pageCount && cases.length === pageSize) {
         setCurrentPageCount(pageCount + 1);
       }
     } catch (error) {
@@ -64,48 +72,51 @@ export default function JurisdictionCases({ jurisdiction }) {
   }
 
   useEffect(() => {
-    if (jurisdiction) {
-      loadData(1, 1);
-    }
+    loadData(1, 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction, filters]);
+  }, [filters]);
 
   return (
-    <Box>
+    <Box sx={{ ...sx }}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: { md: 'space-between' },
           alignItems: { md: 'center' },
+          mb: 4,
         }}
       >
-        <Button
-          size="small"
-          variant={isEmpty(filters) ? 'outlined' : 'contained'}
-          startIcon={
-            <IconFilter
-              hexColor={
-                isEmpty(filters)
-                  ? palette.primary.main
-                  : palette.primary.contrastText
-              }
-              size={18}
-            />
-          }
-          sx={{ px: 2 }}
-          onClick={() =>
-            showDialog(
-              <FiltersDialog
-                filters={filters}
-                onChange={(filters) => setFilters(filters)}
-                onClose={closeDialog}
-              />,
-            )
-          }
-        >
-          Filters
-        </Button>
+        {!isFilterButtonHidden && (
+          <Button
+            size="small"
+            variant={isEmpty(filters) ? 'outlined' : 'contained'}
+            startIcon={
+              <IconFilter
+                hexColor={
+                  isEmpty(filters)
+                    ? palette.primary.main
+                    : palette.primary.contrastText
+                }
+                size={18}
+              />
+            }
+            sx={{ px: 2 }}
+            onClick={() =>
+              showDialog(
+                <FiltersDialog
+                  filters={filters}
+                  isJurisdictionInputDisabled={isJurisdictionInputDisabled}
+                  isParticipantInputDisabled={isParticipantInputDisabled}
+                  onChange={(filters) => setFilters(filters)}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            Filters
+          </Button>
+        )}
         <Pagination
           color="primary"
           sx={{ mt: { xs: 2, md: 0 } }}
@@ -114,112 +125,100 @@ export default function JurisdictionCases({ jurisdiction }) {
           onChange={(_, page) => loadData(page)}
         />
       </Box>
-      <CaseList cases={cases} sx={{ mt: 4 }} />
+      <CaseList cases={cases} />
     </Box>
   );
 }
 
-function FiltersDialog({ filters, onChange, isClose, onClose }) {
+function FiltersDialog({
+  filters,
+  onChange,
+  isJurisdictionInputDisabled,
+  isParticipantInputDisabled,
+  isClose,
+  onClose,
+}) {
   const [formData, setFormData] = useState(filters || {});
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
     properties: {
-      adminProfileAccount: {
+      description: {
         type: ['string', 'null'],
+        title: 'Case Description',
       },
-      subjectProfileAccount: {
+      jurisdictionAddress: {
         type: ['string', 'null'],
-      },
-      plaintiffProfileAccount: {
-        type: ['string', 'null'],
-      },
-      judgeProfileAccount: {
-        type: ['string', 'null'],
-      },
-      witnessProfileAccount: {
-        type: ['string', 'null'],
-      },
-      affectedProfileAccount: {
-        type: ['string', 'null'],
+        title: 'Jurisdiction Address',
       },
       stageId: {
         type: 'number',
-        title: 'Stage',
+        title: '',
+      },
+      subjectProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Acted Profile',
+      },
+      affectedProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Affected Profile',
+      },
+      judgeProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Judge Profile',
+      },
+      witnessProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Witness Profile',
+      },
+      plaintiffProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Plaintiff Profile',
+      },
+      adminProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Admin Profile',
+      },
+      participantProfileAccount: {
+        type: ['string', 'null'],
+        title: 'Profile with Any Role',
       },
     },
   };
 
   const uiSchema = {
-    adminProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Admin</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
+    description: {
+      'ui:placeholder': 'Key word, phrase',
     },
-    subjectProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
-    },
-    plaintiffProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Plaintiff</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
-    },
-    judgeProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Judge</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
-    },
-    witnessProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Witness</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
-    },
-    affectedProfileAccount: {
-      'ui:widget': 'ProfileSelect',
-      'ui:options': {
-        header: (
-          <>
-            <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
-            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-          </>
-        ),
-      },
+    jurisdictionAddress: {
+      'ui:placeholder': '0x8b22...',
+      'ui:disabled': isJurisdictionInputDisabled,
     },
     stageId: {
       'ui:widget': 'CaseStageSelect',
+    },
+    subjectProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    affectedProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    judgeProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    witnessProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    plaintiffProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    adminProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+    },
+    participantProfileAccount: {
+      'ui:widget': 'ProfileSelect',
+      'ui:disabled': isParticipantInputDisabled,
     },
   };
 
@@ -237,7 +236,11 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
   async function submit({ formData }) {
     // Clear form data
     Object.keys(formData).forEach((key) => {
-      if (formData[key] === null || formData[key] === undefined) {
+      if (
+        formData[key] === null ||
+        formData[key] === undefined ||
+        formData[key] === false
+      ) {
         delete formData[key];
       }
     });
@@ -248,7 +251,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ pb: 0 }}>Filters</DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>Case Filters</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}

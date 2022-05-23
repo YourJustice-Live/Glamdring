@@ -11,6 +11,7 @@ import { formatAddress } from 'utils/formatters';
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
+  const propsLabel = props.label;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
   const propsSx = props.sx;
@@ -107,7 +108,8 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label="First name, last name, address"
+            label={propsLabel || 'Profile'}
+            placeholder="Search by name, address"
           />
         )}
         renderOption={(props, option) => {

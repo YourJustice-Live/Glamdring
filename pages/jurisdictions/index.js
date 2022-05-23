@@ -6,7 +6,7 @@ import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconPassport } from 'icons';
+import { IconPassport, IconPlus } from 'icons';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -14,7 +14,7 @@ import { palette } from 'theme/palette';
  * Page with list of all jurisdictions.
  */
 export default function Jurisdictions() {
-  const { account } = useWeb3Context();
+  const { account, accountProfile } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getJurisdictions } = useJurisdiction();
@@ -59,15 +59,19 @@ export default function Jurisdictions() {
             Jurisdictions
           </Typography>
         </Box>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() =>
-            showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
-          }
-        >
-          Create
-        </Button>
+        {accountProfile && (
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<IconPlus />}
+            sx={{ px: 2 }}
+            onClick={() =>
+              showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
+            }
+          >
+            Create
+          </Button>
+        )}
       </Box>
       <JurisdictionList jurisdictions={jurisdictions} sx={{ mt: 0 }} />
       <Pagination

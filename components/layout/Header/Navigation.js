@@ -266,6 +266,11 @@ export default function Navigation() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/cases" passHref>
+              <Typography>Cases</Typography>
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
             <Link href="/jurisdictions" passHref>
               <Typography>Jurisdictions</Typography>
             </Link>

@@ -6,7 +6,7 @@ import { PROFILE_ORDER } from 'constants/subgraph';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
-import { IconUsers } from 'icons';
+import { IconAddUser, IconUsers } from 'icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
  * Page with list of all profiles.
  */
 export default function Profiles() {
-  const { account } = useWeb3Context();
+  const { account, accountProfile } = useWeb3Context();
   const { showToastError } = useToasts();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
@@ -63,11 +63,18 @@ export default function Profiles() {
             Profiles
           </Typography>
         </Box>
-        <Link href="/profile/invite" passHref>
-          <Button variant="outlined" size="small">
-            Invite
-          </Button>
-        </Link>
+        {accountProfile && (
+          <Link href="/profile/invite" passHref>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<IconAddUser />}
+              sx={{ px: 2 }}
+            >
+              Invite
+            </Button>
+          </Link>
+        )}
       </Box>
       <Box
         sx={{
