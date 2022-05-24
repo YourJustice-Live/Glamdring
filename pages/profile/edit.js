@@ -1,13 +1,15 @@
 import Layout from 'components/layout/Layout';
 import ProfileManage from 'components/profile/ProfileManage';
 import ContentProtector from 'components/protector/ContentProtector';
+import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 
 /**
  * Page where account can edit own profile.
  */
 export default function ProfileEdit() {
-  const { account, accountProfile } = useWeb3Context();
+  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
 
   return (
     <Layout title={'YourJustice / Edit Own Profile'} enableSidebar={!!account}>

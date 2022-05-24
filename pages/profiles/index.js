@@ -3,6 +3,7 @@ import ProfileOrderSelect from 'components/form/widget/ProfileOrderSelect';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { PROFILE_ORDER } from 'constants/subgraph';
+import useDataContext from 'hooks/context/useDataContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
@@ -14,7 +15,8 @@ import { useEffect, useState } from 'react';
  * Page with list of all profiles.
  */
 export default function Profiles() {
-  const { account, accountProfile } = useWeb3Context();
+  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showToastError } = useToasts();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);

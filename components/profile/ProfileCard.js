@@ -14,8 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
@@ -24,7 +24,7 @@ import { formatAddress } from 'utils/formatters';
  * A component with a card with profile.
  */
 export default function ProfileCard({ profile, jurisdiction }) {
-  const { accountProfile } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
 
   return (

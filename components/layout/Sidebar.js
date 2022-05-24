@@ -9,30 +9,19 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import useCase from 'hooks/useCase';
+import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
-import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a sidebar (drawer).
  */
 export function Sidebar() {
-  const { account, accountProfile } = useWeb3Context();
-  const { isAccountHasAwaitingCases } = useCase();
-  const [isAwaitingCasesExist, setIsAwaitingCasesExist] = useState(false);
+  const { account } = useWeb3Context();
+  const { accountProfile, isAccountProfileHasAwaitingCases } = useDataContext();
   const drawerWidth = 280;
-
-  useEffect(() => {
-    if (account) {
-      isAccountHasAwaitingCases(account).then((result) =>
-        setIsAwaitingCasesExist(result),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
 
   return (
     <Drawer
@@ -108,7 +97,7 @@ export function Sidebar() {
             <Link underline="none">
               <Badge
                 color="danger"
-                badgeContent={isAwaitingCasesExist ? 1 : 0}
+                badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
                 variant="dot"
                 sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
               >

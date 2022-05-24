@@ -168,7 +168,7 @@ export default function useCase() {
    * Check that the account has cases that await his confirmation.
    *
    * @param {string} account Account address.
-   * @returns {boolean} Result of checking.
+   * @returns {Promise.<boolean>} Result of checking.
    */
   let isAccountHasAwaitingConfirmationCases = async function (account) {
     const cases = await getCases({
@@ -195,19 +195,6 @@ export default function useCase() {
     return cases && cases.length > 0;
   };
 
-  /**
-   * Check that the account has cases that await his judgment.
-   *
-   * @param {string} account Account address.
-   * @returns {Promise.<boolean>} Result of checking.
-   */
-  let isAccountHasAwaitingCases = async function (account) {
-    return (
-      (await isAccountHasAwaitingConfirmationCases(account)) ||
-      (await isAccountHasAwaitingJudgingCases(account))
-    );
-  };
-
   return {
     getCase,
     getCases,
@@ -216,6 +203,5 @@ export default function useCase() {
     isAccountHasCaseRole,
     isAccountHasAwaitingConfirmationCases,
     isAccountHasAwaitingJudgingCases,
-    isAccountHasAwaitingCases,
   };
 }

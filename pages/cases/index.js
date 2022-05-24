@@ -4,46 +4,29 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import CaseListObserver from 'components/case/CaseListObserver';
 import Layout from 'components/layout/Layout';
 import { CASE_STAGE } from 'constants/contracts';
-import useCase from 'hooks/useCase';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconHammer, IconPlus } from 'icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { palette } from 'theme/palette';
 
 /**
  * Page with list of all cases.
  */
 export default function Cases() {
-  const { account, accountProfile } = useWeb3Context();
-  const { showDialog, closeDialog } = useDialogContext();
+  const { account } = useWeb3Context();
   const {
-    isAccountHasAwaitingConfirmationCases,
-    isAccountHasAwaitingJudgingCases,
-  } = useCase();
-  const [
-    isAwaitingConfirmationCasesExist,
-    setIsAwaitingConfirmationCasesExist,
-  ] = useState(false);
-  const [isAwaitingJudgingCasesExist, setIsAwaitingJudgingCasesExist] =
-    useState(false);
+    accountProfile,
+    isAccountProfileHasAwaitingConfirmationCases,
+    isAccountProfileHasAwaitingJudgingCases,
+  } = useDataContext();
+  const { showDialog, closeDialog } = useDialogContext();
   const [tabValue, setTabValue] = useState('1');
 
   function handleChange(_, newTabValue) {
     setTabValue(newTabValue);
   }
-
-  useEffect(() => {
-    if (account) {
-      isAccountHasAwaitingConfirmationCases(account).then((result) =>
-        setIsAwaitingConfirmationCasesExist(result),
-      );
-      isAccountHasAwaitingJudgingCases(account).then((result) =>
-        setIsAwaitingJudgingCasesExist(result),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
 
   return (
     <Layout title={'YourJustice / Cases'} enableSidebar={!!account}>
@@ -87,7 +70,9 @@ export default function Cases() {
                 label={
                   <Badge
                     color="danger"
-                    badgeContent={isAwaitingConfirmationCasesExist ? 1 : 0}
+                    badgeContent={
+                      isAccountProfileHasAwaitingConfirmationCases ? 1 : 0
+                    }
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >
@@ -101,7 +86,9 @@ export default function Cases() {
                 label={
                   <Badge
                     color="danger"
-                    badgeContent={isAwaitingJudgingCasesExist ? 1 : 0}
+                    badgeContent={
+                      isAccountProfileHasAwaitingJudgingCases ? 1 : 0
+                    }
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >

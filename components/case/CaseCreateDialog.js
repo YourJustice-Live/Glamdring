@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseNameInput from 'components/form/widget/CaseNameInput';
@@ -24,20 +25,20 @@ import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
+import { FORM } from 'constants/feedbacks';
+import useDataContext from 'hooks/context/useDataContext';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useAction from 'hooks/useAction';
+import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/useWeb3Context';
 import { IconJurisdiction, IconProfile, IconWallet } from 'icons';
 import { capitalize } from 'lodash';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import NextLink from 'next/link';
-import useDialogContext from 'hooks/useDialogContext';
-import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
-import { FORM } from 'constants/feedbacks';
-import useAction from 'hooks/useAction';
 
 /**
  * A component with a dialog to create a case.
@@ -70,7 +71,8 @@ export default function CaseCreateDialog({
   };
 
   const router = useRouter();
-  const { account, accountProfile, connectWallet } = useWeb3Context();
+  const { account, connectWallet } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastSuccess, showToastError } = useToasts();
   const { makeCase } = useJuridictionContract();

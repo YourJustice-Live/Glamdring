@@ -1,5 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
 
@@ -12,7 +13,8 @@ export default function ContentProtector({
   isAccountProfileRequired,
   isNoAccountProfileRequired,
 }) {
-  const { account, accountProfile, connectWallet } = useWeb3Context();
+  const { account, connectWallet } = useWeb3Context();
+  const { accountProfile } = useDataContext();
 
   // If user do not have connected account
   if (isAccountRequired && !account) {

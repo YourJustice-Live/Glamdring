@@ -2,6 +2,7 @@ import { Box, Button, Pagination, Typography } from '@mui/material';
 import JurisdictionList from 'components/jurisdiction/JurisdictionList';
 import JurisdictionManageDialog from 'components/jurisdiction/JurisdictionManageDialog';
 import Layout from 'components/layout/Layout';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
@@ -14,7 +15,8 @@ import { palette } from 'theme/palette';
  * Page with list of all jurisdictions.
  */
 export default function Jurisdictions() {
-  const { account, accountProfile } = useWeb3Context();
+  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getJurisdictions } = useJurisdiction();

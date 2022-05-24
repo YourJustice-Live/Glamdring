@@ -2,20 +2,20 @@ import { MenuOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Divider,
   IconButton,
+  Link as MuiLink,
   Menu,
   MenuItem,
   Toolbar,
   Tooltip,
   Typography,
-  Link as MuiLink,
-  Badge,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import useCase from 'hooks/useCase';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/useDialogContext';
 import useWeb3Context from 'hooks/useWeb3Context';
 import {
@@ -28,7 +28,7 @@ import {
   Logo,
 } from 'icons';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 import JurisdictionLink from './JurisdictionLink';
@@ -38,11 +38,10 @@ import JurisdictionLink from './JurisdictionLink';
  */
 export default function Navigation() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { account, accountProfile, connectWallet, disconnectWallet } =
-    useWeb3Context();
+  const { account, connectWallet, disconnectWallet } = useWeb3Context();
+  const { accountProfile } = useDataContext();
+  const { isAccountProfileHasAwaitingCases } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasAwaitingCases } = useCase();
-  const [isAwaitingCasesExist, setIsAwaitingCasesExist] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -50,15 +49,6 @@ export default function Navigation() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  useEffect(() => {
-    if (account) {
-      isAccountHasAwaitingCases(account).then((result) =>
-        setIsAwaitingCasesExist(result),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
 
   return (
     <AppBar
@@ -282,7 +272,7 @@ export default function Navigation() {
             <Link href="/cases" passHref>
               <Badge
                 color="danger"
-                badgeContent={isAwaitingCasesExist ? 1 : 0}
+                badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
                 variant="dot"
                 sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
               >
