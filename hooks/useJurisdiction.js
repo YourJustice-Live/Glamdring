@@ -94,7 +94,7 @@ export default function useJurisdiction() {
    * @returns {Promise.<Jurisdiction>} A jurisdiction or null.
    */
   let getJurisdiction = async function (id) {
-    const jurisdictions = await getJurisdictions([id]);
+    const jurisdictions = await getJurisdictions({ ids: [id] });
     return jurisdictions && jurisdictions.length > 0 ? jurisdictions[0] : null;
   };
 

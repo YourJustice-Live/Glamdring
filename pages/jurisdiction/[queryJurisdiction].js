@@ -56,6 +56,9 @@ export default function Jurisdiction() {
   }
 
   useEffect(() => {
+    setJurisdiction(null);
+    setOfficialsCount(null);
+    setCitizensCount(null);
     if (queryJurisdiction) {
       loadData();
     }
