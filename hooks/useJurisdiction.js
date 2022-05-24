@@ -101,15 +101,32 @@ export default function useJurisdiction() {
   /**
    * Get jurisdictions.
    *
-   * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
-   * @param {number} first The number of jurisdictions to getting.
-   * @param {number} skip The number of jurisdictions to skip.
+   * @param {Object} params Params.
+   * @param {Array.<string>} params.ids Jurisdction ids (addresses). May be null for get all jurisdictions.
+   * @param {string} params.searchQuery A part of jurisdiction name for searching.
+   * @param {string} params.member Account that must a member in the jurisdiction.
+   * @param {string} params.judge Account that must a judge in the jurisdiction.
+   * @param {string} params.admin Account that must an admin in the jurisdiction.
+   * @param {number} params.first The number of jurisdictions to getting.
+   * @param {number} params.skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
    */
-  let getJurisdictions = async function (ids, first, skip) {
+  let getJurisdictions = async function ({
+    ids,
+    searchQuery,
+    member,
+    judge,
+    admin,
+    first,
+    skip,
+  }) {
     const jurisdictions = [];
     const jurisdictionEntities = await findJurisdictionEntities(
       ids,
+      searchQuery,
+      member,
+      judge,
+      admin,
       first,
       skip,
     );
