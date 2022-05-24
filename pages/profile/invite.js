@@ -5,7 +5,7 @@ import Layout from 'components/layout/Layout';
 import ProfileManage from 'components/profile/ProfileManage';
 import ContentProtector from 'components/protector/ContentProtector';
 import { IS_PROFILE_INVITING_DISABLED } from 'constants/features';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 
 /**
  * Page where account can create profile for another person.

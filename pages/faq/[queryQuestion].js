@@ -2,7 +2,7 @@ import { Breadcrumbs, Divider, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import { QUESTION } from 'constants/faq';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

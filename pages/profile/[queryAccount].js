@@ -6,7 +6,7 @@ import ProfileMeta from 'components/profile/ProfileMeta';
 import ProfileRatings from 'components/profile/ProfileRatings';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 

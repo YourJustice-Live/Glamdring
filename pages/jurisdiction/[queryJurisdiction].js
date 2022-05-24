@@ -11,7 +11,7 @@ import Layout from 'components/layout/Layout';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 

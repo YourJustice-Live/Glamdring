@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import WrongNetworkError from 'errors/WrongNetworkError';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useSnackbar } from 'notistack';
 
 export default function useToasts() {

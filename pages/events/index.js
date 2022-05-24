@@ -4,7 +4,7 @@ import Layout from 'components/layout/Layout';
 import ContentProtector from 'components/protector/ContentProtector';
 import useCase from 'hooks/useCase';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useEffect, useState } from 'react';
 
 /**

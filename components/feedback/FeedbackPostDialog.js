@@ -14,7 +14,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import { FORM } from 'constants/feedbacks';
 import useFormSubmit from 'hooks/useFormSubmit';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { createRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { theme } from 'theme';

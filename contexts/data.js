@@ -1,5 +1,5 @@
 import LoadingBackdrop from 'components/backdrop/LoadingBackdrop';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useProfile from 'hooks/useProfile';
 import useCase from 'hooks/useCase';
 import { createContext, useEffect, useRef, useState } from 'react';

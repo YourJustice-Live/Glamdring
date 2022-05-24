@@ -14,7 +14,7 @@ import {
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import { capitalize } from 'lodash';
 import { palette } from 'theme/palette';
 

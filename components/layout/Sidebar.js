@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useDataContext from 'hooks/context/useDataContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';

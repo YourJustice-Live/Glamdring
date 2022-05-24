@@ -11,7 +11,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useCase from 'hooks/useCase';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useToasts from 'hooks/useToasts';
 import { IconFilter } from 'icons';
 import { isEmpty } from 'lodash';

@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';

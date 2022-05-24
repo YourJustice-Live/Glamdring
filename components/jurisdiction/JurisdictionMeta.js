@@ -16,10 +16,10 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useDataContext from 'hooks/context/useDataContext';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import {
   IconFlag,
   IconJurisdiction,

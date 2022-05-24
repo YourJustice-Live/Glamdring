@@ -2,7 +2,7 @@
 import contractAbi from 'contracts/abi/Jurisdiction.json';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 
 /**
  * Hook for juridiction contract.

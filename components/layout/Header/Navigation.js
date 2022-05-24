@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import {
   IconHome,
   IconMember,

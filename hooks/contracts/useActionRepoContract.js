@@ -2,7 +2,7 @@
 import contractAbi from 'contracts/abi/ActionRepo.json';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import { Contract } from 'ethers';
-import useWeb3Context from '../useWeb3Context';
+import useWeb3Context from '../context/useWeb3Context';
 
 /**
  * Hook for ActionRepo Contract.

@@ -5,8 +5,8 @@ import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import Layout from 'components/layout/Layout';
 import { QUESTION } from 'constants/faq';
 import { FORM } from 'constants/feedbacks';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 

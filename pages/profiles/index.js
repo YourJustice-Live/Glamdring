@@ -6,7 +6,7 @@ import { PROFILE_ORDER } from 'constants/subgraph';
 import useDataContext from 'hooks/context/useDataContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconAddUser, IconUsers } from 'icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
