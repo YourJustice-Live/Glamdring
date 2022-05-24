@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import { capitalize } from 'lodash';
 import { palette } from 'theme/palette';
 
@@ -24,7 +24,7 @@ import { palette } from 'theme/palette';
  * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
  */
 export default function ProfileRatings({ profile, sx }) {
-  const { accountProfile } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
 
   return (

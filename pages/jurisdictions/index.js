@@ -2,11 +2,12 @@ import { Box, Button, Pagination, Typography } from '@mui/material';
 import JurisdictionList from 'components/jurisdiction/JurisdictionList';
 import JurisdictionManageDialog from 'components/jurisdiction/JurisdictionManageDialog';
 import Layout from 'components/layout/Layout';
-import useDialogContext from 'hooks/useDialogContext';
+import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
-import { IconPassport } from 'icons';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import { IconPassport, IconPlus } from 'icons';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -15,6 +16,7 @@ import { palette } from 'theme/palette';
  */
 export default function Jurisdictions() {
   const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
   const { showToastError } = useToasts();
   const { getJurisdictions } = useJurisdiction();
@@ -59,15 +61,19 @@ export default function Jurisdictions() {
             Jurisdictions
           </Typography>
         </Box>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() =>
-            showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
-          }
-        >
-          Create
-        </Button>
+        {accountProfile && (
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<IconPlus />}
+            sx={{ px: 2 }}
+            onClick={() =>
+              showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
+            }
+          >
+            Create
+          </Button>
+        )}
       </Box>
       <JurisdictionList jurisdictions={jurisdictions} sx={{ mt: 0 }} />
       <Pagination

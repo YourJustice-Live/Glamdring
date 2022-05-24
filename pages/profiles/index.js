@@ -3,10 +3,11 @@ import ProfileOrderSelect from 'components/form/widget/ProfileOrderSelect';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { PROFILE_ORDER } from 'constants/subgraph';
+import useDataContext from 'hooks/context/useDataContext';
 import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
-import { IconUsers } from 'icons';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import { IconAddUser, IconUsers } from 'icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -15,6 +16,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Profiles() {
   const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showToastError } = useToasts();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
@@ -63,11 +65,18 @@ export default function Profiles() {
             Profiles
           </Typography>
         </Box>
-        <Link href="/profile/invite" passHref>
-          <Button variant="outlined" size="small">
-            Invite
-          </Button>
-        </Link>
+        {accountProfile && (
+          <Link href="/profile/invite" passHref>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<IconAddUser />}
+              sx={{ px: 2 }}
+            >
+              Invite
+            </Button>
+          </Link>
+        )}
       </Box>
       <Box
         sx={{

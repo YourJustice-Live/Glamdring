@@ -1,7 +1,7 @@
 import { Alert, Button, Stack, Typography } from '@mui/material';
 import RoleManageDialog from 'components/jurisdiction/JurisdictionRoleManageDialog';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { palette } from 'theme/palette';

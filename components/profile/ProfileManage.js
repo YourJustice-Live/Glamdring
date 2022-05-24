@@ -4,12 +4,12 @@ import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import AvatarNftMetadata from 'classes/metadata/AvatarNftMetadata';
-import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
 import ImageInput from 'components/form/widget/ImageInput';
+import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
+import useDataContext from 'hooks/context/useDataContext';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -30,7 +30,7 @@ export default function ProfileManage({
   };
 
   const { showToastSuccessLink, showToastError } = useToasts();
-  const { runProfileUpdater } = useWeb3Context();
+  const { runProfileUpdater } = useDataContext();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update, add } = useAvatarNftContract();
   const [status, setStatus] = useState(STATUS.isAvailable);

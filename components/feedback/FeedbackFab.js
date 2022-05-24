@@ -1,5 +1,5 @@
 import { Fab } from '@mui/material';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 
 /**

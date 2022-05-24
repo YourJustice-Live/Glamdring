@@ -5,7 +5,7 @@ import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
 import { REPUTATION_RATING } from 'constants/contracts';
 import useAction from 'hooks/useAction';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';

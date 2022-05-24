@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconMember, IconProfile } from 'icons';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';

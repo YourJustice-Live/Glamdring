@@ -1,5 +1,6 @@
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import { DataProvider } from 'contexts/data';
 import { DialogProvider } from 'contexts/dialog';
 import { Web3Provider } from 'contexts/web3';
 import { SnackbarProvider } from 'notistack';
@@ -12,9 +13,11 @@ function App({ Component, pageProps }) {
       <CssBaseline />
       <SnackbarProvider maxSnack={3}>
         <Web3Provider>
-          <DialogProvider>
-            <Component {...pageProps} />
-          </DialogProvider>
+          <DataProvider>
+            <DialogProvider>
+              <Component {...pageProps} />
+            </DialogProvider>
+          </DataProvider>
         </Web3Provider>
       </SnackbarProvider>
     </ThemeProvider>

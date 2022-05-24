@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
-import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
+import CaseListObserver from 'components/case/CaseListObserver';
 import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import JurisdictionManagerTools from 'components/jurisdiction/JurisdictionManagerTools';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
@@ -11,7 +11,7 @@ import Layout from 'components/layout/Layout';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -78,7 +78,7 @@ export default function Jurisdiction() {
             sx={{
               borderBottom: 1,
               borderColor: 'divider',
-              mb: 2,
+              mb: 1,
               maxWidth: 'calc(100vw - 32px)',
             }}
           >
@@ -111,7 +111,14 @@ export default function Jurisdiction() {
           </TabList>
           {/* Cases */}
           <TabPanel value="1" sx={{ px: 0 }}>
-            <JurisdictionCases jurisdiction={jurisdiction} />
+            {jurisdiction && (
+              <CaseListObserver
+                filters={{
+                  jurisdictionAddress: jurisdiction?.id,
+                }}
+                isJurisdictionInputDisabled={true}
+              />
+            )}
           </TabPanel>
           {/* Officials */}
           <TabPanel value="2" sx={{ px: 0 }}>

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Drawer,
   Link,
   Paper,
@@ -8,7 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDataContext from 'hooks/context/useDataContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconMember } from 'icons';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
@@ -17,7 +19,8 @@ import { formatAddress } from 'utils/formatters';
  * A component with a sidebar (drawer).
  */
 export function Sidebar() {
-  const { account, accountProfile } = useWeb3Context();
+  const { account } = useWeb3Context();
+  const { accountProfile, isAccountProfileHasAwaitingCases } = useDataContext();
   const drawerWidth = 280;
 
   return (
@@ -89,6 +92,18 @@ export function Sidebar() {
           )}
           <NextLink href="/profiles" passHref>
             <Link underline="none">Profiles</Link>
+          </NextLink>
+          <NextLink href="/cases" passHref>
+            <Link underline="none">
+              <Badge
+                color="danger"
+                badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
+                variant="dot"
+                sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
+              >
+                Cases
+              </Badge>
+            </Link>
           </NextLink>
           <NextLink href="/jurisdictions" passHref>
             <Link underline="none">Jurisdictions</Link>

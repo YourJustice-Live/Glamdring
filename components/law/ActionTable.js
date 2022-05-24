@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
 import useAction from 'hooks/useAction';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
