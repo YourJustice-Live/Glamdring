@@ -5,7 +5,6 @@ import {
   Badge,
   Box,
   Button,
-  Divider,
   IconButton,
   Link as MuiLink,
   Menu,
@@ -31,7 +30,6 @@ import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
-import JurisdictionLink from './JurisdictionLink';
 
 /**
  * A component with a header navigation.
@@ -86,18 +84,6 @@ export default function Navigation() {
           >
             v.{process.env.NEXT_PUBLIC_VERSION}
           </Typography>
-          <Divider
-            orientation="horizontal"
-            sx={{
-              height: 22,
-              width: '1px',
-              backgroundColor: 'grey.200',
-              opacity: 0.5,
-              border: 'none',
-              ml: 1.5,
-            }}
-          />
-          <JurisdictionLink />
         </Typography>
 
         {/* Mobile logo */}

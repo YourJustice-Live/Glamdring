@@ -36,4 +36,5 @@ export const palette = {
     negative: '#FFF6F8',
     positive: '#F3FFFB',
   },
+  sidebar: '#AD9BF50A',
 };

@@ -63,14 +63,37 @@ export default function useSubgraph() {
    * Find the jurisdiction entities.
    *
    * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
+   * @param {string} searchQuery A part of jurisdiction name for searching.
+   * @param {string} member Account that must a member in the jurisdiction.
+   * @param {string} judge Account that must a judge in the jurisdiction.
+   * @param {string} admin Account that must an admin in the jurisdiction.
    * @param {number} first The number of jurisdictions to getting.
    * @param {number} skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
    */
-  let findJurisdictionEntities = async function (ids, first = 10, skip = 0) {
+  let findJurisdictionEntities = async function (
+    ids,
+    searchQuery,
+    member,
+    judge,
+    admin,
+    first = 10,
+    skip = 0,
+  ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
+    const fixedMember = member ? member.toLowerCase() : null;
+    const fixedJudge = judge ? judge.toLowerCase() : null;
+    const fixedAdmin = admin ? admin.toLowerCase() : null;
     const response = await makeSubgraphQuery(
-      getFindJurisdictionEntitiesQuery(fixedIds, first, skip),
+      getFindJurisdictionEntitiesQuery(
+        fixedIds,
+        searchQuery,
+        fixedMember,
+        fixedJudge,
+        fixedAdmin,
+        first,
+        skip,
+      ),
     );
     return response.jurisdictionEntities;
   };
@@ -338,9 +361,23 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
   }`;
 }
 
-function getFindJurisdictionEntitiesQuery(ids, first, skip) {
+function getFindJurisdictionEntitiesQuery(
+  ids,
+  searchQuery,
+  member,
+  judge,
+  admin,
+  first,
+  skip,
+) {
   let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
-  let filterParams = `where: {${idsFilter}}`;
+  let searchQueryFilter = searchQuery
+    ? `name_contains_nocase: "${searchQuery}"`
+    : '';
+  let memberFilter = member ? `memberAccounts_contains: ["${member}"]` : ``;
+  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
+  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
+  let filterParams = `where: {${idsFilter}, ${searchQueryFilter}, ${memberFilter}, ${judgeFilter}, ${adminFilter}}`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
     jurisdictionEntities(${filterParams}, ${paginationParams}) {

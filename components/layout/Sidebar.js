@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Divider,
   Drawer,
   Link,
   Paper,
@@ -11,8 +12,11 @@ import {
 import { Box } from '@mui/system';
 import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconMember } from 'icons';
+import useJurisdiction from 'hooks/useJurisdiction';
+import { IconJurisdiction, IconMember } from 'icons';
 import NextLink from 'next/link';
+import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -21,7 +25,20 @@ import { formatAddress } from 'utils/formatters';
 export function Sidebar() {
   const { account } = useWeb3Context();
   const { accountProfile, isAccountProfileHasAwaitingCases } = useDataContext();
-  const drawerWidth = 280;
+  const { getJurisdictions } = useJurisdiction();
+  const [accountProfileJurisdictions, setAccountProfileJurisdictions] =
+    useState(null);
+  const drawerWidth = 320;
+
+  useEffect(() => {
+    setAccountProfileJurisdictions(null);
+    if (accountProfile) {
+      getJurisdictions({ member: accountProfile.account, first: 10 })
+        .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
+        .catch((error) => console.error(error));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountProfile]);
 
   return (
     <Drawer
@@ -30,7 +47,13 @@ export function Sidebar() {
         display: { xs: 'none', md: 'block' },
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          background: palette.sidebar,
+          boxShadow: 'none',
+          border: 'none',
+        },
       }}
     >
       <Toolbar />
@@ -75,7 +98,7 @@ export function Sidebar() {
                   </Link>
                 </NextLink>
                 <Box>
-                  <Typography variant="body2">
+                  <Typography variant="body2" color="text.secondary">
                     {formatAddress(accountProfile.account)}
                   </Typography>
                 </Box>
@@ -112,6 +135,45 @@ export function Sidebar() {
             <Link underline="none">FAQ</Link>
           </NextLink>
         </Stack>
+        {/* Profile Jurisdictions */}
+        {accountProfileJurisdictions && (
+          <Box sx={{ mx: 2, mt: 3 }}>
+            <Divider />
+            <Stack sx={{ mt: 3 }} spacing={3}>
+              {accountProfileJurisdictions.map((jurisdiction, index) => (
+                <NextLink
+                  key={index}
+                  href={`/jurisdiction/${jurisdiction?.id}`}
+                  passHref
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      cursor: 'pointer',
+                    }}
+                    key={index}
+                  >
+                    <Avatar
+                      sx={{
+                        width: 22,
+                        height: 22,
+                        fontSize: 14,
+                        mr: 1,
+                      }}
+                      src={jurisdiction.image}
+                    >
+                      <IconJurisdiction width="22" height="22" />
+                    </Avatar>
+                    <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                      {jurisdiction.name}
+                    </Typography>
+                  </Box>
+                </NextLink>
+              ))}
+            </Stack>
+          </Box>
+        )}
       </Box>
     </Drawer>
   );

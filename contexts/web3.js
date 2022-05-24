@@ -51,6 +51,7 @@ export function Web3Provider({ children }) {
 
   async function clearContext() {
     try {
+      setIsReady(false);
       // Remove listeners
       instance.removeAllListeners('chainChanged');
       instance.removeAllListeners('accountsChanged');
@@ -65,6 +66,8 @@ export function Web3Provider({ children }) {
       setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsReady(true);
     }
   }
 
