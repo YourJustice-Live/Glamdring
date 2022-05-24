@@ -9,6 +9,7 @@ import {
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import { IconJurisdiction } from 'icons';
+import { truncate } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -59,7 +60,7 @@ export default function JurisdictionCard({ jurisdiction }) {
                 </Link>
               </NextLink>
               <Typography variant="body2">
-                {jurisdiction.description}
+                {truncate(jurisdiction.description, { length: 36 })}
               </Typography>
               {citizensCount && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
