@@ -1,6 +1,8 @@
 import WalletConnect from '@walletconnect/web3-provider';
+import { EVENT, PROPERTY } from 'constants/analytics';
 import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
+import posthog from 'posthog-js';
 import { createContext, useEffect, useRef, useState } from 'react';
 import Web3Modal from 'web3modal';
 
@@ -163,6 +165,12 @@ export function Web3Provider({ children }) {
       process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID_HEX;
     setIsNetworkChainCorrect(isChainIdCorrect || isChainIdHexCorrect);
   }, [networkChainId]);
+
+  useEffect(() => {
+    posthog.capture(EVENT.connectedAccount, {
+      $set: { [PROPERTY.account]: account },
+    });
+  }, [account]);
 
   const value = {
     state: {
