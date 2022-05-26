@@ -1,6 +1,6 @@
 import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
+import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { IconMember } from 'icons';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -16,7 +16,7 @@ export default function ProfileCompactCard({
   disableRating = false,
   sx,
 }) {
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfile } = useProfile();
   const [accountProfile, setAccountProfile] = useState(null);
 
@@ -29,7 +29,7 @@ export default function ProfileCompactCard({
             setAccountProfile(profile);
           }
         })
-        .catch((error) => showToastError(error));
+        .catch((error) => handleError(error, true));
     }
     return () => {
       isComponentActive = false;

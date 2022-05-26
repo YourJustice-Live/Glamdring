@@ -5,12 +5,10 @@ import { DialogProvider } from 'contexts/dialog';
 import { Web3Provider } from 'contexts/web3';
 import { useRouter } from 'next/router';
 import { SnackbarProvider } from 'notistack';
-import posthog from 'posthog-js';
 import { useEffect } from 'react';
 import 'style/layout.scss';
 import { theme } from 'theme';
-import { IS_LOCALHOST_ANALYTICS_DISABLED } from 'constants/features';
-import { EVENT } from 'constants/analytics';
+import { handlePageViewEvent, initAnalytics } from 'utils/analytics';
 
 function App({ Component, pageProps }) {
   const router = useRouter();
@@ -19,17 +17,8 @@ function App({ Component, pageProps }) {
    * Init analytics
    */
   useEffect(() => {
-    const isLocalhost =
-      window.location.href.includes('127.0.0.1') ||
-      window.location.href.includes('localhost');
-    const isAnalyticsEnabled =
-      (IS_LOCALHOST_ANALYTICS_DISABLED && !isLocalhost) ||
-      !IS_LOCALHOST_ANALYTICS_DISABLED;
-    if (isAnalyticsEnabled) {
-      posthog.init(process.env.NEXT_PUBLIC_POST_HOG_KEY, {
-        api_host: 'https://app.posthog.com',
-      });
-    }
+    initAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -37,12 +26,13 @@ function App({ Component, pageProps }) {
    */
   useEffect(() => {
     const handleRouteChange = function () {
-      posthog.capture(EVENT.pageView);
+      handlePageViewEvent();
     };
     router.events.on('routeChangeComplete', handleRouteChange);
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.events]);
 
   return (

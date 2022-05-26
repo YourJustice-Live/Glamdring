@@ -1,9 +1,11 @@
 import WalletConnect from '@walletconnect/web3-provider';
-import { EVENT, PROPERTY } from 'constants/analytics';
 import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
-import posthog from 'posthog-js';
 import { createContext, useEffect, useRef, useState } from 'react';
+import {
+  handleCatchErrorEvent,
+  handleConnectAccountEvent,
+} from 'utils/analytics';
 import Web3Modal from 'web3modal';
 
 export const Web3Context = createContext();
@@ -46,6 +48,7 @@ export function Web3Provider({ children }) {
       setNetworkChainId(networkChainId);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
       setIsReady(true);
     }
@@ -68,6 +71,7 @@ export function Web3Provider({ children }) {
       setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
       setIsReady(true);
     }
@@ -89,6 +93,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
       if (error?.code === 4902) {
         addNetwork();
       }
@@ -119,6 +124,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     }
   }
 
@@ -168,11 +174,9 @@ export function Web3Provider({ children }) {
 
   useEffect(() => {
     if (account) {
-      posthog.capture(EVENT.connectedAccount, {
-        [PROPERTY.account]: account.toLowerCase(),
-      });
-      posthog.alias(account.toLowerCase());
+      handleConnectAccountEvent(account);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
 
   const value = {

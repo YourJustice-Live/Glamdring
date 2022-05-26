@@ -30,7 +30,6 @@ export default function useToasts() {
   };
 
   let showToastError = function (error) {
-    console.error(error);
     if (error instanceof WrongNetworkError) {
       enqueueSnackbar(
         `You are connected to the wrong network. Please switch to ${process.env.NEXT_PUBLIC_NETWORK_NAME}.`,

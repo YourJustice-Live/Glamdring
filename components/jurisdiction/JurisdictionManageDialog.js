@@ -11,6 +11,7 @@ import { MuiForm5 as Form } from '@rjsf/material-ui';
 import MetadataInput from 'components/form/widget/MetadataInput';
 import useHubContract from 'hooks/contracts/useHubContract';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
@@ -22,7 +23,8 @@ export default function JurisdictionManageDialog({
   isClose,
   onClose,
 }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { makeJurisdiction } = useHubContract();
   const { setUri } = useJuridictionContract();
   const [isLoading, setIsLoading] = useState(false);
@@ -102,7 +104,7 @@ export default function JurisdictionManageDialog({
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

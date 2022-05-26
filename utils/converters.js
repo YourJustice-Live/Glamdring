@@ -1,3 +1,5 @@
+import { handleCatchErrorEvent } from './analytics';
+
 /**
  * Convert hex string to json.
  *
@@ -20,6 +22,7 @@ export function hexStringToJson(hexString) {
     return JSON.parse(str);
   } catch (error) {
     console.error(error);
+    handleCatchErrorEvent(error);
     return null;
   }
 }

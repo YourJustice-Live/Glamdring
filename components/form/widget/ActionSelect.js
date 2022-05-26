@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import useAction from 'hooks/useAction';
-import useToasts from 'hooks/useToasts';
+import useErrors from 'hooks/useErrors';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 import { getActionIcon } from 'utils/metadata';
@@ -20,7 +20,7 @@ export default function ActionSelect(props) {
   const propsValue = props.value;
   const propsRequired = props.required;
   const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getActions } = useAction();
   const [value, setValue] = useState('');
   const [actions, setActions] = useState([]);
@@ -28,7 +28,7 @@ export default function ActionSelect(props) {
   useEffect(() => {
     getActions()
       .then((actions) => setActions(actions))
-      .catch((error) => showToastError(error));
+      .catch((error) => handleError(error, true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

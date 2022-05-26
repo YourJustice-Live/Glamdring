@@ -12,9 +12,9 @@ import RuleManageDialog from 'components/law/RuleManageDialog';
 import RuleTable from 'components/law/RuleTable';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -27,7 +27,7 @@ export default function JurisdictionLawsManage() {
   const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdiction } = useJurisdiction();
   const [jurisdiction, setJurisdiction] = useState(null);
 
@@ -35,7 +35,7 @@ export default function JurisdictionLawsManage() {
     try {
       setJurisdiction(await getJurisdiction(queryJurisdiction));
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

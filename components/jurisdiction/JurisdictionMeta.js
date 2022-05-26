@@ -31,6 +31,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
+import useErrors from 'hooks/useErrors';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -129,7 +130,8 @@ function JurisdictionActions({ jurisdiction, sx }) {
   const { account } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { join, leave } = useJuridictionContract();
   const { isAccountHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
@@ -154,7 +156,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
       await transaction.wait();
       setIsMember(!isMember);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsJoiningOrLeaving(false);
     }

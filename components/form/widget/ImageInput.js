@@ -1,5 +1,6 @@
 import { Avatar, CircularProgress, Input } from '@mui/material';
 import { Box } from '@mui/system';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { IconPlus } from 'icons';
@@ -17,7 +18,8 @@ export default function ImageInput(props) {
   const propsHeader = props.options?.header;
   const propsImage = props.value;
   const propsOnChange = props.onChange;
-  const { showToastSuccessLink, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccessLink } = useToasts();
   const { uploadFileToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
   const size = 164;
@@ -61,7 +63,7 @@ export default function ImageInput(props) {
       propsOnChange(url);
       showToastSuccessLink('Your image uploaded to IPFS!', url);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsLoading(false);
     }

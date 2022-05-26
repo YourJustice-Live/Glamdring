@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import ImageInput from './ImageInput';
 import MetadataIconSelect from './MetadataIconSelect';
@@ -27,7 +27,7 @@ export default function MetadataInput(props) {
   const propsRequiredFields = props.options?.requiredFields || [];
   const propsOnChange = props.onChange;
 
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { loadJsonFromIPFS, uploadJsonToIPFS } = useIpfs();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -69,7 +69,7 @@ export default function MetadataInput(props) {
         setFormData(await loadJsonFromIPFS(propsValue));
       }
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +100,7 @@ export default function MetadataInput(props) {
       const { url } = await uploadJsonToIPFS(formData);
       propsOnChange(url);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
+import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -17,7 +17,7 @@ export default function ProfileSelect(props) {
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
   const [isDisabled, setIsDisabled] = useState(false);
   const [value, setValue] = useState(null);
@@ -73,7 +73,7 @@ export default function ProfileSelect(props) {
           setValue(profile);
           setIsDisabled(false);
         })
-        .catch((error) => showToastError(error));
+        .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

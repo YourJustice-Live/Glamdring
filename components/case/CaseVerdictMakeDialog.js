@@ -12,6 +12,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import VerdictMetadata from 'classes/metadata/VerdictMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
@@ -25,7 +26,8 @@ export default function CaseVerdictMakeDialog({
   isClose,
   onClose,
 }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
   const { setStageClosed } = useCaseContract();
   const [ruleIds, setRuleids] = useState([]);
@@ -89,7 +91,7 @@ export default function CaseVerdictMakeDialog({
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

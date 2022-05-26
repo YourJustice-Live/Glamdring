@@ -28,7 +28,6 @@ export default function useIpfs() {
   let loadJsonFromIPFS = async function (url) {
     const response = await axios.get(url);
     if (response.data.errors) {
-      console.error(response.data.errors);
       throw new Error(`Error loading json from IPFS: ${response.data.errors}`);
     }
     return response.data;

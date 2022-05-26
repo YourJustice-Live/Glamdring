@@ -3,11 +3,13 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
 import useProfile from 'hooks/useProfile';
 import useCase from 'hooks/useCase';
 import { createContext, useEffect, useRef, useState } from 'react';
+import useErrors from 'hooks/useErrors';
 
 export const DataContext = createContext();
 
 export function DataProvider({ children }) {
   const { isReady: isWebContextReady, account } = useWeb3Context();
+  const { handleError } = useErrors();
   const { getProfile } = useProfile();
   const {
     isAccountHasAwaitingConfirmationCases,
@@ -59,7 +61,7 @@ export function DataProvider({ children }) {
         );
         setIsAccountProfileHasAwaitingCases(isAccountProfileHasAwaitingCases);
       } catch (error) {
-        console.error(error);
+        handleError(error);
       }
     }
   }
