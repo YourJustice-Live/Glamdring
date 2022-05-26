@@ -50,7 +50,6 @@ export default function JurisdictionLawsManage() {
     <Layout
       title={'YourJustice / Jurisdiction Laws Manage'}
       enableSidebar={!!account}
-      maxWidth="xl"
     >
       <Box>
         <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 6 }}>
