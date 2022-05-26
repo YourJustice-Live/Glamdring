@@ -10,6 +10,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import MetadataInput from 'components/form/widget/MetadataInput';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
+import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
@@ -17,7 +18,8 @@ import { useState } from 'react';
  * A dialog for adding an action or updating a specified action.
  */
 export default function ActionManageDialog({ action, isClose, onClose }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { addAction, updateActionUri } = useActionRepoContract();
   const [formData, setFormData] = useState(action || {});
   const [isLoading, setIsLoading] = useState(false);
@@ -139,7 +141,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

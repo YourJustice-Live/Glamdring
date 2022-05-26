@@ -10,9 +10,9 @@ import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
-import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useToasts from 'hooks/useToasts';
+import useCase from 'hooks/useCase';
+import useErrors from 'hooks/useErrors';
 import { IconFilter } from 'icons';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ export default function CaseListObserver({
   sx,
 }) {
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getCases } = useCase();
   const [cases, setCases] = useState(null);
   const [params, setParams] = useState({
@@ -79,7 +79,7 @@ export default function CaseListObserver({
         }
       })
       .catch((error) => {
-        showToastError(error);
+        handleError(error, true);
       });
     return () => {
       isComponentActive = false;

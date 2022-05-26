@@ -7,16 +7,16 @@ import {
   Pagination,
   Stack,
 } from '@mui/material';
+import { MuiForm5 as Form } from '@rjsf/material-ui';
+import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useToasts from 'hooks/useToasts';
+import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { IconFilter } from 'icons';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { MuiForm5 as Form } from '@rjsf/material-ui';
-import ProfileSelect from 'components/form/widget/ProfileSelect';
 import JurisdictionList from './JurisdictionList';
-import useJurisdiction from 'hooks/useJurisdiction';
 
 /**
  * A component with a list of jurisdiction that supports filters and navigation.
@@ -27,7 +27,7 @@ export default function JurisdictionListObserver({
   sx,
 }) {
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdictions } = useJurisdiction();
   const [jurisdictions, setJurisdictions] = useState(null);
   const [params, setParams] = useState({
@@ -68,7 +68,7 @@ export default function JurisdictionListObserver({
         }
       })
       .catch((error) => {
-        showToastError(error);
+        handleError(error, true);
       });
     return () => {
       isComponentActive = false;

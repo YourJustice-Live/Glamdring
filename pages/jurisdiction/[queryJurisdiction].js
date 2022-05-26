@@ -9,9 +9,9 @@ import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
 import Layout from 'components/layout/Layout';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ export default function Jurisdiction() {
   const router = useRouter();
   const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdiction } = useJurisdiction();
   const [tabValue, setTabValue] = useState('1');
   const [jurisdiction, setJurisdiction] = useState(null);
@@ -51,7 +51,7 @@ export default function Jurisdiction() {
       );
       setCitizensCount(memberRole?.accountsCount);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

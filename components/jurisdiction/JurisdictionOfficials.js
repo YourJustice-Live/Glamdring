@@ -2,16 +2,16 @@ import { Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction officials (judges, admins).
  */
 export default function JurisdictionOfficials({ jurisdiction }) {
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [judgeProfiles, setJudgeProfiles] = useState(null);
@@ -30,7 +30,7 @@ export default function JurisdictionOfficials({ jurisdiction }) {
       setJudgeProfiles(await getProfiles(judgeAccounts, null, 25, 0));
       setAdminProfiles(await getProfiles(adminAccounts, null, 25, 0));
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

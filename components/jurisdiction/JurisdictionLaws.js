@@ -1,13 +1,13 @@
 import LawList from 'components/law/LawList';
+import useErrors from 'hooks/useErrors';
 import useLaw from 'hooks/useLaw';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction laws.
  */
 export default function JurisdictionLaws({ jurisdiction }) {
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getLawsByJurisdiction } = useLaw();
   const [laws, setLaws] = useState(null);
 
@@ -15,7 +15,7 @@ export default function JurisdictionLaws({ jurisdiction }) {
     try {
       setLaws(await getLawsByJurisdiction(jurisdiction.id));
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

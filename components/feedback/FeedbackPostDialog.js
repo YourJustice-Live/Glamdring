@@ -18,6 +18,7 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
 import { createRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { theme } from 'theme';
+import useErrors from 'hooks/useErrors';
 
 /**
  * A dialog for post feedback.
@@ -29,7 +30,8 @@ export default function FeedbackPostDialog({
   onClose,
 }) {
   const { account } = useWeb3Context();
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { submitForm } = useFormSubmit();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +59,7 @@ export default function FeedbackPostDialog({
       );
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

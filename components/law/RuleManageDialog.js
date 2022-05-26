@@ -12,6 +12,7 @@ import ActionSelect from 'components/form/widget/ActionSelect';
 import MetadataInput from 'components/form/widget/MetadataInput';
 import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useState } from 'react';
@@ -26,7 +27,8 @@ export default function RuleManageDialog({
   isClose,
   onClose,
 }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
   const [formData, setFormData] = useState(rule || {});
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -223,7 +225,7 @@ export default function RuleManageDialog({
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

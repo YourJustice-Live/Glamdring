@@ -1,18 +1,20 @@
 import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
-import useSubgraph from 'hooks/useSubgraph';
-import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
-import { hexStringToJson } from 'utils/converters';
 import {
   FAKE_JURISDICTION_DESCRIPTION,
   FAKE_JURISDICTION_IMAGE,
 } from 'constants/fakes';
+import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
+import useSubgraph from 'hooks/useSubgraph';
+import { hexStringToJson } from 'utils/converters';
+import useErrors from './useErrors';
 import useIpfs from './useIpfs';
 
 /**
  * Hook for work with jurisdiction.
  */
 export default function useJurisdiction() {
+  const { handleError } = useErrors();
   const {
     findJurisdictionEntities,
     findJurisdictionRuleEntities,
@@ -47,7 +49,7 @@ export default function useJurisdiction() {
         jurisdictionImage = uriJson?.image;
         jurisdictionDescription = uriJson?.description;
       } catch (error) {
-        console.error(error);
+        handleError(error);
       }
     }
     // Return jurisdiction object

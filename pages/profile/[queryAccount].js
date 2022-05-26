@@ -4,9 +4,9 @@ import CaseListObserver from 'components/case/CaseListObserver';
 import Layout from 'components/layout/Layout';
 import ProfileMeta from 'components/profile/ProfileMeta';
 import ProfileRatings from 'components/profile/ProfileRatings';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useProfile from 'hooks/useProfile';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,7 @@ export default function Profile() {
   const router = useRouter();
   const { queryAccount } = router.query;
   const { account } = useWeb3Context();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfile } = useProfile();
   const [profile, setProfile] = useState(null);
 
@@ -25,7 +25,7 @@ export default function Profile() {
     try {
       setProfile(await getProfile(queryAccount));
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

@@ -4,9 +4,9 @@ import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { PROFILE_ORDER } from 'constants/subgraph';
 import useDataContext from 'hooks/context/useDataContext';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useProfile from 'hooks/useProfile';
 import { IconAddUser, IconUsers } from 'icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 export default function Profiles() {
   const { account } = useWeb3Context();
   const { accountProfile } = useDataContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfiles } = useProfile();
   const [profiles, setProfiles] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,7 +47,7 @@ export default function Profiles() {
         setCurrentPageCount(pageCount + 1);
       }
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

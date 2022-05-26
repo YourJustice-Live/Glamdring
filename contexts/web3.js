@@ -2,6 +2,10 @@ import WalletConnect from '@walletconnect/web3-provider';
 import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
 import { createContext, useEffect, useRef, useState } from 'react';
+import {
+  handleCatchErrorEvent,
+  handleConnectAccountEvent,
+} from 'utils/analytics';
 import Web3Modal from 'web3modal';
 
 export const Web3Context = createContext();
@@ -44,6 +48,7 @@ export function Web3Provider({ children }) {
       setNetworkChainId(networkChainId);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
       setIsReady(true);
     }
@@ -66,6 +71,7 @@ export function Web3Provider({ children }) {
       setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
       setIsReady(true);
     }
@@ -87,6 +93,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
       if (error?.code === 4902) {
         addNetwork();
       }
@@ -117,6 +124,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     }
   }
 
@@ -163,6 +171,13 @@ export function Web3Provider({ children }) {
       process.env.NEXT_PUBLIC_NETWORK_CHAIN_ID_HEX;
     setIsNetworkChainCorrect(isChainIdCorrect || isChainIdHexCorrect);
   }, [networkChainId]);
+
+  useEffect(() => {
+    if (account) {
+      handleConnectAccountEvent(account);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
 
   const value = {
     state: {

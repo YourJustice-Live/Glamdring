@@ -12,6 +12,7 @@ import {
 import { Box } from '@mui/system';
 import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { IconJurisdiction, IconMember } from 'icons';
 import NextLink from 'next/link';
@@ -25,6 +26,7 @@ import { formatAddress } from 'utils/formatters';
 export function Sidebar() {
   const { account } = useWeb3Context();
   const { accountProfile, isAccountProfileHasAwaitingCases } = useDataContext();
+  const { handleError } = useErrors();
   const { getJurisdictions } = useJurisdiction();
   const [accountProfileJurisdictions, setAccountProfileJurisdictions] =
     useState(null);
@@ -35,7 +37,7 @@ export function Sidebar() {
     if (accountProfile) {
       getJurisdictions({ member: accountProfile.account, first: 10 })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
-        .catch((error) => console.error(error));
+        .catch((error) => handleError(error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountProfile]);

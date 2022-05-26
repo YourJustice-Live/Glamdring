@@ -39,6 +39,8 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
+import useErrors from 'hooks/useErrors';
+import { handleCreateCaseEvent } from 'utils/analytics';
 
 /**
  * A component with a dialog to create a case.
@@ -74,7 +76,8 @@ export default function CaseCreateDialog({
   const { account, connectWallet } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { makeCase } = useJuridictionContract();
   const { getJurisdiction, getJurisdictionRule, isAccountHasJurisdictionRole } =
     useJurisdiction();
@@ -327,7 +330,7 @@ export default function CaseCreateDialog({
         ),
       );
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       close();
     }
   }
@@ -347,7 +350,7 @@ export default function CaseCreateDialog({
       }
       setStatus(STATUS.isFormAvailable);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       close();
     }
   }
@@ -378,7 +381,7 @@ export default function CaseCreateDialog({
       if (changedFormData.actionGuid) {
         getAction(changedFormData.actionGuid)
           .then((action) => setFormAction(action))
-          .catch((error) => console.error(error));
+          .catch((error) => handleError(error));
       }
     }
     // If rule changed
@@ -390,7 +393,7 @@ export default function CaseCreateDialog({
       if (changedFormData.ruleId) {
         getJurisdictionRule(jurisdiction.id, changedFormData.ruleId)
           .then((rule) => setFormRule(rule))
-          .catch((error) => console.error(error));
+          .catch((error) => handleError(error));
       }
     }
     // Update state of form data
@@ -457,10 +460,11 @@ export default function CaseCreateDialog({
         caseRoles,
         casePosts,
       );
+      handleCreateCaseEvent();
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setStatus(STATUS.isFormAvailable);
     }
   }

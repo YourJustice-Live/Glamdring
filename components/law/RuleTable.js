@@ -4,10 +4,10 @@ import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
 import { REPUTATION_RATING } from 'constants/contracts';
-import useAction from 'hooks/useAction';
 import useDialogContext from 'hooks/context/useDialogContext';
+import useAction from 'hooks/useAction';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
@@ -18,7 +18,7 @@ import RuleManageDialog from './RuleManageDialog';
  */
 export default function RuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getActions } = useAction();
   const { getJurisdictionRules } = useJurisdiction();
   const [isLoading, setIsLoading] = useState(true);
@@ -204,7 +204,7 @@ export default function RuleTable({ jurisdiction, sx }) {
       }
       setRows(rows);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsLoading(false);
     }

@@ -3,9 +3,9 @@ import ProfileSelect from 'components/form/widget/ProfileSelect';
 import Layout from 'components/layout/Layout';
 import ProfileList from 'components/profile/ProfileList';
 import { PROFILE_ORDER } from 'constants/subgraph';
-import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useProfile from 'hooks/useProfile';
 import { IconUsers } from 'icons';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Index() {
   const router = useRouter();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { account } = useWeb3Context();
   const [tabValue, setTabValue] = useState(PROFILE_ORDER.byPositiveRating);
   const { getProfiles } = useProfile();
@@ -64,7 +64,7 @@ export default function Index() {
         );
       }
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 
