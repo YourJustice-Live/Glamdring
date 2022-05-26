@@ -1,6 +1,6 @@
 import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
+import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { IconMember } from 'icons';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -16,18 +16,24 @@ export default function ProfileCompactCard({
   disableRating = false,
   sx,
 }) {
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfile } = useProfile();
   const [accountProfile, setAccountProfile] = useState(null);
 
   useEffect(() => {
+    let isComponentActive = true;
     if (!profile && account) {
       getProfile(account)
         .then((profile) => {
-          setAccountProfile(profile);
+          if (isComponentActive) {
+            setAccountProfile(profile);
+          }
         })
-        .catch((error) => showToastError(error));
+        .catch((error) => handleError(error, true));
     }
+    return () => {
+      isComponentActive = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile, account]);
 

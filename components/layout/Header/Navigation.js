@@ -2,20 +2,21 @@ import { MenuOutlined } from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
-  Divider,
   IconButton,
+  Link as MuiLink,
   Menu,
   MenuItem,
   Toolbar,
   Tooltip,
   Typography,
-  Link as MuiLink,
 } from '@mui/material';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import useDialogContext from 'hooks/useDialogContext';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import {
   IconHome,
   IconMember,
@@ -29,15 +30,15 @@ import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
-import JurisdictionLink from './JurisdictionLink';
 
 /**
  * A component with a header navigation.
  */
 export default function Navigation() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { account, accountProfile, connectWallet, disconnectWallet } =
-    useWeb3Context();
+  const { account, connectWallet, disconnectWallet } = useWeb3Context();
+  const { accountProfile } = useDataContext();
+  const { isAccountProfileHasAwaitingCases } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
 
   const handleOpenUserMenu = (event) => {
@@ -83,18 +84,6 @@ export default function Navigation() {
           >
             v.{process.env.NEXT_PUBLIC_VERSION}
           </Typography>
-          <Divider
-            orientation="horizontal"
-            sx={{
-              height: 22,
-              width: '1px',
-              backgroundColor: 'grey.200',
-              opacity: 0.5,
-              border: 'none',
-              ml: 1.5,
-            }}
-          />
-          <JurisdictionLink />
         </Typography>
 
         {/* Mobile logo */}
@@ -263,6 +252,18 @@ export default function Navigation() {
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href="/profiles" passHref>
               <Typography>Profiles</Typography>
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/cases" passHref>
+              <Badge
+                color="danger"
+                badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
+                variant="dot"
+                sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
+              >
+                <Typography>Cases</Typography>
+              </Badge>
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>

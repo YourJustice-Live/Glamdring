@@ -1,31 +1,31 @@
-import { Backdrop, CircularProgress } from '@mui/material';
 import WalletConnect from '@walletconnect/web3-provider';
 import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
-import useProfile from 'hooks/useProfile';
 import { createContext, useEffect, useRef, useState } from 'react';
+import {
+  handleCatchErrorEvent,
+  handleConnectAccountEvent,
+} from 'utils/analytics';
 import Web3Modal from 'web3modal';
 
 export const Web3Context = createContext();
 
 export function Web3Provider({ children }) {
   const web3ModalRef = useRef();
-  const profileWorkerRef = useRef();
-  const { getProfile } = useProfile();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
   const [instance, setInstance] = useState(null);
   const [provider, setProvider] = useState(null);
   const [defaultProvider, setDefaultProvider] = useState(null);
   const [account, setAccount] = useState(null);
   const [networkChainId, setNetworkChainId] = useState(null);
   const [isNetworkChainIdCorrect, setIsNetworkChainCorrect] = useState(null);
-  const [accountProfile, setAccountProfile] = useState(null);
 
-  async function loadContext() {
+  async function initContext() {
     try {
-      // Connect account
+      // Show web3 modal or autoconnects
       const instance = await web3ModalRef.current.connect();
-      setIsLoading(true);
+      // Define data
+      setIsReady(false);
       const provider = new ethers.providers.Web3Provider(instance, 'any');
       const accounts = await provider.listAccounts();
       const network = await provider.getNetwork();
@@ -48,14 +48,15 @@ export function Web3Provider({ children }) {
       setNetworkChainId(networkChainId);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
-      setIsLoading(false);
+      setIsReady(true);
     }
   }
 
   async function clearContext() {
     try {
-      setIsLoading(true);
+      setIsReady(false);
       // Remove listeners
       instance.removeAllListeners('chainChanged');
       instance.removeAllListeners('accountsChanged');
@@ -66,39 +67,22 @@ export function Web3Provider({ children }) {
       setInstance(null);
       setProvider(null);
       setAccount(null);
-      setAccountProfile(null);
       setNetworkChainId(null);
       setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     } finally {
-      setIsLoading(false);
+      setIsReady(true);
     }
   }
 
   async function connectWallet() {
-    loadContext();
+    initContext();
   }
 
   async function disconnectWallet() {
     clearContext();
-  }
-
-  /**
-   * Run web worker to check if the account profile in the blockchain has been changed.
-   */
-  async function runProfileUpdater() {
-    profileWorkerRef.current = new Worker(
-      new URL('../workers/profileUpdater.js', import.meta.url),
-    );
-    profileWorkerRef.current.onmessage = (event) => {
-      setAccountProfile(event.data);
-      profileWorkerRef.current.terminate();
-    };
-    profileWorkerRef.current.postMessage({
-      account: account,
-      accountProfile: accountProfile,
-    });
   }
 
   async function switchNetwork() {
@@ -109,6 +93,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
       if (error?.code === 4902) {
         addNetwork();
       }
@@ -139,10 +124,12 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
+      handleCatchErrorEvent(error);
     }
   }
 
   useEffect(() => {
+    // Init default provider
     if (!defaultProvider && !IS_DEFAULT_PROVIDER_DISABLED) {
       const infuraProvider = new ethers.providers.InfuraWebSocketProvider(
         process.env.NEXT_PUBLIC_INFURA_NETWORK,
@@ -150,6 +137,7 @@ export function Web3Provider({ children }) {
       );
       setDefaultProvider(infuraProvider);
     }
+    // Config web3 modal and try autoconnect
     if (!web3ModalRef.current) {
       // Config Web3Modal
       const providerOptions = {
@@ -167,9 +155,9 @@ export function Web3Provider({ children }) {
       web3ModalRef.current = web3Modal;
       // Connect wallet if cached provider exists
       if (web3ModalRef.current.cachedProvider) {
-        loadContext();
+        initContext();
       } else {
-        setIsLoading(false);
+        setIsReady(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -186,46 +174,24 @@ export function Web3Provider({ children }) {
 
   useEffect(() => {
     if (account) {
-      getProfile(account).then((accountProfile) =>
-        setAccountProfile(accountProfile),
-      );
+      handleConnectAccountEvent(account);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
 
   const value = {
     state: {
+      isReady: isReady,
       defaultProvider: defaultProvider,
       provider: provider,
       account: account,
       networkChainId: networkChainId,
       isNetworkChainIdCorrect: isNetworkChainIdCorrect,
-      accountProfile: accountProfile,
     },
     connectWallet,
     disconnectWallet,
     switchNetwork,
-    runProfileUpdater,
   };
 
-  return (
-    <Web3Context.Provider value={value}>
-      {!isLoading && children}
-      {isLoading && <LoadingBackdrop />}
-    </Web3Context.Provider>
-  );
-}
-
-function LoadingBackdrop() {
-  return (
-    <Backdrop
-      sx={{
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        background: '#FFFFFF',
-      }}
-      open
-    >
-      <CircularProgress size={64} />
-    </Backdrop>
-  );
+  return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;
 }

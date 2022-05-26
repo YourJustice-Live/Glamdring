@@ -8,8 +8,8 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import RuleEffects from 'components/law/RuleEffects';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import { theme } from 'theme';
 import { getActionIcon } from 'utils/metadata';
@@ -27,7 +27,7 @@ export default function CaseRuleSelect(props) {
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const propsFormAction = props.formContext?.formAction;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdictionRules } = useJurisdiction();
   const [rules, setRules] = useState(null);
   const isMediumDevice = useMediaQuery(theme.breakpoints.up('md'));
@@ -43,7 +43,7 @@ export default function CaseRuleSelect(props) {
         propsFormIsPositive === false,
       )
         .then((rules) => setRules(rules))
-        .catch((error) => showToastError(error));
+        .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propsJurisdiction, propsFormIsPositive, propsFormActionGuid]);

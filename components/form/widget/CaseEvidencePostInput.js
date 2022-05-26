@@ -13,11 +13,11 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 import Dropzone from 'react-dropzone';
-import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
 
 /**
  * A widget for input an evidence title and file, generate case post, upload it to IPFS, and get URI.
@@ -28,7 +28,7 @@ export default function CaseEvidencePostInput(props) {
   const propsRequired = props.required;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { uploadFileToIPFS, uploadJsonToIPFS } = useIpfs();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isUploadingToIpfs, setIsUploadingToIpfs] = useState(false);
@@ -80,7 +80,7 @@ export default function CaseEvidencePostInput(props) {
       propsOnChange(evidencePostUri);
       closeDialog();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsUploadingToIpfs(false);
     }

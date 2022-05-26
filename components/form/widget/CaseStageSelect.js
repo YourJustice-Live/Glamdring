@@ -1,11 +1,4 @@
-import {
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { Box } from '@mui/system';
 import { CASE_STAGE } from 'constants/contracts';
 import { CASE_STAGE_STRING } from 'constants/strings';
@@ -16,6 +9,7 @@ import { useState } from 'react';
  * A widget to select case (id) stage.
  */
 export default function CaseStageSelect(props) {
+  const propsHeader = props.options?.header;
   const propsLabel = props.label;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
@@ -23,19 +17,16 @@ export default function CaseStageSelect(props) {
 
   return (
     <Box>
-      {propsLabel && propsLabel !== '' && (
-        <>
-          <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-          <Divider sx={{ mt: 1.5, mb: 2.5 }} />
-        </>
-      )}
+      {propsHeader}
       <FormControl fullWidth>
-        <InputLabel id="case-stage-select-label">Stage</InputLabel>
+        <InputLabel id="case-stage-select-label">
+          {propsLabel || 'Case Stage'}
+        </InputLabel>
         <Select
           labelId="case-stage-select-label"
           id="case-stage-select"
           value={value}
-          label="Stage"
+          label={propsLabel || 'Case Stage'}
           onChange={(event) => {
             setValue(event.target.value);
             propsOnChange(event.target.value);

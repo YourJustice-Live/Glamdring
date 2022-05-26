@@ -1,13 +1,13 @@
-import { Box, Button, Pagination, Typography } from '@mui/material';
-import JurisdictionList from 'components/jurisdiction/JurisdictionList';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Box, Button, Tab, Typography } from '@mui/material';
+import JurisdictionListObserver from 'components/jurisdiction/JurisdictionListObserver';
 import JurisdictionManageDialog from 'components/jurisdiction/JurisdictionManageDialog';
 import Layout from 'components/layout/Layout';
-import useDialogContext from 'hooks/useDialogContext';
-import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
-import { IconPassport } from 'icons';
-import { useEffect, useState } from 'react';
+import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import { IconPassport, IconPlus } from 'icons';
+import { useState } from 'react';
 import { palette } from 'theme/palette';
 
 /**
@@ -15,40 +15,13 @@ import { palette } from 'theme/palette';
  */
 export default function Jurisdictions() {
   const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
-  const { getJurisdictions } = useJurisdiction();
-  const [jurisdictions, setJurisdictions] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentPageCount, setCurrentPageCount] = useState(1);
-  const pageSize = 12;
+  const [tabValue, setTabValue] = useState('1');
 
-  async function loadData(page = currentPage, pageCount = currentPageCount) {
-    try {
-      // Update states
-      setCurrentPage(page);
-      setCurrentPageCount(pageCount);
-      setJurisdictions(null);
-      // Load jurisdictions
-      const jurisdictions = await getJurisdictions(
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-      );
-      setJurisdictions(jurisdictions);
-      // Add next page to pagination if possible
-      if (page == pageCount && jurisdictions.length === pageSize) {
-        setCurrentPageCount(pageCount + 1);
-      }
-    } catch (error) {
-      showToastError(error);
-    }
+  function handleChange(_, newTabValue) {
+    setTabValue(newTabValue);
   }
-
-  useEffect(() => {
-    loadData(1, 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Layout title={'YourJustice / Jurisdictions'} enableSidebar={!!account}>
@@ -59,24 +32,71 @@ export default function Jurisdictions() {
             Jurisdictions
           </Typography>
         </Box>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() =>
-            showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
-          }
-        >
-          Create
-        </Button>
+        {accountProfile && (
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<IconPlus />}
+            sx={{ px: 2 }}
+            onClick={() =>
+              showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
+            }
+          >
+            Create
+          </Button>
+        )}
       </Box>
-      <JurisdictionList jurisdictions={jurisdictions} sx={{ mt: 0 }} />
-      <Pagination
-        color="primary"
-        sx={{ mt: 4 }}
-        count={currentPageCount}
-        page={currentPage}
-        onChange={(_, page) => loadData(page)}
-      />
+      {accountProfile ? (
+        <Box sx={{ width: '100%', mt: 2 }}>
+          <TabContext value={tabValue}>
+            <TabList
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                mb: 1,
+                maxWidth: 'calc(100vw - 32px)',
+              }}
+            >
+              <Tab label="All" value="1" />
+              <Tab label="My Citizenship" value="2" />
+              <Tab label="My Judging" value="3" />
+              <Tab label="My Administration" value="4" />
+            </TabList>
+            <TabPanel value="1" sx={{ px: 0 }}>
+              <JurisdictionListObserver />
+            </TabPanel>
+            <TabPanel value="2" sx={{ px: 0 }}>
+              <JurisdictionListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  memberProfileAccount: account,
+                }}
+              />
+            </TabPanel>
+            <TabPanel value="3" sx={{ px: 0 }}>
+              <JurisdictionListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  judgeProfileAccount: account,
+                }}
+              />
+            </TabPanel>
+            <TabPanel value="4" sx={{ px: 0 }}>
+              <JurisdictionListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  adminProfileAccount: account,
+                }}
+              />
+            </TabPanel>
+          </TabContext>
+        </Box>
+      ) : (
+        <JurisdictionListObserver sx={{ mt: 3 }} />
+      )}
     </Layout>
   );
 }

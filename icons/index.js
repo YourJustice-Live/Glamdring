@@ -1,9 +1,14 @@
 /* eslint-disable import/extensions */
+export { IconAddUser } from './js/IconAddUser';
+export { IconApplication } from './js/IconApplication';
 export { IconChart } from './js/IconChart';
 export { IconClose } from './js/IconClose';
+export { IconCommits } from './js/IconCommits';
 export { IconFilter } from './js/IconFilter';
 export { IconFlag } from './js/IconFlag';
+export { IconHammer } from './js/IconHammer';
 export { IconHome } from './js/IconHome';
+export { IconJudgment } from './js/IconJudgment';
 export { IconNotification } from './js/IconNotification';
 export { IconPassport } from './js/IconPassport';
 export { IconPlus } from './js/IconPlus';

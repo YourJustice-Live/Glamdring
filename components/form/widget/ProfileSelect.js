@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
+import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
@@ -11,12 +11,13 @@ import { formatAddress } from 'utils/formatters';
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
+  const propsLabel = props.label;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
   const [isDisabled, setIsDisabled] = useState(false);
   const [value, setValue] = useState(null);
@@ -72,7 +73,7 @@ export default function ProfileSelect(props) {
           setValue(profile);
           setIsDisabled(false);
         })
-        .catch((error) => showToastError(error));
+        .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -107,7 +108,8 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label="First name, last name, address"
+            label={propsLabel || 'Profile'}
+            placeholder="Search by name, address"
           />
         )}
         renderOption={(props, option) => {

@@ -13,9 +13,14 @@ import ConfirmationPostMetadata from 'classes/metadata/ConfirmationPostMetadata'
 import { CASE_ROLE } from 'constants/contracts';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import {
+  handleCommentCaseEvent,
+  handleConfirmCaseEvent,
+} from 'utils/analytics';
 
 /**
  * A component with dialog for add case post (comment, confirmation).
@@ -28,7 +33,8 @@ export default function CasePostAddDialog({
   isClose,
   onClose,
 }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
   const [formData, setFormData] = useState({});
   const { addPost } = useCaseContract();
@@ -98,6 +104,7 @@ export default function CasePostAddDialog({
           new CommentPostMetadata(formData.message),
         );
         await addPost(caseObject.id, formData.role, url);
+        handleCommentCaseEvent(caseObject.id);
       }
       // If post is confirmation
       else if (postType === POST_TYPE.confirmation) {
@@ -108,6 +115,7 @@ export default function CasePostAddDialog({
           ),
         );
         await addPost(caseObject.id, CASE_ROLE.witness.name, url);
+        handleConfirmCaseEvent(caseObject.id);
       }
       // If post type is not supporter
       else {
@@ -116,7 +124,7 @@ export default function CasePostAddDialog({
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

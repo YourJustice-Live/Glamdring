@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
-import JurisdictionCases from 'components/jurisdiction/JurisdictionCases';
+import CaseListObserver from 'components/case/CaseListObserver';
 import JurisdictionLaws from 'components/jurisdiction/JurisdictionLaws';
 import JurisdictionManagerTools from 'components/jurisdiction/JurisdictionManagerTools';
 import JurisdictionMembers from 'components/jurisdiction/JurisdictionMembers';
@@ -9,9 +9,9 @@ import JurisdictionMeta from 'components/jurisdiction/JurisdictionMeta';
 import JurisdictionOfficials from 'components/jurisdiction/JurisdictionOfficials';
 import Layout from 'components/layout/Layout';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ export default function Jurisdiction() {
   const router = useRouter();
   const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdiction } = useJurisdiction();
   const [tabValue, setTabValue] = useState('1');
   const [jurisdiction, setJurisdiction] = useState(null);
@@ -51,11 +51,14 @@ export default function Jurisdiction() {
       );
       setCitizensCount(memberRole?.accountsCount);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 
   useEffect(() => {
+    setJurisdiction(null);
+    setOfficialsCount(null);
+    setCitizensCount(null);
     if (queryJurisdiction) {
       loadData();
     }
@@ -78,7 +81,7 @@ export default function Jurisdiction() {
             sx={{
               borderBottom: 1,
               borderColor: 'divider',
-              mb: 2,
+              mb: 1,
               maxWidth: 'calc(100vw - 32px)',
             }}
           >
@@ -111,7 +114,14 @@ export default function Jurisdiction() {
           </TabList>
           {/* Cases */}
           <TabPanel value="1" sx={{ px: 0 }}>
-            <JurisdictionCases jurisdiction={jurisdiction} />
+            {jurisdiction && (
+              <CaseListObserver
+                filters={{
+                  jurisdictionAddress: jurisdiction?.id,
+                }}
+                isJurisdictionInputDisabled={true}
+              />
+            )}
           </TabPanel>
           {/* Officials */}
           <TabPanel value="2" sx={{ px: 0 }}>

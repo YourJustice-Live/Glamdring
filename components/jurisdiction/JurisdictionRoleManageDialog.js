@@ -10,6 +10,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useState } from 'react';
@@ -23,7 +24,8 @@ export default function RoleManageDialog({
   isClose,
   onClose,
 }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { assignRole, removeRole } = useJuridictionContract();
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +82,7 @@ export default function RoleManageDialog({
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

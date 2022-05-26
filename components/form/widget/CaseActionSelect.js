@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField, Typography } from '@mui/material';
 import useAction from 'hooks/useAction';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import useToasts from 'hooks/useToasts';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
@@ -12,6 +12,7 @@ import { getActionIcon } from 'utils/metadata';
 export default function CaseActionSelect(props) {
   const propsHeader = props.options?.header;
   const propsFooter = props.options?.footer;
+  const propsLabel = props.label;
   const propsDisabled = props.disabled;
   const propsRequired = props.required;
   const propsSx = props.sx;
@@ -19,7 +20,7 @@ export default function CaseActionSelect(props) {
   const propsOnChange = props.onChange;
   const propsJurisdiction = props.formContext?.jurisdiction;
   const propsIsPositive = props.formContext?.formData?.isPositive;
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getActions } = useAction();
   const { getJurisdictionRulesBySearchQuery } = useJurisdiction();
   const [value, setValue] = useState(null);
@@ -40,7 +41,7 @@ export default function CaseActionSelect(props) {
             searchQuery,
           ).then((rules) => callback(rules));
         } catch (error) {
-          showToastError(error);
+          handleError(error, true);
         }
       }, 400),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +71,7 @@ export default function CaseActionSelect(props) {
       }
       setOptions(options);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 
@@ -128,7 +129,8 @@ export default function CaseActionSelect(props) {
           <TextField
             fullWidth
             {...params}
-            label="Search by action, acted or affected role"
+            label={propsLabel || 'Action'}
+            placeholder="Search by action, acted or affected role"
             required={propsRequired}
           />
         )}

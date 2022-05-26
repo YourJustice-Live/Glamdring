@@ -3,11 +3,11 @@ import CaseTabs from 'components/case/CaseTabs';
 import CaseTop from 'components/case/CaseTop';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
-import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
@@ -19,7 +19,7 @@ export default function Case() {
   const router = useRouter();
   const { queryCase } = router.query;
   const { account } = useWeb3Context();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getCase } = useCase();
   const { getJurisdictionRules } = useJurisdiction();
   const { getLawsByRules, isLawsPositive } = useLaw();
@@ -35,7 +35,7 @@ export default function Case() {
       setCaseObject(caseObject);
       setCaseLaws(laws);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

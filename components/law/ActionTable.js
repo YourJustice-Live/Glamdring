@@ -3,19 +3,19 @@ import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useAction from 'hooks/useAction';
-import useDialogContext from 'hooks/useDialogContext';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
 import ActionManageDialog from './ActionManageDialog';
+import useErrors from 'hooks/useErrors';
 
 /**
  * A component with a table with actions.
  */
 export default function ActionTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getActions } = useAction();
   const [isLoading, setIsLoading] = useState(true);
   const [rows, setRows] = useState([]);
@@ -105,7 +105,7 @@ export default function ActionTable({ sx }) {
       const actions = await getActions();
       setRows(actions);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsLoading(false);
     }

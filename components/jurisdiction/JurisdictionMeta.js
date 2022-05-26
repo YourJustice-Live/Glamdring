@@ -14,11 +14,12 @@ import {
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useDataContext from 'hooks/context/useDataContext';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import {
   IconFlag,
   IconJurisdiction,
@@ -30,6 +31,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
+import useErrors from 'hooks/useErrors';
+import {
+  handleJoinJurisdictionEvent,
+  handleLeaveJurisdictionEvent,
+} from 'utils/analytics';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -125,9 +131,11 @@ function JurisdictionAvatar({ jurisdiction, sx }) {
 }
 
 function JurisdictionActions({ jurisdiction, sx }) {
-  const { account, accountProfile } = useWeb3Context();
+  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { join, leave } = useJuridictionContract();
   const { isAccountHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
@@ -145,14 +153,16 @@ function JurisdictionActions({ jurisdiction, sx }) {
       let transaction;
       if (isMember) {
         transaction = await leave(jurisdiction?.id);
+        handleLeaveJurisdictionEvent(jurisdiction?.id);
       } else {
         transaction = await join(jurisdiction?.id);
+        handleJoinJurisdictionEvent(jurisdiction?.id);
       }
       showToastSuccess('Success! Data will be updated soon.');
       await transaction.wait();
       setIsMember(!isMember);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     } finally {
       setIsJoiningOrLeaving(false);
     }

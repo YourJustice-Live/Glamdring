@@ -3,16 +3,16 @@ import ProfileOrderSelect from 'components/form/widget/ProfileOrderSelect';
 import ProfileList from 'components/profile/ProfileList';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import { PROFILE_ORDER } from 'constants/subgraph';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useProfile from 'hooks/useProfile';
-import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
 
 /**
  * A component with jurisdiction members.
  */
 export default function JurisdictionMembers({ jurisdiction }) {
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getJurisdictionRoleAccounts } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [memberProfiles, setMemberProfiles] = useState();
@@ -47,7 +47,7 @@ export default function JurisdictionMembers({ jurisdiction }) {
         setCurrentPageCount(pageCount + 1);
       }
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

@@ -2,9 +2,9 @@ import { Divider, Typography } from '@mui/material';
 import CaseEventList from 'components/case/CaseEventList';
 import Layout from 'components/layout/Layout';
 import ContentProtector from 'components/protector/ContentProtector';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
-import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useErrors from 'hooks/useErrors';
 import { useEffect, useState } from 'react';
 
 /**
@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Events() {
   const { account } = useWeb3Context();
-  const { showToastError } = useToasts();
+  const { handleError } = useErrors();
   const { getCases, getCaseEvents } = useCase();
   const [caseEvents, setCaseEvents] = useState(null);
 
@@ -29,7 +29,7 @@ export default function Events() {
       const caseEvents = await getCaseEvents(caseIds);
       setCaseEvents(caseEvents);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
     }
   }
 

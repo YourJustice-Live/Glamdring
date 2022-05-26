@@ -4,14 +4,19 @@ import { Button, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import AvatarNftMetadata from 'classes/metadata/AvatarNftMetadata';
-import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
 import ImageInput from 'components/form/widget/ImageInput';
+import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
+import useDataContext from 'hooks/context/useDataContext';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useErrors from 'hooks/useErrors';
 import Link from 'next/link';
 import { useState } from 'react';
+import {
+  handleCreateOwnProfileEvent,
+  handleEditOwnProfileEvent,
+} from 'utils/analytics';
 
 /**
  * A component for create, edit own profile or create profile for another person (aka invite).
@@ -29,8 +34,9 @@ export default function ProfileManage({
     isUsingContractSuccessed: 'isUsingContractSuccessed',
   };
 
-  const { showToastSuccessLink, showToastError } = useToasts();
-  const { runProfileUpdater } = useWeb3Context();
+  const { handleError } = useErrors();
+  const { showToastSuccessLink } = useToasts();
+  const { runProfileUpdater } = useDataContext();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update, add } = useAvatarNftContract();
   const [status, setStatus] = useState(STATUS.isAvailable);
@@ -89,15 +95,17 @@ export default function ProfileManage({
       if (action === 'createOwnProfile') {
         await mint(url);
         runProfileUpdater();
+        handleCreateOwnProfileEvent();
       } else if (action === 'editOwnProfile') {
         await update(profile.avatarNftId, url);
         runProfileUpdater();
+        handleEditOwnProfileEvent();
       } else if (action === 'createAnotherProfile') {
         await add(url);
       }
       setStatus(STATUS.isUsingContractSuccessed);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setStatus(STATUS.isAvailable);
     }
   }

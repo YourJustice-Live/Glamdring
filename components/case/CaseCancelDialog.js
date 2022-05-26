@@ -12,15 +12,18 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CancellationMetadata from 'classes/metadata/CancellationMetadata';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import { handleCancelCaseEvent } from 'utils/analytics';
 
 /**
  * A component with dialog for cancel case.
  */
 export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
   const { setStageCancelled } = useCaseContract();
   const [formData, setFormData] = useState({});
@@ -53,10 +56,11 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
         new CancellationMetadata(formData.message),
       );
       await setStageCancelled(caseObject.id, cancellationMetadataUri);
+      handleCancelCaseEvent(caseObject.id);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setIsLoading(false);
     }
   }

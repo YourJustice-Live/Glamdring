@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import WrongNetworkError from 'errors/WrongNetworkError';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useSnackbar } from 'notistack';
 
 export default function useToasts() {
@@ -30,7 +30,6 @@ export default function useToasts() {
   };
 
   let showToastError = function (error) {
-    console.error(error);
     if (error instanceof WrongNetworkError) {
       enqueueSnackbar(
         `You are connected to the wrong network. Please switch to ${process.env.NEXT_PUBLIC_NETWORK_NAME}.`,

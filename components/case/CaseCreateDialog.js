@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import CaseActionSelect from 'components/form/widget/CaseActionSelect';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import CaseNameInput from 'components/form/widget/CaseNameInput';
@@ -24,20 +25,22 @@ import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
+import { FORM } from 'constants/feedbacks';
+import useDataContext from 'hooks/context/useDataContext';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useAction from 'hooks/useAction';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconJurisdiction, IconProfile, IconWallet } from 'icons';
 import { capitalize } from 'lodash';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import NextLink from 'next/link';
-import useDialogContext from 'hooks/useDialogContext';
-import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
-import { FORM } from 'constants/feedbacks';
-import useAction from 'hooks/useAction';
+import useErrors from 'hooks/useErrors';
+import { handleCreateCaseEvent } from 'utils/analytics';
 
 /**
  * A component with a dialog to create a case.
@@ -70,9 +73,11 @@ export default function CaseCreateDialog({
   };
 
   const router = useRouter();
-  const { account, accountProfile, connectWallet } = useWeb3Context();
+  const { account, connectWallet } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { showToastSuccess, showToastError } = useToasts();
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { makeCase } = useJuridictionContract();
   const { getJurisdiction, getJurisdictionRule, isAccountHasJurisdictionRole } =
     useJurisdiction();
@@ -100,6 +105,7 @@ export default function CaseCreateDialog({
       },
       actionGuid: {
         type: 'string',
+        title: '',
       },
     },
     required: ['actionGuid'],
@@ -120,9 +126,11 @@ export default function CaseCreateDialog({
         properties: {
           subjectProfileAccount: {
             type: 'string',
+            title: '',
           },
           affectedProfileAccount: {
             type: 'string',
+            title: '',
           },
           evidencePostUri: {
             type: 'string',
@@ -322,7 +330,7 @@ export default function CaseCreateDialog({
         ),
       );
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       close();
     }
   }
@@ -342,7 +350,7 @@ export default function CaseCreateDialog({
       }
       setStatus(STATUS.isFormAvailable);
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       close();
     }
   }
@@ -373,7 +381,7 @@ export default function CaseCreateDialog({
       if (changedFormData.actionGuid) {
         getAction(changedFormData.actionGuid)
           .then((action) => setFormAction(action))
-          .catch((error) => console.error(error));
+          .catch((error) => handleError(error));
       }
     }
     // If rule changed
@@ -385,7 +393,7 @@ export default function CaseCreateDialog({
       if (changedFormData.ruleId) {
         getJurisdictionRule(jurisdiction.id, changedFormData.ruleId)
           .then((rule) => setFormRule(rule))
-          .catch((error) => console.error(error));
+          .catch((error) => handleError(error));
       }
     }
     // Update state of form data
@@ -452,10 +460,11 @@ export default function CaseCreateDialog({
         caseRoles,
         casePosts,
       );
+      handleCreateCaseEvent();
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
-      showToastError(error);
+      handleError(error, true);
       setStatus(STATUS.isFormAvailable);
     }
   }

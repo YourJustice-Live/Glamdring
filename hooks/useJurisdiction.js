@@ -1,18 +1,20 @@
 import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
-import useSubgraph from 'hooks/useSubgraph';
-import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
-import { hexStringToJson } from 'utils/converters';
 import {
   FAKE_JURISDICTION_DESCRIPTION,
   FAKE_JURISDICTION_IMAGE,
 } from 'constants/fakes';
+import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
+import useSubgraph from 'hooks/useSubgraph';
+import { hexStringToJson } from 'utils/converters';
+import useErrors from './useErrors';
 import useIpfs from './useIpfs';
 
 /**
  * Hook for work with jurisdiction.
  */
 export default function useJurisdiction() {
+  const { handleError } = useErrors();
   const {
     findJurisdictionEntities,
     findJurisdictionRuleEntities,
@@ -47,7 +49,7 @@ export default function useJurisdiction() {
         jurisdictionImage = uriJson?.image;
         jurisdictionDescription = uriJson?.description;
       } catch (error) {
-        console.error(error);
+        handleError(error);
       }
     }
     // Return jurisdiction object
@@ -94,22 +96,39 @@ export default function useJurisdiction() {
    * @returns {Promise.<Jurisdiction>} A jurisdiction or null.
    */
   let getJurisdiction = async function (id) {
-    const jurisdictions = await getJurisdictions([id]);
+    const jurisdictions = await getJurisdictions({ ids: [id] });
     return jurisdictions && jurisdictions.length > 0 ? jurisdictions[0] : null;
   };
 
   /**
    * Get jurisdictions.
    *
-   * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
-   * @param {number} first The number of jurisdictions to getting.
-   * @param {number} skip The number of jurisdictions to skip.
+   * @param {Object} params Params.
+   * @param {Array.<string>} params.ids Jurisdction ids (addresses). May be null for get all jurisdictions.
+   * @param {string} params.searchQuery A part of jurisdiction name for searching.
+   * @param {string} params.member Account that must a member in the jurisdiction.
+   * @param {string} params.judge Account that must a judge in the jurisdiction.
+   * @param {string} params.admin Account that must an admin in the jurisdiction.
+   * @param {number} params.first The number of jurisdictions to getting.
+   * @param {number} params.skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
    */
-  let getJurisdictions = async function (ids, first, skip) {
+  let getJurisdictions = async function ({
+    ids,
+    searchQuery,
+    member,
+    judge,
+    admin,
+    first,
+    skip,
+  }) {
     const jurisdictions = [];
     const jurisdictionEntities = await findJurisdictionEntities(
       ids,
+      searchQuery,
+      member,
+      judge,
+      admin,
       first,
       skip,
     );

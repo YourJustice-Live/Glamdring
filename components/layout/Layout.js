@@ -8,7 +8,6 @@ export default function Layout({
   children,
   title = 'YourJustice',
   enableSidebar = false,
-  maxWidth = 'lg',
   background,
 }) {
   return (
@@ -18,7 +17,7 @@ export default function Layout({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <Header />
-      <Container maxWidth={maxWidth}>
+      <Container maxWidth={enableSidebar ? 'xl' : 'lg'}>
         <Box sx={{ display: 'flex' }}>
           {enableSidebar && <Sidebar />}
           <Box sx={{ flexGrow: 1, py: 4 }}>

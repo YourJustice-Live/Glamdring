@@ -1,10 +1,13 @@
 import axios from 'axios';
 import qs from 'qs';
+import useErrors from './useErrors';
 
 /**
  * Hook for work with formsubmit.io.
  */
 export default function useFormSubmit() {
+  const { handleError } = useErrors();
+
   /**
    * Post form to formsubmit.io.
    *
@@ -32,7 +35,7 @@ export default function useFormSubmit() {
         });
         await axios.post(postUrl, postData);
       } catch (error) {
-        console.error(error);
+        handleError(error);
       }
     }
   };

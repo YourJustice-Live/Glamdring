@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import Layout from 'components/layout/Layout';
-import useWeb3Context from 'hooks/useWeb3Context';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 
 /**
  * Page for sandbox.

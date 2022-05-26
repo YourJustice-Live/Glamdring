@@ -12,7 +12,7 @@ import { Box } from '@mui/system';
 import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import RuleEffects from 'components/law/RuleEffects';
 import { FORM } from 'constants/feedbacks';
-import useDialogContext from 'hooks/useDialogContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import { getActionIcon } from 'utils/metadata';
 
 /**
