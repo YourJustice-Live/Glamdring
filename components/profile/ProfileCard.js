@@ -78,7 +78,9 @@ export default function ProfileCard({ profile, jurisdiction }) {
                     {profile.avatarNftUriLastName}
                   </Link>
                 </NextLink>
-                <Typography>{formatAddress(profile.account)}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {formatAddress(profile.account)}
+                </Typography>
               </Box>
             </Box>
             {/* Actions */}

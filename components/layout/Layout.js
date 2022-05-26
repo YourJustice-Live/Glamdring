@@ -8,7 +8,7 @@ export default function Layout({
   children,
   title = 'YourJustice',
   enableSidebar = false,
-  maxWidth = 'lg',
+  maxWidth = 'xl',
   background,
 }) {
   return (
