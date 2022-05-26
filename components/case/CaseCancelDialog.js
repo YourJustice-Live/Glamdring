@@ -16,6 +16,7 @@ import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import { handleCancelCaseEvent } from 'utils/analytics';
 
 /**
  * A component with dialog for cancel case.
@@ -55,6 +56,7 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
         new CancellationMetadata(formData.message),
       );
       await setStageCancelled(caseObject.id, cancellationMetadataUri);
+      handleCancelCaseEvent(caseObject.id);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

@@ -32,6 +32,10 @@ import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
 import useErrors from 'hooks/useErrors';
+import {
+  handleJoinJurisdictionEvent,
+  handleLeaveJurisdictionEvent,
+} from 'utils/analytics';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -149,8 +153,10 @@ function JurisdictionActions({ jurisdiction, sx }) {
       let transaction;
       if (isMember) {
         transaction = await leave(jurisdiction?.id);
+        handleLeaveJurisdictionEvent(jurisdiction?.id);
       } else {
         transaction = await join(jurisdiction?.id);
+        handleJoinJurisdictionEvent(jurisdiction?.id);
       }
       showToastSuccess('Success! Data will be updated soon.');
       await transaction.wait();

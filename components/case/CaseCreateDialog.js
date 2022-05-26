@@ -40,6 +40,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import useErrors from 'hooks/useErrors';
+import { handleCreateCaseEvent } from 'utils/analytics';
 
 /**
  * A component with a dialog to create a case.
@@ -459,6 +460,7 @@ export default function CaseCreateDialog({
         caseRoles,
         casePosts,
       );
+      handleCreateCaseEvent();
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

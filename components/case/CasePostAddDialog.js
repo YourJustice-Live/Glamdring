@@ -17,6 +17,10 @@ import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import {
+  handleCommentCaseEvent,
+  handleConfirmCaseEvent,
+} from 'utils/analytics';
 
 /**
  * A component with dialog for add case post (comment, confirmation).
@@ -100,6 +104,7 @@ export default function CasePostAddDialog({
           new CommentPostMetadata(formData.message),
         );
         await addPost(caseObject.id, formData.role, url);
+        handleCommentCaseEvent(caseObject.id);
       }
       // If post is confirmation
       else if (postType === POST_TYPE.confirmation) {
@@ -110,6 +115,7 @@ export default function CasePostAddDialog({
           ),
         );
         await addPost(caseObject.id, CASE_ROLE.witness.name, url);
+        handleConfirmCaseEvent(caseObject.id);
       }
       // If post type is not supporter
       else {

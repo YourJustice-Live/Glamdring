@@ -16,6 +16,7 @@ import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useEffect, useState } from 'react';
+import { handleMakeCaseVerdictEvent } from 'utils/analytics';
 
 /**
  * A component with dialog for make case verdict.
@@ -88,6 +89,7 @@ export default function CaseVerdictMakeDialog({
       });
       // Use contract
       await setStageClosed(caseObject.id, verdict, verdictMetadataUri);
+      handleMakeCaseVerdictEvent(caseObject.id);
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {

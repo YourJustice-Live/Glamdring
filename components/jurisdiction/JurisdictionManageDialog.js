@@ -14,6 +14,10 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
+import {
+  handleMakeJurisdiction,
+  handleSetJurisdictionUri,
+} from 'utils/analytics';
 
 /**
  * A dialog for adding a jurisdiction or updating a specified jurisdiction.
@@ -98,8 +102,10 @@ export default function JurisdictionManageDialog({
       setIsLoading(true);
       if (jurisdiction) {
         await setUri(jurisdiction?.id, formData.uri);
+        handleSetJurisdictionUri(jurisdiction?.id);
       } else {
         await makeJurisdiction(formData.name, formData.uri);
+        handleMakeJurisdiction();
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();

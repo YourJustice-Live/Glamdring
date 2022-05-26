@@ -13,6 +13,10 @@ import useToasts from 'hooks/useToasts';
 import useErrors from 'hooks/useErrors';
 import Link from 'next/link';
 import { useState } from 'react';
+import {
+  handleCreateOwnProfileEvent,
+  handleEditOwnProfileEvent,
+} from 'utils/analytics';
 
 /**
  * A component for create, edit own profile or create profile for another person (aka invite).
@@ -91,9 +95,11 @@ export default function ProfileManage({
       if (action === 'createOwnProfile') {
         await mint(url);
         runProfileUpdater();
+        handleCreateOwnProfileEvent();
       } else if (action === 'editOwnProfile') {
         await update(profile.avatarNftId, url);
         runProfileUpdater();
+        handleEditOwnProfileEvent();
       } else if (action === 'createAnotherProfile') {
         await add(url);
       }
