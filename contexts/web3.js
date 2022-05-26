@@ -167,9 +167,12 @@ export function Web3Provider({ children }) {
   }, [networkChainId]);
 
   useEffect(() => {
-    posthog.capture(EVENT.connectedAccount, {
-      $set: { [PROPERTY.account]: account },
-    });
+    if (account) {
+      posthog.capture(EVENT.connectedAccount, {
+        [PROPERTY.account]: account.toLowerCase(),
+      });
+      posthog.alias(account.toLowerCase());
+    }
   }, [account]);
 
   const value = {
