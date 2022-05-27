@@ -152,7 +152,7 @@ export default function CaseCreateDialog({
         required: [
           'subjectProfileAccount',
           'affectedProfileAccount',
-          formRule?.confirmation?.evidence && 'evidencePostUri',
+          ...(formRule?.confirmation?.evidence ? ['evidencePostUri'] : []),
         ],
       },
     },
@@ -411,6 +411,8 @@ export default function CaseCreateDialog({
       }
       // Define case name
       const caseName = submittedFormData.name;
+      // Define case metadata
+      const caseMetadata = '';
       // Define case rules
       const caseRules = [];
       caseRules.push({
@@ -456,6 +458,7 @@ export default function CaseCreateDialog({
       await makeCase(
         jurisdiction?.id,
         caseName,
+        caseMetadata,
         caseRules,
         caseRoles,
         casePosts,

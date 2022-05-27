@@ -15,24 +15,6 @@ export default function useCaseContract() {
   }
 
   /**
-   * Assign a role to a specified account.
-   *
-   * @param {string} contractAddress Case contract address.
-   * @param {string} account Account address.
-   * @param {string} role Role string. For example, "witness".
-   * @returns Transaction.
-   */
-  async function assignRole(contractAddress, account, role) {
-    if (!isNetworkChainIdCorrect) {
-      throw new WrongNetworkError();
-    }
-    return await getContract(contractAddress, provider?.getSigner()).roleAssign(
-      account,
-      role,
-    );
-  }
-
-  /**
    * Add a post to specified case contract.
    *
    * @param {string} contractAddress Case contract address.
@@ -118,7 +100,6 @@ export default function useCaseContract() {
   }
 
   return {
-    assignRole,
     addPost,
     setStageOpen,
     setStageVerdict,

@@ -108,10 +108,13 @@ export default function CaseVerdictMakeDialog({
       );
       setRuleids(caseLawRules.map((rule) => rule.ruleId));
       setRuleNames(
-        caseLawRules.map(
-          (rule) =>
-            `${rule.rule.uriData.name} / ${rule.rule.uriData.description}`,
-        ),
+        caseLawRules.map((rule) => {
+          let ruleName = rule?.rule?.uriData?.name || 'None Rule Name';
+          if (rule?.rule?.uriData?.description) {
+            ruleName = `${ruleName} / ${rule.rule.uriData.description}`;
+          }
+          return ruleName;
+        }),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

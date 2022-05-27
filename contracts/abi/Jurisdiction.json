@@ -3,19 +3,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "actionRepo",
-        "type": "address"
-      }
-    ],
-    "name": "ActionRepoSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "account",
@@ -91,6 +78,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "ContractURI",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "id",
@@ -123,6 +123,19 @@
       }
     ],
     "name": "GUIDURIChange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -470,13 +483,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "actionRepo",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "uint256", "name": "id", "type": "uint256" }
@@ -495,6 +501,16 @@
     "outputs": [
       { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "extTokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "id", "type": "uint256" }
+    ],
+    "name": "balanceOfToken",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -519,6 +535,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "name_", "type": "string" },
+      { "internalType": "string", "name": "uri_", "type": "string" },
       {
         "components": [
           {
@@ -559,6 +576,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "name_", "type": "string" },
+      { "internalType": "string", "name": "uri_", "type": "string" },
       {
         "components": [
           {
@@ -641,6 +659,15 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "getExtTokenId",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "contractAddr", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
       { "internalType": "string", "name": "domain", "type": "string" },
@@ -672,6 +699,13 @@
     ],
     "name": "getRepForDomain",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTargetContract",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -717,14 +751,14 @@
   {
     "inputs": [],
     "name": "join",
-    "outputs": [],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "leave",
-    "outputs": [],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -774,6 +808,16 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "ownerToken", "type": "uint256" },
+      { "internalType": "string", "name": "role", "type": "string" }
+    ],
+    "name": "roleAssignToToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "string", "name": "roleOld", "type": "string" },
       { "internalType": "string", "name": "roleNew", "type": "string" }
@@ -806,6 +850,16 @@
       { "internalType": "string", "name": "role", "type": "string" }
     ],
     "name": "roleRemove",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "ownerToken", "type": "uint256" },
+      { "internalType": "string", "name": "role", "type": "string" }
+    ],
+    "name": "roleRemoveFromToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -863,6 +917,25 @@
     ],
     "name": "ruleAdd",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      {
+        "components": [
+          { "internalType": "string", "name": "ruling", "type": "string" },
+          { "internalType": "bool", "name": "evidence", "type": "bool" },
+          { "internalType": "uint256", "name": "witness", "type": "uint256" }
+        ],
+        "internalType": "struct DataTypes.Confirmation",
+        "name": "confirmation",
+        "type": "tuple"
+      }
+    ],
+    "name": "ruleConfirmationUpdate",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1033,13 +1106,6 @@
     "inputs": [{ "internalType": "string", "name": "role", "type": "string" }],
     "name": "uniqueRoleMembersCount",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "string", "name": "role", "type": "string" }],
-    "name": "uri",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
   },

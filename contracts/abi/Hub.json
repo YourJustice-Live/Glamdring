@@ -18,6 +18,25 @@
       {
         "indexed": false,
         "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      }
+    ],
+    "name": "Assoc",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
         "name": "name",
         "type": "string"
       },
@@ -99,6 +118,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "name_", "type": "string" },
+      { "internalType": "string", "name": "uri_", "type": "string" },
       {
         "components": [
           {
@@ -197,7 +217,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "key", "type": "string" },
-      { "internalType": "address", "name": "contract_", "type": "address" }
+      { "internalType": "address", "name": "contractAddr", "type": "address" }
     ],
     "name": "setAssoc",
     "outputs": [],
@@ -211,6 +231,15 @@
     "name": "setConfig",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+    ],
+    "name": "supportsInterface",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
