@@ -1,9 +1,5 @@
 import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
-import {
-  FAKE_JURISDICTION_DESCRIPTION,
-  FAKE_JURISDICTION_IMAGE,
-} from 'constants/fakes';
 import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
@@ -33,24 +29,14 @@ export default function useJurisdiction() {
     let jurisdictionUri;
     let jurisdictionImage;
     let jurisdictionDescription;
-    // Use fake image and description for main jurisdiction contract
-    if (
-      jurisdictionEntity.id?.toLowerCase() ===
-      process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase()
-    ) {
-      jurisdictionImage = FAKE_JURISDICTION_IMAGE;
-      jurisdictionDescription = FAKE_JURISDICTION_DESCRIPTION;
-    }
     // Load image and description using jurisdiction uri
-    else {
-      try {
-        jurisdictionUri = await getUri(jurisdictionEntity.id);
-        const uriJson = await loadJsonFromIPFS(jurisdictionUri);
-        jurisdictionImage = uriJson?.image;
-        jurisdictionDescription = uriJson?.description;
-      } catch (error) {
-        handleError(error);
-      }
+    try {
+      jurisdictionUri = await getUri(jurisdictionEntity.id);
+      const uriJson = await loadJsonFromIPFS(jurisdictionUri);
+      jurisdictionImage = uriJson?.image;
+      jurisdictionDescription = uriJson?.description;
+    } catch (error) {
+      handleError(error);
     }
     // Return jurisdiction object
     return new Jurisdiction(
