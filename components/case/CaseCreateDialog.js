@@ -570,7 +570,7 @@ export default function CaseCreateDialog({
                   height: 22,
                   fontSize: 14,
                 }}
-                src={jurisdiction.image}
+                src={jurisdiction.uriData?.image}
               >
                 <IconJurisdiction width="22" height="22" />
               </Avatar>

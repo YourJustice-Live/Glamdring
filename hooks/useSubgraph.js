@@ -381,6 +381,8 @@ function getFindJurisdictionEntitiesQuery(
     jurisdictionEntities(${filterParams}, ${paginationParams}) {
       id
       name
+      uri
+      uriData
       roles {
         id
         roleId

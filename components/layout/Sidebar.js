@@ -163,7 +163,7 @@ export function Sidebar() {
                         fontSize: 14,
                         mr: 1,
                       }}
-                      src={jurisdiction.image}
+                      src={jurisdiction.uriData?.image}
                     >
                       <IconJurisdiction width="22" height="22" />
                     </Avatar>

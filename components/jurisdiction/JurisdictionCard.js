@@ -46,7 +46,7 @@ export default function JurisdictionCard({ jurisdiction }) {
                     height: 82,
                     borderRadius: '16px',
                   }}
-                  src={jurisdiction.image}
+                  src={jurisdiction.uriData?.image}
                 >
                   <IconJurisdiction width="82" height="82" />
                 </Avatar>
@@ -60,7 +60,7 @@ export default function JurisdictionCard({ jurisdiction }) {
                 </Link>
               </NextLink>
               <Typography variant="body2">
-                {truncate(jurisdiction.description, { length: 36 })}
+                {truncate(jurisdiction.uriData?.description, { length: 36 })}
               </Typography>
               {citizensCount && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>

@@ -104,8 +104,10 @@ function JurisdictionMain({ jurisdiction, sx }) {
       <JurisdictionAvatar jurisdiction={jurisdiction} />
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
         <Typography variant="h2">{jurisdiction.name}</Typography>
-        {jurisdiction.description && (
-          <Typography sx={{ mt: 1 }}>{jurisdiction.description}</Typography>
+        {jurisdiction?.uriData?.description && (
+          <Typography sx={{ mt: 1 }}>
+            {jurisdiction.uriData.description}
+          </Typography>
         )}
         <JurisdictionActions jurisdiction={jurisdiction} sx={{ mt: 2 }} />
       </Box>
@@ -122,7 +124,7 @@ function JurisdictionAvatar({ jurisdiction, sx }) {
           height: 164,
           borderRadius: '24px',
         }}
-        src={jurisdiction?.image}
+        src={jurisdiction?.uriData?.image}
       >
         <IconJurisdiction width="164" height="164" />
       </Avatar>

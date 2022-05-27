@@ -1,23 +1,17 @@
 import Jurisdiction from 'classes/Jurisdiction';
 import JurisdictionRule from 'classes/JurisdictionRule';
-import useJurisdictionContract from 'hooks/contracts/useJurisdictionContract';
 import useSubgraph from 'hooks/useSubgraph';
 import { hexStringToJson } from 'utils/converters';
-import useErrors from './useErrors';
-import useIpfs from './useIpfs';
 
 /**
  * Hook for work with jurisdiction.
  */
 export default function useJurisdiction() {
-  const { handleError } = useErrors();
   const {
     findJurisdictionEntities,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesBySearchQuery,
   } = useSubgraph();
-  const { getUri } = useJurisdictionContract();
-  const { loadJsonFromIPFS } = useIpfs();
 
   /**
    * Convert jurisdiction entity to jurisdiction object.
@@ -26,25 +20,12 @@ export default function useJurisdiction() {
    * @returns Jurisdiction object.
    */
   async function createJurisdictionObject(jurisdictionEntity) {
-    let jurisdictionUri;
-    let jurisdictionImage;
-    let jurisdictionDescription;
-    // Load image and description using jurisdiction uri
-    try {
-      jurisdictionUri = await getUri(jurisdictionEntity.id);
-      const uriJson = await loadJsonFromIPFS(jurisdictionUri);
-      jurisdictionImage = uriJson?.image;
-      jurisdictionDescription = uriJson?.description;
-    } catch (error) {
-      handleError(error);
-    }
     // Return jurisdiction object
     return new Jurisdiction(
       jurisdictionEntity.id,
-      jurisdictionUri,
-      jurisdictionImage,
       jurisdictionEntity.name,
-      jurisdictionDescription,
+      jurisdictionEntity.uri,
+      hexStringToJson(jurisdictionEntity.uriData),
       jurisdictionEntity.roles,
       jurisdictionEntity.rules,
       jurisdictionEntity.rulesCount,

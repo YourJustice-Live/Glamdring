@@ -8,25 +8,10 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
  * Hook for juridiction contract.
  */
 export default function useJuridictionContract() {
-  const { defaultProvider, provider, isNetworkChainIdCorrect } =
-    useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(address, signerOrProvider) {
     return new Contract(address, contractAbi, signerOrProvider);
-  }
-
-  /**
-   * Get jurisdiction contract uri with metadata.
-   *
-   * @param {string} contractAddress Jurisdiction contract address.
-   * @returns Transaction,
-   */
-  async function getUri(contractAddress) {
-    const signerOrProvider =
-      provider?.getSigner() && isNetworkChainIdCorrect
-        ? provider.getSigner()
-        : defaultProvider;
-    return await getContract(contractAddress, signerOrProvider).contractURI();
   }
 
   /**
@@ -124,7 +109,6 @@ export default function useJuridictionContract() {
   }
 
   return {
-    getUri,
     setUri,
     join,
     leave,
