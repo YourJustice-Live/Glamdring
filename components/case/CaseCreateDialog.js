@@ -291,7 +291,17 @@ export default function CaseCreateDialog({
     evidencePostUri: {
       'ui:widget': 'CaseEvidencePostInput',
       'ui:options': {
-        subLabel: formRule?.rule?.uriData?.evidenceDescription,
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
+            <Typography variant="body2">
+              {formRule?.rule?.uriData?.evidenceDescription ||
+                'Any file you deem necessary'}{' '}
+              {formRule?.confirmation?.evidence && '*'}
+            </Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
       },
     },
     witnessProfileAccounts: {

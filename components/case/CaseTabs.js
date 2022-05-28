@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 import CaseComments from './CaseComments';
 import CaseConfirmations from './CaseConfirmations';
+import CaseEvidence from './CaseEvidence';
 import CaseJudging from './CaseJudging';
 
 /**
@@ -30,17 +31,21 @@ export default function CaseTabs({ caseObject, caseLaws, sx }) {
             maxWidth: 'calc(100vw - 96px)',
           }}
         >
-          <Tab label="Comments" value="1" />
-          <Tab label="Confirmations" value="2" />
-          <Tab label="Judging" value="3" />
+          <Tab label="Evidence" value="1" />
+          <Tab label="Comments" value="2" />
+          <Tab label="Confirmations" value="3" />
+          <Tab label="Judging" value="4" />
         </TabList>
         <TabPanel value="1" sx={{ px: { xs: 0, md: '24px' } }}>
-          <CaseComments caseObject={caseObject} />
+          <CaseEvidence caseObject={caseObject} />
         </TabPanel>
         <TabPanel value="2" sx={{ px: { xs: 0, md: '24px' } }}>
-          <CaseConfirmations caseObject={caseObject} />
+          <CaseComments caseObject={caseObject} />
         </TabPanel>
         <TabPanel value="3" sx={{ px: { xs: 0, md: '24px' } }}>
+          <CaseConfirmations caseObject={caseObject} />
+        </TabPanel>
+        <TabPanel value="4" sx={{ px: { xs: 0, md: '24px' } }}>
           <CaseJudging caseObject={caseObject} caseLaws={caseLaws} />
         </TabPanel>
       </TabContext>

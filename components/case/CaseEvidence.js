@@ -1,4 +1,5 @@
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { AttachFileOutlined } from '@mui/icons-material';
+import { Button, Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
@@ -12,33 +13,33 @@ import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
 
 /**
- * A component with case comment posts.
+ * A component with case evidence posts.
  */
-export default function CaseComments({ caseObject, sx }) {
+export default function CaseEvidence({ caseObject, sx }) {
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasAnyCaseRole } = useCase();
-  const [commentPosts, setCommentsPosts] = useState(null);
+  const [evidencePosts, setEvidencePosts] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
-      const commentPosts = caseObject.posts.filter(
-        (post) => post.uriType === POST_TYPE.comment,
+      const evidencePosts = caseObject.posts.filter(
+        (post) => post.uriType === POST_TYPE.evidence,
       );
-      const sortedCommentPosts = commentPosts.sort((a, b) =>
+      const sortedEvidencePosts = evidencePosts.sort((a, b) =>
         a?.createdDate?.localeCompare(b?.createdDate),
       );
-      setCommentsPosts(sortedCommentPosts);
+      setEvidencePosts(sortedEvidencePosts);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
 
   return (
     <Box sx={{ ...sx }}>
-      {/* Comments */}
-      {commentPosts && commentPosts.length > 0 ? (
-        <Stack spacing={1}>
-          {commentPosts.map((post, index) => (
+      {/* Evidence */}
+      {evidencePosts && evidencePosts.length > 0 ? (
+        <Stack spacing={1} sx={{ mt: 1.5 }}>
+          {evidencePosts.map((post, index) => (
             <Paper key={index} sx={{ p: 2 }}>
               {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
@@ -47,26 +48,39 @@ export default function CaseComments({ caseObject, sx }) {
                   ({CASE_ROLE_STRING[post.entityRole]})
                 </Typography>
               </Stack>
-              {/* Message */}
-              <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: 'bold' }}
-                  gutterBottom
-                >
-                  {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
-                </Typography>
-                <Typography variant="body2">
-                  {new Date(post.createdDate * 1000).toLocaleString()}
-                </Typography>
+              {/* File */}
+              <Paper
+                variant="outlined"
+                sx={{
+                  p: 2,
+                  mt: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <AttachFileOutlined />
+                <Box sx={{ ml: 1 }}>
+                  <Link
+                    href={hexStringToJson(post.uriData)?.evidenceFileUri || '#'}
+                    underline="none"
+                    target="_blank"
+                    variant="body2"
+                  >
+                    {hexStringToJson(post.uriData)?.evidenceTitle || 'Unknown'}
+                  </Link>
+                  <Typography variant="body2">
+                    {new Date(post.createdDate * 1000).toLocaleString()}
+                  </Typography>
+                </Box>
               </Paper>
             </Paper>
           ))}
         </Stack>
       ) : (
-        <Typography>No comments</Typography>
+        <Typography>No evidence</Typography>
       )}
-      {/* Button to add comment */}
+      {/* Button to add evidence */}
       {caseObject?.stage === CASE_STAGE.open &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>
@@ -76,13 +90,13 @@ export default function CaseComments({ caseObject, sx }) {
                 showDialog(
                   <CasePostAddDialog
                     caseObject={caseObject}
-                    postType={POST_TYPE.comment}
+                    postType={POST_TYPE.evidence}
                     onClose={closeDialog}
                   />,
                 )
               }
             >
-              Add Comment
+              Add Evidence
             </Button>
           </Box>
         )}

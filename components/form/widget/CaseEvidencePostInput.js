@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   Link,
   Paper,
   Stack,
@@ -23,9 +22,8 @@ import Dropzone from 'react-dropzone';
  * A widget for input an evidence title and file, generate case post, upload it to IPFS, and get URI.
  */
 export default function CaseEvidencePostInput(props) {
-  const propsLabel = props.label;
-  const propsSubLabel = props.options?.subLabel;
-  const propsRequired = props.required;
+  const propsHeader = props.options?.header;
+  const propsSx = props.sx;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
   const { handleError } = useErrors();
@@ -103,12 +101,8 @@ export default function CaseEvidencePostInput(props) {
   }
 
   return (
-    <>
-      <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-      <Typography variant="body2">
-        {propsSubLabel || 'Any file you deem necessary'} {propsRequired && '*'}
-      </Typography>
-      <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+    <Box sx={{ ...propsSx }}>
+      {propsHeader}
       {evidencePost ? (
         <>
           <Paper variant="outlined" sx={{ p: 2 }}>
@@ -129,7 +123,7 @@ export default function CaseEvidencePostInput(props) {
             disabled={propsDisabled}
             onClick={removeEvidence}
           >
-            Remove
+            Remove Evidence
           </Button>
         </>
       ) : (
@@ -149,9 +143,6 @@ export default function CaseEvidencePostInput(props) {
       >
         <DialogTitle>Evidence</DialogTitle>
         <DialogContent>
-          {/* Sublabel */}
-          <Typography gutterBottom>{propsSubLabel}</Typography>
-          <Divider sx={{ my: 1.5 }} />
           {/* Title */}
           <TextField
             label="Title"
@@ -212,6 +203,6 @@ export default function CaseEvidencePostInput(props) {
           </Stack>
         </DialogContent>
       </Dialog>
-    </>
+    </Box>
   );
 }
