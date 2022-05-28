@@ -1,4 +1,7 @@
-import WalletConnect from '@walletconnect/web3-provider';
+import {
+  default as WalletConnect,
+  default as WalletConnectProvider,
+} from '@walletconnect/web3-provider';
 import { IS_DEFAULT_PROVIDER_DISABLED } from 'constants/features';
 import { ethers } from 'ethers';
 import { createContext, useEffect, useRef, useState } from 'react';
@@ -57,6 +60,10 @@ export function Web3Provider({ children }) {
   async function clearContext() {
     try {
       setIsReady(false);
+      // Disconnect provider
+      if (instance instanceof WalletConnectProvider) {
+        instance.disconnect();
+      }
       // Remove listeners
       instance.removeAllListeners('chainChanged');
       instance.removeAllListeners('accountsChanged');
