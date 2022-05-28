@@ -14,6 +14,7 @@ export default function ProfileSelect(props) {
   const propsLabel = props.label;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
+  const propsRequired = props.required;
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
@@ -110,6 +111,7 @@ export default function ProfileSelect(props) {
             size={propsSize}
             label={propsLabel || 'Profile'}
             placeholder="Search by name, address"
+            required={propsRequired}
           />
         )}
         renderOption={(props, option) => {
@@ -119,6 +121,7 @@ export default function ProfileSelect(props) {
                 profile={option}
                 disableAddress={false}
                 disableLink={true}
+                disableRating={true}
                 sx={{ my: 0.6 }}
               />
             </li>
