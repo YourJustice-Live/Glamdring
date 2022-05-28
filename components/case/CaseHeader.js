@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
 /**
- * A component with a case top (address, created date, admin, stage).
+ * A component with a case header (address, created date, admin, stage).
  */
-export default function CaseTop({ caseObject, sx }) {
+export default function CaseHeader({ caseObject, sx }) {
   return (
     <Box sx={{ ...sx }}>
       <CaseAdressJurisdictionCreatedDate caseObject={caseObject} />

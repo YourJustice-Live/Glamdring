@@ -1,6 +1,6 @@
 import CaseDetails from 'components/case/CaseDetails';
 import CaseTabs from 'components/case/CaseTabs';
-import CaseTop from 'components/case/CaseTop';
+import CaseHeader from 'components/case/CaseHeader';
 import LawList from 'components/law/LawList';
 import Layout from 'components/layout/Layout';
 import useWeb3Context from 'hooks/context/useWeb3Context';
@@ -58,7 +58,7 @@ export default function Case() {
           : 'none'
       }
     >
-      <CaseTop caseObject={caseObject} />
+      <CaseHeader caseObject={caseObject} />
       <LawList laws={caseLaws} sx={{ mt: 4 }} />
       <CaseDetails caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 4 }} />
       <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 4 }} />

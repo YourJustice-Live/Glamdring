@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import CaseDetails from './CaseDetails';
 import CaseTabs from './CaseTabs';
-import CaseTop from './CaseTop';
+import CaseHeader from './CaseHeader';
 
 /**
  * A component with a card with case.
@@ -51,7 +51,7 @@ export default function CaseCard({ caseObject }) {
       }}
     >
       <CardContent sx={{ p: 4 }}>
-        <CaseTop caseObject={caseObject} />
+        <CaseHeader caseObject={caseObject} />
         <LawList laws={caseLaws} sx={{ mt: 3 }} />
         <CaseDetails
           caseObject={caseObject}
