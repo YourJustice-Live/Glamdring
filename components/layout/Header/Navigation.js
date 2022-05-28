@@ -189,6 +189,9 @@ export default function Navigation() {
               borderRadius: '15px',
               overflow: 'hidden',
             },
+            [`& .MuiBackdrop-root`]: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
           }}
           anchorEl={anchorElUser}
           anchorOrigin={{
