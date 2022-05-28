@@ -376,9 +376,10 @@ function getFindJurisdictionEntitiesQuery(
   let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
   let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
   let filterParams = `where: {${idsFilter}, ${searchQueryFilter}, ${memberFilter}, ${judgeFilter}, ${adminFilter}}`;
+  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
-    jurisdictionEntities(${filterParams}, ${paginationParams}) {
+    jurisdictionEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
       id
       name
       roles {
