@@ -1,5 +1,4 @@
 import { Button, Card, CardContent, Collapse } from '@mui/material';
-import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
@@ -61,24 +60,16 @@ export default function CaseCard({ caseObject }) {
           caseLaws={caseLaws}
           sx={{ mt: 3 }}
         />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            mt: 3,
-          }}
+        <Button
+          variant="text"
+          onClick={() => setIsDetailed(!isDetailed)}
+          startIcon={
+            isDetailed ? <IconArrowDownCircle /> : <IconArrowRightCircle />
+          }
+          sx={{ width: 1, mt: 3 }}
         >
-          <Button
-            variant="text"
-            onClick={() => setIsDetailed(!isDetailed)}
-            startIcon={
-              isDetailed ? <IconArrowDownCircle /> : <IconArrowRightCircle />
-            }
-          >
-            {isDetailed ? 'Hide Details' : 'View Details'}
-          </Button>
-        </Box>
+          {isDetailed ? 'Hide Details' : 'View Details'}
+        </Button>
         <Collapse in={isDetailed}>
           <CaseTabs
             caseObject={caseObject}

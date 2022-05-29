@@ -38,7 +38,7 @@ export default function CaseEvidence({ caseObject, sx }) {
     <Box sx={{ ...sx }}>
       {/* Evidence */}
       {evidencePosts && evidencePosts.length > 0 ? (
-        <Stack spacing={1} sx={{ mt: 1.5 }}>
+        <Stack spacing={1}>
           {evidencePosts.map((post, index) => (
             <Paper key={index} sx={{ p: 2 }}>
               {/* Author */}
