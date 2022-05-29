@@ -16,11 +16,11 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.jsx?$/,
-      // use: ['@svgr/webpack'],
       use: [
         {
           loader: '@svgr/webpack',
           options: {
+            replaceAttrValues: { '#5E42CC': '{props.color || "#5E42CC"}' },
             svgoConfig: {
               plugins: [
                 {

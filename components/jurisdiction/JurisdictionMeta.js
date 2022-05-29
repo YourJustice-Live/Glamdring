@@ -15,27 +15,22 @@ import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useDataContext from 'hooks/context/useDataContext';
-import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/context/useWeb3Context';
-import {
-  IconFlag,
-  IconJurisdiction,
-  IconPassport,
-  IconPlus,
-  IconProfile,
-} from 'icons';
+import { IconFlag, IconPassport, IconPlus, IconProfile } from 'icons/core';
+import { IconJurisdiction } from 'icons/entities';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
-import useErrors from 'hooks/useErrors';
 import {
   handleJoinJurisdictionEvent,
   handleLeaveJurisdictionEvent,
 } from 'utils/analytics';
+import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -79,7 +74,7 @@ function JurisdictionTop({ jurisdiction, sx }) {
         ...sx,
       }}
     >
-      <IconFlag hexColor={palette.text.secondary} size={18} />
+      <IconFlag color={palette.text.secondary} width="18" height="18" />
       <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
         JURISDICTION
       </Typography>
@@ -188,7 +183,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
           variant={isMember ? 'contained' : 'outlined'}
           startIcon={
             <IconPlus
-              hexColor={
+              color={
                 isMember ? palette.primary.contrastText : palette.primary.main
               }
             />
@@ -210,7 +205,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
           variant={isMember ? 'outlined' : 'contained'}
           startIcon={
             <IconPassport
-              hexColor={
+              color={
                 isMember ? palette.primary.main : palette.primary.contrastText
               }
             />
@@ -257,7 +252,7 @@ function ProfileRequireDialog({ isClose, onClose }) {
             router.push('/profile/create');
             close();
           }}
-          startIcon={<IconProfile hexColor={palette.primary.contrastText} />}
+          startIcon={<IconProfile color={palette.primary.contrastText} />}
         >
           Create Profile
         </Button>

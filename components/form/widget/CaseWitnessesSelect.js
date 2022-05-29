@@ -1,5 +1,5 @@
 import { Button, Divider, Stack, Typography } from '@mui/material';
-import { IconClose, IconPlus } from 'icons';
+import { IconCloseSquare, IconPlus } from 'icons/core';
 import { useEffect, useState } from 'react';
 import ProfileSelect from './ProfileSelect';
 
@@ -51,7 +51,7 @@ export default function CaseWitnessesSelect(props) {
       >
         {witnesses.length < 5 && (
           <Button
-            startIcon={<IconPlus size={22} />}
+            startIcon={<IconPlus width="22" heigth="22" />}
             disabled={propsDisabled}
             onClick={addWitnessSelect}
           >
@@ -60,7 +60,7 @@ export default function CaseWitnessesSelect(props) {
         )}
         {witnesses.length > 1 && (
           <Button
-            startIcon={<IconClose size={24} />}
+            startIcon={<IconCloseSquare width="22" heigth="22" />}
             disabled={propsDisabled}
             onClick={removeWitnessSelect}
           >

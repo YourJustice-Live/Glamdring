@@ -7,9 +7,10 @@ import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import { IconAddUser, IconUsers } from 'icons';
+import { Icon3User, IconAddUser } from 'icons/core';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * Page with list of all profiles.
@@ -60,7 +61,7 @@ export default function Profiles() {
     <Layout title={'YourJustice / Profiles'} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconUsers size={24} />
+          <Icon3User color={palette.text.primary} width="24" height="24" />
           <Typography variant="h3" sx={{ ml: 1 }}>
             Profiles
           </Typography>

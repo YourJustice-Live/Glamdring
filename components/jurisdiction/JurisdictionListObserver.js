@@ -12,7 +12,7 @@ import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import { IconFilter } from 'icons';
+import { IconFilter3 } from 'icons/core';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
@@ -92,13 +92,14 @@ export default function JurisdictionListObserver({
             size="small"
             variant={isEmpty(params.filters) ? 'outlined' : 'contained'}
             startIcon={
-              <IconFilter
-                hexColor={
+              <IconFilter3
+                color={
                   isEmpty(params.filters)
                     ? palette.primary.main
                     : palette.primary.contrastText
                 }
-                size={18}
+                width="18"
+                height="18"
               />
             }
             sx={{ px: 2 }}

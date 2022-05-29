@@ -27,19 +27,20 @@ import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
 import { FORM } from 'constants/feedbacks';
 import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useAction from 'hooks/useAction';
-import useDialogContext from 'hooks/context/useDialogContext';
+import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
-import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconJurisdiction, IconProfile, IconWallet } from 'icons';
+import { IconProfile, IconWallet } from 'icons/core';
+import { IconJurisdiction } from 'icons/entities';
 import { capitalize } from 'lodash';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import useErrors from 'hooks/useErrors';
 import { handleCreateCaseEvent } from 'utils/analytics';
 
 /**
@@ -521,7 +522,7 @@ export default function CaseCreateDialog({
                 connectWallet();
                 close();
               }}
-              startIcon={<IconWallet hexColor={palette.primary.contrastText} />}
+              startIcon={<IconWallet color={palette.primary.contrastText} />}
             >
               Connect Wallet
             </Button>
@@ -540,9 +541,7 @@ export default function CaseCreateDialog({
                 router.push('/profile/create');
                 close();
               }}
-              startIcon={
-                <IconProfile hexColor={palette.primary.contrastText} />
-              }
+              startIcon={<IconProfile color={palette.primary.contrastText} />}
             >
               Create Profile
             </Button>

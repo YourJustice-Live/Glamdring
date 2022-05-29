@@ -2,7 +2,7 @@ import { Button, Card, CardContent, Collapse } from '@mui/material';
 import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
-import { IconArrowDownCircle, IconArrowRightCircle } from 'icons';
+import { IconArrowDownCircle, IconArrowRightCircle } from 'icons/core';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import CaseDetails from './CaseDetails';

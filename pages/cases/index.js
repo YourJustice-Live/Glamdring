@@ -7,7 +7,7 @@ import { CASE_STAGE } from 'constants/contracts';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconHammer, IconPlus } from 'icons';
+import { IconHammer1, IconPlus } from 'icons/core';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -32,7 +32,7 @@ export default function Cases() {
     <Layout title={'YourJustice / Cases'} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconHammer size={24} hexColor={palette.text.primary} />
+          <IconHammer1 color={palette.text.primary} width="18" heigth="18" />
           <Typography variant="h3" sx={{ ml: 1 }}>
             Cases
           </Typography>

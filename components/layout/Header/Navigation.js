@@ -17,15 +17,15 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { IconMember } from 'icons/entities';
 import {
   IconHome,
-  IconMember,
   IconNotification,
   IconPlus,
   IconProfile,
   IconWallet,
-  Logo,
-} from 'icons';
+} from 'icons/core';
+import { Logo } from 'icons/logo';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
@@ -147,7 +147,7 @@ export default function Navigation() {
           <Box sx={{ flexGrow: 0 }}>
             <Link href="/" passHref>
               <IconButton sx={{ ml: 2 }}>
-                <IconHome />
+                <IconHome color={palette.text.secondary} />
               </IconButton>
             </Link>
           </Box>
@@ -158,7 +158,7 @@ export default function Navigation() {
           <Box sx={{ flexGrow: 0 }}>
             <Link href="/events" passHref>
               <IconButton sx={{ ml: 0.4 }}>
-                <IconNotification />
+                <IconNotification color={palette.text.secondary} />
               </IconButton>
             </Link>
           </Box>
