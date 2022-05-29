@@ -1,6 +1,8 @@
 /* eslint-disable import/extensions */
 export { IconAddUser } from './js/IconAddUser';
 export { IconApplication } from './js/IconApplication';
+export { IconArrowDownCircle } from './js/IconArrowDownCircle';
+export { IconArrowRightCircle } from './js/IconArrowRightCircle';
 export { IconChart } from './js/IconChart';
 export { IconClose } from './js/IconClose';
 export { IconCommits } from './js/IconCommits';

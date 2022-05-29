@@ -1,12 +1,14 @@
-import { Card, CardContent } from '@mui/material';
+import { Button, Card, CardContent, Collapse } from '@mui/material';
+import { Box } from '@mui/system';
 import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
+import { IconArrowDownCircle, IconArrowRightCircle } from 'icons';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import CaseDetails from './CaseDetails';
-import CaseTabs from './CaseTabs';
 import CaseHeader from './CaseHeader';
+import CaseTabs from './CaseTabs';
 
 /**
  * A component with a card with case.
@@ -15,6 +17,7 @@ export default function CaseCard({ caseObject }) {
   const { getJurisdictionRules } = useJurisdiction();
   const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
+  const [isDetailed, setIsDetailed] = useState(false);
 
   async function getLawsByCase(caseObject) {
     let laws;
@@ -58,7 +61,31 @@ export default function CaseCard({ caseObject }) {
           caseLaws={caseLaws}
           sx={{ mt: 3 }}
         />
-        <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 3 }} />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            mt: 3,
+          }}
+        >
+          <Button
+            variant="text"
+            onClick={() => setIsDetailed(!isDetailed)}
+            startIcon={
+              isDetailed ? <IconArrowDownCircle /> : <IconArrowRightCircle />
+            }
+          >
+            {isDetailed ? 'Hide Details' : 'View Details'}
+          </Button>
+        </Box>
+        <Collapse in={isDetailed}>
+          <CaseTabs
+            caseObject={caseObject}
+            caseLaws={caseLaws}
+            sx={{ mt: 3 }}
+          />
+        </Collapse>
       </CardContent>
     </Card>
   );
