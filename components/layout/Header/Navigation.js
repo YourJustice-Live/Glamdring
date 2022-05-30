@@ -251,19 +251,19 @@ export default function Navigation() {
             </MenuItem>
           )}
           {account && !accountProfile && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/create" passHref>
+            <Link href="/profile/create" passHref>
+              <MenuItem onClick={handleCloseUserMenu}>
                 <Typography>Create Own Profile</Typography>
-              </Link>
-            </MenuItem>
-          )}
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/profiles" passHref>
-              <Typography>Profiles</Typography>
+              </MenuItem>
             </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/cases" passHref>
+          )}
+          <Link href="/profiles" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>Profiles</Typography>
+            </MenuItem>
+          </Link>
+          <Link href="/cases" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
               <Badge
                 color="danger"
                 badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
@@ -272,18 +272,18 @@ export default function Navigation() {
               >
                 <Typography>Cases</Typography>
               </Badge>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/jurisdictions" passHref>
+            </MenuItem>
+          </Link>
+          <Link href="/jurisdictions" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
               <Typography>Jurisdictions</Typography>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/faq" passHref>
+            </MenuItem>
+          </Link>
+          <Link href="/faq" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
               <Typography>FAQ</Typography>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
           {account && (
             <MenuItem onClick={disconnectWallet}>
               <Typography textAlign="center">Disconnect Wallet</Typography>
