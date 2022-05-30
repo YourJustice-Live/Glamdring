@@ -208,7 +208,12 @@ export default function Navigation() {
         >
           {/* Menu items */}
           {!account && (
-            <MenuItem onClick={connectWallet}>
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                connectWallet();
+              }}
+            >
               <Typography textAlign="center">Connect Wallet</Typography>
             </MenuItem>
           )}
