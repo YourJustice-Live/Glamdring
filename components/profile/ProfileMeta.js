@@ -10,6 +10,7 @@ import {
 import {
   Avatar,
   Button,
+  Chip,
   Divider,
   Link,
   Skeleton,
@@ -51,7 +52,7 @@ export default function ProfileMeta({ profile }) {
           <Skeleton
             variant="rectangular"
             height={24}
-            width={256}
+            width={164}
             sx={{ mb: 1 }}
           />
         </>
@@ -99,18 +100,20 @@ function ProfileMain({ profile, sx }) {
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        alignItems: { md: 'center' },
         ...sx,
       }}
     >
-      <ProfileAvatar profile={profile} />
+      <Box>
+        <ProfileAvatar profile={profile} />
+        <ProfileEditButton profile={profile} sx={{ mt: 2, width: 164 }} />
+      </Box>
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
+        <Chip label={`ID: ${profile?.id}`} sx={{ height: '24px', mb: 1.5 }} />
         <Typography variant="h2">
           {firstName} {lastName}
         </Typography>
         {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
         <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />
-        <ProfileEditButton profile={profile} sx={{ mt: 1 }} />
       </Box>
     </Box>
   );
@@ -199,13 +202,11 @@ function ProfileEditButton({ profile, sx }) {
   const { account } = useWeb3Context();
   if (profile?.owner?.toLowerCase() === account?.toLowerCase()) {
     return (
-      <Box sx={{ ...sx }}>
-        <NextLink href={`/profile/edit`} passHref>
-          <Button size="small" variant="outlined">
-            Edit Profile
-          </Button>
-        </NextLink>
-      </Box>
+      <NextLink href={`/profile/edit`} passHref>
+        <Button size="small" variant="outlined" sx={{ ...sx }}>
+          Edit Profile
+        </Button>
+      </NextLink>
     );
   } else {
     return <></>;
