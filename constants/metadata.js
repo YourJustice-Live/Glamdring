@@ -17,7 +17,7 @@ import {
   IconSecurityWeaknesses,
   IconSuccessfulContracts,
   IconXenophobia,
-} from 'icons';
+} from 'icons/laws';
 
 export const PROFILE_TRAIT_TYPE = {
   firstName: 'First Name',

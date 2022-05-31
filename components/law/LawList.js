@@ -1,4 +1,4 @@
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import LawCard from './LawCard';
 
 /**
@@ -8,7 +8,7 @@ export default function LawList({ laws, isCommentsEnabled, sx }) {
   return (
     <Stack spacing={4} sx={{ ...sx }}>
       {!laws && (
-        <>
+        <Box>
           <Skeleton
             variant="rectangular"
             sx={{ mb: 1 }}
@@ -16,7 +16,7 @@ export default function LawList({ laws, isCommentsEnabled, sx }) {
             height={24}
           />
           <Skeleton variant="rectangular" width={82} height={24} />
-        </>
+        </Box>
       )}
       {laws && laws.size === 0 && <Typography>No laws</Typography>}
       {laws && laws.size > 0 && (

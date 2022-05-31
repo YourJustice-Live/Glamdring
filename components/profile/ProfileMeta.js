@@ -19,7 +19,8 @@ import {
 import { Box } from '@mui/system';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconMember, IconProfile } from 'icons';
+import { IconMember } from 'icons/entities';
+import { IconProfile } from 'icons/core';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 import { formatAddress } from 'utils/formatters';
@@ -69,7 +70,7 @@ function ProfileTop({ profile, sx }) {
         ...sx,
       }}
     >
-      <IconProfile hexColor={palette.text.secondary} size={18} />
+      <IconProfile color={palette.text.secondary} width="18" height="18" />
       <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
         HUMAN
       </Typography>

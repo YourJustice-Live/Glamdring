@@ -16,7 +16,7 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
-import { IconMember } from 'icons';
+import { IconMember } from 'icons/entities';
 import NextLink from 'next/link';
 import { formatAddress } from 'utils/formatters';
 

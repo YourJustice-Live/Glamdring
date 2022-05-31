@@ -93,7 +93,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
           ) : (
             <Typography sx={{ mt: 1 }}>No confirmations</Typography>
           )}
-          {/* Add confirmation post form */}
+          {/* Button to add confirmation */}
           {caseObject?.stage === CASE_STAGE.open &&
             isAccountHasCaseRole(caseObject, account, CASE_ROLE.witness.id) && (
               <Box sx={{ mt: 2 }}>

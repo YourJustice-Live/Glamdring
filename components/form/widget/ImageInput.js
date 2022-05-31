@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { IconPlus } from 'icons';
+import { IconPlus } from 'icons/core';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -86,7 +86,7 @@ export default function ImageInput(props) {
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <IconPlus hexColor={palette.grey[600]} />
+            <IconPlus color={palette.grey[600]} />
           )}
         </Avatar>
         <Input

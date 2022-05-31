@@ -1,7 +1,7 @@
 import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import { IconMember } from 'icons';
+import { IconMember } from 'icons/entities';
 import { useEffect, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 

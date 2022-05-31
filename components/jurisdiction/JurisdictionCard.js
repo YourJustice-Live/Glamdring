@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import { IconJurisdiction } from 'icons';
+import { IconJurisdiction } from 'icons/entities';
 import { truncate } from 'lodash';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';

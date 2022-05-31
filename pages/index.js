@@ -6,9 +6,10 @@ import { PROFILE_ORDER } from 'constants/subgraph';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import { IconUsers } from 'icons';
+import { Icon3User } from 'icons/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * Main page with profiles from light side and dark side.
@@ -96,7 +97,7 @@ export default function Index() {
         </Tabs>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconUsers size={24} />
+            <Icon3User color={palette.text.primary} width="24" height="24" />
             <Typography variant="h3" sx={{ ml: 1 }}>
               People
             </Typography>

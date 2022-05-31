@@ -3,10 +3,10 @@ import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
 import { POST_TYPE } from 'constants/metadata';
-import useCase from 'hooks/useCase';
+import { CASE_ROLE_STRING } from 'constants/strings';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { capitalize } from 'lodash';
+import useCase from 'hooks/useCase';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
@@ -43,8 +43,8 @@ export default function CaseComments({ caseObject, sx }) {
               {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
                 <ProfileCompactCard account={post.author} />
-                <Typography variant="body2">
-                  ({capitalize(post.entityRole)})
+                <Typography variant="body2" color="text.secondary">
+                  ({CASE_ROLE_STRING[post.entityRole]})
                 </Typography>
               </Stack>
               {/* Message */}
@@ -66,7 +66,7 @@ export default function CaseComments({ caseObject, sx }) {
       ) : (
         <Typography>No comments</Typography>
       )}
-      {/* Add comment post form */}
+      {/* Button to add comment */}
       {caseObject?.stage === CASE_STAGE.open &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>

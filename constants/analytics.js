@@ -5,6 +5,7 @@ export const POST_HOG_EVENT = {
   createdOwnProfile: 'created own profile',
   editedOwnProfile: 'edited own profile',
   createdCase: 'created case',
+  addedCaseEvidence: 'added case evidence',
   commentedCase: 'commented case',
   confirmedCase: 'confirmed case',
   madeCaseVerdict: 'made case verdict',

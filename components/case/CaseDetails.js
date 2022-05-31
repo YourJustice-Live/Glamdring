@@ -1,25 +1,18 @@
-import { AttachFileOutlined } from '@mui/icons-material';
-import { Link, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { POST_TYPE } from 'constants/metadata';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
-import { hexStringToJson } from 'utils/converters';
 
 /**
- * A component with a case details (name, subject, affected, evidence).
+ * A component with a case details (name, subject, affected).
  */
 export default function CaseDetails({ caseObject, caseLaws, sx }) {
   const [subjectTitles, setSubjectTitles] = useState(null);
   const [affectedTitles, setAffectedTitles] = useState(null);
-  const [evidencePosts, setEvidencePosts] = useState(null);
 
   useEffect(() => {
     if (caseObject && caseLaws) {
-      const evidencePosts = caseObject.posts.filter(
-        (post) => post.uriType === POST_TYPE.evidence,
-      );
       const subjectTitles = [];
       const affectedTitles = [];
       for (const law of caseLaws.values()) {
@@ -28,7 +21,6 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
           affectedTitles.push(capitalize(rule.rule?.affected));
         }
       }
-      setEvidencePosts(evidencePosts);
       setSubjectTitles(subjectTitles);
       setAffectedTitles(affectedTitles);
     }
@@ -81,34 +73,6 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
             ))}
           </Stack>
         </Box>
-      </Box>
-      {/* Evidence */}
-      <Box sx={{ mt: 4 }}>
-        <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
-        {evidencePosts && evidencePosts.length > 0 ? (
-          <Stack spacing={1} sx={{ mt: 1.5 }}>
-            {evidencePosts.map((post, index) => (
-              <Stack
-                key={index}
-                direction="row"
-                spacing={1}
-                alignItems="center"
-              >
-                <AttachFileOutlined />
-                <Link
-                  href={hexStringToJson(post.uriData)?.evidenceFileUri || '#'}
-                  underline="none"
-                  target="_blank"
-                  variant="body2"
-                >
-                  {hexStringToJson(post.uriData)?.evidenceTitle || 'Unknown'}
-                </Link>
-              </Stack>
-            ))}
-          </Stack>
-        ) : (
-          <Typography>None</Typography>
-        )}
       </Box>
     </Box>
   );

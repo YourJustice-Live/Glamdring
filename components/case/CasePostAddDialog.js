@@ -10,14 +10,17 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CommentPostMetadata from 'classes/metadata/CommentPostMetadata';
 import ConfirmationPostMetadata from 'classes/metadata/ConfirmationPostMetadata';
+import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import { CASE_ROLE } from 'constants/contracts';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
+import { CASE_ROLE_STRING } from 'constants/strings';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 import {
+  handleAddCaseEvidenceEvent,
   handleCommentCaseEvent,
   handleConfirmCaseEvent,
 } from 'utils/analytics';
@@ -43,6 +46,9 @@ export default function CasePostAddDialog({
 
   const schema = {
     type: 'object',
+    ...(postType === POST_TYPE.evidence && {
+      required: ['role', 'evidencePostUri'],
+    }),
     ...(postType === POST_TYPE.comment && {
       required: ['role', 'message'],
     }),
@@ -50,7 +56,9 @@ export default function CasePostAddDialog({
       required: ['confirmationType'],
     }),
     properties: {
-      ...(postType === POST_TYPE.comment && {
+      // Role input
+      ...((postType === POST_TYPE.evidence ||
+        postType === POST_TYPE.comment) && {
         role: {
           type: 'string',
           title: 'Your Role',
@@ -63,19 +71,31 @@ export default function CasePostAddDialog({
             CASE_ROLE.affected.name,
           ],
           enumNames: [
-            'Admin',
-            'Acted',
-            'Plaintiff',
-            'Judge',
-            'Witness',
-            'Affected',
+            CASE_ROLE_STRING.admin,
+            CASE_ROLE_STRING.subject,
+            CASE_ROLE_STRING.plaintiff,
+            CASE_ROLE_STRING.judge,
+            CASE_ROLE_STRING.witness,
+            CASE_ROLE_STRING.affected,
           ],
         },
       }),
-      message: {
-        type: 'string',
-        title: 'Message',
-      },
+      // Evidence input
+      ...(postType === POST_TYPE.evidence && {
+        evidencePostUri: {
+          type: 'string',
+          title: '',
+        },
+      }),
+      // Message input
+      ...((postType === POST_TYPE.comment ||
+        postType === POST_TYPE.confirmation) && {
+        message: {
+          type: 'string',
+          title: 'Message',
+        },
+      }),
+      // Confirmation type input
       ...(postType === POST_TYPE.confirmation && {
         confirmationType: {
           type: 'string',
@@ -85,6 +105,19 @@ export default function CasePostAddDialog({
         },
       }),
     },
+  };
+
+  const uiSchema = {
+    evidencePostUri: {
+      'ui:widget': 'CaseEvidencePostInput',
+      'ui:options': {
+        subLabel: '...',
+      },
+    },
+  };
+
+  const widgets = {
+    CaseEvidencePostInput: CaseEvidencePostInput,
   };
 
   async function close() {
@@ -98,6 +131,11 @@ export default function CasePostAddDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
+      // If post is evidence
+      if (postType === POST_TYPE.evidence) {
+        await addPost(caseObject.id, formData.role, formData.evidencePostUri);
+        handleAddCaseEvidenceEvent(caseObject.id);
+      }
       // If post is comment
       if (postType === POST_TYPE.comment) {
         const { url } = await uploadJsonToIPFS(
@@ -107,7 +145,7 @@ export default function CasePostAddDialog({
         handleCommentCaseEvent(caseObject.id);
       }
       // If post is confirmation
-      else if (postType === POST_TYPE.confirmation) {
+      if (postType === POST_TYPE.confirmation) {
         const { url } = await uploadJsonToIPFS(
           new ConfirmationPostMetadata(
             formData.confirmationType,
@@ -116,10 +154,6 @@ export default function CasePostAddDialog({
         );
         await addPost(caseObject.id, CASE_ROLE.witness.name, url);
         handleConfirmCaseEvent(caseObject.id);
-      }
-      // If post type is not supporter
-      else {
-        throw new Error('Post type is not supported');
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();
@@ -137,14 +171,19 @@ export default function CasePostAddDialog({
       fullWidth
     >
       <DialogTitle>
-        {postType === POST_TYPE.comment ? 'Add Comment' : 'Add Confirmation'}
+        {postType === POST_TYPE.evidence && 'Add Evidence'}
+        {postType === POST_TYPE.comment && 'Add Comment'}
+        {postType === POST_TYPE.confirmation && 'Add Confirmation'}
       </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
+          uiSchema={uiSchema}
+          widgets={widgets}
           formData={formData}
           onSubmit={submit}
           disabled={isLoading}
+          showErrorList={false}
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (

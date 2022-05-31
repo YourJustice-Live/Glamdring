@@ -11,29 +11,34 @@ You can file cases for or against other individuals, supply evidence and call fo
 ## Resources
 
 - [dApp](https://yj.life/)
-- [Task management (Notion)](https://yourjustice.notion.site/1a0b9e7b3bbc43278e3f41567e98c5dd?v=cc7bdb06027648ab9adefc679f3194a9)
 - [Design (Figma)](https://www.figma.com/file/Q27NdlekpXVilnWzflwgdy/Minimal-Existing-Product?node-id=9559%3A38178)
 
 ## Stack
 
-* [NextJS](https://nextjs.org/)
-* [React](https://reactjs.org/)
-* [Ethers](https://ethers.io/)
-* [MUI](https://mui.com/)
-* [The Graph](https://thegraph.com/)
+- [NextJS](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [Ethers](https://ethers.io/)
+- [MUI](https://mui.com/)
+- [The Graph](https://thegraph.com/)
 
 ## Commands
 
 - Install depencies - `npm install`
 - Start development server - `npm run dev`
-- Deploy to Vercel (dev) - `vercel`
-- Deploy to Vercel (production) - `vercel --prod`
+
+## How to set up a development environment
+
+1. Create a file .env.local with content:
+
+```
+NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjustice-dev
+```
 
 ## Naming Convention
 
 - Branch: `{Notion ID}-{task-name}`
   - Example: `1a41b-integrate-new-contracts`
-- Commit Message: `[{Notion ID}]-{Task name}`
+- Commit Message: `[{Notion ID}]-{Commit message}`
   - Example: `[1a41b] Add new hooks for the jurisdiction contract`
 
 ## Environment variables for Polygon Mainnet

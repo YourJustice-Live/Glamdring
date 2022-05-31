@@ -6,7 +6,7 @@ import Layout from 'components/layout/Layout';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconPassport, IconPlus } from 'icons';
+import { IconPassport, IconPlus } from 'icons/core';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -27,7 +27,7 @@ export default function Jurisdictions() {
     <Layout title={'YourJustice / Jurisdictions'} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconPassport size={24} hexColor={palette.text.primary} />
+          <IconPassport color={palette.text.primary} width="24" height="24" />
           <Typography variant="h3" sx={{ ml: 1 }}>
             Jurisdictions
           </Typography>
