@@ -108,8 +108,8 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || 'Profile'}
-            placeholder="Search by name, address"
+            label={propsLabel || 'Soul Search'}
+            placeholder="Search by name or address"
           />
         )}
         renderOption={(props, option) => {
