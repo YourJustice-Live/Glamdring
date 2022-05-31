@@ -62,7 +62,7 @@ export default function Profiles() {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconUsers size={24} />
           <Typography variant="h3" sx={{ ml: 1 }}>
-            Profiles
+            Souls
           </Typography>
         </Box>
         {accountProfile && (

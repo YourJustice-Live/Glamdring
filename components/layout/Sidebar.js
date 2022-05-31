@@ -116,7 +116,7 @@ export function Sidebar() {
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>
-            <Link underline="none">Profiles</Link>
+            <Link underline="none">Souls</Link>
           </NextLink>
           <NextLink href="/cases" passHref>
             <Link underline="none">

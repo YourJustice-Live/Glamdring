@@ -251,7 +251,7 @@ export default function Navigation() {
           )}
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href="/profiles" passHref>
-              <Typography>Profiles</Typography>
+              <Typography>Souls</Typography>
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
