@@ -45,40 +45,57 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
         <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
           {law?.rules?.map((rule, index) => (
             <Paper key={index} variant="outlined" sx={{ p: 2 }}>
-              {/* Rule id */}
-              <Chip label={`ID: ${rule?.ruleId || 'None'}`} size="small" />
-              {/* Rule negation and name */}
               <Box
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'center',
-                  mt: 1.5,
                 }}
               >
-                {rule?.rule?.negation && (
-                  <Typography
-                    variant="body2"
+                <Box
+                  sx={{
+                    flex: 1,
+                    // display: 'flex',
+                    // flexDirection: 'row',
+                    mt: 1.5,
+                  }}
+                >
+                  {/* Rule negation and name */}
+                  <Box
                     sx={{
-                      fontWeight: 'bold',
-                      color: 'danger.primary',
-                      mr: 0.5,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
                     }}
                   >
-                    NOT
-                  </Typography>
-                )}
-                <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
-                  {rule?.rule?.uriData?.name || 'None Rule Name'}
-                </Typography>
+                    {rule?.rule?.negation && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 'bold',
+                          color: 'danger.primary',
+                          mr: 0.5,
+                        }}
+                      >
+                        NOT
+                      </Typography>
+                    )}
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
+                      {rule?.rule?.uriData?.name || 'None Rule Name'}
+                    </Typography>
+                    {/* Rule id */}
+                    <Chip label={`ID: ${rule?.ruleId || 'None'}`} size="small" sx={{ height: '20px' }} />
+                  </Box>
+                  {/* Rule description */}
+                  {rule?.rule?.uriData?.description && (
+                    <Typography variant="body2" sx={{ mt: 0.3 }}>
+                      {rule.rule.uriData.description}
+                    </Typography>
+                  )}
+                </Box>
+                <RuleEffects rule={rule} sx={{ mt: 1.5, display: 'flex', flex: '0 1 auto' }} />
               </Box>
-              {/* Rule description */}
-              {rule?.rule?.uriData?.description && (
-                <Typography variant="body2" sx={{ mt: 0.3 }}>
-                  {rule.rule.uriData.description}
-                </Typography>
-              )}
-              <RuleEffects rule={rule} sx={{ mt: 1.5 }} />
+
               {/* Comment law button */}
               {isCommentsEnabled && (
                 <Box sx={{ display: 'flex', direction: 'row', mt: 2 }}>
