@@ -48,19 +48,18 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
               <Box
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: { xs: 'column', md: 'row' },
+                  mt: 1.5,
                 }}
               >
+                {/* Rule negation, name, id, description */}
                 <Box
                   sx={{
                     flex: 1,
-                    // display: 'flex',
-                    // flexDirection: 'row',
-                    mt: 1.5,
+                    mr: 4,
                   }}
                 >
-                  {/* Rule negation and name */}
+                  {/* Rule negation, name */}
                   <Box
                     sx={{
                       display: 'flex',
@@ -80,11 +79,18 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
                         NOT
                       </Typography>
                     )}
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', mr: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 'bold', mr: 1 }}
+                    >
                       {rule?.rule?.uriData?.name || 'None Rule Name'}
                     </Typography>
                     {/* Rule id */}
-                    <Chip label={`ID: ${rule?.ruleId || 'None'}`} size="small" sx={{ height: '20px' }} />
+                    <Chip
+                      label={`ID: ${rule?.ruleId || 'None'}`}
+                      size="small"
+                      sx={{ height: '20px' }}
+                    />
                   </Box>
                   {/* Rule description */}
                   {rule?.rule?.uriData?.description && (
@@ -93,7 +99,7 @@ export default function LawCard({ law, isCommentsEnabled, sx }) {
                     </Typography>
                   )}
                 </Box>
-                <RuleEffects rule={rule} sx={{ mt: 1.5, display: 'flex', flex: '0 1 auto' }} />
+                <RuleEffects rule={rule} sx={{ mt: { xs: 2, md: 0 } }} />
               </Box>
 
               {/* Comment law button */}
