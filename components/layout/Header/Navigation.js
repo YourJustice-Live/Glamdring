@@ -108,7 +108,7 @@ export default function Navigation() {
             flexDirection: 'row-reverse',
           }}
         >
-          {account && accountProfile && (
+          {/* account && accountProfile && (
             <Button
               variant="secondary"
               sx={{ display: { xs: 'none', md: 'flex' } }}
@@ -119,7 +119,7 @@ export default function Navigation() {
             >
               Create Case
             </Button>
-          )}
+            )*/}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <Button
