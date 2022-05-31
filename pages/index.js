@@ -98,7 +98,7 @@ export default function Index() {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconUsers size={24} />
             <Typography variant="h3" sx={{ ml: 1 }}>
-              People
+              Souls
             </Typography>
           </Box>
           {profilesCount && <Typography>Total: {profilesCount}</Typography>}
