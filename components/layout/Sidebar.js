@@ -118,6 +118,9 @@ export function Sidebar() {
           <NextLink href="/profiles" passHref>
             <Link underline="none">Souls</Link>
           </NextLink>
+          <NextLink href="/jurisdictions" passHref>
+            <Link underline="none">Jurisdictions</Link>
+          </NextLink>
           <NextLink href="/cases" passHref>
             <Link underline="none">
               <Badge
@@ -130,13 +133,11 @@ export function Sidebar() {
               </Badge>
             </Link>
           </NextLink>
-          <NextLink href="/jurisdictions" passHref>
-            <Link underline="none">Jurisdictions</Link>
-          </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>
           </NextLink>
         </Stack>
+
         {/* Profile Jurisdictions */}
         {accountProfileJurisdictions && (
           <Box sx={{ mx: 2, mt: 3 }}>
