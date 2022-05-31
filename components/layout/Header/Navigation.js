@@ -21,7 +21,7 @@ import {
   IconHome,
   IconMember,
   IconNotification,
-  IconPlus,
+  // IconPlus,
   IconProfile,
   IconWallet,
   Logo,
