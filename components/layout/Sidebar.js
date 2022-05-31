@@ -141,6 +141,9 @@ export function Sidebar() {
         {accountProfileJurisdictions && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
+            <Typography variant="h4" sx={{ mt: 2 }}>
+              My Jurisdictions
+            </Typography>
             <Stack sx={{ mt: 3 }} spacing={3}>
               {accountProfileJurisdictions.map((jurisdiction, index) => (
                 <NextLink
