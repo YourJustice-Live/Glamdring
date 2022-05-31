@@ -27,8 +27,12 @@ export default function JurisdictionOfficials({ jurisdiction }) {
         jurisdiction,
         JURISDICTION_ROLE.admin.id,
       );
-      setJudgeProfiles(await getProfiles(judgeAccounts, null, 25, 0));
-      setAdminProfiles(await getProfiles(adminAccounts, null, 25, 0));
+      setJudgeProfiles(
+        await getProfiles({ owners: judgeAccounts, first: 25, skip: 0 }),
+      );
+      setAdminProfiles(
+        await getProfiles({ owners: adminAccounts, first: 25, skip: 0 }),
+      );
     } catch (error) {
       handleError(error, true);
     }

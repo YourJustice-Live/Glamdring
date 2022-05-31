@@ -34,13 +34,12 @@ export default function JurisdictionMembers({ jurisdiction }) {
         jurisdiction,
         JURISDICTION_ROLE.member.id,
       );
-      const memberProfiles = await getProfiles(
-        memberAccounts,
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-        selectedOrder,
-      );
+      const memberProfiles = await getProfiles({
+        owners: memberAccounts,
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+        order: selectedOrder,
+      });
       setMemberProfiles(memberProfiles);
       // Add next page to pagination if possible
       if (page == pageCount && memberProfiles.length === pageSize) {

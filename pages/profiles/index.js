@@ -35,14 +35,11 @@ export default function Profiles() {
       setCurrentPageCount(pageCount);
       setProfiles(null);
       // Load member profiles for page
-      const profiles = await getProfiles(
-        null,
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-        selectedOrder,
-      );
-      console.log('[Dev] Profiles profiles', profiles);
+      const profiles = await getProfiles({
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+        order: selectedOrder,
+      });
       setProfiles(profiles);
       // Add next page to pagination if possible
       if (page == pageCount && profiles.length === pageSize) {

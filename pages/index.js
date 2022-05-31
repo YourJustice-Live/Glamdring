@@ -37,13 +37,11 @@ export default function Index() {
       setCurrentPageCount(pageCount);
       setProfiles(null);
       // Load profiles
-      const profiles = await getProfiles(
-        null,
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-        tabValue,
-      );
+      const profiles = await getProfiles({
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+        order: tabValue,
+      });
       setProfiles(profiles);
       // Add next page to pagination if possible
       if (page == pageCount && profiles.length === pageSize) {
@@ -51,13 +49,11 @@ export default function Index() {
       }
       // Define profiles counts
       if (!profilesCount) {
-        const lastProfiles = await getProfiles(
-          null,
-          null,
-          1,
-          0,
-          PROFILE_ORDER.byId,
-        );
+        const lastProfiles = await getProfiles({
+          first: 1,
+          skip: 0,
+          order: PROFILE_ORDER.byId,
+        });
         setProfilesCount(
           lastProfiles && lastProfiles.length > 0 ? lastProfiles[0].id : null,
         );
@@ -83,6 +79,7 @@ export default function Index() {
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+        {/* TODO: Use profile id instead of account */}
         <ProfileSelect
           sx={{ width: { xs: 1, md: 580 } }}
           onChange={(account) => router.push(`/profile/${account}`)}

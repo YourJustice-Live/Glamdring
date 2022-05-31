@@ -1,4 +1,4 @@
-import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
+import { Avatar, Box, Chip, Link, Skeleton, Typography } from '@mui/material';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { IconMember } from 'icons/entities';
@@ -10,7 +10,8 @@ import { formatAddress } from 'utils/formatters';
  */
 export default function ProfileCompactCard({
   profile: propsProfile,
-  account: propsAccount,
+  account: propsAccount, // TODO: Replace to id
+  disableId = true,
   disableAddress = true,
   disableLink = false,
   disableRating = false,
@@ -29,7 +30,7 @@ export default function ProfileCompactCard({
     }
     // Else find profile by account is defined
     else if (propsAccount) {
-      getProfile(propsAccount)
+      getProfile({ owner: propsAccount })
         .then((profile) => {
           if (isComponentActive) {
             // Set profile if found
@@ -71,11 +72,14 @@ export default function ProfileCompactCard({
                 {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
               </>
             ) : (
-              <Link href={`/profile/${profile.owner}`} underline="none">
+              <Link href={`/profile/${profile.id}`} underline="none">
                 {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
               </Link>
             )}
           </Typography>
+          {!disableId && (
+            <Chip size="small" label={`ID: ${profile.id}`} sx={{ ml: 1 }} />
+          )}
           {!disableAddress && (
             <Typography sx={{ color: 'text.secondary', ml: 1 }}>
               ({formatAddress(profile.owner)})

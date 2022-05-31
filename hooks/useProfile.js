@@ -10,38 +10,47 @@ export default function useProfile() {
     useSubgraph();
 
   /**
-   * Get profile for specified account.
+   * Get profile.
    *
-   * @param {string} account Account address.
+   * @param {Object} params Params.
+   * @param {string} params.id Profile id (token id).
+   * @param {string} params.owner Account address.
    * @returns {Promise.<Profile>} A profile or null if profile not found.
    */
-  let getProfile = async function (account) {
-    if (!account) {
+  let getProfile = async function ({ id, owner }) {
+    if (!id && !owner) {
       return null;
     }
-    const accounts = await getProfiles([account]);
-    return accounts && accounts.length > 0 ? accounts[0] : null;
+    const profiles = await getProfiles({
+      ids: id ? [id] : null,
+      owners: owner ? [owner] : owner,
+    });
+    return profiles && profiles.length > 0 ? profiles[0] : null;
   };
 
   /**
    * Get profiles.
    *
-   * @param {Array.<string>} accounts If not null, then the function returns the profiles for the specified accounts.
-   * @param {string} jurisdiction Jurisdiction address.
-   * @param {number} first The number of profiles to getting.
-   * @param {number} skip The number of profiles to skip.
-   * @param {String} order Profiles order. See subgraph constants.
+   * @param {Object} params Params.
+   * @param {Array.<string>} params.ids Profile Ids (token ids).
+   * @param {Array.<string>} params.owners Addresses of owner accounts.
+   * @param {string} params.jurisdiction Jurisdiction address.
+   * @param {number} params.first The number of profiles to getting.
+   * @param {number} params.skip The number of profiles to skip.
+   * @param {String} params.order Profiles order. See subgraph constants.
    * @returns {Promise.<Array.<Profile>>} A list with profiles.
    */
-  let getProfiles = async function (
-    accounts,
+  let getProfiles = async function ({
+    ids,
+    owners,
     jurisdiction,
     first,
     skip,
     order,
-  ) {
+  }) {
     const avatarNftEntities = await findAvatarNftEntities(
-      accounts,
+      ids,
+      owners,
       jurisdiction,
       first,
       skip,

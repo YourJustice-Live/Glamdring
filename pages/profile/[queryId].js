@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Profile() {
   const router = useRouter();
-  const { queryAccount } = router.query;
+  const { queryId } = router.query;
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
@@ -23,36 +23,38 @@ export default function Profile() {
 
   async function loadData() {
     try {
-      setProfile(await getProfile(queryAccount));
+      setProfile(await getProfile({ id: queryId }));
     } catch (error) {
       handleError(error, true);
     }
   }
 
   useEffect(() => {
-    if (queryAccount) {
+    if (queryId) {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryAccount]);
+  }, [queryId]);
 
   return (
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <ProfileMeta profile={profile} />
       <ProfileRatings profile={profile} sx={{ mt: 4 }} />
-      <Box sx={{ mt: 6 }}>
-        <Typography variant="h1" gutterBottom>
-          Cases
-        </Typography>
-        <Divider />
-        <CaseListObserver
-          filters={{
-            participantProfileAccount: queryAccount,
-          }}
-          isParticipantInputDisabled={true}
-          sx={{ mt: 4 }}
-        />
-      </Box>
+      {profile && (
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h1" gutterBottom>
+            Cases
+          </Typography>
+          <Divider />
+          <CaseListObserver
+            filters={{
+              participantProfileAccount: profile?.owner,
+            }}
+            isParticipantInputDisabled={true}
+            sx={{ mt: 4 }}
+          />
+        </Box>
+      )}
     </Layout>
   );
 }

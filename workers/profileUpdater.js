@@ -18,6 +18,6 @@ addEventListener('message', (event) => {
     }
 
     // Load profile from blockchain
-    accountLoadedProfile = await getProfile(account);
+    accountLoadedProfile = await getProfile({ owner: account });
   }, interval);
 });

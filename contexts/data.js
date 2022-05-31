@@ -43,7 +43,7 @@ export function DataProvider({ children }) {
     else {
       try {
         // Define data
-        const accountProfile = await getProfile(account);
+        const accountProfile = await getProfile({ owner: account });
         const isAccountProfileHasAwaitingConfirmationCases =
           await isAccountHasAwaitingConfirmationCases(account);
         const isAccountProfileHasAwaitingJudgingCases =

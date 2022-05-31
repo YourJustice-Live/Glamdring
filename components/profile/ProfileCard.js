@@ -48,7 +48,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
             >
               {/* Image */}
               <Box sx={{ mr: 2 }}>
-                <NextLink href={`/profile/${profile.owner}`} passHref>
+                <NextLink href={`/profile/${profile.id}`} passHref>
                   <Avatar
                     sx={{
                       cursor: 'pointer',
@@ -72,7 +72,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                     {`-${profile.totalNegativeRating}`}
                   </Typography>
                 </Box>
-                <NextLink href={`/profile/${profile.owner}`} passHref>
+                <NextLink href={`/profile/${profile.id}`} passHref>
                   <Link variant="h5" underline="none">
                     {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
                   </Link>

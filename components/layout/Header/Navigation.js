@@ -230,7 +230,7 @@ export default function Navigation() {
               }}
             >
               {accountProfile && (
-                <Link href={`/profile/${accountProfile.owner}`} passHref>
+                <Link href={`/profile/${accountProfile.id}`} passHref>
                   <MuiLink underline="none">
                     {accountProfile.uriFirstName || 'Anonymous'}{' '}
                     {accountProfile.uriLastName}

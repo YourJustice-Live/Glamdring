@@ -7,7 +7,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { formatAddress } from 'utils/formatters';
 
 /**
- * A widget to select profile.
+ * A widget to select profile (profile id).
+ *
+ * TODO: Replace profile owner to profile id.
+ * TODO: Check all uses.
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
@@ -69,7 +72,7 @@ export default function ProfileSelect(props) {
     // Init selected value if props value is defined
     if (propsValue) {
       setIsDisabled(true);
-      getProfile(propsValue)
+      getProfile({ owner: propsValue })
         .then((profile) => {
           setValue(profile);
           setIsDisabled(false);
@@ -108,7 +111,7 @@ export default function ProfileSelect(props) {
             {...params}
             size={propsSize}
             label={propsLabel || 'Profile'}
-            placeholder="Search by name, address"
+            placeholder="Search by id, name, address"
             required={propsRequired}
           />
         )}
@@ -117,6 +120,7 @@ export default function ProfileSelect(props) {
             <li {...props}>
               <ProfileCompactCard
                 profile={option}
+                disableId={false}
                 disableAddress={false}
                 disableLink={true}
                 disableRating={true}

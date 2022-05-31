@@ -94,7 +94,7 @@ export function Sidebar() {
                     {`-${accountProfile.totalNegativeRating}`}
                   </Typography>
                 </Box>
-                <NextLink href={`/profile/${accountProfile.owner}`} passHref>
+                <NextLink href={`/profile/${accountProfile.id}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
                     {accountProfile.uriFirstName || 'Anonymous'}{' '}
                     {accountProfile.uriLastName}
