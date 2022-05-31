@@ -70,6 +70,8 @@ export default function useJurisdiction() {
   /**
    * Get jurisdictions.
    *
+   * TODO: Use profile id instead of account.
+   *
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids Jurisdction ids (addresses). May be null for get all jurisdictions.
    * @param {string} params.searchQuery A part of jurisdiction name for searching.

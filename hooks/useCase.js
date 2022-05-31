@@ -24,6 +24,8 @@ export default function useCase() {
   /**
    * Get cases.
    *
+   * TODO: Use profile id instead of account.
+   *
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids A list with case ids (addresses).
    * @param {string} params.searchQuery A part of case name for searching.

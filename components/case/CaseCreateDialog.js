@@ -87,9 +87,9 @@ export default function CaseCreateDialog({
   const [status, setStatus] = useState(STATUS.isLoading);
   const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
   const [formData, setFormData] = useState({
-    ...(subjectProfile && { subjectProfileAccount: subjectProfile?.owner }),
+    ...(subjectProfile && { subjectProfileId: subjectProfile?.id }),
     ...(affectedProfile && {
-      affectedProfileAccount: affectedProfile?.owner,
+      affectedProfileId: affectedProfile?.id,
     }),
   });
   const [formAction, setFormAction] = useState(null);
@@ -125,11 +125,11 @@ export default function CaseCreateDialog({
       },
       ruleId: {
         properties: {
-          subjectProfileAccount: {
+          subjectProfileId: {
             type: 'string',
             title: '',
           },
-          affectedProfileAccount: {
+          affectedProfileId: {
             type: 'string',
             title: '',
           },
@@ -137,7 +137,7 @@ export default function CaseCreateDialog({
             type: 'string',
             title: 'Evidence',
           },
-          witnessProfileAccounts: {
+          witnessProfileIds: {
             type: 'array',
             title: 'Witnesses',
             items: {
@@ -151,8 +151,8 @@ export default function CaseCreateDialog({
           },
         },
         required: [
-          'subjectProfileAccount',
-          'affectedProfileAccount',
+          'subjectProfileId',
+          'affectedProfileId',
           ...(formRule?.confirmation?.evidence ? ['evidencePostUri'] : []),
         ],
       },
@@ -249,7 +249,7 @@ export default function CaseCreateDialog({
         ),
       },
     },
-    subjectProfileAccount: {
+    subjectProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
         header: (
@@ -268,7 +268,7 @@ export default function CaseCreateDialog({
         ),
       },
     },
-    affectedProfileAccount: {
+    affectedProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
         header: (
@@ -305,7 +305,7 @@ export default function CaseCreateDialog({
         ),
       },
     },
-    witnessProfileAccounts: {
+    witnessProfileIds: {
       'ui:widget': 'CaseWitnessesSelect',
       'ui:emptyValue': [],
       'ui:options': {
@@ -350,6 +350,7 @@ export default function CaseCreateDialog({
     try {
       // Check that account has jurisdiction role
       if (
+        // TODO: Use function "isProfileHasJurisdictionRole()"
         !isAccountHasJurisdictionRole(
           jurisdiction,
           account,
@@ -379,7 +380,7 @@ export default function CaseCreateDialog({
       delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
     }
     // If action changed
     if (formData.actionGuid !== changedFormData.actionGuid) {
@@ -387,7 +388,7 @@ export default function CaseCreateDialog({
       delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
       // Load action by guid
       if (changedFormData.actionGuid) {
         getAction(changedFormData.actionGuid)
@@ -399,7 +400,7 @@ export default function CaseCreateDialog({
     if (formData.ruleId !== changedFormData.ruleId) {
       // Clear dependent form fields
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
       // Load action by id
       if (changedFormData.ruleId) {
         getJurisdictionRule(jurisdiction.id, changedFormData.ruleId)
@@ -417,7 +418,7 @@ export default function CaseCreateDialog({
       setFormData(submittedFormData);
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
-      if (submittedFormData.witnessProfileAccounts.length < formRuleWitness) {
+      if (submittedFormData.witnessProfileIds.length < formRuleWitness) {
         throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
       }
       // Define case name
@@ -431,19 +432,19 @@ export default function CaseCreateDialog({
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
-      // TODO: Use token ids instead of accounts
+      // TODO: Use token ids instead of accounts for case roles
       const caseRoles = [];
       caseRoles.push({
-        account: submittedFormData.subjectProfileAccount,
+        account: submittedFormData.subjectProfileId,
         role: CASE_ROLE.subject.name,
       });
       caseRoles.push({
-        account: submittedFormData.affectedProfileAccount,
+        account: submittedFormData.affectedProfileId,
         role: CASE_ROLE.affected.name,
       });
-      for (const witnessProfileAccount of submittedFormData.witnessProfileAccounts) {
+      for (const witnessProfileId of submittedFormData.witnessProfileIds) {
         caseRoles.push({
-          account: witnessProfileAccount,
+          account: witnessProfileId,
           role: CASE_ROLE.witness.name,
         });
       }
@@ -451,10 +452,10 @@ export default function CaseCreateDialog({
       const jurisdictionJudgeRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.judge.id,
       );
-      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.owner || [];
-      for (const jurisdictionJudgeAccount of jurisdictionJudgeAccounts) {
+      const jurisdictionJudgeIds = jurisdictionJudgeRole?.accounts || [];
+      for (const jurisdictionJudgeId of jurisdictionJudgeIds) {
         caseRoles.push({
-          account: jurisdictionJudgeAccount,
+          account: jurisdictionJudgeId,
           role: CASE_ROLE.judge.name,
         });
       }

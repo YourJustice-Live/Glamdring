@@ -8,9 +8,6 @@ import { formatAddress } from 'utils/formatters';
 
 /**
  * A widget to select profile (profile id).
- *
- * TODO: Replace profile owner to profile id.
- * TODO: Check all uses.
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
@@ -72,7 +69,7 @@ export default function ProfileSelect(props) {
     // Init selected value if props value is defined
     if (propsValue) {
       setIsDisabled(true);
-      getProfile({ owner: propsValue })
+      getProfile({ id: propsValue })
         .then((profile) => {
           setValue(profile);
           setIsDisabled(false);
@@ -91,20 +88,23 @@ export default function ProfileSelect(props) {
           (option.uriFirstName || 'Anonymous') +
           ' ' +
           option.uriLastName +
-          ' ' +
-          `(${formatAddress(option.owner)})`
+          ' (' +
+          option.id +
+          ', ' +
+          `${formatAddress(option.owner)}` +
+          ')'
         }
         filterOptions={(x) => x}
         options={options}
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue ? newValue.owner : null);
+          propsOnChange(newValue ? newValue.id : null);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        isOptionEqualToValue={(option, value) => option.owner === value.owner}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => (
           <TextField
             fullWidth

@@ -3,6 +3,9 @@ import { IconCloseSquare, IconPlus } from 'icons/core';
 import { useEffect, useState } from 'react';
 import ProfileSelect from './ProfileSelect';
 
+/**
+ * A widget to select case witness profiles (profile ids).
+ */
 export default function CaseWitnessesSelect(props) {
   const propsLabel = props.label;
   const propsSubLabel = props.options?.subLabel;

@@ -176,7 +176,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction]);
+  }, [account, jurisdiction]);
 
   return (
     <Stack direction="row" spacing={1} sx={{ ...sx }}>

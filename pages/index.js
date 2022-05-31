@@ -79,10 +79,9 @@ export default function Index() {
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-        {/* TODO: Use profile id instead of account */}
         <ProfileSelect
           sx={{ width: { xs: 1, md: 580 } }}
-          onChange={(account) => router.push(`/profile/${account}`)}
+          onChange={(id) => router.push(`/profile/${id}`)}
         />
       </Box>
       <Box sx={{ mt: 12 }}>
