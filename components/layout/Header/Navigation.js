@@ -168,7 +168,7 @@ export default function Navigation() {
         <Tooltip title="Open Menu">
           <IconButton onClick={handleOpenUserMenu} sx={{ ml: 1, p: '6px' }}>
             <Avatar
-              src={accountProfile?.avatarNftUriImage}
+              src={accountProfile?.uriImage}
               sx={{ width: 36, height: 36 }}
             >
               {account ? (
@@ -230,10 +230,10 @@ export default function Navigation() {
               }}
             >
               {accountProfile && (
-                <Link href={`/profile/${accountProfile.account}`} passHref>
+                <Link href={`/profile/${accountProfile.owner}`} passHref>
                   <MuiLink underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {accountProfile.uriFirstName || 'Anonymous'}{' '}
+                    {accountProfile.uriLastName}
                   </MuiLink>
                 </Link>
               )}

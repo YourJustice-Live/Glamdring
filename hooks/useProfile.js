@@ -82,8 +82,8 @@ export default function useProfile() {
  */
 function createProfileObject(avatarNftEntity) {
   return new Profile(
-    avatarNftEntity.owner,
     avatarNftEntity.id,
+    avatarNftEntity.owner,
     avatarNftEntity.uri,
     hexStringToJson(avatarNftEntity.uriData),
     avatarNftEntity.uriImage,

@@ -36,7 +36,7 @@ export function Sidebar() {
   useEffect(() => {
     setAccountProfileJurisdictions(null);
     if (accountProfile) {
-      getJurisdictions({ member: accountProfile.account, first: 10 })
+      getJurisdictions({ member: accountProfile.owner, first: 10 })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
         .catch((error) => handleError(error));
     }
@@ -79,7 +79,7 @@ export function Sidebar() {
                     height: 82,
                     borderRadius: '16px',
                   }}
-                  src={accountProfile.avatarNftUriImage}
+                  src={accountProfile.uriImage}
                 >
                   <IconMember width="82" height="82" />
                 </Avatar>
@@ -88,21 +88,21 @@ export function Sidebar() {
               <Box sx={{ flex: '1' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                   <Typography sx={{ color: 'success.main', mr: 1 }}>
-                    {`+${accountProfile.avatarNftTotalPositiveRating}`}
+                    {`+${accountProfile.totalPositiveRating}`}
                   </Typography>
                   <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                    {`-${accountProfile.avatarNftTotalNegativeRating}`}
+                    {`-${accountProfile.totalNegativeRating}`}
                   </Typography>
                 </Box>
-                <NextLink href={`/profile/${accountProfile.account}`} passHref>
+                <NextLink href={`/profile/${accountProfile.owner}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {accountProfile.uriFirstName || 'Anonymous'}{' '}
+                    {accountProfile.uriLastName}
                   </Link>
                 </NextLink>
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    {formatAddress(accountProfile.account)}
+                    {formatAddress(accountProfile.owner)}
                   </Typography>
                 </Box>
               </Box>

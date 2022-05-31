@@ -53,7 +53,7 @@ export default function ProfileSelect(props) {
           newOptions = unionWith(
             newOptions,
             profiles,
-            (profile1, profile2) => profile1.account === profile2.account,
+            (profile1, profile2) => profile1.owner === profile2.owner,
           );
         }
         setOptions(newOptions);
@@ -85,25 +85,23 @@ export default function ProfileSelect(props) {
       <Autocomplete
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
-          (option.avatarNftUriFirstName || 'Anonymous') +
+          (option.uriFirstName || 'Anonymous') +
           ' ' +
-          option.avatarNftUriLastName +
+          option.uriLastName +
           ' ' +
-          `(${formatAddress(option.account)})`
+          `(${formatAddress(option.owner)})`
         }
         filterOptions={(x) => x}
         options={options}
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue ? newValue.account : null);
+          propsOnChange(newValue ? newValue.owner : null);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        isOptionEqualToValue={(option, value) =>
-          option.account === value.account
-        }
+        isOptionEqualToValue={(option, value) => option.owner === value.owner}
         renderInput={(params) => (
           <TextField
             fullWidth

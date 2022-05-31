@@ -41,7 +41,7 @@ export default function ProfileManage({
   const { mint, update, add } = useAvatarNftContract();
   const [status, setStatus] = useState(STATUS.isAvailable);
   const [formData, setFormData] = useState(
-    profile?.avatarNftUriData ? profile.avatarNftUriData : {},
+    profile?.uriData ? profile.uriData : {},
   );
 
   const schema = {
@@ -97,7 +97,7 @@ export default function ProfileManage({
         runProfileUpdater();
         handleCreateOwnProfileEvent();
       } else if (action === 'editOwnProfile') {
-        await update(profile.avatarNftId, url);
+        await update(profile.id, url);
         runProfileUpdater();
         handleEditOwnProfileEvent();
       } else if (action === 'createAnotherProfile') {

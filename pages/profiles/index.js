@@ -42,6 +42,7 @@ export default function Profiles() {
         (page - 1) * pageSize,
         selectedOrder,
       );
+      console.log('[Dev] Profiles profiles', profiles);
       setProfiles(profiles);
       // Add next page to pagination if possible
       if (page == pageCount && profiles.length === pageSize) {

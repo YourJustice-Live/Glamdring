@@ -13,9 +13,7 @@ addEventListener('message', (event) => {
 
   setInterval(async function () {
     // Post message if uri has changed
-    if (
-      accountInitProfile?.avatarNftUri !== accountLoadedProfile?.avatarNftUri
-    ) {
+    if (accountInitProfile?.uri !== accountLoadedProfile?.uri) {
       postMessage(accountLoadedProfile);
     }
 

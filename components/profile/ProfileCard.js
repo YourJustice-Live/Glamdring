@@ -29,7 +29,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
 
   return (
     <Card elevation={1}>
-      {profile?.account ? (
+      {profile?.owner ? (
         <CardContent sx={{ p: '10px !important' }}>
           <Box
             sx={{
@@ -48,7 +48,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
             >
               {/* Image */}
               <Box sx={{ mr: 2 }}>
-                <NextLink href={`/profile/${profile.account}`} passHref>
+                <NextLink href={`/profile/${profile.owner}`} passHref>
                   <Avatar
                     sx={{
                       cursor: 'pointer',
@@ -56,7 +56,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
                       height: 82,
                       borderRadius: '16px',
                     }}
-                    src={profile.avatarNftUriImage}
+                    src={profile.uriImage}
                   >
                     <IconMember width="82" heigth="82" />
                   </Avatar>
@@ -66,20 +66,19 @@ export default function ProfileCard({ profile, jurisdiction }) {
               <Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                   <Typography sx={{ color: 'success.main', mr: 1 }}>
-                    {`+${profile.avatarNftTotalPositiveRating}`}
+                    {`+${profile.totalPositiveRating}`}
                   </Typography>
                   <Typography sx={{ color: 'danger.main', mr: 1 }}>
-                    {`-${profile.avatarNftTotalNegativeRating}`}
+                    {`-${profile.totalNegativeRating}`}
                   </Typography>
                 </Box>
-                <NextLink href={`/profile/${profile.account}`} passHref>
+                <NextLink href={`/profile/${profile.owner}`} passHref>
                   <Link variant="h5" underline="none">
-                    {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {profile.avatarNftUriLastName}
+                    {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
                   </Link>
                 </NextLink>
                 <Typography variant="body2" color="text.secondary">
-                  {formatAddress(profile.account)}
+                  {formatAddress(profile.owner)}
                 </Typography>
               </Box>
             </Box>

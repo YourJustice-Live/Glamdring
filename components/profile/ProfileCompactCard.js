@@ -62,28 +62,23 @@ export default function ProfileCompactCard({
       {/* If profile is found */}
       {profile && (
         <>
-          <Avatar
-            src={profile.avatarNftUriImage}
-            sx={{ width: 24, height: 24 }}
-          >
+          <Avatar src={profile.uriImage} sx={{ width: 24, height: 24 }}>
             <IconMember width="24" heigth="24" />
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
             {disableLink ? (
               <>
-                {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                {profile.avatarNftUriLastName}
+                {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
               </>
             ) : (
-              <Link href={`/profile/${profile.account}`} underline="none">
-                {profile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                {profile.avatarNftUriLastName}
+              <Link href={`/profile/${profile.owner}`} underline="none">
+                {profile.uriFirstName || 'Anonymous'} {profile.uriLastName}
               </Link>
             )}
           </Typography>
           {!disableAddress && (
             <Typography sx={{ color: 'text.secondary', ml: 1 }}>
-              ({formatAddress(profile.account)})
+              ({formatAddress(profile.owner)})
             </Typography>
           )}
           {!disableRating && (
@@ -91,12 +86,12 @@ export default function ProfileCompactCard({
               <Typography
                 sx={{ color: 'success.main', fontWeight: 'bold', ml: 1.5 }}
               >
-                {`+${profile.avatarNftTotalPositiveRating}`}
+                {`+${profile.totalPositiveRating}`}
               </Typography>
               <Typography
                 sx={{ color: 'danger.main', fontWeight: 'bold', ml: 1 }}
               >
-                {`-${profile.avatarNftTotalNegativeRating}`}
+                {`-${profile.totalNegativeRating}`}
               </Typography>
             </>
           )}

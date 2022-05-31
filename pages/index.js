@@ -56,12 +56,10 @@ export default function Index() {
           null,
           1,
           0,
-          PROFILE_ORDER.byTokenId,
+          PROFILE_ORDER.byId,
         );
         setProfilesCount(
-          lastProfiles && lastProfiles.length > 0
-            ? lastProfiles[0].avatarNftId
-            : null,
+          lastProfiles && lastProfiles.length > 0 ? lastProfiles[0].id : null,
         );
       }
     } catch (error) {

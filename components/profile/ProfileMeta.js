@@ -76,7 +76,7 @@ function ProfileTop({ profile, sx }) {
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
       <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        {formatAddress(profile?.account) || 'none'}
+        {formatAddress(profile?.owner) || 'none'}
       </Typography>
     </Box>
   );
@@ -84,17 +84,13 @@ function ProfileTop({ profile, sx }) {
 
 function ProfileMain({ profile, sx }) {
   const firstName =
-    getTraitValue(
-      profile.avatarNftUriData?.attributes,
-      PROFILE_TRAIT_TYPE.firstName,
-    ) || 'None';
+    getTraitValue(profile.uriData?.attributes, PROFILE_TRAIT_TYPE.firstName) ||
+    'None';
   const lastName =
-    getTraitValue(
-      profile.avatarNftUriData?.attributes,
-      PROFILE_TRAIT_TYPE.lastName,
-    ) || 'None';
+    getTraitValue(profile.uriData?.attributes, PROFILE_TRAIT_TYPE.lastName) ||
+    'None';
   const description = getTraitValue(
-    profile.avatarNftUriData?.attributes,
+    profile.uriData?.attributes,
     PROFILE_TRAIT_TYPE.description,
   );
 
@@ -129,7 +125,7 @@ function ProfileAvatar({ profile, sx }) {
           height: 164,
           borderRadius: '24px',
         }}
-        src={profile?.avatarNftUriData?.image}
+        src={profile?.uriData?.image}
       >
         <IconMember width="164" height="164" />
       </Avatar>
@@ -139,27 +135,27 @@ function ProfileAvatar({ profile, sx }) {
 
 function ProfileLinks({ profile, sx }) {
   const email = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.email,
   );
   const site = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.site,
   );
   const twitter = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.twitter,
   );
   const telegram = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.telegram,
   );
   const facebook = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.facebook,
   );
   const instagram = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.instagram,
   );
 
@@ -201,7 +197,7 @@ function ProfileLinks({ profile, sx }) {
 
 function ProfileEditButton({ profile, sx }) {
   const { account } = useWeb3Context();
-  if (profile?.account?.toLowerCase() === account?.toLowerCase()) {
+  if (profile?.owner?.toLowerCase() === account?.toLowerCase()) {
     return (
       <Box sx={{ ...sx }}>
         <NextLink href={`/profile/edit`} passHref>

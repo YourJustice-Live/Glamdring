@@ -87,9 +87,9 @@ export default function CaseCreateDialog({
   const [status, setStatus] = useState(STATUS.isLoading);
   const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
   const [formData, setFormData] = useState({
-    ...(subjectProfile && { subjectProfileAccount: subjectProfile?.account }),
+    ...(subjectProfile && { subjectProfileAccount: subjectProfile?.owner }),
     ...(affectedProfile && {
-      affectedProfileAccount: affectedProfile?.account,
+      affectedProfileAccount: affectedProfile?.owner,
     }),
   });
   const [formAction, setFormAction] = useState(null);
@@ -431,6 +431,7 @@ export default function CaseCreateDialog({
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
+      // TODO: Use token ids instead of accounts
       const caseRoles = [];
       caseRoles.push({
         account: submittedFormData.subjectProfileAccount,
@@ -450,7 +451,7 @@ export default function CaseCreateDialog({
       const jurisdictionJudgeRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.judge.id,
       );
-      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.accounts || [];
+      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.owner || [];
       for (const jurisdictionJudgeAccount of jurisdictionJudgeAccounts) {
         caseRoles.push({
           account: jurisdictionJudgeAccount,

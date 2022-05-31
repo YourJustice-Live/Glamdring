@@ -1,5 +1,5 @@
 export const PROFILE_ORDER = {
-  byTokenId: 'tokenId',
+  byId: 'idInt',
   byPositiveRating: 'totalPositiveRating',
   byNegativeRating: 'totalNegativeRating',
 };
