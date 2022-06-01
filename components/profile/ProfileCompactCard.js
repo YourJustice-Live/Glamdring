@@ -10,7 +10,8 @@ import { formatAddress } from 'utils/formatters';
  */
 export default function ProfileCompactCard({
   profile: propsProfile,
-  account: propsAccount, // TODO: Replace to id
+  profileId: propsProfileId,
+  account: propsAccount,
   disableId = true,
   disableAddress = true,
   disableLink = false,
@@ -19,37 +20,38 @@ export default function ProfileCompactCard({
 }) {
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
+  const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState(null);
-  const [account, setAccount] = useState(null);
 
   useEffect(() => {
     let isComponentActive = true;
-    // Set profile if defined
+    setIsLoading(true);
+    setProfile(null);
+    // Set profile if already defined
     if (propsProfile) {
       setProfile(propsProfile);
+      setIsLoading(false);
     }
-    // Else find profile by account is defined
-    else if (propsAccount) {
-      getProfile({ owner: propsAccount })
+    // Else load profile by profile id or account
+    else if (propsProfileId || propsAccount) {
+      getProfile(
+        propsProfileId ? { id: propsProfileId } : { owner: propsAccount },
+      )
         .then((profile) => {
-          if (isComponentActive) {
-            // Set profile if found
-            if (profile) {
-              setProfile(profile);
-            }
-            // Else set account
-            else {
-              setAccount(propsAccount);
-            }
+          if (isComponentActive && profile) {
+            setProfile(profile);
           }
         })
-        .catch((error) => handleError(error, true));
+        .catch((error) => handleError(error, true))
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
     }
     return () => {
       isComponentActive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsProfile, propsAccount]);
+  }, [propsProfile, propsProfileId, propsAccount]);
 
   return (
     <Box
@@ -60,8 +62,10 @@ export default function ProfileCompactCard({
         ...sx,
       }}
     >
-      {/* If profile is found */}
-      {profile && (
+      {/* If profile is loading */}
+      {isLoading && <Skeleton variant="rectangular" width={128} height={22} />}
+      {/* If profile is loaded successfully */}
+      {!isLoading && profile && (
         <>
           <Avatar src={profile.uriImage} sx={{ width: 24, height: 24 }}>
             <IconMember width="24" heigth="24" />
@@ -101,23 +105,16 @@ export default function ProfileCompactCard({
           )}
         </>
       )}
-      {/* If profile is not found */}
-      {account && (
+      {/* If profile loading is failed */}
+      {!isLoading && !profile && (
         <>
           <Avatar sx={{ width: 24, height: 24 }}>
             <IconMember width="24" heigth="24" />
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
-            Unknown
-          </Typography>
-          <Typography sx={{ color: 'text.secondary', ml: 1 }}>
-            ({formatAddress(account)})
+            Profile not found
           </Typography>
         </>
-      )}
-      {/* If profile or account are not defined */}
-      {!profile && !account && (
-        <Skeleton variant="rectangular" width={128} height={22} />
       )}
     </Box>
   );
