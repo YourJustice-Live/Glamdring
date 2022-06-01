@@ -117,7 +117,10 @@ export function Sidebar() {
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>
-            <Link underline="none">Profiles</Link>
+            <Link underline="none">Souls</Link>
+          </NextLink>
+          <NextLink href="/jurisdictions" passHref>
+            <Link underline="none">Jurisdictions</Link>
           </NextLink>
           <NextLink href="/cases" passHref>
             <Link underline="none">
@@ -131,17 +134,18 @@ export function Sidebar() {
               </Badge>
             </Link>
           </NextLink>
-          <NextLink href="/jurisdictions" passHref>
-            <Link underline="none">Jurisdictions</Link>
-          </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>
           </NextLink>
         </Stack>
+
         {/* Profile Jurisdictions */}
         {accountProfileJurisdictions && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
+            <Typography variant="h4" sx={{ mt: 2 }}>
+              My Jurisdictions
+            </Typography>
             <Stack sx={{ mt: 3 }} spacing={3}>
               {accountProfileJurisdictions.map((jurisdiction, index) => (
                 <NextLink
