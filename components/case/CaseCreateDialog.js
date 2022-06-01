@@ -33,6 +33,7 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useAction from 'hooks/useAction';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
+import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { IconProfile, IconWallet } from 'icons/core';
 import { IconJurisdiction } from 'icons/entities';
@@ -83,6 +84,7 @@ export default function CaseCreateDialog({
   const { getJurisdiction, getJurisdictionRule, isAccountHasJurisdictionRole } =
     useJurisdiction();
   const { getAction } = useAction();
+  const { getProfiles } = useProfile();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
   const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
@@ -432,30 +434,36 @@ export default function CaseCreateDialog({
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
-      // TODO: Use token ids instead of accounts for case roles
       const caseRoles = [];
       caseRoles.push({
-        account: submittedFormData.subjectProfileId,
+        tokenId: submittedFormData.subjectProfileId,
         role: CASE_ROLE.subject.name,
       });
       caseRoles.push({
-        account: submittedFormData.affectedProfileId,
+        tokenId: submittedFormData.affectedProfileId,
         role: CASE_ROLE.affected.name,
       });
       for (const witnessProfileId of submittedFormData.witnessProfileIds) {
         caseRoles.push({
-          account: witnessProfileId,
+          tokenId: witnessProfileId,
           role: CASE_ROLE.witness.name,
         });
       }
       // Add jurisdiction judges to case judges
+      // TODO: Use "profileIds" from judge role instead of getting "accounts" and then loading profiles
       const jurisdictionJudgeRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.judge.id,
       );
-      const jurisdictionJudgeIds = jurisdictionJudgeRole?.accounts || [];
+      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.accounts || [];
+      const jurisdictionJudgeProfiles = await getProfiles({
+        owners: jurisdictionJudgeAccounts,
+      });
+      const jurisdictionJudgeIds = jurisdictionJudgeProfiles.map(
+        (profile) => profile.id,
+      );
       for (const jurisdictionJudgeId of jurisdictionJudgeIds) {
         caseRoles.push({
-          account: jurisdictionJudgeId,
+          tokenId: jurisdictionJudgeId,
           role: CASE_ROLE.judge.name,
         });
       }
