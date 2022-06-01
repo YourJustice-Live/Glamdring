@@ -14,12 +14,11 @@ import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import { IconMember } from 'icons/entities';
-import { IconJurisdiction } from 'icons/entities';
+import { IconJurisdiction, IconMember } from 'icons/entities';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a sidebar (drawer).
@@ -86,18 +85,23 @@ export function Sidebar() {
               </Box>
               {/* Profile details */}
               <Box sx={{ flex: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography sx={{ color: 'success.main', mr: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mb: 0.3 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
+                  >
                     {`+${accountProfile.avatarNftTotalPositiveRating}`}
                   </Typography>
-                  <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
+                  >
                     {`-${accountProfile.avatarNftTotalNegativeRating}`}
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${accountProfile.account}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </Link>
                 </NextLink>
                 <Box>

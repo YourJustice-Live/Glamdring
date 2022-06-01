@@ -4,7 +4,7 @@ import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A widget to select profile.
@@ -85,11 +85,9 @@ export default function ProfileSelect(props) {
       <Autocomplete
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
-          (option.avatarNftUriFirstName || 'Anonymous') +
+          formatProfileFirstLastName(option) +
           ' ' +
-          option.avatarNftUriLastName +
-          ' ' +
-          `(${formatAddress(option.account)})`
+          formatAddress(option.account)
         }
         filterOptions={(x) => x}
         options={options}

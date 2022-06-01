@@ -3,7 +3,7 @@ import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { IconMember } from 'icons/entities';
 import { useEffect, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a compact card with profile.
@@ -56,19 +56,13 @@ export default function ProfileCompactCard({
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
             {disableLink ? (
-              <>
-                {(profile || accountProfile).avatarNftUriFirstName ||
-                  'Anonymous'}{' '}
-                {(profile || accountProfile).avatarNftUriLastName}
-              </>
+              <>{formatProfileFirstLastName(profile || accountProfile)}</>
             ) : (
               <Link
                 href={`/profile/${(profile || accountProfile).account}`}
                 underline="none"
               >
-                {(profile || accountProfile).avatarNftUriFirstName ||
-                  'Anonymous'}{' '}
-                {(profile || accountProfile).avatarNftUriLastName}
+                {formatProfileFirstLastName(profile || accountProfile)}
               </Link>
             )}
           </Typography>

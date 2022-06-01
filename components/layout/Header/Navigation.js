@@ -29,7 +29,7 @@ import { Logo } from 'icons/logo';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a header navigation.
@@ -234,8 +234,7 @@ export default function Navigation() {
               {accountProfile && (
                 <Link href={`/profile/${accountProfile.account}`} passHref>
                   <MuiLink underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </MuiLink>
                 </Link>
               )}
