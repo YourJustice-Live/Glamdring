@@ -143,7 +143,7 @@ export function Sidebar() {
         {accountProfileJurisdictions && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
-            <Typography variant="h4" sx={{ mt: 2 }}>
+            <Typography variant="h4" sx={{ mt: 3 }}>
               My Jurisdictions
             </Typography>
             <Stack sx={{ mt: 3 }} spacing={3}>
@@ -172,7 +172,7 @@ export function Sidebar() {
                     >
                       <IconJurisdiction width="22" height="22" />
                     </Avatar>
-                    <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {jurisdiction.name}
                     </Typography>
                   </Box>
