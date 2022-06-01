@@ -330,6 +330,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "disabled",
+        "type": "bool"
+      }
+    ],
+    "name": "RuleDisabled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "id",
@@ -551,10 +570,10 @@
       },
       {
         "components": [
-          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
           { "internalType": "string", "name": "role", "type": "string" }
         ],
-        "internalType": "struct DataTypes.InputRole[]",
+        "internalType": "struct DataTypes.InputRoleToken[]",
         "name": "assignRoles",
         "type": "tuple[]"
       },
@@ -592,10 +611,10 @@
       },
       {
         "components": [
-          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
           { "internalType": "string", "name": "role", "type": "string" }
         ],
-        "internalType": "struct DataTypes.InputRole[]",
+        "internalType": "struct DataTypes.InputRoleToken[]",
         "name": "assignRoles",
         "type": "tuple[]"
       },
@@ -888,7 +907,8 @@
           { "internalType": "bytes32", "name": "about", "type": "bytes32" },
           { "internalType": "string", "name": "affected", "type": "string" },
           { "internalType": "bool", "name": "negation", "type": "bool" },
-          { "internalType": "string", "name": "uri", "type": "string" }
+          { "internalType": "string", "name": "uri", "type": "string" },
+          { "internalType": "bool", "name": "disabled", "type": "bool" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "rule",
@@ -940,6 +960,16 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "bool", "name": "disabled", "type": "bool" }
+    ],
+    "name": "ruleDisable",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
     "name": "ruleGet",
     "outputs": [
@@ -948,7 +978,8 @@
           { "internalType": "bytes32", "name": "about", "type": "bytes32" },
           { "internalType": "string", "name": "affected", "type": "string" },
           { "internalType": "bool", "name": "negation", "type": "bool" },
-          { "internalType": "string", "name": "uri", "type": "string" }
+          { "internalType": "string", "name": "uri", "type": "string" },
+          { "internalType": "bool", "name": "disabled", "type": "bool" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "",
@@ -966,7 +997,8 @@
           { "internalType": "bytes32", "name": "about", "type": "bytes32" },
           { "internalType": "string", "name": "affected", "type": "string" },
           { "internalType": "bool", "name": "negation", "type": "bool" },
-          { "internalType": "string", "name": "uri", "type": "string" }
+          { "internalType": "string", "name": "uri", "type": "string" },
+          { "internalType": "bool", "name": "disabled", "type": "bool" }
         ],
         "internalType": "struct DataTypes.Rule",
         "name": "rule",

@@ -134,10 +134,10 @@
       },
       {
         "components": [
-          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
           { "internalType": "string", "name": "role", "type": "string" }
         ],
-        "internalType": "struct DataTypes.InputRole[]",
+        "internalType": "struct DataTypes.InputRoleToken[]",
         "name": "assignRoles",
         "type": "tuple[]"
       }
