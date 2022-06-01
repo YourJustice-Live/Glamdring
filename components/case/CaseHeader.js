@@ -96,6 +96,7 @@ function CaseAdminStage({ caseObject, sx }) {
         ...sx,
       }}
     >
+      {/* TODO: Use profile id */}
       <ProfileCompactCard
         account={adminAccount}
         sx={{ mt: { xs: 0.8, md: 0 } }}

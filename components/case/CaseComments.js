@@ -42,6 +42,7 @@ export default function CaseComments({ caseObject, sx }) {
             <Paper key={index} sx={{ p: 2 }}>
               {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
+                {/* TODO: Use profile id */}
                 <ProfileCompactCard account={post.author} />
                 <Typography variant="body2" color="text.secondary">
                   ({CASE_ROLE_STRING[post.entityRole]})

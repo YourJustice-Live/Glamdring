@@ -40,6 +40,7 @@ function CaseJudges({ caseObject, sx }) {
       {caseObject?.judgeAccounts?.length > 0 ? (
         <Stack spacing={1} sx={{ mt: 1.5 }}>
           {caseObject?.judgeAccounts?.map((account, accountIndex) => (
+            // TODO: Use profile id
             <ProfileCompactCard key={accountIndex} account={account} />
           ))}
         </Stack>

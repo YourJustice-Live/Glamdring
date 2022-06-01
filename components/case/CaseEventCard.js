@@ -20,6 +20,7 @@ export default function CaseEventCard({ caseEvent }) {
         {/* Account got role */}
         {caseEvent.type === 'accountGotRole' && (
           <Stack direction="row" spacing={1} alignItems="center">
+            {/* TODO: Use profile id */}
             <ProfileCompactCard
               account={caseEvent.data.account}
               disableRating={true}
