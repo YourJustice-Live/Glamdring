@@ -29,7 +29,7 @@ export default function CaseEventList({ caseEvents, sx }) {
       {caseEvents && caseEvents.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 3 }}>
-            <Typography>Case events not found :(</Typography>
+            <Typography>No Pending Events</Typography>
           </CardContent>
         </Card>
       )}
