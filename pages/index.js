@@ -75,7 +75,7 @@ export default function Index() {
 
   return (
     <Layout enableSidebar={!!account}>
-      <Box sx={{ px: 4, mt: 12, textAlign: 'center' }}>
+      <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
         <Typography variant="h1" gutterBottom>
           Check or impact reputation of crypto people!
         </Typography>
@@ -89,7 +89,7 @@ export default function Index() {
           onChange={(account) => router.push(`/profile/${account}`)}
         />
       </Box>
-      <Box sx={{ mt: 12 }}>
+      <Box sx={{ mt: 8 }}>
         <Tabs value={tabValue} onChange={handleTabChange} centered>
           <Tab value={PROFILE_ORDER.byPositiveRating} label="Light Side" />
           <Tab value={PROFILE_ORDER.byNegativeRating} label="Dark Side" />
