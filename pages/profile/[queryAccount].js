@@ -1,8 +1,11 @@
-import { Divider, Typography } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseListObserver from 'components/case/CaseListObserver';
 import Layout from 'components/layout/Layout';
+import ProfileCaseStats from 'components/profile/ProfileCaseStats';
 import ProfileMeta from 'components/profile/ProfileMeta';
+import ProfileRatingActions from 'components/profile/ProfileRatingActions';
 import ProfileRatings from 'components/profile/ProfileRatings';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
@@ -40,18 +43,31 @@ export default function Profile() {
     <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
       <ProfileMeta profile={profile} />
       <ProfileRatings profile={profile} sx={{ mt: 4 }} />
-      <Box sx={{ mt: 6 }}>
-        <Typography variant="h1" gutterBottom>
-          Cases
-        </Typography>
-        <Divider />
-        <CaseListObserver
-          filters={{
-            participantProfileAccount: queryAccount,
-          }}
-          isParticipantInputDisabled={true}
-          sx={{ mt: 4 }}
-        />
+      <ProfileCaseStats profile={profile} sx={{ mt: 6 }} />
+      <ProfileRatingActions profile={profile} sx={{ mt: 6 }} />
+      <Box sx={{ width: '100%', mt: 4 }}>
+        <TabContext value="1">
+          <TabList
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 1,
+              maxWidth: 'calc(100vw - 32px)',
+            }}
+          >
+            <Tab label="Cases" value="1" />
+          </TabList>
+          <TabPanel value="1" sx={{ px: 0 }}>
+            <CaseListObserver
+              filters={{
+                participantProfileAccount: queryAccount,
+              }}
+              isParticipantInputDisabled={true}
+            />
+          </TabPanel>
+        </TabContext>
       </Box>
     </Layout>
   );

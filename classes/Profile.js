@@ -13,6 +13,8 @@ export default class Profile {
     avatarNftReputations,
     avatarNftTotalNegativeRating,
     avatarNftTotalPositiveRating,
+    avatarNftTotalNegativeCases,
+    avatarNftTotalPositiveCases,
   ) {
     this.account = account;
     this.avatarNftId = avatarNftId;
@@ -24,5 +26,7 @@ export default class Profile {
     this.avatarNftReputations = avatarNftReputations;
     this.avatarNftTotalNegativeRating = avatarNftTotalNegativeRating;
     this.avatarNftTotalPositiveRating = avatarNftTotalPositiveRating;
+    this.avatarNftTotalNegativeCases = avatarNftTotalNegativeCases;
+    this.avatarNftTotalPositiveCases = avatarNftTotalPositiveCases;
   }
 }

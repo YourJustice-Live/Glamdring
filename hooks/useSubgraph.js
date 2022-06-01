@@ -315,6 +315,8 @@ function getFindAvatarNftEntitiesQuery(
         }
         totalNegativeRating
         totalPositiveRating
+        totalNegativeCases
+        totalPositiveCases
       }
     }`;
 }
