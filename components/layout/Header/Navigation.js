@@ -257,6 +257,11 @@ export default function Navigation() {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
+            <Link href="/jurisdictions" passHref>
+              <Typography>Jurisdictions</Typography>
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleCloseUserMenu}>
             <Link href="/cases" passHref>
               <Badge
                 color="danger"
@@ -266,11 +271,6 @@ export default function Navigation() {
               >
                 <Typography>Cases</Typography>
               </Badge>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/jurisdictions" passHref>
-              <Typography>Jurisdictions</Typography>
             </Link>
           </MenuItem>
           <MenuItem onClick={handleCloseUserMenu}>
