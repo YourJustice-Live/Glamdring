@@ -86,10 +86,11 @@ export default function ProfileSelect(props) {
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
           formatProfileFirstLastName(option) +
-          ' ' +
+          ' (' +
           option.id +
-          ' ' +
-          formatAddress(option.owner)
+          ' , ' +
+          formatAddress(option.owner) +
+          ')'
         }
         filterOptions={(x) => x}
         options={options}
