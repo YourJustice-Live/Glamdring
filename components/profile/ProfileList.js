@@ -12,14 +12,14 @@ export default function ProfileList({ profiles, jurisdiction, sx }) {
           {Array(3)
             .fill()
             .map((_, index) => (
-              <Grid key={index} item xs={12} md={6}>
+              <Grid key={index} item xs={12}>
                 <ProfileCard />
               </Grid>
             ))}
         </>
       )}
       {profiles && profiles.length === 0 && (
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12}>
           <Typography>No profiles</Typography>
         </Grid>
       )}
@@ -28,7 +28,7 @@ export default function ProfileList({ profiles, jurisdiction, sx }) {
           {profiles.map(
             (profile, index) =>
               profile && (
-                <Grid key={index} item xs={12} md={6}>
+                <Grid key={index} item xs={12}>
                   <ProfileCard profile={profile} jurisdiction={jurisdiction} />
                 </Grid>
               ),

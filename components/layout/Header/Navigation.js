@@ -21,7 +21,7 @@ import { IconMember } from 'icons/entities';
 import {
   IconHome,
   IconNotification,
-  IconPlus,
+  // IconPlus,
   IconProfile,
   IconWallet,
 } from 'icons/core';
@@ -29,7 +29,7 @@ import { Logo } from 'icons/logo';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a header navigation.
@@ -108,7 +108,8 @@ export default function Navigation() {
             flexDirection: 'row-reverse',
           }}
         >
-          {account && accountProfile && (
+          {/*
+          { account && accountProfile && (
             <Button
               variant="secondary"
               sx={{ display: { xs: 'none', md: 'flex' } }}
@@ -119,7 +120,8 @@ export default function Navigation() {
             >
               Create Case
             </Button>
-          )}
+            )}
+          */}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <Button
@@ -232,8 +234,7 @@ export default function Navigation() {
               {accountProfile && (
                 <Link href={`/profile/${accountProfile.id}`} passHref>
                   <MuiLink underline="none">
-                    {accountProfile.uriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.uriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </MuiLink>
                 </Link>
               )}
@@ -259,7 +260,12 @@ export default function Navigation() {
           )}
           <Link href="/profiles" passHref>
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography>Profiles</Typography>
+              <Typography>Souls</Typography>
+            </MenuItem>
+          </Link>
+          <Link href="/jurisdictions" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>Jurisdictions</Typography>
             </MenuItem>
           </Link>
           <Link href="/cases" passHref>
@@ -272,11 +278,6 @@ export default function Navigation() {
               >
                 <Typography>Cases</Typography>
               </Badge>
-            </MenuItem>
-          </Link>
-          <Link href="/jurisdictions" passHref>
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography>Jurisdictions</Typography>
             </MenuItem>
           </Link>
           <Link href="/faq" passHref>

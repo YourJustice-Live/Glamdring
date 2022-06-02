@@ -14,12 +14,11 @@ import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import { IconMember } from 'icons/entities';
-import { IconJurisdiction } from 'icons/entities';
+import { IconJurisdiction, IconMember } from 'icons/entities';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a sidebar (drawer).
@@ -86,18 +85,23 @@ export function Sidebar() {
               </Box>
               {/* Profile details */}
               <Box sx={{ flex: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography sx={{ color: 'success.main', mr: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mb: 0.3 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
+                  >
                     {`+${accountProfile.totalPositiveRating}`}
                   </Typography>
-                  <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
+                  >
                     {`-${accountProfile.totalNegativeRating}`}
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${accountProfile.id}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.uriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.uriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </Link>
                 </NextLink>
                 <Box>
@@ -117,7 +121,10 @@ export function Sidebar() {
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>
-            <Link underline="none">Profiles</Link>
+            <Link underline="none">Souls</Link>
+          </NextLink>
+          <NextLink href="/jurisdictions" passHref>
+            <Link underline="none">Jurisdictions</Link>
           </NextLink>
           <NextLink href="/cases" passHref>
             <Link underline="none">
@@ -131,17 +138,18 @@ export function Sidebar() {
               </Badge>
             </Link>
           </NextLink>
-          <NextLink href="/jurisdictions" passHref>
-            <Link underline="none">Jurisdictions</Link>
-          </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">FAQ</Link>
           </NextLink>
         </Stack>
+
         {/* Profile Jurisdictions */}
         {accountProfileJurisdictions && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
+            <Typography variant="h4" sx={{ mt: 3 }}>
+              My Jurisdictions
+            </Typography>
             <Stack sx={{ mt: 3 }} spacing={3}>
               {accountProfileJurisdictions.map((jurisdiction, index) => (
                 <NextLink
@@ -168,7 +176,7 @@ export function Sidebar() {
                     >
                       <IconJurisdiction width="22" height="22" />
                     </Avatar>
-                    <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {jurisdiction.name}
                     </Typography>
                   </Box>

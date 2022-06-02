@@ -4,7 +4,7 @@ import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { throttle, unionWith } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A widget to select profile (profile id).
@@ -85,14 +85,11 @@ export default function ProfileSelect(props) {
       <Autocomplete
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
-          (option.uriFirstName || 'Anonymous') +
+          formatProfileFirstLastName(option) +
           ' ' +
-          option.uriLastName +
-          ' (' +
           option.id +
-          ', ' +
-          `${formatAddress(option.owner)}` +
-          ')'
+          ' ' +
+          formatAddress(option.owner)
         }
         filterOptions={(x) => x}
         options={options}
@@ -110,7 +107,7 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || 'Profile'}
+            label={propsLabel || 'Soul Search'}
             placeholder="Search by id, name, address"
             required={propsRequired}
           />

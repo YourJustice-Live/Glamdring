@@ -24,7 +24,7 @@ import { IconMember } from 'icons/entities';
 import { IconProfile } from 'icons/core';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 import { getTraitValue } from 'utils/metadata';
 
 /**
@@ -84,12 +84,6 @@ function ProfileTop({ profile, sx }) {
 }
 
 function ProfileMain({ profile, sx }) {
-  const firstName =
-    getTraitValue(profile.uriData?.attributes, PROFILE_TRAIT_TYPE.firstName) ||
-    'None';
-  const lastName =
-    getTraitValue(profile.uriData?.attributes, PROFILE_TRAIT_TYPE.lastName) ||
-    'None';
   const description = getTraitValue(
     profile.uriData?.attributes,
     PROFILE_TRAIT_TYPE.description,
@@ -110,7 +104,7 @@ function ProfileMain({ profile, sx }) {
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
         <Chip label={`ID: ${profile?.id}`} sx={{ height: '24px', mb: 1.5 }} />
         <Typography variant="h2">
-          {firstName} {lastName}
+          {formatProfileFirstLastName(profile)}
         </Typography>
         {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
         <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />

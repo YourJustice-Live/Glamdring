@@ -12,7 +12,6 @@ import RuleManageDialog from 'components/law/RuleManageDialog';
 import RuleTable from 'components/law/RuleTable';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import NextLink from 'next/link';
@@ -25,7 +24,6 @@ import { useEffect, useState } from 'react';
 export default function JurisdictionLawsManage() {
   const router = useRouter();
   const { queryJurisdiction } = router.query;
-  const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { handleError } = useErrors();
   const { getJurisdiction } = useJurisdiction();
@@ -47,10 +45,7 @@ export default function JurisdictionLawsManage() {
   }, [queryJurisdiction]);
 
   return (
-    <Layout
-      title={'YourJustice / Jurisdiction Laws Manage'}
-      enableSidebar={!!account}
-    >
+    <Layout title={'YourJustice / Jurisdiction Laws Manage'} maxWidth="xl">
       <Box>
         <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 6 }}>
           <NextLink href={`/jurisdiction/${queryJurisdiction}`} passHref>

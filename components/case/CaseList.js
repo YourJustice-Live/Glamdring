@@ -29,7 +29,7 @@ export default function CaseList({ cases, sx }) {
       {cases && cases.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 4 }}>
-            <Typography>Cases not found :(</Typography>
+            <Typography>No Results</Typography>
           </CardContent>
         </Card>
       )}

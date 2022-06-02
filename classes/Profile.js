@@ -13,6 +13,8 @@ export default class Profile {
     reputations,
     totalNegativeRating,
     totalPositiveRating,
+    totalNegativeCases,
+    totalPositiveCases,
   ) {
     this.id = id;
     this.owner = owner;
@@ -24,5 +26,7 @@ export default class Profile {
     this.reputations = reputations;
     this.totalNegativeRating = totalNegativeRating;
     this.totalPositiveRating = totalPositiveRating;
+    this.totalNegativeCases = totalNegativeCases;
+    this.totalPositiveCases = totalPositiveCases;
   }
 }
