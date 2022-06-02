@@ -61,8 +61,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
                   <Paper key={index} sx={{ p: 2 }}>
                     {/* Author */}
                     <Stack direction="row" spacing={1} alignItems="center">
-                      {/* TODO: Use profile id */}
-                      <ProfileCompactCard account={post.author} />
+                      <ProfileCompactCard profileId={post.author} />
                     </Stack>
                     {/* Confirmation */}
                     <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>

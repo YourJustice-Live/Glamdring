@@ -131,8 +131,7 @@ function CaseVerdict({ caseObject, sx }) {
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
-          {/* TODO: Use profile id */}
-          <ProfileCompactCard account={caseObject?.verdictAuthor} />
+          <ProfileCompactCard profileId={caseObject?.verdictAuthor} />
           <Typography variant="body2">(Judge)</Typography>
         </Stack>
         {/* Content */}
@@ -186,8 +185,7 @@ function CaseCancellation({ caseObject, sx }) {
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
-          {/* TODO: Use profile id */}
-          <ProfileCompactCard account={caseObject?.cancellationAuthor} />
+          <ProfileCompactCard profileId={caseObject?.cancellationAuthor} />
           <Typography variant="body2">(Judge)</Typography>
         </Stack>
         {/* Content */}
