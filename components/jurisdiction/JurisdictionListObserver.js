@@ -49,9 +49,9 @@ export default function JurisdictionListObserver({
     setJurisdictions(null);
     getJurisdictions({
       searchQuery: params.filters.name,
-      member: params.filters.memberProfileAccount,
-      judge: params.filters.judgeProfileAccount,
-      admin: params.filters.adminProfileAccount,
+      member: params.filters.memberProfileId,
+      judge: params.filters.judgeProfileId,
+      admin: params.filters.adminProfileId,
       first: params.pageSize,
       skip: (params.page - 1) * params.pageSize,
     })
@@ -147,15 +147,15 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
         type: ['string', 'null'],
         title: 'Jurisdiction Name',
       },
-      memberProfileAccount: {
+      memberProfileId: {
         type: ['string', 'null'],
         title: 'Citizen Profile',
       },
-      judgeProfileAccount: {
+      judgeProfileId: {
         type: ['string', 'null'],
         title: 'Judge Profile',
       },
-      adminProfileAccount: {
+      adminProfileId: {
         type: ['string', 'null'],
         title: 'Admin Profile',
       },
@@ -166,13 +166,13 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
     name: {
       'ui:placeholder': 'Key word, phrase',
     },
-    memberProfileAccount: {
+    memberProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    judgeProfileAccount: {
+    judgeProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    adminProfileAccount: {
+    adminProfileId: {
       'ui:widget': 'ProfileSelect',
     },
   };

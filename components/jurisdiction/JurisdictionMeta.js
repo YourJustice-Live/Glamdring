@@ -134,7 +134,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { join, leave } = useJuridictionContract();
-  const { isAccountHasJurisdictionRole } = useJurisdiction();
+  const { isProfileHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
 
@@ -166,17 +166,17 @@ function JurisdictionActions({ jurisdiction, sx }) {
   }
 
   useEffect(() => {
-    if (account && jurisdiction) {
+    if (accountProfile && jurisdiction) {
       setIsMember(
-        isAccountHasJurisdictionRole(
+        isProfileHasJurisdictionRole(
           jurisdiction,
-          account,
+          accountProfile.id,
           JURISDICTION_ROLE.member.id,
         ),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, jurisdiction]);
+  }, [accountProfile, jurisdiction]);
 
   return (
     <Stack direction="row" spacing={1} sx={{ ...sx }}>

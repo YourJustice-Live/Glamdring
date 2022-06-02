@@ -12,27 +12,23 @@ import { useEffect, useState } from 'react';
  */
 export default function JurisdictionOfficials({ jurisdiction }) {
   const { handleError } = useErrors();
-  const { getJurisdictionRoleAccounts } = useJurisdiction();
+  const { getJurisdictionRoleParticipants } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [judgeProfiles, setJudgeProfiles] = useState(null);
   const [adminProfiles, setAdminProfiles] = useState(null);
 
   async function loadData() {
     try {
-      const judgeAccounts = getJurisdictionRoleAccounts(
+      const judges = getJurisdictionRoleParticipants(
         jurisdiction,
         JURISDICTION_ROLE.judge.id,
       );
-      const adminAccounts = getJurisdictionRoleAccounts(
+      const admins = getJurisdictionRoleParticipants(
         jurisdiction,
         JURISDICTION_ROLE.admin.id,
       );
-      setJudgeProfiles(
-        await getProfiles({ owners: judgeAccounts, first: 25, skip: 0 }),
-      );
-      setAdminProfiles(
-        await getProfiles({ owners: adminAccounts, first: 25, skip: 0 }),
-      );
+      setJudgeProfiles(await getProfiles({ ids: judges, first: 25, skip: 0 }));
+      setAdminProfiles(await getProfiles({ ids: admins, first: 25, skip: 0 }));
     } catch (error) {
       handleError(error, true);
     }

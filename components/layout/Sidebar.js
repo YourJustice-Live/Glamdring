@@ -36,7 +36,7 @@ export function Sidebar() {
   useEffect(() => {
     setAccountProfileJurisdictions(null);
     if (accountProfile) {
-      getJurisdictions({ member: accountProfile.owner, first: 10 })
+      getJurisdictions({ member: accountProfile.id, first: 10 })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
         .catch((error) => handleError(error));
     }

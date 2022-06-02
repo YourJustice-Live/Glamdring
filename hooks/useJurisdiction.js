@@ -70,14 +70,12 @@ export default function useJurisdiction() {
   /**
    * Get jurisdictions.
    *
-   * TODO: Use profile id instead of account.
-   *
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids Jurisdction ids (addresses). May be null for get all jurisdictions.
    * @param {string} params.searchQuery A part of jurisdiction name for searching.
-   * @param {string} params.member Account that must a member in the jurisdiction.
-   * @param {string} params.judge Account that must a judge in the jurisdiction.
-   * @param {string} params.admin Account that must an admin in the jurisdiction.
+   * @param {string} params.member Profile token id that must a member in the jurisdiction.
+   * @param {string} params.judge Profile token id that must a judge in the jurisdiction.
+   * @param {string} params.admin Profile token id that must an admin in the jurisdiction.
    * @param {number} params.first The number of jurisdictions to getting.
    * @param {number} params.skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
@@ -176,32 +174,32 @@ export default function useJurisdiction() {
   };
 
   /**
-   * Get accounts for specified jurisdiction role.
+   * Get participants (profile token ids) for specified jurisdiction role.
    *
    * @param {Jurisdiction} jurisdiction Jurisdiction.
    * @param {string} role Role id.
-   * @returns {Array.<string>} Array with accounts.
+   * @returns {Array.<string>} Array with participants (profile token ids).
    */
-  let getJurisdictionRoleAccounts = function (jurisdiction, role) {
+  let getJurisdictionRoleParticipants = function (jurisdiction, role) {
     const jurisdictionRole = jurisdiction?.roles?.find(
       (element) => element?.roleId === role,
     );
-    return jurisdictionRole?.accounts || [];
+    return jurisdictionRole?.participants || [];
   };
 
   /**
-   * Check that the account has a specified jurisdiction role.
+   * Check that the profile has a specified jurisdiction role.
    *
    * @param {Jurisdiction} jurisdiction Jurisdiction.
-   * @param {string} account Account address.
+   * @param {string} profile Profile id.
    * @param {string} role Role id.
    * @returns {boolean} Result of checking.
    */
-  let isAccountHasJurisdictionRole = function (jurisdiction, account, role) {
+  let isProfileHasJurisdictionRole = function (jurisdiction, profile, role) {
     const jurisdictionRole = jurisdiction?.roles?.find(
       (element) => element?.roleId === role,
     );
-    return jurisdictionRole?.accounts?.includes(account?.toLowerCase());
+    return jurisdictionRole?.participants?.includes(profile);
   };
 
   return {
@@ -210,7 +208,7 @@ export default function useJurisdiction() {
     getJurisdictionRule,
     getJurisdictionRules,
     getJurisdictionRulesBySearchQuery,
-    getJurisdictionRoleAccounts,
-    isAccountHasJurisdictionRole,
+    getJurisdictionRoleParticipants,
+    isProfileHasJurisdictionRole,
   };
 }

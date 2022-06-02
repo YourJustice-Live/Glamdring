@@ -72,7 +72,7 @@ export default function Jurisdictions() {
               <JurisdictionListObserver
                 isFilterButtonHidden={true}
                 filters={{
-                  memberProfileAccount: account,
+                  memberProfileId: accountProfile.id,
                 }}
               />
             </TabPanel>
@@ -80,7 +80,7 @@ export default function Jurisdictions() {
               <JurisdictionListObserver
                 isFilterButtonHidden={true}
                 filters={{
-                  judgeProfileAccount: account,
+                  judgeProfileId: accountProfile.id,
                 }}
               />
             </TabPanel>
@@ -88,7 +88,7 @@ export default function Jurisdictions() {
               <JurisdictionListObserver
                 isFilterButtonHidden={true}
                 filters={{
-                  adminProfileAccount: account,
+                  adminProfileId: accountProfile.id,
                 }}
               />
             </TabPanel>

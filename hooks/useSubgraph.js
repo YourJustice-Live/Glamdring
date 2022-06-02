@@ -84,16 +84,13 @@ export default function useSubgraph() {
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
-    const fixedMember = member ? member.toLowerCase() : null;
-    const fixedJudge = judge ? judge.toLowerCase() : null;
-    const fixedAdmin = admin ? admin.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindJurisdictionEntitiesQuery(
         fixedIds,
         searchQuery,
-        fixedMember,
-        fixedJudge,
-        fixedAdmin,
+        member,
+        judge,
+        admin,
         first,
         skip,
       ),
@@ -381,11 +378,11 @@ function getFindJurisdictionEntitiesQuery(
   let searchQueryFilter = searchQuery
     ? `name_contains_nocase: "${searchQuery}"`
     : '';
-  let memberFilter = member ? `memberAccounts_contains: ["${member}"]` : ``;
-  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
-  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
+  let memberFilter = member ? `members_contains: ["${member}"]` : ``;
+  let judgeFilter = judge ? `judges_contains: ["${judge}"]` : ``;
+  let adminFilter = admin ? `admins_contains: ["${admin}"]` : ``;
   let filterParams = `where: {${idsFilter}, ${searchQueryFilter}, ${memberFilter}, ${judgeFilter}, ${adminFilter}}`;
-  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let sortParams = `orderBy: membersCount, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
     jurisdictionEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
@@ -396,8 +393,8 @@ function getFindJurisdictionEntitiesQuery(
       roles {
         id
         roleId
-        accounts
-        accountsCount
+        participants
+        participantsCount
       }
       rules {
         id

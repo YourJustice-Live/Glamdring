@@ -81,7 +81,7 @@ export default function CaseCreateDialog({
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { getJurisdiction, getJurisdictionRule, isAccountHasJurisdictionRole } =
+  const { getJurisdiction, getJurisdictionRule, isProfileHasJurisdictionRole } =
     useJurisdiction();
   const { getAction } = useAction();
   const { getProfiles } = useProfile();
@@ -352,10 +352,9 @@ export default function CaseCreateDialog({
     try {
       // Check that account has jurisdiction role
       if (
-        // TODO: Use function "isProfileHasJurisdictionRole()"
-        !isAccountHasJurisdictionRole(
+        !isProfileHasJurisdictionRole(
           jurisdiction,
-          account,
+          accountProfile?.id,
           JURISDICTION_ROLE.member.id,
         )
       ) {
