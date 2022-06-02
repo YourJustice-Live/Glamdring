@@ -53,7 +53,7 @@ export default function ProfileSelect(props) {
           newOptions = unionWith(
             newOptions,
             profiles,
-            (profile1, profile2) => profile1.owner === profile2.owner,
+            (profile1, profile2) => profile1.id === profile2.id,
           );
         }
         setOptions(newOptions);
