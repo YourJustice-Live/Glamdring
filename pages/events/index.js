@@ -2,6 +2,7 @@ import { Divider, Typography } from '@mui/material';
 import CaseEventList from 'components/case/CaseEventList';
 import Layout from 'components/layout/Layout';
 import ContentProtector from 'components/protector/ContentProtector';
+import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
@@ -14,6 +15,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Events() {
   const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { handleError } = useErrors();
   const { getCases, getCaseEvents } = useCase();
   const [caseEvents, setCaseEvents] = useState(null);
@@ -21,7 +23,7 @@ export default function Events() {
   async function loadData() {
     try {
       const cases = await getCases({
-        participant: account,
+        participant: accountProfile.id,
         first: 100,
         skip: 0,
       });
@@ -34,9 +36,11 @@ export default function Events() {
   }
 
   useEffect(() => {
-    loadData();
+    if (accountProfile) {
+      loadData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [accountProfile]);
 
   return (
     <Layout title={'YourJustice / Events'} enableSidebar={!!account}>

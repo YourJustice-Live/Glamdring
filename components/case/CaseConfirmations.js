@@ -3,9 +3,9 @@ import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
-import useCase from 'hooks/useCase';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
+import useCase from 'hooks/useCase';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
@@ -14,9 +14,9 @@ import CasePostAddDialog from './CasePostAddDialog';
  * A component with case witness and confirmation posts.
  */
 export default function CaseConfirmations({ caseObject, sx }) {
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasCaseRole } = useCase();
+  const { isProfileHasCaseRole } = useCase();
   const [confirmationPosts, setConfirmationPosts] = useState(null);
 
   useEffect(() => {
@@ -37,11 +37,10 @@ export default function CaseConfirmations({ caseObject, sx }) {
       {/* Witness */}
       <Box>
         <Typography sx={{ fontWeight: 'bold' }}>Witness</Typography>
-        {caseObject?.witnessAccounts?.length > 0 ? (
+        {caseObject?.witnesses?.length > 0 ? (
           <Stack spacing={1} sx={{ mt: 1.5 }}>
-            {caseObject?.witnessAccounts?.map((account, accountIndex) => (
-              // TODO: Use profile id
-              <ProfileCompactCard key={accountIndex} account={account} />
+            {caseObject?.witnesses?.map((profileId, index) => (
+              <ProfileCompactCard key={index} profileId={profileId} />
             ))}
           </Stack>
         ) : (
@@ -49,7 +48,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
         )}
       </Box>
       {/* Confirmations */}
-      {caseObject?.witnessAccounts?.length > 0 && (
+      {caseObject?.witnesses?.length > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography sx={{ fontWeight: 'bold' }}>Confirmations</Typography>
           {confirmationPosts && confirmationPosts.length > 0 ? (
@@ -62,6 +61,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
                   <Paper key={index} sx={{ p: 2 }}>
                     {/* Author */}
                     <Stack direction="row" spacing={1} alignItems="center">
+                      {/* TODO: Use profile id */}
                       <ProfileCompactCard account={post.author} />
                     </Stack>
                     {/* Confirmation */}
@@ -96,7 +96,11 @@ export default function CaseConfirmations({ caseObject, sx }) {
           )}
           {/* Button to add confirmation */}
           {caseObject?.stage === CASE_STAGE.open &&
-            isAccountHasCaseRole(caseObject, account, CASE_ROLE.witness.id) && (
+            isProfileHasCaseRole(
+              caseObject,
+              accountProfile?.id,
+              CASE_ROLE.witness.id,
+            ) && (
               <Box sx={{ mt: 2 }}>
                 <Button
                   variant="outlined"

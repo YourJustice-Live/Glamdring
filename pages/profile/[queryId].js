@@ -48,7 +48,7 @@ export default function Profile() {
           <Divider />
           <CaseListObserver
             filters={{
-              participantProfileAccount: profile?.owner,
+              participantProfileId: profile.id,
             }}
             isParticipantInputDisabled={true}
             sx={{ mt: 4 }}

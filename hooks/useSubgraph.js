@@ -7,12 +7,15 @@ import { unionWith } from 'lodash';
  */
 export default function useSubgraph() {
   /**
-   * Find the Avatar NFTs for all or only for the specified accounts.
+   * Find the Avatar NFT entities.
    *
-   * @param {Array.<string>} owners If not null, then the function returns the Avatar NFTs for the specified accounts.
+   * @param {Array.<string>} ids Token ids.
+   * @param {Array.<string>} owners Token owner accounts.
    * @param {string} jurisdiction Jurisdiction address.
-   * @param {string} order avatars order.
-   * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
+   * @param {number} first The number of entities to getting.
+   * @param {number} skip The number of entities to skip.
+   * @param {string} order Entities order.
+   * @returns {Promise.<Array.<{object}>>} Avatar NFT entities.
    */
   let findAvatarNftEntities = async function (
     ids,
@@ -23,7 +26,7 @@ export default function useSubgraph() {
     order = PROFILE_ORDER.byPositiveRating,
   ) {
     const fixedOwners = owners
-      ? owners.map((account) => account.toLowerCase())
+      ? owners.map((owner) => owner.toLowerCase())
       : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
@@ -67,9 +70,9 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
    * @param {string} searchQuery A part of jurisdiction name for searching.
-   * @param {string} member Account that must a member in the jurisdiction.
-   * @param {string} judge Account that must a judge in the jurisdiction.
-   * @param {string} admin Account that must an admin in the jurisdiction.
+   * @param {string} member Id of token that must be a member in the jurisdiction.
+   * @param {string} judge Id of token that must be a judge in the jurisdiction.
+   * @param {string} admin If of token that must be an admin in the jurisdiction.
    * @param {number} first The number of jurisdictions to getting.
    * @param {number} skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
@@ -179,14 +182,14 @@ export default function useSubgraph() {
    * @param {string} searchQuery A part of case name for searching.
    * @param {string} jurisdiction Jurisdiction address.
    * @param {number} stage Case stage id.
-   * @param {string} participant Account that must a participant in the case.
-   * @param {string} admin Account that must an admin in the case.
-   * @param {string} subject Account that must a subject in the case.
-   * @param {string} plaintiff Account that must a plaintiff in the case.
-   * @param {string} judge Account that must a judge in the case.
-   * @param {string} witness Account that must a witness in the case.
-   * @param {string} affected Account that must an affected in the case.
-   * @param {string} accountWithoutConfirmationPost Account that must not have any post with confirmation.
+   * @param {string} participant Id of token that must be a participant in the case.
+   * @param {string} admin Id of token that must be an admin in the case.
+   * @param {string} subject Id of token that must be a subject in the case.
+   * @param {string} plaintiff Id of token that must be a plaintiff in the case.
+   * @param {string} judge Id of token that must be a judge in the case.
+   * @param {string} witness Id of token that must be a witness in the case.
+   * @param {string} affected Id of token that must be an affected in the case.
+   * @param {string} participantWithoutConfirmationPost Id of token that must not have any post with confirmation.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
@@ -203,36 +206,26 @@ export default function useSubgraph() {
     judge,
     witness,
     affected,
-    accountWithoutConfirmationPost,
+    participantWithoutConfirmationPost,
     first = 5,
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
-    const fixedAdmin = admin ? admin.toLowerCase() : null;
-    const fixedParticipant = participant ? participant.toLowerCase() : null;
-    const fixedSubject = subject ? subject.toLowerCase() : null;
-    const fixedPlaintiff = plaintiff ? plaintiff.toLowerCase() : null;
-    const fixedJudge = judge ? judge.toLowerCase() : null;
-    const fixedWitness = witness ? witness.toLowerCase() : null;
-    const fixedAffected = affected ? affected.toLowerCase() : null;
-    const fixedAccountWithoutConfirmationPost = accountWithoutConfirmationPost
-      ? accountWithoutConfirmationPost.toLowerCase()
-      : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
         fixedIds,
         searchQuery,
         fixedJurisdiction,
         stage,
-        fixedParticipant,
-        fixedAdmin,
-        fixedSubject,
-        fixedPlaintiff,
-        fixedJudge,
-        fixedWitness,
-        fixedAffected,
-        fixedAccountWithoutConfirmationPost,
+        participant,
+        admin,
+        subject,
+        plaintiff,
+        judge,
+        witness,
+        affected,
+        participantWithoutConfirmationPost,
         first,
         skip,
       ),
@@ -272,11 +265,15 @@ async function makeSubgraphQuery(query) {
       query: query,
     });
     if (response.data.errors) {
-      throw new Error(`Error making subgraph query: ${response.data.errors}`);
+      throw new Error(
+        `Error making subgraph query: ${JSON.stringify(response.data.errors)}`,
+      );
     }
     return response.data.data;
   } catch (error) {
-    throw new Error(`Could not query the subgraph: ${error.message}`);
+    throw new Error(
+      `Could not query the subgraph: ${JSON.stringify(error.message)}`,
+    );
   }
 }
 
@@ -545,7 +542,7 @@ function getFindCaseEntitiesQuery(
   judge,
   witness,
   affected,
-  accountWithoutConfirmationPost,
+  participantWithoutConfirmationPost,
   first,
   skip,
 ) {
@@ -557,20 +554,18 @@ function getFindCaseEntitiesQuery(
     ? `jurisdiction: "${jurisdiction}"`
     : '';
   let participantFilter = participant
-    ? `participantAccounts_contains: ["${participant}"]`
+    ? `participants_contains: ["${participant}"]`
     : ``;
-  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
-  let subjectFilter = subject ? `subjectAccounts_contains: ["${subject}"]` : ``;
+  let adminFilter = admin ? `admins_contains: ["${admin}"]` : ``;
+  let subjectFilter = subject ? `subjects_contains: ["${subject}"]` : ``;
   let plaintiffFilter = plaintiff
-    ? `plaintiffAccounts_contains: ["${plaintiff}"]`
+    ? `plaintiffs_contains: ["${plaintiff}"]`
     : ``;
-  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
-  let witnessFilter = witness ? `witnessAccounts_contains: ["${witness}"]` : ``;
-  let affectedFilter = affected
-    ? `affectedAccounts_contains: ["${affected}"]`
-    : ``;
-  let notFilter = accountWithoutConfirmationPost
-    ? `accountsWithConfirmationPosts_not_contains: ["${accountWithoutConfirmationPost}"]`
+  let judgeFilter = judge ? `judges_contains: ["${judge}"]` : ``;
+  let witnessFilter = witness ? `witnesses_contains: ["${witness}"]` : ``;
+  let affectedFilter = affected ? `affecteds_contains: ["${affected}"]` : ``;
+  let notFilter = participantWithoutConfirmationPost
+    ? `participantsWithConfirmationPosts_not_contains: ["${participantWithoutConfirmationPost}"]`
     : ``;
   let stageFilter =
     stage !== null && stage !== undefined ? `stage: ${stage}` : '';
@@ -610,13 +605,13 @@ function getFindCaseEntitiesQuery(
         uriData
         uriType
       }
-      participantAccounts
-      adminAccounts
-      subjectAccounts
-      plaintiffAccounts
-      judgeAccounts
-      witnessAccounts
-      affectedAccounts
+      participants
+      admins
+      subjects
+      plaintiffs
+      judges
+      witnesses
+      affecteds
     }
   }`;
 }

@@ -5,10 +5,10 @@ import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import { hexStringToJson } from 'utils/converters';
 import CaseCancelDialog from './CaseCancelDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
+import useDataContext from 'hooks/context/useDataContext';
 
 /**
  * A component with a case judges, verdict or cancellation.
@@ -37,11 +37,10 @@ function CaseJudges({ caseObject, sx }) {
   return (
     <Box sx={{ ...sx }}>
       <Typography sx={{ fontWeight: 'bold' }}>Judges</Typography>
-      {caseObject?.judgeAccounts?.length > 0 ? (
+      {caseObject?.judges?.length > 0 ? (
         <Stack spacing={1} sx={{ mt: 1.5 }}>
-          {caseObject?.judgeAccounts?.map((account, accountIndex) => (
-            // TODO: Use profile id
-            <ProfileCompactCard key={accountIndex} account={account} />
+          {caseObject?.judges?.map((profileId, index) => (
+            <ProfileCompactCard key={index} profileId={profileId} />
           ))}
         </Stack>
       ) : (
@@ -75,9 +74,14 @@ function CaseRequireVerdictStage({ caseObject, sx }) {
 }
 
 function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasCaseRole } = useCase();
+  const { isProfileHasCaseRole } = useCase();
+  const isProfileHasCaseJudgeRole = isProfileHasCaseRole(
+    caseObject,
+    accountProfile?.id,
+    CASE_ROLE.judge.id,
+  );
 
   return (
     <Box sx={{ ...sx }}>
@@ -85,7 +89,7 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
       <Typography sx={{ mt: 1 }}>
         The judge&apos;s verdict is awaited.
       </Typography>
-      {isAccountHasCaseRole(caseObject, account, CASE_ROLE.judge.id) && (
+      {isProfileHasCaseJudgeRole && (
         <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
           <Button
             variant="outlined"
@@ -127,6 +131,7 @@ function CaseVerdict({ caseObject, sx }) {
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
+          {/* TODO: Use profile id */}
           <ProfileCompactCard account={caseObject?.verdictAuthor} />
           <Typography variant="body2">(Judge)</Typography>
         </Stack>
@@ -181,6 +186,7 @@ function CaseCancellation({ caseObject, sx }) {
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
+          {/* TODO: Use profile id */}
           <ProfileCompactCard account={caseObject?.cancellationAuthor} />
           <Typography variant="body2">(Judge)</Typography>
         </Stack>

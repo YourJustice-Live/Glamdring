@@ -36,6 +36,7 @@ export default function CaseEventCard({ caseEvent }) {
         {/* Account added post */}
         {caseEvent.type === 'accountAddedPost' && (
           <Stack direction="row" spacing={1} alignItems="center">
+            {/* TODO: Use profile id */}
             <ProfileCompactCard
               account={caseEvent.data.account}
               disableRating={true}
@@ -58,6 +59,7 @@ export default function CaseEventCard({ caseEvent }) {
         {/* Account made verdict */}
         {caseEvent.type === 'accountMadeVerdict' && (
           <Stack direction="row" spacing={1} alignItems="center">
+            {/* TODO: Use profile id */}
             <ProfileCompactCard
               account={caseEvent.data.account}
               disableRating={true}
@@ -70,6 +72,7 @@ export default function CaseEventCard({ caseEvent }) {
         {/* Account cancelled case */}
         {caseEvent.type === 'accountCancelledCase' && (
           <Stack direction="row" spacing={1} alignItems="center">
+            {/* TODO: Use profile id */}
             <ProfileCompactCard
               account={caseEvent.data.account}
               disableRating={true}

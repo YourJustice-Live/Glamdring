@@ -54,15 +54,15 @@ export default function CaseListObserver({
       searchQuery: params.filters.description,
       jurisdiction: params.filters.jurisdictionAddress,
       stage: params.filters.stageId,
-      admin: params.filters.adminProfileAccount,
-      subject: params.filters.subjectProfileAccount,
-      plaintiff: params.filters.plaintiffProfileAccount,
-      judge: params.filters.judgeProfileAccount,
-      witness: params.filters.witnessProfileAccount,
-      affected: params.filters.affectedProfileAccount,
-      accountWithoutConfirmationPost:
-        params.filters.accountWithoutConfirmationPost,
-      participant: params.filters.participantProfileAccount,
+      admin: params.filters.adminProfileId,
+      subject: params.filters.subjectProfileId,
+      plaintiff: params.filters.plaintiffProfileId,
+      judge: params.filters.judgeProfileId,
+      witness: params.filters.witnessProfileId,
+      affected: params.filters.affectedProfileId,
+      participantWithoutConfirmationPost:
+        params.filters.participantWithoutConfirmationPostProfileId,
+      participant: params.filters.participantProfileId,
       first: params.pageSize,
       skip: (params.page - 1) * params.pageSize,
     })
@@ -175,31 +175,31 @@ function FiltersDialog({
         type: 'number',
         title: '',
       },
-      subjectProfileAccount: {
+      subjectProfileId: {
         type: ['string', 'null'],
         title: 'Acted Profile',
       },
-      affectedProfileAccount: {
+      affectedProfileId: {
         type: ['string', 'null'],
         title: 'Affected Profile',
       },
-      judgeProfileAccount: {
+      judgeProfileId: {
         type: ['string', 'null'],
         title: 'Judge Profile',
       },
-      witnessProfileAccount: {
+      witnessProfileId: {
         type: ['string', 'null'],
         title: 'Witness Profile',
       },
-      plaintiffProfileAccount: {
+      plaintiffProfileId: {
         type: ['string', 'null'],
         title: 'Plaintiff Profile',
       },
-      adminProfileAccount: {
+      adminProfileId: {
         type: ['string', 'null'],
         title: 'Admin Profile',
       },
-      participantProfileAccount: {
+      participantProfileId: {
         type: ['string', 'null'],
         title: 'Profile with Any Role',
       },
@@ -217,25 +217,25 @@ function FiltersDialog({
     stageId: {
       'ui:widget': 'CaseStageSelect',
     },
-    subjectProfileAccount: {
+    subjectProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    affectedProfileAccount: {
+    affectedProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    judgeProfileAccount: {
+    judgeProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    witnessProfileAccount: {
+    witnessProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    plaintiffProfileAccount: {
+    plaintiffProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    adminProfileAccount: {
+    adminProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    participantProfileAccount: {
+    participantProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:disabled': isParticipantInputDisabled,
     },

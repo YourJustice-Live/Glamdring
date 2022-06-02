@@ -12,8 +12,8 @@ export function DataProvider({ children }) {
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
   const {
-    isAccountHasAwaitingConfirmationCases,
-    isAccountHasAwaitingJudgingCases,
+    isProfileHasAwaitingConfirmationCases,
+    isProfileHasAwaitingJudgingCases,
   } = useCase();
   const profileWorkerRef = useRef();
   const [isReady, setIsReady] = useState(false);
@@ -45,9 +45,9 @@ export function DataProvider({ children }) {
         // Define data
         const accountProfile = await getProfile({ owner: account });
         const isAccountProfileHasAwaitingConfirmationCases =
-          await isAccountHasAwaitingConfirmationCases(account);
+          await isProfileHasAwaitingConfirmationCases(accountProfile?.id);
         const isAccountProfileHasAwaitingJudgingCases =
-          await isAccountHasAwaitingJudgingCases(account);
+          await isProfileHasAwaitingJudgingCases(accountProfile?.id);
         const isAccountProfileHasAwaitingCases =
           isAccountProfileHasAwaitingConfirmationCases ||
           isAccountProfileHasAwaitingJudgingCases;

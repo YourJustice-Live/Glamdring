@@ -4,8 +4,8 @@ import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
 import { POST_TYPE } from 'constants/metadata';
 import { CASE_ROLE_STRING } from 'constants/strings';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
@@ -15,9 +15,9 @@ import CasePostAddDialog from './CasePostAddDialog';
  * A component with case comment posts.
  */
 export default function CaseComments({ caseObject, sx }) {
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasAnyCaseRole } = useCase();
+  const { isProfileHasAnyCaseRole } = useCase();
   const [commentPosts, setCommentsPosts] = useState(null);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function CaseComments({ caseObject, sx }) {
       )}
       {/* Button to add comment */}
       {caseObject?.stage === CASE_STAGE.open &&
-        isAccountHasAnyCaseRole(caseObject, account) && (
+        isProfileHasAnyCaseRole(caseObject, accountProfile?.id) && (
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"

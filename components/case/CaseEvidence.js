@@ -5,8 +5,8 @@ import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
 import { POST_TYPE } from 'constants/metadata';
 import { CASE_ROLE_STRING } from 'constants/strings';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
@@ -16,9 +16,9 @@ import CasePostAddDialog from './CasePostAddDialog';
  * A component with case evidence posts.
  */
 export default function CaseEvidence({ caseObject, sx }) {
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasAnyCaseRole } = useCase();
+  const { isProfileHasAnyCaseRole } = useCase();
   const [evidencePosts, setEvidencePosts] = useState(null);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export default function CaseEvidence({ caseObject, sx }) {
             <Paper key={index} sx={{ p: 2 }}>
               {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
+                {/* TODO: Use profile id */}
                 <ProfileCompactCard account={post.author} />
                 <Typography variant="body2" color="text.secondary">
                   ({CASE_ROLE_STRING[post.entityRole]})
@@ -82,7 +83,7 @@ export default function CaseEvidence({ caseObject, sx }) {
       )}
       {/* Button to add evidence */}
       {caseObject?.stage === CASE_STAGE.open &&
-        isAccountHasAnyCaseRole(caseObject, account) && (
+        isProfileHasAnyCaseRole(caseObject, accountProfile?.id) && (
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"

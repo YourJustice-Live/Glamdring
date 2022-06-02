@@ -24,21 +24,19 @@ export default function useCase() {
   /**
    * Get cases.
    *
-   * TODO: Use profile id instead of account.
-   *
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids A list with case ids (addresses).
    * @param {string} params.searchQuery A part of case name for searching.
    * @param {string} params.jurisdiction Jurisdiction address.
    * @param {number} params.stage Case stage id.
-   * @param {string} params.participant Account that must a participant in the case.
-   * @param {string} params.admin Account that must an admin in the case.
-   * @param {string} params.subject Account that must a subject in the case.
-   * @param {string} params.plaintiff Account that must a plaintiff in the case.
-   * @param {string} params.judge Account that must a judge in the case.
-   * @param {string} params.witness Account that must a witness in the case.
-   * @param {string} params.affected Account that must an affected in the case.
-   * @param {string} params.accountWithoutConfirmationPost Account that must not have any post with confirmation.
+   * @param {string} params.participant Id of token that must be a participant in the case.
+   * @param {string} params.admin Id of token that must be an admin in the case.
+   * @param {string} params.subject Id of token that must be a subject in the case.
+   * @param {string} params.plaintiff Id of token that must be a plaintiff in the case.
+   * @param {string} params.judge Id of token that must be a judge in the case.
+   * @param {string} params.witness Id of token that must be a witness in the case.
+   * @param {string} params.affected Id of token that must be an affected in the case.
+   * @param {string} params.participanttWithoutConfirmationPost Id of token that must not have any post with confirmation.
    * @param {number} params.first The number of cases to getting.
    * @param {number} params.skip The number of options to skip.
    * @returns {Promise.<Array.<Case>>} A list with cases.
@@ -55,7 +53,7 @@ export default function useCase() {
     judge,
     witness,
     affected,
-    accountWithoutConfirmationPost,
+    participanttWithoutConfirmationPost,
     first,
     skip,
   }) {
@@ -71,7 +69,7 @@ export default function useCase() {
       judge,
       witness,
       affected,
-      accountWithoutConfirmationPost,
+      participanttWithoutConfirmationPost,
       first,
       skip,
     );
@@ -126,72 +124,72 @@ export default function useCase() {
   };
 
   /**
-   * Check that the account has any role in specified case.
+   * Check that the profile has any role in specified case.
    *
    * @param {Case} caseObject Case.
-   * @param {string} account Account address.
+   * @param {string} profile Profile id.
    * @returns {boolean} Result of checking.
    */
-  let isAccountHasAnyCaseRole = function (caseObject, account) {
-    return caseObject?.participantAccounts?.includes(account?.toLowerCase());
+  let isProfileHasAnyCaseRole = function (caseObject, profile) {
+    return caseObject?.participants?.includes(profile);
   };
 
   /**
-   * Check that the account has a specified case role.
+   * Check that the profile has a specified case role.
    *
-   * @param {Case} caseObject Case
-   * @param {string} account Account address.
+   * @param {Case} caseObject Case.
+   * @param {string} profile Profile id.
    * @param {string} role Role id.
    * @returns {boolean} Result of checking.
    */
-  let isAccountHasCaseRole = function (caseObject, account, role) {
+  let isProfileHasCaseRole = function (caseObject, profile, role) {
     if (role === CASE_ROLE.admin.id) {
-      return caseObject?.adminAccounts?.includes(account?.toLowerCase());
+      return caseObject?.admins?.includes(profile);
     }
     if (role === CASE_ROLE.subject.id) {
-      return caseObject?.subjectAccounts?.includes(account?.toLowerCase());
+      return caseObject?.subjects?.includes(profile);
     }
     if (role === CASE_ROLE.plaintiff.id) {
-      return caseObject?.plaintiffAccounts?.includes(account?.toLowerCase());
+      return caseObject?.plaintiffs?.includes(profile);
     }
     if (role === CASE_ROLE.judge.id) {
-      return caseObject?.judgeAccounts?.includes(account?.toLowerCase());
+      return caseObject?.judges?.includes(profile);
     }
     if (role === CASE_ROLE.witness.id) {
-      return caseObject?.witnessAccounts?.includes(account?.toLowerCase());
+      return caseObject?.witnesses?.includes(profile);
     }
     if (role === CASE_ROLE.affected.id) {
-      return caseObject?.affectedAccounts?.includes(account?.toLowerCase());
+      return caseObject?.affecteds?.includes(profile);
     }
     return false;
   };
 
   /**
-   * Check that the account has cases that await his confirmation.
+   * Check that the profile has cases that await his confirmation.
    *
-   * @param {string} account Account address.
+   * @param {string} profile Profile id.
    * @returns {Promise.<boolean>} Result of checking.
    */
-  let isAccountHasAwaitingConfirmationCases = async function (account) {
+  let isProfileHasAwaitingConfirmationCases = async function (profile) {
     const cases = await getCases({
       stage: CASE_STAGE.open,
-      witness: account,
-      accountWithoutConfirmationPost: account,
+      witness: profile,
+      participanttWithoutConfirmationPost: profile,
       first: 1,
     });
     return cases && cases.length > 0;
   };
 
   /**
-   * Check that the account has cases that await his judgment.
+   * Check that the profile has cases that await his judgment.
    *
-   * @param {string} account Account address.
+   * @param {string} profile Profile id.
    * @returns {Promise.<boolean>} Result of checking.
    */
-  let isAccountHasAwaitingJudgingCases = async function (account) {
+  let isProfileHasAwaitingJudgingCases = async function (profile) {
     const cases = await getCases({
       stage: CASE_STAGE.verdict,
-      judge: account,
+      judge: profile,
       first: 1,
     });
     return cases && cases.length > 0;
@@ -201,9 +199,9 @@ export default function useCase() {
     getCase,
     getCases,
     getCaseEvents,
-    isAccountHasAnyCaseRole,
-    isAccountHasCaseRole,
-    isAccountHasAwaitingConfirmationCases,
-    isAccountHasAwaitingJudgingCases,
+    isProfileHasAnyCaseRole,
+    isProfileHasCaseRole,
+    isProfileHasAwaitingConfirmationCases,
+    isProfileHasAwaitingJudgingCases,
   };
 }

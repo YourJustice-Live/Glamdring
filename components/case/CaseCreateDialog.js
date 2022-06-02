@@ -33,7 +33,6 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useAction from 'hooks/useAction';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { IconProfile, IconWallet } from 'icons/core';
 import { IconJurisdiction } from 'icons/entities';
@@ -84,7 +83,6 @@ export default function CaseCreateDialog({
   const { getJurisdiction, getJurisdictionRule, isProfileHasJurisdictionRole } =
     useJurisdiction();
   const { getAction } = useAction();
-  const { getProfiles } = useProfile();
   const [isOpen, setIsOpen] = useState(!isClose);
   const [status, setStatus] = useState(STATUS.isLoading);
   const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
@@ -449,23 +447,18 @@ export default function CaseCreateDialog({
         });
       }
       // Add jurisdiction judges to case judges
-      // TODO: Use "profileIds" from judge role instead of getting "accounts" and then loading profiles
       const jurisdictionJudgeRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.judge.id,
       );
-      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.accounts || [];
-      const jurisdictionJudgeProfiles = await getProfiles({
-        owners: jurisdictionJudgeAccounts,
-      });
-      const jurisdictionJudgeIds = jurisdictionJudgeProfiles.map(
-        (profile) => profile.id,
-      );
-      for (const jurisdictionJudgeId of jurisdictionJudgeIds) {
-        caseRoles.push({
-          tokenId: jurisdictionJudgeId,
-          role: CASE_ROLE.judge.name,
-        });
+      if (jurisdictionJudgeRole?.participants) {
+        for (const jurisdictionJudgeId of jurisdictionJudgeRole.participants) {
+          caseRoles.push({
+            tokenId: jurisdictionJudgeId,
+            role: CASE_ROLE.judge.name,
+          });
+        }
       }
+      console.log('[Dev] caseRoles`', caseRoles);
       // Define case posts
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {
