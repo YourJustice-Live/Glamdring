@@ -28,10 +28,20 @@ You can file cases for or against other individuals, supply evidence and call fo
 
 ## How to set up a development environment
 
-1. Create a file .env.local with content:
+1. Go to dev branch.
+2. Create a file .env.local with content:
 
 ```
 NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjustice-dev
+```
+
+## How to set up a sandbox environment
+
+1. Go to branch that supports the sandbox subgraph.
+2. Create a file .env.local with content:
+
+```
+NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjustice-subgraph
 ```
 
 ## Naming Convention

@@ -114,6 +114,12 @@ export default function CasePostAddDialog({
         subLabel: '...',
       },
     },
+    message: {
+      'ui:widget': 'textarea',
+      'ui:options': {
+        rows: 5,
+      },
+    },
   };
 
   const widgets = {
