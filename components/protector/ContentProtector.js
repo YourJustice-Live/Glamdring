@@ -40,11 +40,11 @@ export default function ContentProtector({
           Content is not available
         </Typography>
         <Typography gutterBottom>
-          Please create own profile to view this content.
+          To view this content you must first claim your soul.
         </Typography>
         <Link href="/profile/create" passHref>
           <Button variant="contained" onClick={connectWallet} sx={{ mt: 2 }}>
-            Create Own Profile
+            Claim Your Soul
           </Button>
         </Link>
       </Box>

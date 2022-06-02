@@ -10,10 +10,7 @@ export default function ProfileCreate() {
   const { account } = useWeb3Context();
 
   return (
-    <Layout
-      title={'YourJustice / Create Own Profile'}
-      enableSidebar={!!account}
-    >
+    <Layout title={'YourJustice / Claim Your Soul'} enableSidebar={!!account}>
       <ContentProtector
         isAccountRequired={true}
         isNoAccountProfileRequired={true}

@@ -125,7 +125,7 @@ export default function HowItWorks() {
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
             Now we need to fill in the account information. Click on the button
-            &quot;Create Own Profile&quot;.
+            &quot;Claim Your Soul&quot;.
           </Typography>
           <Typography gutterBottom>
             Upload your avatar and fill in information about yourself.

@@ -129,7 +129,7 @@ export default function Navigation() {
                 sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconProfile />}
               >
-                Create Own Profile
+                Claim Your Soul
               </Button>
             </Link>
           )}
@@ -254,7 +254,7 @@ export default function Navigation() {
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography>Create Own Profile</Typography>
+                <Typography>Claim Your Soul</Typography>
               </MenuItem>
             </Link>
           )}
