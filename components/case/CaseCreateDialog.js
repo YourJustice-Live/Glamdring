@@ -537,7 +537,8 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountProfileRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to create profile.
+              To create case and add reputation you need to first claim your
+              Soul.
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -548,7 +549,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconProfile color={palette.primary.contrastText} />}
             >
-              Create Profile
+              Claim Your Soul
             </Button>
           </>
         )}

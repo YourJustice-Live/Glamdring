@@ -256,7 +256,7 @@ function ProfileRequireDialog({ isClose, onClose }) {
           }}
           startIcon={<IconProfile color={palette.primary.contrastText} />}
         >
-          Create Profile
+          Claim Your Soul
         </Button>
       </DialogContent>
     </Dialog>

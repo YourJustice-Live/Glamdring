@@ -122,7 +122,7 @@ export default function ProfileManage({
           </Typography>
           <Typography gutterBottom>
             {action === 'createAnotherProfile' &&
-              'Create profile for another person to make it appear in YourJustice.'}
+              "Create a Soul for another person who's not yet in the system."}
           </Typography>
           <Divider sx={{ mb: 3 }} />
           <Form
@@ -136,8 +136,8 @@ export default function ProfileManage({
             {status === STATUS.isAvailable && (
               <Button variant="contained" type="submit">
                 {action === 'editOwnProfile'
-                  ? 'Edit Profile'
-                  : 'Create Profile'}
+                  ? 'Edit Soul Detilas'
+                  : 'Claim Your Soul'}
               </Button>
             )}
             {status === STATUS.isUploadingToIpfs && (
