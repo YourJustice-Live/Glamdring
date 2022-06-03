@@ -4,7 +4,12 @@ import LawCard from './LawCard';
 /**
  * A component with a list of laws.
  */
-export default function LawList({ laws, isCommentsEnabled, sx }) {
+export default function LawList({
+  laws,
+  isCollapseEnabled,
+  isCommentsEnabled,
+  sx,
+}) {
   return (
     <Stack spacing={4} sx={{ ...sx }}>
       {!laws && (
@@ -25,6 +30,7 @@ export default function LawList({ laws, isCommentsEnabled, sx }) {
             <LawCard
               key={key}
               law={laws.get(key)}
+              isCollapseEnabled={isCollapseEnabled}
               isCommentsEnabled={isCommentsEnabled}
             />
           ))}
