@@ -14,11 +14,13 @@ import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput'
 import { CASE_ROLE } from 'constants/contracts';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
 import { CASE_ROLE_STRING } from 'constants/strings';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   handleAddCaseEvidenceEvent,
   handleCommentCaseEvent,
@@ -27,8 +29,6 @@ import {
 
 /**
  * A component with dialog for add case post (comment, confirmation).
- *
- * TODO: Automatically define account roles
  */
 export default function CasePostAddDialog({
   caseObject,
@@ -36,11 +36,15 @@ export default function CasePostAddDialog({
   isClose,
   onClose,
 }) {
+  const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
-  const [formData, setFormData] = useState({});
   const { addPost } = useCaseContract();
+  const { isAccountHasCaseRole } = useCase();
+  const [caseRoleNames, setCaseRoleNames] = useState([]);
+  const [caseRoleStrings, setCaseRoleStrings] = useState([]);
+  const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
@@ -62,22 +66,9 @@ export default function CasePostAddDialog({
         role: {
           type: 'string',
           title: 'Your Role',
-          enum: [
-            CASE_ROLE.admin.name,
-            CASE_ROLE.subject.name,
-            CASE_ROLE.plaintiff.name,
-            CASE_ROLE.judge.name,
-            CASE_ROLE.witness.name,
-            CASE_ROLE.affected.name,
-          ],
-          enumNames: [
-            CASE_ROLE_STRING.admin,
-            CASE_ROLE_STRING.subject,
-            CASE_ROLE_STRING.plaintiff,
-            CASE_ROLE_STRING.judge,
-            CASE_ROLE_STRING.witness,
-            CASE_ROLE_STRING.affected,
-          ],
+          enum: caseRoleNames,
+          enumNames: caseRoleStrings,
+          default: caseRoleNames?.[0],
         },
       }),
       // Evidence input
@@ -108,6 +99,11 @@ export default function CasePostAddDialog({
   };
 
   const uiSchema = {
+    ...(caseRoleNames?.length === 1 && {
+      role: {
+        'ui:widget': 'hidden',
+      },
+    }),
     evidencePostUri: {
       'ui:widget': 'CaseEvidencePostInput',
       'ui:options': {
@@ -168,6 +164,23 @@ export default function CasePostAddDialog({
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    // Define which roles the account has
+    if (account && caseObject) {
+      const caseRoleNames = Object.values(CASE_ROLE)
+        .filter((caseRole) =>
+          isAccountHasCaseRole(caseObject, account, caseRole.id),
+        )
+        .map((caseRole) => caseRole.name);
+      const caseRoleStrings = caseRoleNames.map(
+        (caseRoleName) => CASE_ROLE_STRING[caseRoleName],
+      );
+      setCaseRoleNames(caseRoleNames);
+      setCaseRoleStrings(caseRoleStrings);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, caseObject]);
 
   return (
     <Dialog

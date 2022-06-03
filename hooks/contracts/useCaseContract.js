@@ -36,7 +36,7 @@ export default function useCaseContract() {
    * Add a post to specified case contract.
    *
    * @param {string} contractAddress Case contract address.
-   * @param {string} entityRole Entity role.
+   * @param {string} entityRole Case role name.
    * @param {string} uri Uri.
    * @returns Transaction.
    */
