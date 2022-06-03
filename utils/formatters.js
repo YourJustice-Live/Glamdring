@@ -1,19 +1,19 @@
 import { truncate } from 'lodash';
 
 /**
- * Convert "0x788a4fecc0ece997b9b64528bc9e10e0219c94a2" to "0x788...94a2".
+ * Convert "0x4306D7a79265D2cb85Db0c5a55ea5F4f6F73C4B1" to "0x430...c4b1".
  *
  * @param {string} address Origin address.
  * @returns Formatted address.
  */
 export function formatAddress(address) {
+  let formattedAddress = address;
   if (address && address.length > 10) {
-    return `${address.substring(0, 6)}...${address.substring(
+    formattedAddress = `${address.substring(0, 6)}...${address.substring(
       address.length - 4,
     )}`;
-  } else {
-    return address;
   }
+  return formattedAddress?.toLowerCase();
 }
 
 /**
