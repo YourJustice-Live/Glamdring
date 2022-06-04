@@ -1,25 +1,32 @@
 import { Divider, Link, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import InteractiveAddress from 'components/address/InteractiveAddress';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE_STRING } from 'constants/strings';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a case header (address, created date, admin, stage).
  */
-export default function CaseHeader({ caseObject, sx }) {
+export default function CaseHeader({ caseObject, isCaseAddressLinkable, sx }) {
   return (
     <Box sx={{ ...sx }}>
-      <CaseAdressJurisdictionCreatedDate caseObject={caseObject} />
+      <CaseAddressJurisdictionCreatedDate
+        caseObject={caseObject}
+        isCaseAddressLinkable={isCaseAddressLinkable}
+      />
       <Divider sx={{ mt: 1, mb: 1 }} />
       <CaseAdminStage caseObject={caseObject} />
     </Box>
   );
 }
 
-function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
+function CaseAddressJurisdictionCreatedDate({
+  caseObject,
+  isCaseAddressLinkable,
+  sx,
+}) {
   return (
     <Box
       sx={{
@@ -34,14 +41,18 @@ function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
         <>
           {/* Address and jurisdiction */}
           <Box
-            sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: 'center',
+            }}
           >
             {/* Address */}
-            <Typography variant="body2">
-              <Link href={`/case/${caseObject.id}`} underline="none">
-                {formatAddress(caseObject.id)}
-              </Link>
-            </Typography>
+            <InteractiveAddress
+              address={caseObject.id}
+              link={`${window.location.origin}/case/${caseObject.id}`}
+              isAddressLinkable={isCaseAddressLinkable}
+            />
             <Divider
               orientation="vertical"
               flexItem

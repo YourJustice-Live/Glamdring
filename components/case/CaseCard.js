@@ -53,7 +53,7 @@ export default function CaseCard({ caseObject }) {
       }}
     >
       <CardContent sx={{ p: 4 }}>
-        <CaseHeader caseObject={caseObject} />
+        <CaseHeader caseObject={caseObject} isCaseAddressLinkable={true} />
         <LawList laws={caseLaws} sx={{ mt: 3 }} />
         <CaseDetails
           caseObject={caseObject}

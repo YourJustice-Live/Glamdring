@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import InteractiveAddress from 'components/address/InteractiveAddress';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useDataContext from 'hooks/context/useDataContext';
@@ -30,7 +31,6 @@ import {
   handleJoinJurisdictionEvent,
   handleLeaveJurisdictionEvent,
 } from 'utils/analytics';
-import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with jurisdiction meta (title, image, etc).
@@ -79,9 +79,11 @@ function JurisdictionTop({ jurisdiction, sx }) {
         JURISDICTION
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
-      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        {formatAddress(jurisdiction?.id) || 'none'}
-      </Typography>
+      <InteractiveAddress
+        address={jurisdiction.id}
+        link={`${window.location.origin}/jurisdiction/${jurisdiction.id}`}
+        sx={{ ml: 1 }}
+      />
     </Box>
   );
 }

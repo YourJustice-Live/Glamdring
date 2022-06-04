@@ -17,13 +17,14 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import InteractiveAddress from 'components/address/InteractiveAddress';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconMember } from 'icons/entities';
 import { IconProfile } from 'icons/core';
+import { IconMember } from 'icons/entities';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
-import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
+import { formatProfileFirstLastName } from 'utils/formatters';
 import { getTraitValue } from 'utils/metadata';
 
 /**
@@ -75,9 +76,11 @@ function ProfileTop({ profile, sx }) {
         HUMAN
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
-      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        {formatAddress(profile?.account) || 'none'}
-      </Typography>
+      <InteractiveAddress
+        address={profile.account}
+        link={`${window.location.origin}/profile/${profile.account}`}
+        sx={{ ml: 1 }}
+      />
     </Box>
   );
 }
