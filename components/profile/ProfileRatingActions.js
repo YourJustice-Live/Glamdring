@@ -1,12 +1,10 @@
-import {
-  AddBoxOutlined,
-  IndeterminateCheckBoxOutlined,
-} from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
+import { IconArrowDown2, IconArrowUp2 } from 'icons/core';
+import { palette } from 'theme/palette';
 
 /**
  * A component with buttons to add rating (reputation).
@@ -23,7 +21,7 @@ export default function ProfileRatingActions({ profile, sx }) {
         <Button
           variant="contained"
           color="success"
-          startIcon={<AddBoxOutlined />}
+          startIcon={<IconArrowUp2 color={palette.success.contrastText} />}
           sx={{ flex: 1, mr: 2 }}
           onClick={() =>
             showDialog(
@@ -35,12 +33,12 @@ export default function ProfileRatingActions({ profile, sx }) {
             )
           }
         >
-          Add Reputation
+          Upvote
         </Button>
         <Button
           variant="contained"
           color="danger"
-          startIcon={<IndeterminateCheckBoxOutlined />}
+          startIcon={<IconArrowDown2 color={palette.danger.contrastText} />}
           sx={{ flex: 1 }}
           onClick={() =>
             showDialog(
@@ -52,7 +50,7 @@ export default function ProfileRatingActions({ profile, sx }) {
             )
           }
         >
-          Add Reputation
+          Downvote
         </Button>
       </Box>
     );

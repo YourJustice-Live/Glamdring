@@ -78,7 +78,8 @@ export default function Index() {
     <Layout enableSidebar={!!account}>
       <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
         <Typography variant="h1" gutterBottom>
-          Check or impact reputation of crypto people!
+          Check or impact reputation of crypto people, communities, companies
+          and addresses
         </Typography>
         <Typography>
           Who was involved in the activities that made you uncomfortable?

@@ -1,8 +1,4 @@
 import {
-  AddBoxOutlined,
-  IndeterminateCheckBoxOutlined,
-} from '@mui/icons-material';
-import {
   Avatar,
   Box,
   Button,
@@ -17,6 +13,7 @@ import {
 import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
+import { IconArrowUp2, IconArrowDown2 } from 'icons/core';
 import { IconMember } from 'icons/entities';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
@@ -192,13 +189,14 @@ function ProfileActions({ profile, jurisdiction }) {
         direction={{ xs: 'row', md: 'column' }}
         spacing={1}
         justifyContent="center"
-        sx={{ mr: '10px !important', mt: { xs: 2, md: 0 } }}
+        alignItems="flex-start"
+        sx={{ mr: { xs: 0, md: 2 } }}
       >
         <Button
           variant="text"
           color="success"
           size="small"
-          startIcon={<AddBoxOutlined />}
+          startIcon={<IconArrowUp2 color={palette.success.main} />}
           sx={{ flex: { xs: 1, md: 0 } }}
           onClick={() =>
             showDialog(
@@ -211,13 +209,13 @@ function ProfileActions({ profile, jurisdiction }) {
             )
           }
         >
-          Add Reputation
+          Upvote
         </Button>
         <Button
           variant="text"
           color="danger"
           size="small"
-          startIcon={<IndeterminateCheckBoxOutlined />}
+          startIcon={<IconArrowDown2 color={palette.danger.main} />}
           sx={{ flex: { xs: 1, md: 0 } }}
           onClick={() =>
             showDialog(
@@ -230,7 +228,7 @@ function ProfileActions({ profile, jurisdiction }) {
             )
           }
         >
-          Add Reputation
+          Downvote
         </Button>
       </Stack>
     );
