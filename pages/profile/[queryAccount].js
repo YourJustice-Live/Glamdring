@@ -45,30 +45,32 @@ export default function Profile() {
       <ProfileRatings profile={profile} sx={{ mt: 4 }} />
       <ProfileCaseStats profile={profile} sx={{ mt: 6 }} />
       <ProfileRatingActions profile={profile} sx={{ mt: 6 }} />
-      <Box sx={{ width: '100%', mt: 4 }}>
-        <TabContext value="1">
-          <TabList
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 1,
-              maxWidth: 'calc(100vw - 32px)',
-            }}
-          >
-            <Tab label="Cases" value="1" />
-          </TabList>
-          <TabPanel value="1" sx={{ px: 0 }}>
-            <CaseListObserver
-              filters={{
-                participantProfileAccount: queryAccount,
+      {profile && (
+        <Box sx={{ width: '100%', mt: 4 }}>
+          <TabContext value="1">
+            <TabList
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                mb: 1,
+                maxWidth: 'calc(100vw - 32px)',
               }}
-              isParticipantInputDisabled={true}
-            />
-          </TabPanel>
-        </TabContext>
-      </Box>
+            >
+              <Tab label="Cases" value="1" />
+            </TabList>
+            <TabPanel value="1" sx={{ px: 0 }}>
+              <CaseListObserver
+                filters={{
+                  participantProfileAccount: queryAccount,
+                }}
+                isParticipantInputDisabled={true}
+              />
+            </TabPanel>
+          </TabContext>
+        </Box>
+      )}
     </Layout>
   );
 }
