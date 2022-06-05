@@ -21,7 +21,6 @@ import { IconMember } from 'icons/entities';
 import {
   IconHome,
   IconNotification,
-  // IconPlus,
   IconProfile,
   IconWallet,
 } from 'icons/core';
@@ -108,20 +107,6 @@ export default function Navigation() {
             flexDirection: 'row-reverse',
           }}
         >
-          {/*
-          { account && accountProfile && (
-            <Button
-              variant="secondary"
-              sx={{ display: { xs: 'none', md: 'flex' } }}
-              startIcon={<IconPlus />}
-              onClick={() =>
-                showDialog(<CaseCreateDialog onClose={closeDialog} />)
-              }
-            >
-              Create Case
-            </Button>
-            )}
-          */}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <Button
