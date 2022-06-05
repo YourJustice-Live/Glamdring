@@ -12,6 +12,8 @@ import { JURISDICTION_ROLE } from 'constants/contracts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -20,6 +22,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Jurisdiction() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
@@ -68,7 +71,10 @@ export default function Jurisdiction() {
   }, [queryJurisdiction]);
 
   return (
-    <Layout title={'YourJustice / Jurisdiction'} enableSidebar={!!account}>
+    <Layout
+      title={`${t('page-title-jurisdiction')} ${queryJurisdiction}`}
+      enableSidebar={!!account}
+    >
       {/* Meta */}
       <JurisdictionMeta jurisdiction={jurisdiction} />
       {/* Manager Tools */}
@@ -91,28 +97,32 @@ export default function Jurisdiction() {
               <Tab
                 label={
                   jurisdiction.casesCount
-                    ? `Cases: ${jurisdiction.casesCount}`
-                    : 'Cases'
+                    ? `${t('text-cases')}: ${jurisdiction.casesCount}`
+                    : t('text-cases')
                 }
                 value="1"
               />
               <Tab
                 label={
-                  officialsCount ? `Officials: ${officialsCount}` : 'Officials'
+                  officialsCount
+                    ? `${t('text-officials')}: ${officialsCount}`
+                    : t('text-officials')
                 }
                 value="2"
               />
               <Tab
                 label={
-                  citizensCount ? `Citizens: ${citizensCount}` : 'Citizens'
+                  citizensCount
+                    ? `${t('text-citizens')}: ${citizensCount}`
+                    : t('text-citizens')
                 }
                 value="3"
               />
               <Tab
                 label={
                   jurisdiction.rulesCount
-                    ? `Laws: ${jurisdiction.rulesCount}`
-                    : 'Laws'
+                    ? `${t('text-laws')}: ${jurisdiction.rulesCount}`
+                    : t('text-laws')
                 }
                 value="4"
               />
@@ -143,4 +153,15 @@ export default function Jurisdiction() {
       )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts before rendering the page.
+ */
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

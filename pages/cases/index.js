@@ -8,6 +8,8 @@ import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconHammer1, IconPlus } from 'icons/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -15,6 +17,7 @@ import { palette } from 'theme/palette';
  * Page with list of all cases.
  */
 export default function Cases() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const {
     accountProfile,
@@ -29,12 +32,12 @@ export default function Cases() {
   }
 
   return (
-    <Layout title={'YourJustice / Cases'} enableSidebar={!!account}>
+    <Layout title={t('page-title-cases')} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconHammer1 color={palette.text.primary} width="18" heigth="18" />
           <Typography variant="h3" sx={{ ml: 1 }}>
-            Cases
+            {t('text-cases')}
           </Typography>
         </Box>
         {accountProfile && (
@@ -47,7 +50,7 @@ export default function Cases() {
               showDialog(<CaseCreateDialog onClose={closeDialog} />)
             }
           >
-            Create
+            {t('button-create')}
           </Button>
         )}
       </Box>
@@ -65,7 +68,7 @@ export default function Cases() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
-              <Tab label="All" value="1" />
+              <Tab label={t('text-all')} value="1" />
               <Tab
                 label={
                   <Badge
@@ -76,7 +79,7 @@ export default function Cases() {
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >
-                    Awaiting My Confirmation
+                    {t('text-awaiting-my-confirmation')}
                   </Badge>
                 }
                 sx={{ px: 4 }}
@@ -92,7 +95,7 @@ export default function Cases() {
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >
-                    Awaiting My Judging
+                    {t('text-awaiting-my-judging')}
                   </Badge>
                 }
                 sx={{ px: 4 }}
@@ -128,4 +131,15 @@ export default function Cases() {
       )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

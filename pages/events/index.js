@@ -5,6 +5,8 @@ import ContentProtector from 'components/protector/ContentProtector';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 
 /**
@@ -13,6 +15,7 @@ import { useEffect, useState } from 'react';
  * TODO: Optimize function to load events.
  */
 export default function Events() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { getCases, getCaseEvents } = useCase();
@@ -39,20 +42,31 @@ export default function Events() {
   }, []);
 
   return (
-    <Layout title={'YourJustice / Events'} enableSidebar={!!account}>
+    <Layout title={t('page-title-events')} enableSidebar={!!account}>
       <ContentProtector
         isAccountRequired={true}
         isAccountProfileRequired={true}
       >
         <Typography variant="h1" gutterBottom>
-          Events
+          {t('events-pages-headline')}
         </Typography>
         <Typography gutterBottom>
-          Recent events that happened in cases in which you are a participant
+          {t('events-pages-supporting-headline')}
         </Typography>
         <Divider />
         <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />
       </ContentProtector>
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }
