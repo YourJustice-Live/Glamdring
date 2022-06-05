@@ -60,9 +60,19 @@
   "text-uploading-to-ipfs": "Uploading to IPFS",
   "text-leaving": "Leaving",
   "text-joining": "Joining",
+  "text-nft-minting": "Minting NFT",
+  "text-nft-updating": "Updating NFT",
 
   "text-profile": "Soul",
   "text-profiles": "Souls",
+  "text-profiles-no": "No souls",
+  "text-profile-cases": "Cases",
+  "text-profile-positive-cases": "Positive",
+  "text-profile-negative-cases": "Negative",
+  "text-profile-will-be-minted-soon": "Your profile will be minted soon.",
+  "text-profile-will-be-updated-soon": "Your profile will be updated soon.",
+  "text-profile-total-reputation": "Total Reputation",
+
   "text-judges": "Judges",
   "text-judges-no": "No judges",
   "text-witness": "Witness",
@@ -129,10 +139,6 @@
   "text-my-judging": "My Judging",
   "text-my-administration": "My Administration",
 
-  "text-public-profile": "Public Profile",
-  "text-contacts": "Contacts",
-  "text-links": "Links",
-
   "text-order": "Order",
   "text-order-by-positive-reputation": "Order by Positive Reputation",
   "text-order-by-negative-reputation": "Order by Negative Reputation",
@@ -144,10 +150,18 @@
   "text-copy-address-to-clipboard": "Copy address to clipboard",
   "text-copy-link-to-clipboard": "Copy link to clipboard",
 
-  "text-error-invalid-captcha": "Invalid CAPTCHA",
+  "text-error": "Error",
+  "text-error-wrong-network": "You are connected to the wrong network. Please switch to",
   "text-error-file-smaller-than-10mb-required": "Only files with size smaller than 10MB are currently supported!",
   "text-error-smaller-than-2mb-required": "'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!'",
+  "text-error-invalid-captcha": "Invalid CAPTCHA",
 
+  "text-protector-content-is-not-available": "Content is not available",
+  "text-protector-content-requre-connect-wallet": "Please connect wallet to view this content.",
+  "text-protector-content-requre-create-profile": "Please create own profile to view this content.",
+  "text-protector-content-requre-no-profile": "This content is only available to users without profiles.",
+
+  "button-open": "Open",
   "button-add": "Add",
   "button-create": "Create",
   "button-remove": "Remove",
@@ -156,13 +170,17 @@
   "button-filters": "Filters",
   "button-apply": "Apply",
   "button-post": "Post",
+  "button-go-home": "Go to Home",
 
   "button-wallet-connect": "Connect Wallet",
   "button-wallet-disconnect": "Disconnect Wallet",
 
   "button-profile-create": "Create Profile",
-  "button-create-profile-own": "Create Own Profile",
+  "button-profile-create-own": "Create Own Profile",
+  "button-profile-edit": "Edit Profile",
   "button-profile-invite": "Invite",
+  "button-profile-increase-reputation": "Upvote",
+  "button-profile-decrease-reputation": "Downvote",
 
   "button-jurisdiction-open": "Open Jurisdiction",
   "button-jurisdiction-create": "Create Jurisdiction",
@@ -195,9 +213,16 @@
 
   "notification-data-is-successfully-updated": "Success! Data will be updated soon.",
   "notification-image-is-successfully-uploaded": "Your image uploaded to IPFS!",
+  "notification-data-is-successfully-uploaded": "Data uploaded to IPFS!",
   "notification-thanks-for-feedback": "Thanks! Together we will create fair and open justice!",
   "notification-address-is-copied": "Address is copied",
   "notification-link-is-copied": "Link is copied",
+  "notification-transaction-is-created": "Transaction is created!",
+
+  "dialog-profile-create-own-title": "Creating Own Profile",
+  "dialog-profile-edit-own-title": "Editing Own Profile",
+  "dialog-profile-invite-title": "Invite Person",
+  "dialog-profile-invite-subscription": "Create profile for another person to make it appear in YourJustice.",
 
   "dialog-jurisdiction-create-title": "Create Jurisdiction",
   "dialog-jurisdiction-update-title": "Update Jurisdiction",
@@ -239,6 +264,10 @@
   "input-profile-admin-title": "Admin Profile",
   "input-profile-citizen-title": "Citizen Profile",
   "input-profile-with-any-role-title": "Profile with Any Role",
+  "input-profile-picture-title": "Profile Picture",
+  "input-profile-public-title": "Public Profile",
+  "input-profile-contacts-title": "Contacts",
+  "input-profile-links-title": "Links",
 
   "input-jurisdiction-address-title": "Jurisdiction Address",
   "input-jurisdiction-address-placeholder": "0x8b22...",

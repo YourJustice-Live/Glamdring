@@ -15,6 +15,7 @@ import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import { IconArrowUp2, IconArrowDown2 } from 'icons/core';
 import { IconMember } from 'icons/entities';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
@@ -130,6 +131,8 @@ function ProfileDetails({ profile, sx }) {
 }
 
 function ProfileCaseStats({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   function Item({ value, title, titleColor }) {
     return (
       <Box
@@ -161,15 +164,18 @@ function ProfileCaseStats({ profile, sx }) {
         spacing={2}
         sx={{ my: 1.5, ...sx }}
       >
-        <Item value={totalCases} title="CASES" />
+        <Item
+          value={totalCases}
+          title={t('text-profile-cases').toUpperCase()}
+        />
         <Item
           value={profile.avatarNftTotalPositiveCases}
-          title="POSITIVE"
+          title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Item
           value={profile.avatarNftTotalNegativeCases}
-          title="NEGATIVE"
+          title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />
       </Stack>
@@ -180,6 +186,7 @@ function ProfileCaseStats({ profile, sx }) {
 }
 
 function ProfileActions({ profile, jurisdiction }) {
+  const { t } = useTranslation('common');
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -209,7 +216,7 @@ function ProfileActions({ profile, jurisdiction }) {
             )
           }
         >
-          Upvote
+          {t('button-profile-increase-reputation')}
         </Button>
         <Button
           variant="text"
@@ -228,7 +235,7 @@ function ProfileActions({ profile, jurisdiction }) {
             )
           }
         >
-          Downvote
+          {t('button-profile-decrease-reputation')}
         </Button>
       </Stack>
     );

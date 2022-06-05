@@ -1,9 +1,12 @@
 import { Button } from '@mui/material';
 import WrongNetworkError from 'errors/WrongNetworkError';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { truncate } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useSnackbar } from 'notistack';
 
 export default function useToasts() {
+  const { t } = useTranslation('common');
   const { enqueueSnackbar } = useSnackbar();
   const { switchNetwork } = useWeb3Context();
 
@@ -22,7 +25,7 @@ export default function useToasts() {
           onClick={() => window.open(link, '_blank').focus()}
           color="inherit"
         >
-          Open
+          {t('button-open')}
         </Button>
       ),
       variant: 'success',
@@ -31,27 +34,27 @@ export default function useToasts() {
 
   let showToastError = function (error) {
     if (error instanceof WrongNetworkError) {
-      enqueueSnackbar(
-        `You are connected to the wrong network. Please switch to ${process.env.NEXT_PUBLIC_NETWORK_NAME}.`,
-        {
-          action: (
-            <Button
-              onClick={() => {
-                switchNetwork();
-              }}
-              color="inherit"
-            >
-              Switch
-            </Button>
-          ),
-        },
+      const message =
+        t('text-error-wrong-network') +
+        ' ' +
+        process.env.NEXT_PUBLIC_NETWORK_NAME +
+        '.';
+      const action = (
+        <Button
+          onClick={() => {
+            switchNetwork();
+          }}
+          color="inherit"
+        >
+          Switch
+        </Button>
       );
-    } else if (error.message.length > 128) {
-      enqueueSnackbar(`Error: ${error.message.substring(0, 256)}...`, {
-        variant: 'error',
-      });
+      enqueueSnackbar(message, { action: action });
     } else {
-      enqueueSnackbar(`Error: ${error.message}`, { variant: 'error' });
+      const message = truncate(`${t('text-error')}: ${error.message}`, {
+        length: 256,
+      });
+      enqueueSnackbar(message, { variant: 'error' });
     }
   };
 

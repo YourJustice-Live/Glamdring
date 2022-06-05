@@ -4,6 +4,7 @@ import CaseCreateDialog from 'components/case/CaseCreateDialog';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import { IconArrowDown2, IconArrowUp2 } from 'icons/core';
+import { useTranslation } from 'next-i18next';
 import { palette } from 'theme/palette';
 
 /**
@@ -12,6 +13,7 @@ import { palette } from 'theme/palette';
  * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
  */
 export default function ProfileRatingActions({ profile, sx }) {
+  const { t } = useTranslation('common');
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
 
@@ -33,7 +35,7 @@ export default function ProfileRatingActions({ profile, sx }) {
             )
           }
         >
-          Upvote
+          {t('button-profile-increase-reputation')}
         </Button>
         <Button
           variant="contained"
@@ -50,7 +52,7 @@ export default function ProfileRatingActions({ profile, sx }) {
             )
           }
         >
-          Downvote
+          {t('button-profile-decrease-reputation')}
         </Button>
       </Box>
     );

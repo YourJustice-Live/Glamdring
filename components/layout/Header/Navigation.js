@@ -116,7 +116,7 @@ export default function Navigation() {
                 sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconProfile />}
               >
-                {t('button-create-profile-own')}
+                {t('button-profile-create-own')}
               </Button>
             </Link>
           )}
@@ -243,7 +243,7 @@ export default function Navigation() {
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography>{t('button-create-profile-own')}</Typography>
+                <Typography>{t('button-profile-create-own')}</Typography>
               </MenuItem>
             </Link>
           )}

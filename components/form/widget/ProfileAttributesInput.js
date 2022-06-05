@@ -69,7 +69,7 @@ export default function ProfileAttributesInput(props) {
         <>
           <Divider sx={{ mb: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            {t('text-public-profile')}
+            {t('input-profile-public-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField
@@ -109,7 +109,7 @@ export default function ProfileAttributesInput(props) {
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            {t('text-contacts')}
+            {t('input-profile-contacts-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField
@@ -124,7 +124,7 @@ export default function ProfileAttributesInput(props) {
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            {t('text-links')}
+            {t('input-profile-links-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField
