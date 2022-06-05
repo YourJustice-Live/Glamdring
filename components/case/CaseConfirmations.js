@@ -46,7 +46,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
             ))}
           </Stack>
         ) : (
-          <Typography sx={{ mt: 1 }}>{t('text-no-witness')}</Typography>
+          <Typography sx={{ mt: 1 }}>{t('text-witness-no')}</Typography>
         )}
       </Box>
       {/* Confirmations */}
@@ -79,8 +79,8 @@ export default function CaseConfirmations({ caseObject, sx }) {
                       >
                         {t('text-witness')}{' '}
                         {isConfirmed
-                          ? t('text-confirmed').toLowerCase()
-                          : t('text-denied').toLowerCase()}{' '}
+                          ? t('text-confirmation-confirmed').toLowerCase()
+                          : t('text-confirmation-denied').toLowerCase()}{' '}
                         {t('text-case').toLowerCase()}
                       </Typography>
                       <Typography
@@ -99,7 +99,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
               })}
             </Stack>
           ) : (
-            <Typography sx={{ mt: 1 }}>{t('text-no-confirmations')}</Typography>
+            <Typography sx={{ mt: 1 }}>{t('text-confirmations-no')}</Typography>
           )}
           {/* Button to add confirmation */}
           {caseObject?.stage === CASE_STAGE.open &&
@@ -117,7 +117,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
                     )
                   }
                 >
-                  {t('button-add-confirmation')}
+                  {t('button-case-add-confirmation')}
                 </Button>
               </Box>
             )}

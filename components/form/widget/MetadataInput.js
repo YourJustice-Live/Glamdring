@@ -132,7 +132,7 @@ export default function MetadataInput(props) {
           </Paper>
           {/* Button for open dialog with form */}
           <Button variant="outlined" onClick={openForm}>
-            {t('button-edit-metadata')}
+            {t('button-metadata-edit')}
           </Button>
           {/* Dialog with form */}
           <Dialog open={isFormOpen} onClose={closeForm} maxWidth="xs" fullWidth>
@@ -150,7 +150,7 @@ export default function MetadataInput(props) {
               >
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">
-                    {t('button-edit-metadata')}
+                    {t('button-metadata-edit')}
                   </Button>
                   <Button variant="outlined" onClick={closeForm}>
                     {t('button-cancel')}

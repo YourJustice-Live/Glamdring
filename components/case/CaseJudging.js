@@ -67,7 +67,7 @@ function CaseJudges({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography sx={{ mt: 1 }}>{t('text-no-judges')}</Typography>
+        <Typography sx={{ mt: 1 }}>{t('text-judges-no')}</Typography>
       )}
     </Box>
   );
@@ -90,7 +90,7 @@ function CaseRequireVerdictStage({ caseObject, sx }) {
         }}
         sx={{ mt: 2 }}
       >
-        {t('button-set-verdict-stage')}
+        {t('button-case-set-verdict-stage')}
       </Button>
     </Box>
   );
@@ -120,7 +120,7 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
               )
             }
           >
-            {t('button-make-verdict')}
+            {t('button-case-make-verdict')}
           </Button>
           <Button
             variant="outlined"
@@ -133,7 +133,7 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
               )
             }
           >
-            {t('button-cancel-case')}
+            {t('button-case-cancel')}
           </Button>
         </Stack>
       )}
@@ -166,10 +166,10 @@ function CaseVerdict({ caseObject, sx }) {
               variant="body2"
               sx={{ fontWeight: 'bold', color: 'success.main', mr: 0.5 }}
             >
-              {t('text-judge-made-verdict')}
+              {t('text-verdict-is-made')}
             </Typography>
             <Typography variant="body2">
-              ({t('text-confirmed-rules')}:
+              ({t('text-verdict-confirmed-rules')}:
             </Typography>
             {caseObject?.verdictConfirmedRules?.length > 0 ? (
               <>
@@ -217,7 +217,7 @@ function CaseCancellation({ caseObject, sx }) {
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'danger.main', mr: 0.5 }}
           >
-            {t('text-judge-cancelled-case')}
+            {t('text-cancellation-is-made')}
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 0.5 }}>
             {hexStringToJson(caseObject?.cancellationUriData)

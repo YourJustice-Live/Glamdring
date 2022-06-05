@@ -58,7 +58,7 @@ export default function CaseEvidencePostInput(props) {
     try {
       // Check file
       if (!isFileValid(inputEvidenceFile)) {
-        throw new Error(t('text-file-smaller-than-10mb-required'));
+        throw new Error(t('text-error-file-smaller-than-10mb-required'));
       }
       setIsUploadingToIpfs(true);
       // Upload evidence file to ipfs
@@ -123,7 +123,7 @@ export default function CaseEvidencePostInput(props) {
             disabled={propsDisabled}
             onClick={removeEvidence}
           >
-            {t('button-remove-evidence')}
+            {t('button-case-remove-evidence')}
           </Button>
         </>
       ) : (
@@ -132,7 +132,7 @@ export default function CaseEvidencePostInput(props) {
           disabled={propsDisabled}
           onClick={openDialog}
         >
-          {t('button-add-evidence')}
+          {t('button-case-add-evidence')}
         </Button>
       )}
       {/* Dialog for input title and file */}
@@ -167,7 +167,7 @@ export default function CaseEvidencePostInput(props) {
                       <Typography>
                         {inputEvidenceFile
                           ? inputEvidenceFile.name
-                          : t('Drag & Drop Your File Here')}
+                          : t('input-drag-drop-placeholder')}
                       </Typography>
                     </Stack>
                   </div>
@@ -193,7 +193,7 @@ export default function CaseEvidencePostInput(props) {
                   onClick={addEvidence}
                   disabled={!inputEvidenceTitle || !inputEvidenceFile}
                 >
-                  {t('button-add-evidence')}
+                  {t('button-case-add-evidence')}
                 </Button>
                 <Button variant="outlined" onClick={closeDialog}>
                   {t('button-close')}

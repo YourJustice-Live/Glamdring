@@ -93,8 +93,8 @@ export default function RoleManageDialog({
     <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
       <DialogTitle>
         {isAssign
-          ? t('dialog-assign-role-title')
-          : t('dialog-remove-role-title')}
+          ? t('dialog-jurisdiction-assign-role-title')
+          : t('dialog-jurisdiction-remove-role-title')}
       </DialogTitle>
       <DialogContent>
         <Form
@@ -117,7 +117,9 @@ export default function RoleManageDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {isAssign ? t('button-assign-role') : t('button-remove-role')}
+                  {isAssign
+                    ? t('button-jurisdiction-assign-role')
+                    : t('button-jurisdiction-remove-role')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}

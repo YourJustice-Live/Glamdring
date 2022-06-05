@@ -56,7 +56,7 @@ export default function ImageInput(props) {
     try {
       // Check file
       if (!isFileValid(file)) {
-        throw new Error(t('text-image-smaller-than-2mb-required'));
+        throw new Error(t('text-error-smaller-than-2mb-required'));
       }
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);

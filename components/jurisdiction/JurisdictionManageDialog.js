@@ -80,7 +80,7 @@ export default function JurisdictionManageDialog({
           },
           description: {
             type: 'string',
-            title: t('input-name-description'),
+            title: t('input-description-title'),
           },
         },
       },
@@ -121,8 +121,8 @@ export default function JurisdictionManageDialog({
     <Dialog open={isOpen} onClose={isLoading ? null : close}>
       <DialogTitle>
         {jurisdiction
-          ? t('dialog-update-jurisdiction-title')
-          : t('dialog-create-jurisdiction-title')}
+          ? t('dialog-jurisdiction-update-title')
+          : t('dialog-jurisdiction-create-title')}
       </DialogTitle>
       <DialogContent>
         <Form
@@ -147,8 +147,8 @@ export default function JurisdictionManageDialog({
               <>
                 <Button variant="contained" type="submit">
                   {jurisdiction
-                    ? t('button-update-jurisdiction')
-                    : 'button-create-jurisdiction'}
+                    ? t('button-jurisdiction-update')
+                    : 'button-jurisdiction-create'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}

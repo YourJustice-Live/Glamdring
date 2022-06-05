@@ -52,7 +52,7 @@ export default function ActionSelect(props) {
         <InputLabel id="metadata-action-select-label">
           {actions.length > 0
             ? t('input-action-title')
-            : t('text-actions-is-loading')}
+            : t('text-actions-are-loading')}
         </InputLabel>
         <Select
           labelId="metadata-action-select-label"

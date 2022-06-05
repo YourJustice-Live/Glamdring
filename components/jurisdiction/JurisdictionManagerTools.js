@@ -53,7 +53,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
                 )
               }
             >
-              {t('button-update-jurisdiction')}
+              {t('button-jurisdiction-update')}
             </Button>
           )}
           <Button
@@ -69,7 +69,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               )
             }
           >
-            {t('button-assign-role')}
+            {t('button-jurisdiction-assign-role')}
           </Button>
           <Button
             variant="outlined"
@@ -84,7 +84,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               )
             }
           >
-            {t('button-remove-role')}
+            {t('button-jurisdiction-remove-role')}
           </Button>
           <Button
             variant="outlined"
@@ -93,7 +93,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               router.push(`/jurisdiction/${jurisdiction.id}/laws/manage`)
             }
           >
-            {t('button-manage-laws')}
+            {t('button-laws-manage')}
           </Button>
         </Stack>
       </Alert>

@@ -26,7 +26,7 @@ export default function LawList({
           <Skeleton variant="rectangular" width={82} height={24} />
         </Box>
       )}
-      {laws && laws.size === 0 && <Typography>{t('text-no-laws')}</Typography>}
+      {laws && laws.size === 0 && <Typography>{t('text-laws-no')}</Typography>}
       {laws && laws.size > 0 && (
         <>
           {[...laws.keys()].map((key) => (

@@ -77,7 +77,7 @@ export default function Profiles() {
               startIcon={<IconAddUser />}
               sx={{ px: 2 }}
             >
-              {t('button-invite')}
+              {t('button-profile-invite')}
             </Button>
           </Link>
         )}

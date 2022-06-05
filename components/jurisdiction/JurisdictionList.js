@@ -23,7 +23,7 @@ export default function JurisdictionList({ jurisdictions, sx }) {
       )}
       {jurisdictions && jurisdictions.length === 0 && (
         <Grid item xs={12} md={4}>
-          <Typography>{t('text-no-jurisdictions')}</Typography>
+          <Typography>{t('text-jurisdictions-no')}</Typography>
         </Grid>
       )}
       {jurisdictions && jurisdictions.length > 0 && (

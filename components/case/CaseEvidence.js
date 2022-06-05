@@ -81,7 +81,7 @@ export default function CaseEvidence({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>{t('text-no-evidence')}</Typography>
+        <Typography>{t('text-evidence-no')}</Typography>
       )}
       {/* Button to add evidence */}
       {caseObject?.stage === CASE_STAGE.open &&
@@ -99,7 +99,7 @@ export default function CaseEvidence({ caseObject, sx }) {
                 )
               }
             >
-              {t('button-add-evidence')}
+              {t('button-case-add-evidence')}
             </Button>
           </Box>
         )}

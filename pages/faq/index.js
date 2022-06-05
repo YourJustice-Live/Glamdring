@@ -24,10 +24,10 @@ export default function Faq() {
     <Layout title={t('page-title-faq')} enableSidebar={!!account}>
       <Box sx={{ mb: 3 }}>
         <Typography variant="h1" gutterBottom>
-          {t('faq-page-headline')}
+          {t('page-faq-headline')}
         </Typography>
         <Typography gutterBottom>
-          {t('faq-page-supporting-headline')}
+          {t('page-faq-supporting-headline')}
         </Typography>
         <Divider />
       </Box>
@@ -49,10 +49,10 @@ export default function Faq() {
         sx={{ mt: 6, p: 3, background: palette.grey[50], boxShadow: 'none' }}
       >
         <Typography variant="h4" gutterBottom>
-          {t('faq-page-alert-headline')}
+          {t('page-faq-alert-headline')}
         </Typography>
         <Typography gutterBottom>
-          {t('faq-page-alert-supporting-headline')}
+          {t('page-faq-alert-supporting-headline')}
         </Typography>
         <Button
           variant="outlined"
@@ -66,7 +66,7 @@ export default function Faq() {
             )
           }
         >
-          {t('button-ask-question')}
+          {t('button-faq-ask-question')}
         </Button>
       </Alert>
     </Layout>

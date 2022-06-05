@@ -81,9 +81,9 @@ export default function Index() {
     <Layout enableSidebar={!!account}>
       <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
         <Typography variant="h1" gutterBottom>
-          {t('main-page-headline')}
+          {t('page-main-headline')}
         </Typography>
-        <Typography>{t('main-page-supporting-headline')}</Typography>
+        <Typography>{t('page-main-supporting-headline')}</Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <ProfileSelect
@@ -95,11 +95,11 @@ export default function Index() {
         <Tabs value={tabValue} onChange={handleTabChange} centered>
           <Tab
             value={PROFILE_ORDER.byPositiveRating}
-            label={t('text-light-side')}
+            label={t('page-main-text-light-side')}
           />
           <Tab
             value={PROFILE_ORDER.byNegativeRating}
-            label={t('text-dark-side')}
+            label={t('page-main-text-dark-side')}
           />
         </Tabs>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>

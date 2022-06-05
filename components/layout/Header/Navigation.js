@@ -116,7 +116,7 @@ export default function Navigation() {
                 sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconProfile />}
               >
-                {t('button-create-own-profile')}
+                {t('button-create-profile-own')}
               </Button>
             </Link>
           )}
@@ -126,7 +126,7 @@ export default function Navigation() {
               onClick={connectWallet}
               startIcon={<IconWallet />}
             >
-              {t('button-connect-wallet')}
+              {t('button-wallet-connect')}
             </Button>
           )}
         </Box>
@@ -204,7 +204,7 @@ export default function Navigation() {
               }}
             >
               <Typography textAlign="center">
-                {t('button-connect-wallet')}
+                {t('button-wallet-connect')}
               </Typography>
             </MenuItem>
           )}
@@ -237,13 +237,13 @@ export default function Navigation() {
                 showDialog(<CaseCreateDialog onClose={closeDialog} />);
               }}
             >
-              <Typography>{t('button-create-case')}</Typography>
+              <Typography>{t('button-case-create')}</Typography>
             </MenuItem>
           )}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography>{t('button-create-own-profile')}</Typography>
+                <Typography>{t('button-create-profile-own')}</Typography>
               </MenuItem>
             </Link>
           )}
@@ -277,7 +277,7 @@ export default function Navigation() {
           {account && (
             <MenuItem onClick={disconnectWallet}>
               <Typography textAlign="center">
-                {t('button-disconnect-wallet')}
+                {t('button-wallet-disconnect')}
               </Typography>
             </MenuItem>
           )}

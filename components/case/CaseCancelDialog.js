@@ -74,9 +74,9 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>{t('dialog-cancel-case-title')}</DialogTitle>
+      <DialogTitle>{t('dialog-case-cancel-title')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('dialog-cancel-case-description')}</Typography>
+        <Typography>{t('dialog-case-cancel-description')}</Typography>
         <Divider sx={{ my: 1.5 }} />
         <Form
           schema={schema}
@@ -97,7 +97,7 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {t('button-cancel-case')}
+                  {t('button-case-cancel')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}

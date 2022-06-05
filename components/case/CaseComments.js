@@ -67,7 +67,7 @@ export default function CaseComments({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>{t('text-no-comments')}</Typography>
+        <Typography>{t('text-comments-no')}</Typography>
       )}
       {/* Button to add comment */}
       {caseObject?.stage === CASE_STAGE.open &&
@@ -85,7 +85,7 @@ export default function CaseComments({ caseObject, sx }) {
                 )
               }
             >
-              {t('button-add-comment')}
+              {t('button-case-add-comment')}
             </Button>
           </Box>
         )}

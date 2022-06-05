@@ -32,7 +32,7 @@ export default function CaseEventList({ caseEvents, sx }) {
       {caseEvents && caseEvents.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 3 }}>
-            <Typography>{t('text-no-events')}</Typography>
+            <Typography>{t('text-events-no')}</Typography>
           </CardContent>
         </Card>
       )}

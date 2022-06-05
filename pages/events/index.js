@@ -48,10 +48,10 @@ export default function Events() {
         isAccountProfileRequired={true}
       >
         <Typography variant="h1" gutterBottom>
-          {t('events-pages-headline')}
+          {t('page-events-headline')}
         </Typography>
         <Typography gutterBottom>
-          {t('events-pages-supporting-headline')}
+          {t('page-events-supporting-headline')}
         </Typography>
         <Divider />
         <CaseEventList caseEvents={caseEvents} sx={{ mt: 4 }} />

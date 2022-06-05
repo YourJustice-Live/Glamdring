@@ -32,7 +32,7 @@ export default function CaseList({ cases, sx }) {
       {cases && cases.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 4 }}>
-            <Typography>{t('text-no-cases')}</Typography>
+            <Typography>{t('text-cases-no')}</Typography>
           </CardContent>
         </Card>
       )}

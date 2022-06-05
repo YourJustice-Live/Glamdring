@@ -67,7 +67,7 @@ export default function CasePostAddDialog({
         postType === POST_TYPE.comment) && {
         role: {
           type: 'string',
-          title: t('input-your-role-title'),
+          title: t('input-role-your-title'),
           enum: caseRoleNames,
           enumNames: caseRoleStrings,
           default: caseRoleNames?.[0],
@@ -94,7 +94,10 @@ export default function CasePostAddDialog({
           type: 'string',
           title: t('input-case-confirm-title'),
           enum: [CONFIRMATION_TYPE.confirmation, CONFIRMATION_TYPE.denial],
-          enumNames: [t('text-i-confirm'), t('text-i-deny')],
+          enumNames: [
+            t('text-confirmation-i-confirm'),
+            t('text-confirmation-i-deny'),
+          ],
         },
       }),
     },

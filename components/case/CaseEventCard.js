@@ -28,7 +28,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-become-a').toLowerCase()}{' '}
+              {t('text-event-become-a').toLowerCase()}{' '}
               {Object.values(CASE_ROLE).map((role) =>
                 role.id === caseEvent.data.role ? role.name : null,
               )}
@@ -43,7 +43,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-added').toLowerCase()} {caseEvent.data.type}
+              {t('text-event-added').toLowerCase()} {caseEvent.data.type}
             </Typography>
           </Stack>
         )}
@@ -51,7 +51,7 @@ export default function CaseEventCard({ caseEvent }) {
         {caseEvent.type === 'stageChanged' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-case-stange-changed-to')} &quot;
+              {t('text-event-case-stange-changed-to')} &quot;
               {t(CASE_STAGE_KEY[caseEvent.data.stage])}
               &quot;
             </Typography>
@@ -65,7 +65,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-made-verdict').toLowerCase}
+              {t('text-event-made-verdict').toLowerCase}
             </Typography>
           </Stack>
         )}
@@ -77,7 +77,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-cancelled-case').toLowerCase()}
+              {t('text-event-cancelled-case').toLowerCase()}
             </Typography>
           </Stack>
         )}

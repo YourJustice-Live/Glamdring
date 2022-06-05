@@ -119,7 +119,7 @@ export function Sidebar() {
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
           {account && !accountProfile && (
             <NextLink href="/profile/create" passHref>
-              <Link underline="none">{t('button-create-own-profile')}</Link>
+              <Link underline="none">{t('button-create-profile-own')}</Link>
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>

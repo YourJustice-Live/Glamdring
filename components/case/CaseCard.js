@@ -70,7 +70,9 @@ export default function CaseCard({ caseObject }) {
           }
           sx={{ width: 1, mt: 3 }}
         >
-          {isDetailed ? t('button-hide-details') : t('button-view-details')}
+          {isDetailed
+            ? t('button-case-hide-details')
+            : t('button-case-view-details')}
         </Button>
         <Collapse in={isDetailed}>
           <CaseTabs

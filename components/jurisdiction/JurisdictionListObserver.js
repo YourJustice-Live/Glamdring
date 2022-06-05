@@ -152,15 +152,15 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
       },
       memberProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-citizen-profile-title'),
+        title: t('input-profile-citizen-title'),
       },
       judgeProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-judge-profile-title'),
+        title: t('input-profile-judge-title'),
       },
       adminProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-admin-profile-title'),
+        title: t('input-profile-admin-title'),
       },
     },
   };

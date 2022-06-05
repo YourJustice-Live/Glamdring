@@ -180,27 +180,27 @@ function FiltersDialog({
       },
       subjectProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-subject-profile-title'),
+        title: t('input-profile-subject-title'),
       },
       affectedProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-affected-profile-title'),
+        title: t('input-profile-affected-title'),
       },
       judgeProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-judge-profile-title'),
+        title: t('input-profile-judge-title'),
       },
       witnessProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-witness-profile-title'),
+        title: t('input-profile-witness-title'),
       },
       plaintiffProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-plaintiff-profile-title'),
+        title: t('input-profile-plaintiff-title'),
       },
       adminProfileAccount: {
         type: ['string', 'null'],
-        title: t('input-admin-profile-title'),
+        title: t('input-profile-admin-title'),
       },
       participantProfileAccount: {
         type: ['string', 'null'],

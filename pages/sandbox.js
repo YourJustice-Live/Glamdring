@@ -19,9 +19,9 @@ export default function Sandbox() {
   return (
     <Layout title={t('page-title-sandbox')} enableSidebar={!!account}>
       <Stack spacing={2}>
-        <Typography>{t('sandbox-page-headline')}</Typography>
+        <Typography>{t('page-sandbox-headline')}</Typography>
         <Button variant="contained" onClick={play}>
-          {t('button-play')}
+          {t('button-sandbox-play')}
         </Button>
       </Stack>
     </Layout>

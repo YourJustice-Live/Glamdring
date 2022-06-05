@@ -79,7 +79,7 @@ export default function Cases() {
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >
-                    {t('text-awaiting-my-confirmation')}
+                    {t('text-my-awaiting-confirmation')}
                   </Badge>
                 }
                 sx={{ px: 4 }}
@@ -95,7 +95,7 @@ export default function Cases() {
                     variant="dot"
                     sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
                   >
-                    {t('text-awaiting-my-judging')}
+                    {t('text-my-awaiting-judging')}
                   </Badge>
                 }
                 sx={{ px: 4 }}

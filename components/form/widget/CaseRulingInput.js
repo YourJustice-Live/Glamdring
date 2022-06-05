@@ -15,10 +15,10 @@ export default function CaseRulingInput(props) {
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       <Paper variant="outlined" sx={{ p: 2 }}>
         {propsType === 'judge' ? (
-          <Typography>{t('text-ruling-judge-description')}</Typography>
+          <Typography>{t('text-rule-ruling-judge-description')}</Typography>
         ) : (
           <Typography>
-            {t('text-ruling-type-is')}{' '}
+            {t('text-rule-ruling-type-is')}{' '}
             <b>&apos;{propsType || t('text-unknown').toLowerCase()}&apos;</b>.
           </Typography>
         )}

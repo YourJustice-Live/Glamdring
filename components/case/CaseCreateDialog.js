@@ -103,7 +103,7 @@ export default function CaseCreateDialog({
       isPositive: {
         type: 'boolean',
         title: '',
-        enumNames: [t('text-positive-laws'), t('text-negative-laws')],
+        enumNames: [t('text-laws-positive'), t('text-laws-negative')],
         default: true,
       },
       actionGuid: {
@@ -513,7 +513,7 @@ export default function CaseCreateDialog({
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
-      <DialogTitle>{t('dialog-create-case-title')}</DialogTitle>
+      <DialogTitle>{t('dialog-case-create-title')}</DialogTitle>
       <DialogContent>
         {/* Loading process */}
         {status === STATUS.isLoading && (
@@ -531,7 +531,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountRequired && (
           <>
             <Typography>
-              {t('text-wallet-required-before-creating-case')}
+              {t('text-case-creating-require-connect-wallet')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -542,7 +542,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconWallet color={palette.primary.contrastText} />}
             >
-              {t('button-connect-wallet')}
+              {t('button-wallet-connect')}
             </Button>
           </>
         )}
@@ -550,7 +550,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountProfileRequired && (
           <>
             <Typography>
-              {t('text-profile-required-before-creating-case')}
+              {t('text-case-creating-require-create-profile')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -561,7 +561,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconProfile color={palette.primary.contrastText} />}
             >
-              {t('button-create-profile')}
+              {t('button-profile-create')}
             </Button>
           </>
         )}
@@ -569,7 +569,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isJoiningToJurisdictionRequired && (
           <>
             <Typography>
-              {t('text-jurisdiction-required-before-creating-case')}
+              {t('text-case-creating-require-join-jurisdiction')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -579,7 +579,7 @@ export default function CaseCreateDialog({
                 close();
               }}
             >
-              {t('button-open-jurisdiction')}
+              {t('button-jurisdiction-open')}
             </Button>
           </>
         )}
@@ -632,7 +632,7 @@ export default function CaseCreateDialog({
               ) : (
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">
-                    {t('button-create-case')}
+                    {t('button-case-create')}
                   </Button>
                   <Button variant="outlined" onClick={close}>
                     {t('button-cancel')}

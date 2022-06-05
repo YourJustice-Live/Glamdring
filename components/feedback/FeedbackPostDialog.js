@@ -51,7 +51,7 @@ export default function FeedbackPostDialog({
   async function submit({ formData }) {
     try {
       if (!recaptchaRef.current.getValue()) {
-        throw new Error(t('text-invalid-captcha'));
+        throw new Error(t('text-error-invalid-captcha'));
       }
       setFormData(formData);
       setIsLoading(true);

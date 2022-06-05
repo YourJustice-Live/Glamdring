@@ -126,9 +126,9 @@ export default function CaseVerdictMakeDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>{t('dialog-make-verdict-title')}</DialogTitle>
+      <DialogTitle>{t('dialog-case-make-verdict-title')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('dialog-make-verdict-description')}</Typography>
+        <Typography>{t('dialog-case-make-verdict-description')}</Typography>
         <Divider sx={{ mt: 2 }} />
         <Form
           schema={schema}
@@ -150,7 +150,7 @@ export default function CaseVerdictMakeDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {t('button-make-verdict')}
+                  {t('button-case-make-verdict')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}

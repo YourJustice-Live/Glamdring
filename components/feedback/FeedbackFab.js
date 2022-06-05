@@ -22,7 +22,7 @@ export default function FeedbackFab() {
       }}
       onClick={() => showDialog(<FeedbackPostDialog onClose={closeDialog} />)}
     >
-      {t('button-post-feedback')}
+      {t('button-feedback-post')}
     </Fab>
   );
 }

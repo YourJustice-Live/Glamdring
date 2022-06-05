@@ -203,7 +203,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
             )
           }
         >
-          {t('button-create-case')}
+          {t('button-case-create')}
         </Button>
       )}
       {account && isMember !== null && !isJoiningOrLeaving && (
@@ -218,7 +218,9 @@ function JurisdictionActions({ jurisdiction, sx }) {
           }
           onClick={joinOrLeave}
         >
-          {isMember ? t('button-leave') : t('button-join')}
+          {isMember
+            ? t('button-jurisdiction-leave')
+            : t('button-jurisdiction-join')}
         </Button>
       )}
       {account && isMember !== null && isJoiningOrLeaving && (
@@ -259,7 +261,7 @@ function ProfileRequireDialog({ isClose, onClose }) {
           }}
           startIcon={<IconProfile color={palette.primary.contrastText} />}
         >
-          {t('button-create-profile')}
+          {t('button-profile-create')}
         </Button>
       </DialogContent>
     </Dialog>

@@ -64,10 +64,10 @@ export default function JurisdictionLawsManage() {
           {/* Rules */}
           <Box>
             <Typography variant="h2" gutterBottom>
-              {t('jurisdiction-laws-manage-page-rules-headline')}
+              {t('page-jurisdictions-laws-manage-rules-headline')}
             </Typography>
             <Typography gutterBottom>
-              {t('jurisdiction-laws-manage-page-rules-supporting-headline')}
+              {t('page-jurisdictions-laws-manage-rules-supporting-headline')}
             </Typography>
             <Divider />
             <Button
@@ -82,17 +82,17 @@ export default function JurisdictionLawsManage() {
               }
               sx={{ mt: 2.5 }}
             >
-              {t('button-add-rule')}
+              {t('button-rule-add')}
             </Button>
             <RuleTable jurisdiction={jurisdiction} sx={{ mt: 2.5 }} />
           </Box>
           {/* Actions */}
           <Box sx={{ mt: 12 }}>
             <Typography variant="h2" gutterBottom>
-              {t('jurisdiction-laws-manage-page-actions-headline')}
+              {t('page-jurisdictions-laws-manage-actions-headline')}
             </Typography>
             <Typography gutterBottom>
-              {t('jurisdiction-laws-manage-page-actions-supporting-headline')}
+              {t('page-jurisdictions-laws-manage-actions-supporting-headline')}
             </Typography>
             <Divider />
             <Button
@@ -102,7 +102,7 @@ export default function JurisdictionLawsManage() {
               }
               sx={{ mt: 2.5 }}
             >
-              {t('button-add-action')}
+              {t('button-action-add')}
             </Button>
             <ActionTable sx={{ mt: 2.5 }} />
           </Box>
