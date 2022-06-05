@@ -2,6 +2,7 @@ import { IconButton, Link, Tooltip, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import useToasts from 'hooks/useToasts';
 import { IconCopy, IconLink } from 'icons/core';
+import { useTranslation } from 'next-i18next';
 import { formatAddress } from 'utils/formatters';
 
 /**
@@ -15,6 +16,7 @@ export default function InteractiveAddress({
   isCopyLinkButtonEnabled = true,
   sx,
 }) {
+  const { t } = useTranslation('common');
   const { showToastSuccess } = useToasts();
 
   if (address) {
@@ -44,14 +46,14 @@ export default function InteractiveAddress({
           )}
         </Typography>
         {isCopyAddressButtonEnabled && (
-          <Tooltip title="Copy address to clipboard">
+          <Tooltip title={t('text-copy-address-to-clipboard')}>
             <IconButton
               color="primary"
-              aria-label="Copy address to clipboard"
+              aria-label={t('text-copy-address-to-clipboard')}
               sx={{ p: '3px' }}
               onClick={() => {
                 navigator.clipboard.writeText(address);
-                showToastSuccess('Address is copied');
+                showToastSuccess(t('notification-address-is-copied'));
               }}
             >
               <IconCopy width="18" height="18" />
@@ -59,14 +61,14 @@ export default function InteractiveAddress({
           </Tooltip>
         )}
         {isCopyLinkButtonEnabled && (
-          <Tooltip title="Copy link to clipboard">
+          <Tooltip title={t('text-copy-link-to-clipboard')}>
             <IconButton
               color="primary"
-              aria-label="Copy link to clipboard"
+              aria-label={t('text-copy-link-to-clipboard')}
               sx={{ p: '3px' }}
               onClick={() => {
                 navigator.clipboard.writeText(link);
-                showToastSuccess('Link is copied');
+                showToastSuccess(t('notification-link-is-copied'));
               }}
             >
               <IconLink width="18" height="18" />

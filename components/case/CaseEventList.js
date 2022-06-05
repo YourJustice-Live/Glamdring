@@ -1,10 +1,13 @@
 import { Card, CardContent, Skeleton, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 import CaseEventCard from './CaseEventCard';
 
 /**
  * A component with a list of case events.
  */
 export default function CaseEventList({ caseEvents, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Stack spacing={2} sx={{ ...sx }}>
       {!caseEvents && (
@@ -29,7 +32,7 @@ export default function CaseEventList({ caseEvents, sx }) {
       {caseEvents && caseEvents.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 3 }}>
-            <Typography>No Pending Events</Typography>
+            <Typography>{t('text-no-events')}</Typography>
           </CardContent>
         </Card>
       )}

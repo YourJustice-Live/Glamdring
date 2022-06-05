@@ -67,7 +67,7 @@ export default function CasePostAddDialog({
         postType === POST_TYPE.comment) && {
         role: {
           type: 'string',
-          title: 'Your Role',
+          title: t('input-role-title'),
           enum: caseRoleNames,
           enumNames: caseRoleStrings,
           default: caseRoleNames?.[0],
@@ -85,16 +85,16 @@ export default function CasePostAddDialog({
         postType === POST_TYPE.confirmation) && {
         message: {
           type: 'string',
-          title: 'Message',
+          title: t('input-message-title'),
         },
       }),
       // Confirmation type input
       ...(postType === POST_TYPE.confirmation && {
         confirmationType: {
           type: 'string',
-          title: 'Do you confirm this case?',
+          title: t('input-case-confirm-title'),
           enum: [CONFIRMATION_TYPE.confirmation, CONFIRMATION_TYPE.denial],
-          enumNames: ['Yes, I confirm', 'No, I deny'],
+          enumNames: [t('text-i-confirm'), t('text-i-deny')],
         },
       }),
     },
@@ -159,7 +159,7 @@ export default function CasePostAddDialog({
         await addPost(caseObject.id, CASE_ROLE.witness.name, url);
         handleConfirmCaseEvent(caseObject.id);
       }
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -192,9 +192,10 @@ export default function CasePostAddDialog({
       fullWidth
     >
       <DialogTitle>
-        {postType === POST_TYPE.evidence && 'Add Evidence'}
-        {postType === POST_TYPE.comment && 'Add Comment'}
-        {postType === POST_TYPE.confirmation && 'Add Confirmation'}
+        {postType === POST_TYPE.evidence && t('dialog-case-add-evidence-title')}
+        {postType === POST_TYPE.comment && t('dialog-case-add-comment-title')}
+        {postType === POST_TYPE.confirmation &&
+          'dialog-case-add-confirmation-title'}
       </DialogTitle>
       <DialogContent>
         <Form
@@ -214,15 +215,15 @@ export default function CasePostAddDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Add
+                  {t('button-add')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

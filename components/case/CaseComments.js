@@ -56,7 +56,8 @@ export default function CaseComments({ caseObject, sx }) {
                   sx={{ fontWeight: 'bold' }}
                   gutterBottom
                 >
-                  {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
+                  {hexStringToJson(post.uriData)?.commentMessage ||
+                    t('text-unknown')}
                 </Typography>
                 <Typography variant="body2">
                   {new Date(post.createdDate * 1000).toLocaleString()}
@@ -66,7 +67,7 @@ export default function CaseComments({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>No comments</Typography>
+        <Typography>{t('text-no-comments')}</Typography>
       )}
       {/* Button to add comment */}
       {caseObject?.stage === CASE_STAGE.open &&
@@ -84,7 +85,7 @@ export default function CaseComments({ caseObject, sx }) {
                 )
               }
             >
-              Add Comment
+              {t('button-add-comment')}
             </Button>
           </Box>
         )}

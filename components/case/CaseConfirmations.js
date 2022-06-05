@@ -9,11 +9,13 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A component with case witness and confirmation posts.
  */
 export default function CaseConfirmations({ caseObject, sx }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasCaseRole } = useCase();
@@ -36,7 +38,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
     <Box sx={{ ...sx }}>
       {/* Witness */}
       <Box>
-        <Typography sx={{ fontWeight: 'bold' }}>Witness</Typography>
+        <Typography sx={{ fontWeight: 'bold' }}>{t('text-witness')}</Typography>
         {caseObject?.witnessAccounts?.length > 0 ? (
           <Stack spacing={1} sx={{ mt: 1.5 }}>
             {caseObject?.witnessAccounts?.map((account, accountIndex) => (
@@ -44,13 +46,15 @@ export default function CaseConfirmations({ caseObject, sx }) {
             ))}
           </Stack>
         ) : (
-          <Typography sx={{ mt: 1 }}>No witness</Typography>
+          <Typography sx={{ mt: 1 }}>{t('text-no-witness')}</Typography>
         )}
       </Box>
       {/* Confirmations */}
       {caseObject?.witnessAccounts?.length > 0 && (
         <Box sx={{ mt: 4 }}>
-          <Typography sx={{ fontWeight: 'bold' }}>Confirmations</Typography>
+          <Typography sx={{ fontWeight: 'bold' }}>
+            {t('text-confirmations')}
+          </Typography>
           {confirmationPosts && confirmationPosts.length > 0 ? (
             <Stack spacing={1} sx={{ mt: 1.5 }}>
               {confirmationPosts.map((post, index) => {
@@ -73,7 +77,11 @@ export default function CaseConfirmations({ caseObject, sx }) {
                         }}
                         gutterBottom
                       >
-                        Witness {isConfirmed ? 'confirmed' : 'denied'} case
+                        {t('text-witness')}{' '}
+                        {isConfirmed
+                          ? t('text-confirmed').toLowerCase()
+                          : t('text-denied').toLowerCase()}{' '}
+                        {t('text-case').toLowerCase()}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -91,7 +99,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
               })}
             </Stack>
           ) : (
-            <Typography sx={{ mt: 1 }}>No confirmations</Typography>
+            <Typography sx={{ mt: 1 }}>{t('text-no-confirmations')}</Typography>
           )}
           {/* Button to add confirmation */}
           {caseObject?.stage === CASE_STAGE.open &&
@@ -109,7 +117,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
                     )
                   }
                 >
-                  Add Confirmation
+                  {t('button-add-confirmation')}
                 </Button>
               </Box>
             )}

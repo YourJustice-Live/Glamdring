@@ -15,6 +15,7 @@ import useCaseContract from 'hooks/contracts/useCaseContract';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { handleMakeCaseVerdictEvent } from 'utils/analytics';
 
@@ -27,6 +28,7 @@ export default function CaseVerdictMakeDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
@@ -54,7 +56,7 @@ export default function CaseVerdictMakeDialog({
       },
       message: {
         type: 'string',
-        title: 'Message',
+        title: t('input-message-title'),
       },
     },
   };
@@ -90,7 +92,7 @@ export default function CaseVerdictMakeDialog({
       // Use contract
       await setStageClosed(caseObject.id, verdict, verdictMetadataUri);
       handleMakeCaseVerdictEvent(caseObject.id);
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -124,11 +126,9 @@ export default function CaseVerdictMakeDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>Make Verdict</DialogTitle>
+      <DialogTitle>{t('dialog-make-verdict-title')}</DialogTitle>
       <DialogContent>
-        <Typography>
-          Select the rules you confirm and write a message for your verdict.
-        </Typography>
+        <Typography>{t('dialog-make-verdict-description')}</Typography>
         <Divider sx={{ mt: 2 }} />
         <Form
           schema={schema}
@@ -145,15 +145,15 @@ export default function CaseVerdictMakeDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Make Verdict
+                  {t('button-make-verdict')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

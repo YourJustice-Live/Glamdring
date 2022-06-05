@@ -34,7 +34,7 @@ export default function ProfileInvite() {
               sx={{ mt: 1 }}
             >
               <Construction fontSize="small" />
-              <Typography>{t('text-feature-inviting-comming-soon')}</Typography>
+              <Typography>{t('text-feature-inviting-coming-soon')}</Typography>
             </Stack>
           </Box>
         ) : (

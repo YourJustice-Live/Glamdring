@@ -69,7 +69,8 @@ export default function CaseEvidence({ caseObject, sx }) {
                     target="_blank"
                     variant="body2"
                   >
-                    {hexStringToJson(post.uriData)?.evidenceTitle || 'Unknown'}
+                    {hexStringToJson(post.uriData)?.evidenceTitle ||
+                      t('text-unknown')}
                   </Link>
                   <Typography variant="body2">
                     {new Date(post.createdDate * 1000).toLocaleString()}
@@ -80,7 +81,7 @@ export default function CaseEvidence({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>No evidence</Typography>
+        <Typography>{t('text-no-evidence')}</Typography>
       )}
       {/* Button to add evidence */}
       {caseObject?.stage === CASE_STAGE.open &&
@@ -98,7 +99,7 @@ export default function CaseEvidence({ caseObject, sx }) {
                 )
               }
             >
-              Add Evidence
+              {t('button-add-evidence')}
             </Button>
           </Box>
         )}

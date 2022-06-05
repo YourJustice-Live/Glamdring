@@ -15,6 +15,7 @@ import useCaseContract from 'hooks/contracts/useCaseContract';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { handleCancelCaseEvent } from 'utils/analytics';
 
@@ -22,6 +23,7 @@ import { handleCancelCaseEvent } from 'utils/analytics';
  * A component with dialog for cancel case.
  */
 export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
@@ -36,7 +38,7 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
     properties: {
       message: {
         type: 'string',
-        title: 'Message',
+        title: t('input-message-title'),
       },
     },
   };
@@ -57,7 +59,7 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
       );
       await setStageCancelled(caseObject.id, cancellationMetadataUri);
       handleCancelCaseEvent(caseObject.id);
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -72,11 +74,9 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>Cancel Case</DialogTitle>
+      <DialogTitle>{t('dialog-cancel-case-title')}</DialogTitle>
       <DialogContent>
-        <Typography>
-          Describe the reason why you want to cancel the case.
-        </Typography>
+        <Typography>{t('dialog-cancel-case-description')}</Typography>
         <Divider sx={{ my: 1.5 }} />
         <Form
           schema={schema}
@@ -92,15 +92,15 @@ export default function CaseCancelDialog({ caseObject, isClose, onClose }) {
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Cancel Case
+                  {t('button-cancel-case')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

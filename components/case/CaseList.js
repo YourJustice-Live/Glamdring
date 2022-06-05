@@ -1,10 +1,13 @@
 import { Card, CardContent, Skeleton, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 import CaseCard from './CaseCard';
 
 /**
  * A component with a list of cases.
  */
 export default function CaseList({ cases, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Stack spacing={4} sx={{ ...sx }}>
       {!cases && (
@@ -29,7 +32,7 @@ export default function CaseList({ cases, sx }) {
       {cases && cases.length === 0 && (
         <Card elevation={1}>
           <CardContent sx={{ p: 4 }}>
-            <Typography>No Results</Typography>
+            <Typography>{t('text-no-cases')}</Typography>
           </CardContent>
         </Card>
       )}

@@ -28,6 +28,8 @@ function CaseAddressJurisdictionCreatedDate({
   isCaseAddressLinkable,
   sx,
 }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box
       sx={{
@@ -66,7 +68,7 @@ function CaseAddressJurisdictionCreatedDate({
                 passHref
               >
                 <Link underline="none">
-                  {caseObject?.jurisdiction?.name || 'Unnamed Jurisdiction'}
+                  {caseObject?.jurisdiction?.name || t('text-unknown')}
                 </Link>
               </NextLink>
             </Typography>
@@ -121,7 +123,7 @@ function CaseAdminStage({ caseObject, sx }) {
         }}
       >
         <Typography variant="body2" sx={{ mt: 0.3, fontWeight: 'bold' }}>
-          {stageName || 'Unknown Case Stage'}
+          {stageName || t('text-unknown')}
         </Typography>
       </Box>
     </Box>

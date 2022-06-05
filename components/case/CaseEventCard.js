@@ -28,7 +28,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              become a{' '}
+              {t('text-become-a').toLowerCase()}{' '}
               {Object.values(CASE_ROLE).map((role) =>
                 role.id === caseEvent.data.role ? role.name : null,
               )}
@@ -43,7 +43,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              added {caseEvent.data.type}
+              {t('text-added').toLowerCase()} {caseEvent.data.type}
             </Typography>
           </Stack>
         )}
@@ -51,7 +51,7 @@ export default function CaseEventCard({ caseEvent }) {
         {caseEvent.type === 'stageChanged' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              Case stage changed to &quot;
+              {t('text-case-stange-changed-to')} &quot;
               {t(CASE_STAGE_KEY[caseEvent.data.stage])}
               &quot;
             </Typography>
@@ -65,7 +65,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              made verdict
+              {t('text-made-verdict').toLowerCase}
             </Typography>
           </Stack>
         )}
@@ -77,14 +77,14 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              cancelled case
+              {t('text-cancelled-case').toLowerCase()}
             </Typography>
           </Stack>
         )}
         <Divider sx={{ mt: 1, mb: 1 }} />
         {/* Case */}
         <Stack direction="row" spacing={1}>
-          <Typography variant="body2">Case:</Typography>
+          <Typography variant="body2">{t('text-case')}:</Typography>
           <Link
             href={`/case/${caseEvent.caseEntity.id}`}
             variant="body2"
@@ -96,7 +96,7 @@ export default function CaseEventCard({ caseEvent }) {
         </Stack>
         {/* Jurisdiction */}
         <Stack direction="row" spacing={1}>
-          <Typography variant="body2">Jurisdiction:</Typography>
+          <Typography variant="body2">{t('text-jurisdiction')}:</Typography>
           <Link
             href={`/jurisdiction/${caseEvent.caseEntity.jurisdiction?.id}`}
             variant="body2"
@@ -108,7 +108,7 @@ export default function CaseEventCard({ caseEvent }) {
         </Stack>
         {/* Created date */}
         <Stack direction="row" spacing={1}>
-          <Typography variant="body2">Date:</Typography>
+          <Typography variant="body2">{t('text-date')}:</Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
             {new Date(caseEvent.createdDate * 1000).toLocaleString()}
           </Typography>
