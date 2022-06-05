@@ -22,13 +22,13 @@ export default function CaseStageSelect(props) {
       {propsHeader}
       <FormControl fullWidth>
         <InputLabel id="case-stage-select-label">
-          {propsLabel || 'Case Stage'}
+          {propsLabel || t('input-case-stage-title')}
         </InputLabel>
         <Select
           labelId="case-stage-select-label"
           id="case-stage-select"
           value={value}
-          label={propsLabel || 'Case Stage'}
+          label={propsLabel || t('input-case-stage-title')}
           onChange={(event) => {
             setValue(event.target.value);
             propsOnChange(event.target.value);

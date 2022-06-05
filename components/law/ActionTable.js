@@ -12,6 +12,8 @@ import useErrors from 'hooks/useErrors';
 
 /**
  * A component with a table with actions.
+ *
+ * TODO: Move strings to localization file.
  */
 export default function ActionTable({ sx }) {
   const { showDialog, closeDialog } = useDialogContext();

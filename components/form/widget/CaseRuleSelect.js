@@ -10,6 +10,7 @@ import {
 import RuleEffects from 'components/law/RuleEffects';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { theme } from 'theme';
 import { getActionIcon } from 'utils/metadata';
@@ -27,6 +28,7 @@ export default function CaseRuleSelect(props) {
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const propsFormAction = props.formContext?.formAction;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getJurisdictionRules } = useJurisdiction();
   const [rules, setRules] = useState(null);
@@ -98,13 +100,13 @@ export default function CaseRuleSelect(props) {
                         mr: 0.5,
                       }}
                     >
-                      NOT
+                      {t('text-action-negation')}
                     </Typography>
                   )}
                   <Typography
                     sx={{ fontWeight: 'bold', mr: 1, mt: { xs: 0.2, md: 0 } }}
                   >
-                    {rule?.rule?.uriData?.name || 'None Name'}
+                    {rule?.rule?.uriData?.name || t('text-none-name')}
                   </Typography>
                   <Chip
                     label={`ID: ${rule.ruleId}`}

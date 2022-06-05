@@ -19,6 +19,7 @@ import { createRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { theme } from 'theme';
 import useErrors from 'hooks/useErrors';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A dialog for post feedback.
@@ -29,6 +30,7 @@ export default function FeedbackPostDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
@@ -49,14 +51,12 @@ export default function FeedbackPostDialog({
   async function submit({ formData }) {
     try {
       if (!recaptchaRef.current.getValue()) {
-        throw new Error('Invalid CAPTCHA');
+        throw new Error(t('text-invalid-captcha'));
       }
       setFormData(formData);
       setIsLoading(true);
       submitForm(form.recepients, form.type, account, formData, additionalData);
-      showToastSuccess(
-        'Thanks! Together we will create fair and open justice!',
-      );
+      showToastSuccess(t('notification-thanks-for-feedback'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -96,7 +96,7 @@ export default function FeedbackPostDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
@@ -105,14 +105,14 @@ export default function FeedbackPostDialog({
                   type="submit"
                   sx={{ minWidth: 100 }}
                 >
-                  Post
+                  {t('button-post')}
                 </Button>
                 <Button
                   variant="outlined"
                   onClick={onClose}
                   sx={{ minWidth: 100 }}
                 >
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

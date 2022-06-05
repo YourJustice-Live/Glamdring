@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { PROFILE_ORDER } from 'constants/subgraph';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 /**
@@ -10,26 +11,27 @@ export default function ProfileOrderSelect(props) {
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const [value, setValue] = useState(propsValue);
 
   return (
     <FormControl sx={{ ...propsSx }} size={propsSize}>
-      <InputLabel id="profile-order-select-label">Order</InputLabel>
+      <InputLabel id="profile-order-select-label">{t('text-order')}</InputLabel>
       <Select
         labelId="profile-order-select-label"
         id="profile-order-select"
         value={value}
-        label="Order"
+        label={t('text-order')}
         onChange={(event) => {
           setValue(event.target.value);
           propsOnChange(event.target.value);
         }}
       >
         <MenuItem value={PROFILE_ORDER.byPositiveRating}>
-          Order by Positive Reputation
+          {t('text-order-by-positive-reputation')}
         </MenuItem>
         <MenuItem value={PROFILE_ORDER.byNegativeRating}>
-          Order by Negative Reputation
+          {t('text-order-by-negative-reputation')}
         </MenuItem>
       </Select>
     </FormControl>

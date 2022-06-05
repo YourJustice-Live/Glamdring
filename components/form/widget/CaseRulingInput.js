@@ -1,4 +1,5 @@
 import { Divider, Paper, Typography } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A widget to input ruling (non-interactive).
@@ -6,6 +7,7 @@ import { Divider, Paper, Typography } from '@mui/material';
 export default function CaseRulingInput(props) {
   const propsLabel = props.label;
   const propsType = props.options?.type;
+  const { t } = useTranslation('common');
 
   return (
     <>
@@ -13,13 +15,11 @@ export default function CaseRulingInput(props) {
       <Divider sx={{ mt: 1.5, mb: 2.5 }} />
       <Paper variant="outlined" sx={{ p: 2 }}>
         {propsType === 'judge' ? (
-          <Typography>
-            Judge will be selected <b>randomly</b>. To avoid bias and
-            corruption.
-          </Typography>
+          <Typography>{t('text-ruling-judge-description')}</Typography>
         ) : (
           <Typography>
-            Ruling type is <b>&apos;{propsType || 'unknown'}&apos;</b>.
+            {t('text-ruling-type-is')}{' '}
+            <b>&apos;{propsType || t('text-unknown').toLowerCase()}&apos;</b>.
           </Typography>
         )}
       </Paper>

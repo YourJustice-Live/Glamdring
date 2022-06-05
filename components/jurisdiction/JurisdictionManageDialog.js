@@ -13,6 +13,7 @@ import useHubContract from 'hooks/contracts/useHubContract';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import {
   handleMakeJurisdiction,
@@ -27,6 +28,7 @@ export default function JurisdictionManageDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { makeJurisdiction } = useHubContract();
@@ -43,17 +45,17 @@ export default function JurisdictionManageDialog({
       ...(jurisdiction && {
         id: {
           type: 'string',
-          title: 'ID (Address)',
+          title: t('input-jurisdiction-id-title'),
         },
       }),
       name: {
         type: 'string',
-        title: 'Name',
+        title: t('input-name-title'),
         default: '',
       },
       uri: {
         type: 'string',
-        title: 'Metadata',
+        title: t('input-jurisdiction-metadata-title'),
         default: '',
       },
     },
@@ -70,7 +72,7 @@ export default function JurisdictionManageDialog({
       'ui:emptyValue': '',
       'ui:widget': 'MetadataInput',
       'ui:options': {
-        subLabel: 'Jurisdiction image and description',
+        subLabel: t('input-jurisdiction-metadata-description'),
         fields: {
           image: {
             type: 'string',
@@ -78,7 +80,7 @@ export default function JurisdictionManageDialog({
           },
           description: {
             type: 'string',
-            title: 'Description',
+            title: t('input-name-description'),
           },
         },
       },
@@ -107,7 +109,7 @@ export default function JurisdictionManageDialog({
         await makeJurisdiction(formData.name, formData.uri);
         handleMakeJurisdiction();
       }
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -118,7 +120,9 @@ export default function JurisdictionManageDialog({
   return (
     <Dialog open={isOpen} onClose={isLoading ? null : close}>
       <DialogTitle>
-        {jurisdiction ? 'Update Jurisdiction' : 'Create Jurisdiction'}
+        {jurisdiction
+          ? t('dialog-update-jurisdiction-title')
+          : t('dialog-create-jurisdiction-title')}
       </DialogTitle>
       <DialogContent>
         <Form
@@ -137,15 +141,17 @@ export default function JurisdictionManageDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {jurisdiction ? 'Update Jurisdiction' : 'Create Jurisdiction'}
+                  {jurisdiction
+                    ? t('button-update-jurisdiction')
+                    : 'button-create-jurisdiction'}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

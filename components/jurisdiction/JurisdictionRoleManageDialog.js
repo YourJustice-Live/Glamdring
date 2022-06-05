@@ -13,6 +13,7 @@ import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 /**
@@ -24,6 +25,7 @@ export default function RoleManageDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { assignRole, removeRole } = useJuridictionContract();
@@ -37,11 +39,11 @@ export default function RoleManageDialog({
     properties: {
       account: {
         type: 'string',
-        title: 'Account',
+        title: t('input-account-title'),
       },
       role: {
         type: 'string',
-        title: 'Role',
+        title: t('input-role-title'),
         default: JURISDICTION_ROLE.member.name,
         enum: [
           JURISDICTION_ROLE.member.name,
@@ -59,7 +61,7 @@ export default function RoleManageDialog({
 
   const uiSchema = {
     account: {
-      'ui:placeholder': '0x430...',
+      'ui:placeholder': t('input-account-placeholder'),
     },
   };
 
@@ -79,7 +81,7 @@ export default function RoleManageDialog({
       } else {
         await removeRole(jurisdiction?.id, formData.account, formData.role);
       }
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -89,7 +91,11 @@ export default function RoleManageDialog({
 
   return (
     <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
-      <DialogTitle>{isAssign ? 'Assign Role' : 'Remove Role'}</DialogTitle>
+      <DialogTitle>
+        {isAssign
+          ? t('dialog-assign-role-title')
+          : t('dialog-remove-role-title')}
+      </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -106,15 +112,15 @@ export default function RoleManageDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {isAssign ? 'Assign Role' : 'Remove Role'}
+                  {isAssign ? t('button-assign-role') : t('button-remove-role')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}

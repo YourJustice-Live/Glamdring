@@ -15,6 +15,8 @@ import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a table with jurisdiction rules.
+ *
+ * TODO: Move strings to localization file.
  */
 export default function RuleTable({ jurisdiction, sx }) {
   const { showDialog, closeDialog } = useDialogContext();

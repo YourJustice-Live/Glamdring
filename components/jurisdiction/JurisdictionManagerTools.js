@@ -2,6 +2,7 @@ import { Alert, Button, Stack, Typography } from '@mui/material';
 import RoleManageDialog from 'components/jurisdiction/JurisdictionRoleManageDialog';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
@@ -11,6 +12,7 @@ import JurisdictionManageDialog from './JurisdictionManageDialog';
  * A component with jurisdiction manager tools.
  */
 export default function JurisdictionManagerTools({ jurisdiction, sx }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const router = useRouter();
@@ -28,10 +30,10 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
         onClose={() => setIsVisible(false)}
       >
         <Typography variant="h4" gutterBottom>
-          Manager Tools
+          {t('alert-manager-tools-title')}
         </Typography>
         <Typography gutterBottom>
-          Features for users with appropriate roles to manage this jurisdiction
+          {t('alert-manager-tools-description')}
         </Typography>
         <Stack
           direction={{ xs: 'column', md: 'row' }}
@@ -51,7 +53,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
                 )
               }
             >
-              Update Jurisdiction
+              {t('button-update-jurisdiction')}
             </Button>
           )}
           <Button
@@ -67,7 +69,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               )
             }
           >
-            Assign Role
+            {t('button-assign-role')}
           </Button>
           <Button
             variant="outlined"
@@ -82,7 +84,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               )
             }
           >
-            Remove Role
+            {t('button-remove-role')}
           </Button>
           <Button
             variant="outlined"
@@ -91,7 +93,7 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
               router.push(`/jurisdiction/${jurisdiction.id}/laws/manage`)
             }
           >
-            Manage Laws
+            {t('button-manage-laws')}
           </Button>
         </Stack>
       </Alert>

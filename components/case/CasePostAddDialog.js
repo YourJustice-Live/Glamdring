@@ -67,7 +67,7 @@ export default function CasePostAddDialog({
         postType === POST_TYPE.comment) && {
         role: {
           type: 'string',
-          title: t('input-role-title'),
+          title: t('input-your-role-title'),
           enum: caseRoleNames,
           enumNames: caseRoleStrings,
           default: caseRoleNames?.[0],
