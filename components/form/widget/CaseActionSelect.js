@@ -3,6 +3,7 @@ import useAction from 'hooks/useAction';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { throttle, unionWith } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
 
@@ -20,6 +21,7 @@ export default function CaseActionSelect(props) {
   const propsOnChange = props.onChange;
   const propsJurisdiction = props.formContext?.jurisdiction;
   const propsIsPositive = props.formContext?.formData?.isPositive;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getActions } = useAction();
   const { getJurisdictionRulesBySearchQuery } = useJurisdiction();
@@ -113,7 +115,7 @@ export default function CaseActionSelect(props) {
       {propsHeader}
       <Autocomplete
         disabled={propsDisabled}
-        getOptionLabel={(option) => option.uriData?.name || 'None Name'}
+        getOptionLabel={(option) => option.uriData?.name || t('text-none-name')}
         filterOptions={(x) => x}
         options={options}
         value={value}
@@ -129,8 +131,8 @@ export default function CaseActionSelect(props) {
           <TextField
             fullWidth
             {...params}
-            label={propsLabel || 'Action'}
-            placeholder="Search by action, acted or affected role"
+            label={propsLabel || t('input-action-title')}
+            placeholder={t('input-action-placeholder')}
             required={propsRequired}
           />
         )}
@@ -155,7 +157,7 @@ export default function CaseActionSelect(props) {
                   }}
                 >
                   <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                    {option.uriData?.name || 'None Name'}
+                    {option.uriData?.name || t('text-none-name')}
                   </Typography>
                   <Typography variant="body2">
                     {option.uriData?.description}

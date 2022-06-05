@@ -15,6 +15,7 @@ import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
 import { IconFilter3 } from 'icons/core';
 import { isEmpty } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import CaseList from './CaseList';
@@ -29,6 +30,7 @@ export default function CaseListObserver({
   isParticipantInputDisabled,
   sx,
 }) {
+  const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();
   const { handleError } = useErrors();
   const { getCases } = useCase();
@@ -133,7 +135,7 @@ export default function CaseListObserver({
               )
             }
           >
-            Filters
+            {t('button-filters')}
           </Button>
         )}
         <Pagination
@@ -157,6 +159,7 @@ function FiltersDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const [formData, setFormData] = useState(filters || {});
   const [isOpen, setIsOpen] = useState(!isClose);
 
@@ -165,11 +168,11 @@ function FiltersDialog({
     properties: {
       description: {
         type: ['string', 'null'],
-        title: 'Case Description',
+        title: t('input-case-description-title'),
       },
       jurisdictionAddress: {
         type: ['string', 'null'],
-        title: 'Jurisdiction Address',
+        title: t('input-jurisdiction-address-title'),
       },
       stageId: {
         type: 'number',
@@ -177,31 +180,31 @@ function FiltersDialog({
       },
       subjectProfileAccount: {
         type: ['string', 'null'],
-        title: 'Acted Profile',
+        title: t('input-profile-subject-title'),
       },
       affectedProfileAccount: {
         type: ['string', 'null'],
-        title: 'Affected Profile',
+        title: t('input-profile-affected-title'),
       },
       judgeProfileAccount: {
         type: ['string', 'null'],
-        title: 'Judge Profile',
+        title: t('input-profile-judge-title'),
       },
       witnessProfileAccount: {
         type: ['string', 'null'],
-        title: 'Witness Profile',
+        title: t('input-profile-witness-title'),
       },
       plaintiffProfileAccount: {
         type: ['string', 'null'],
-        title: 'Plaintiff Profile',
+        title: t('input-profile-plaintiff-title'),
       },
       adminProfileAccount: {
         type: ['string', 'null'],
-        title: 'Admin Profile',
+        title: t('input-profile-admin-title'),
       },
       participantProfileAccount: {
         type: ['string', 'null'],
-        title: 'Profile with Any Role',
+        title: t('input-profile-with-any-role-title'),
       },
     },
   };
@@ -211,7 +214,7 @@ function FiltersDialog({
       'ui:placeholder': 'Key word, phrase',
     },
     jurisdictionAddress: {
-      'ui:placeholder': '0x8b22...',
+      'ui:placeholder': t('input-jurisdiction-address-placeholder'),
       'ui:disabled': isJurisdictionInputDisabled,
     },
     stageId: {
@@ -270,7 +273,7 @@ function FiltersDialog({
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ pb: 0 }}>Case Filters</DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>{t('dialog-case-filters-title')}</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -281,10 +284,10 @@ function FiltersDialog({
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             <Button variant="contained" type="submit">
-              Apply
+              {t('button-apply')}
             </Button>
             <Button variant="outlined" onClick={onClose}>
-              Close
+              {t('button-close')}
             </Button>
           </Stack>
         </Form>

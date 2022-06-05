@@ -1,18 +1,21 @@
 import { LinearProgress, Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { palette } from 'theme/palette';
 
 /**
  * A component with profile ratings (reputations).
  */
 export default function ProfileRatings({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   if (profile) {
     return (
       <Paper sx={{ p: 3, ...sx }}>
         {/* Total Rating */}
         <Rating
-          domain="Total Reputation"
+          domain={t('text-profile-total-reputation')}
           negativeRating={profile.avatarNftTotalNegativeRating}
           positiveRating={profile.avatarNftTotalPositiveRating}
         />

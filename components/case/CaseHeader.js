@@ -2,7 +2,8 @@ import { Divider, Link, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import InteractiveAddress from 'components/address/InteractiveAddress';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_STAGE_STRING } from 'constants/strings';
+import { CASE_STAGE_KEY } from 'constants/i18n';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -27,6 +28,8 @@ function CaseAddressJurisdictionCreatedDate({
   isCaseAddressLinkable,
   sx,
 }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box
       sx={{
@@ -65,7 +68,7 @@ function CaseAddressJurisdictionCreatedDate({
                 passHref
               >
                 <Link underline="none">
-                  {caseObject?.jurisdiction?.name || 'Unnamed Jurisdiction'}
+                  {caseObject?.jurisdiction?.name || t('text-unknown')}
                 </Link>
               </NextLink>
             </Typography>
@@ -86,13 +89,14 @@ function CaseAddressJurisdictionCreatedDate({
 }
 
 function CaseAdminStage({ caseObject, sx }) {
+  const { t } = useTranslation('common');
   const [adminAccount, setAdminAccount] = useState(null);
   const [stageName, setStageName] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
       setAdminAccount(caseObject.adminAccounts[0]);
-      setStageName(CASE_STAGE_STRING[caseObject?.stage]);
+      setStageName(t(CASE_STAGE_KEY[caseObject.stage]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
@@ -119,7 +123,7 @@ function CaseAdminStage({ caseObject, sx }) {
         }}
       >
         <Typography variant="body2" sx={{ mt: 0.3, fontWeight: 'bold' }}>
-          {stageName || 'Unknown Case Stage'}
+          {stageName || t('text-unknown')}
         </Typography>
       </Box>
     </Box>

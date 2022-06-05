@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { getTraitValue } from 'utils/metadata';
 
@@ -23,7 +24,7 @@ export default function ProfileAttributesInput(props) {
   const propsDisabled = props.disabled;
   const propsAttributes = props.value;
   const propsOnChange = props.onChange;
-
+  const { t } = useTranslation('common');
   const [attributes, setAttributes] = useState(null);
 
   function onChange(event) {
@@ -68,7 +69,7 @@ export default function ProfileAttributesInput(props) {
         <>
           <Divider sx={{ mb: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            Public Profile
+            {t('input-profile-public-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField
@@ -108,7 +109,7 @@ export default function ProfileAttributesInput(props) {
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            Contacts
+            {t('input-profile-contacts-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField
@@ -123,7 +124,7 @@ export default function ProfileAttributesInput(props) {
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
-            Links
+            {t('input-profile-links-title')}
           </Typography>
           <Stack spacing={2}>
             <TextField

@@ -37,6 +37,7 @@ import useToasts from 'hooks/useToasts';
 import { IconProfile, IconWallet } from 'icons/core';
 import { IconJurisdiction } from 'icons/entities';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -74,6 +75,7 @@ export default function CaseCreateDialog({
   };
 
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { account, connectWallet } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
@@ -101,7 +103,7 @@ export default function CaseCreateDialog({
       isPositive: {
         type: 'boolean',
         title: '',
-        enumNames: ['Positive Laws', 'Negative Laws'],
+        enumNames: [t('text-laws-positive'), t('text-laws-negative')],
         default: true,
       },
       actionGuid: {
@@ -115,7 +117,7 @@ export default function CaseCreateDialog({
         properties: {
           name: {
             type: 'string',
-            title: 'Description',
+            title: t('input-case-name-title'),
           },
           ruleId: {
             type: 'string',
@@ -135,18 +137,18 @@ export default function CaseCreateDialog({
           },
           evidencePostUri: {
             type: 'string',
-            title: 'Evidence',
+            title: '',
           },
           witnessProfileAccounts: {
             type: 'array',
-            title: 'Witnesses',
+            title: t('input-case-witnesses-title'),
             items: {
               type: 'string',
             },
             default: [],
           },
           ruling: {
-            title: 'Ruling',
+            title: t('input-case-ruling-title'),
             type: 'string',
           },
         },
@@ -171,9 +173,11 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-action-title')}
+            </Typography>
             <Typography variant="body2">
-              An action that was done within the law
+              {t('input-case-action-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -190,7 +194,7 @@ export default function CaseCreateDialog({
               mb: 0,
             }}
           >
-            <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
+            <AlertTitle>{t('alert-propose-law-title')}</AlertTitle>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body2">
                 <NextLink
@@ -202,10 +206,10 @@ export default function CaseCreateDialog({
                     underline="none"
                     sx={{ mr: 0.5, pb: 0.3 }}
                   >
-                    <strong>Look</strong>
+                    <strong>{t('alert-propose-law-button-look')}</strong>
                   </Link>
                 </NextLink>
-                at the list of all laws of the jurisdiction or
+                {t('alert-propose-law-description-1')}
                 <Link
                   component="button"
                   variant="body2"
@@ -220,9 +224,11 @@ export default function CaseCreateDialog({
                     )
                   }
                 >
-                  <strong>propose</strong>
+                  <strong>
+                    {t('alert-propose-law-button-propose').toLowerCase()}
+                  </strong>
                 </Link>
-                a law that we should add to the jurisdiction.
+                {t('alert-propose-law-description-2')}
               </Typography>
             </Box>
           </Alert>
@@ -232,7 +238,7 @@ export default function CaseCreateDialog({
     name: {
       'ui:widget': 'CaseNameInput',
       'ui:options': {
-        inputLabel: 'Describe what happened',
+        inputLabel: t('input-case-name-description'),
       },
     },
     ruleId: {
@@ -240,9 +246,11 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-rule-title')}
+            </Typography>
             <Typography variant="body2">
-              Consequences of acting within the law
+              {t('input-case-rule-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -255,14 +263,18 @@ export default function CaseCreateDialog({
         header: (
           <>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('input-case-subject-title')}
+              </Typography>
               {formAction?.action?.subject && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   ({capitalize(formAction.action.subject)})
                 </Typography>
               )}
             </Stack>
-            <Typography variant="body2">The one who did the action</Typography>
+            <Typography variant="body2">
+              {t('input-case-subject-description')}
+            </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
         ),
@@ -274,7 +286,9 @@ export default function CaseCreateDialog({
         header: (
           <>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('input-case-affected-title')}
+              </Typography>
               {formRule?.rule?.affected && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   ({capitalize(formRule.rule.affected)})
@@ -282,7 +296,7 @@ export default function CaseCreateDialog({
               )}
             </Stack>
             <Typography variant="body2">
-              The one who was affected by the action
+              {t('input-case-affected-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -294,10 +308,12 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-evidence-title')}
+            </Typography>
             <Typography variant="body2">
               {formRule?.rule?.uriData?.evidenceDescription ||
-                'Any file you deem necessary'}{' '}
+                t('input-case-evidence-description')}{' '}
               {formRule?.confirmation?.evidence && '*'}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
@@ -310,7 +326,7 @@ export default function CaseCreateDialog({
       'ui:emptyValue': [],
       'ui:options': {
         subLabel: `
-          Minimal number of witnesses:
+          ${t('input-case-witnesses-description')}:
           ${formRule?.confirmation?.witness || 0}
         `,
       },
@@ -418,7 +434,9 @@ export default function CaseCreateDialog({
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
       if (submittedFormData.witnessProfileAccounts.length < formRuleWitness) {
-        throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
+        throw new Error(
+          `${t('input-case-witnesses-description')}: ${formRuleWitness}`,
+        );
       }
       // Define case name
       const caseName = submittedFormData.name;
@@ -472,7 +490,7 @@ export default function CaseCreateDialog({
         casePosts,
       );
       handleCreateCaseEvent();
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -495,7 +513,7 @@ export default function CaseCreateDialog({
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
-      <DialogTitle>Create New Case</DialogTitle>
+      <DialogTitle>{t('dialog-case-create-title')}</DialogTitle>
       <DialogContent>
         {/* Loading process */}
         {status === STATUS.isLoading && (
@@ -513,7 +531,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to connect wallet.
+              {t('text-case-creating-require-connect-wallet')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -524,7 +542,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconWallet color={palette.primary.contrastText} />}
             >
-              Connect Wallet
+              {t('button-wallet-connect')}
             </Button>
           </>
         )}
@@ -532,7 +550,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountProfileRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to create profile.
+              {t('text-case-creating-require-create-profile')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -543,7 +561,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconProfile color={palette.primary.contrastText} />}
             >
-              Create Profile
+              {t('button-profile-create')}
             </Button>
           </>
         )}
@@ -551,7 +569,7 @@ export default function CaseCreateDialog({
         {status === STATUS.isJoiningToJurisdictionRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to join jurisdiction.
+              {t('text-case-creating-require-join-jurisdiction')}
             </Typography>
             <Button
               sx={{ mt: 4 }}
@@ -561,7 +579,7 @@ export default function CaseCreateDialog({
                 close();
               }}
             >
-              Open Jurisdiction
+              {t('button-jurisdiction-open')}
             </Button>
           </>
         )}
@@ -569,7 +587,9 @@ export default function CaseCreateDialog({
         {status >= STATUS.isFormAvailable && (
           <>
             <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-              <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('text-jurisdiction')}
+              </Typography>
               <Avatar
                 sx={{
                   width: 22,
@@ -606,16 +626,16 @@ export default function CaseCreateDialog({
                     startIcon={<Save />}
                     variant="outlined"
                   >
-                    Submitting
+                    {t('text-submitting')}
                   </LoadingButton>
                 </>
               ) : (
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">
-                    Create Case
+                    {t('button-case-create')}
                   </Button>
                   <Button variant="outlined" onClick={close}>
-                    Cancel
+                    {t('button-cancel')}
                   </Button>
                 </Stack>
               )}

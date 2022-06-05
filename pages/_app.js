@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { DataProvider } from 'contexts/data';
 import { DialogProvider } from 'contexts/dialog';
 import { Web3Provider } from 'contexts/web3';
+import { appWithTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
@@ -51,4 +52,4 @@ function App({ Component, pageProps }) {
   );
 }
 
-export default App;
+export default appWithTranslation(App);

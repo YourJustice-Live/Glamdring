@@ -7,6 +7,8 @@ import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconPassport, IconPlus } from 'icons/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -14,6 +16,7 @@ import { palette } from 'theme/palette';
  * Page with list of all jurisdictions.
  */
 export default function Jurisdictions() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
@@ -24,12 +27,12 @@ export default function Jurisdictions() {
   }
 
   return (
-    <Layout title={'YourJustice / Jurisdictions'} enableSidebar={!!account}>
+    <Layout title={t('page-title-jurisdictions')} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconPassport color={palette.text.primary} width="24" height="24" />
           <Typography variant="h3" sx={{ ml: 1 }}>
-            Jurisdictions
+            {t('text-jurisdictions')}
           </Typography>
         </Box>
         {accountProfile && (
@@ -42,7 +45,7 @@ export default function Jurisdictions() {
               showDialog(<JurisdictionManageDialog onClose={closeDialog} />)
             }
           >
-            Create
+            {t('button-create')}
           </Button>
         )}
       </Box>
@@ -60,10 +63,10 @@ export default function Jurisdictions() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
-              <Tab label="All" value="1" />
-              <Tab label="My Citizenship" value="2" />
-              <Tab label="My Judging" value="3" />
-              <Tab label="My Administration" value="4" />
+              <Tab label={t('text-all')} value="1" />
+              <Tab label={t('text-my-citizenship')} value="2" />
+              <Tab label={t('text-my-judging')} value="3" />
+              <Tab label={t('text-my-administration')} value="4" />
             </TabList>
             <TabPanel value="1" sx={{ px: 0 }}>
               <JurisdictionListObserver />
@@ -99,4 +102,15 @@ export default function Jurisdictions() {
       )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

@@ -3,6 +3,7 @@ import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { throttle, unionWith } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
@@ -18,6 +19,7 @@ export default function ProfileSelect(props) {
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -107,8 +109,8 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || 'Soul Search'}
-            placeholder="Search by name or address"
+            label={propsLabel || t('input-profile-title')}
+            placeholder={t('input-profile-placeholder')}
             required={propsRequired}
           />
         )}

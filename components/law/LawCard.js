@@ -18,6 +18,7 @@ import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import RuleEffects from 'components/law/RuleEffects';
 import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/context/useDialogContext';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
 
@@ -30,6 +31,7 @@ export default function LawCard({
   isCommentsEnabled = false,
   sx,
 }) {
+  const { t } = useTranslation('common');
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
@@ -54,7 +56,9 @@ export default function LawCard({
                 />
               }
             >
-              <Typography sx={{ fontWeight: 'bold' }}>Rules</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('text-rules')}
+              </Typography>
             </Button>
             <Collapse in={!isCollapsed}>
               <LawRules
@@ -77,13 +81,15 @@ export default function LawCard({
 }
 
 function LawAction({ law }) {
+  const { t } = useTranslation('common');
+
   if (law?.action) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         {getActionIcon(law.action, 36)}
         <Box sx={{ ml: 1.5 }}>
           <Typography sx={{ fontWeight: 'bold' }}>
-            {law.action.uriData?.name || 'None Action Name'}
+            {law.action.uriData?.name || t('text-none-name')}
           </Typography>
           {law.action.uriData?.description && (
             <Typography variant="body2" sx={{ mt: 0.3 }}>
@@ -99,6 +105,7 @@ function LawAction({ law }) {
 }
 
 function LawRules({ law, isCommentsEnabled, sx }) {
+  const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();
 
   if (law?.rules) {
@@ -131,11 +138,11 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                         mr: 0.5,
                       }}
                     >
-                      NOT
+                      {t('text-action-negation').toUpperCase()}
                     </Typography>
                   )}
                   <Typography sx={{ fontWeight: 'bold', mr: 1 }}>
-                    {rule?.rule?.uriData?.name || 'None Rule Name'}
+                    {rule?.rule?.uriData?.name || t('text-none-name')}
                   </Typography>
                 </Box>
                 {/* Description */}
@@ -146,7 +153,7 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                 )}
                 {/* Id */}
                 <Chip
-                  label={`ID: ${rule?.ruleId || 'None'}`}
+                  label={`ID: ${rule?.ruleId || t('text-none')}`}
                   size="small"
                   sx={{ mt: 1 }}
                 />
@@ -161,7 +168,7 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                   sx={{ mr: 1, color: 'text.secondary' }}
                 />
                 <Typography variant="body2" color="text.secondary">
-                  Do you have an idea how to improve the law?
+                  {t('alert-propost-law-edits-description-1')}
                   <Link
                     component="button"
                     variant="body2"
@@ -177,9 +184,11 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                       )
                     }
                   >
-                    <strong>Propose</strong>
+                    <strong>
+                      {t('alert-propose-law-edits-button-propose')}
+                    </strong>
                   </Link>
-                  edits or additions.
+                  {t('alert-propose-law-edits-description-2')}
                 </Typography>
               </Box>
             )}

@@ -10,6 +10,8 @@ import ProfileRatings from 'components/profile/ProfileRatings';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -17,6 +19,7 @@ import { useEffect, useState } from 'react';
  * Page with profile data.
  */
 export default function Profile() {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const { queryAccount } = router.query;
   const { account } = useWeb3Context();
@@ -40,7 +43,10 @@ export default function Profile() {
   }, [queryAccount]);
 
   return (
-    <Layout title={'YourJustice / Profile'} enableSidebar={!!account}>
+    <Layout
+      title={`${t('page-title-profile')} ${queryAccount}`}
+      enableSidebar={!!account}
+    >
       <ProfileMeta profile={profile} />
       <ProfileRatings profile={profile} sx={{ mt: 4 }} />
       <ProfileCaseStats profile={profile} sx={{ mt: 6 }} />
@@ -58,7 +64,7 @@ export default function Profile() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
-              <Tab label="Cases" value="1" />
+              <Tab label={t('text-cases')} value="1" />
             </TabList>
             <TabPanel value="1" sx={{ px: 0 }}>
               <CaseListObserver
@@ -73,4 +79,15 @@ export default function Profile() {
       )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts before rendering the page.
+ */
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

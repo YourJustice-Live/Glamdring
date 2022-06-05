@@ -1,11 +1,14 @@
 import { Divider, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useTranslation } from 'next-i18next';
 import { palette } from 'theme/palette';
 
 /**
  * A component with profile case stats.
  */
 export default function ProfileCaseStats({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   if (profile) {
     const totalCases =
       Number(profile.avatarNftTotalPositiveCases) +
@@ -18,15 +21,18 @@ export default function ProfileCaseStats({ profile, sx }) {
         spacing={2}
         sx={{ px: 4, ...sx }}
       >
-        <Stats value={totalCases} title="CASES" />
+        <Stats
+          value={totalCases}
+          title={t('text-profile-cases').toUpperCase()}
+        />
         <Stats
           value={profile.avatarNftTotalPositiveCases}
-          title="POSITIVE"
+          title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Stats
           value={profile.avatarNftTotalNegativeCases}
-          title="NEGATIVE"
+          title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />
       </Stack>

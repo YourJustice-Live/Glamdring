@@ -22,6 +22,7 @@ import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import { IconProfile } from 'icons/core';
 import { IconMember } from 'icons/entities';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 import { formatProfileFirstLastName } from 'utils/formatters';
@@ -62,6 +63,8 @@ export default function ProfileMeta({ profile }) {
 }
 
 function ProfileTop({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box
       sx={{
@@ -73,7 +76,7 @@ function ProfileTop({ profile, sx }) {
     >
       <IconProfile color={palette.text.secondary} width="18" height="18" />
       <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        HUMAN
+        {t('text-profile').toUpperCase()}
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
       <InteractiveAddress
@@ -193,13 +196,15 @@ function ProfileLinks({ profile, sx }) {
 }
 
 function ProfileEditButton({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   const { account } = useWeb3Context();
   if (profile?.account?.toLowerCase() === account?.toLowerCase()) {
     return (
       <Box sx={{ ...sx }}>
         <NextLink href={`/profile/edit`} passHref>
           <Button size="small" variant="outlined">
-            Edit Profile
+            {t('button-profile-edit')}
           </Button>
         </NextLink>
       </Box>
