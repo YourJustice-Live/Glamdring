@@ -148,7 +148,7 @@ export default function JurisdictionManageDialog({
                 <Button variant="contained" type="submit">
                   {jurisdiction
                     ? t('button-jurisdiction-update')
-                    : 'button-jurisdiction-create'}
+                    : t('button-jurisdiction-create')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}
