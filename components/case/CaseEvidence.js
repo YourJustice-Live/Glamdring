@@ -3,11 +3,12 @@ import { Button, Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
+import { CASE_ROLE_KEY } from 'constants/i18n';
 import { POST_TYPE } from 'constants/metadata';
-import { CASE_ROLE_STRING } from 'constants/strings';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCase from 'hooks/useCase';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
@@ -16,6 +17,7 @@ import CasePostAddDialog from './CasePostAddDialog';
  * A component with case evidence posts.
  */
 export default function CaseEvidence({ caseObject, sx }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasAnyCaseRole } = useCase();
@@ -45,7 +47,7 @@ export default function CaseEvidence({ caseObject, sx }) {
               <Stack direction="row" spacing={1} alignItems="center">
                 <ProfileCompactCard account={post.author} />
                 <Typography variant="body2" color="text.secondary">
-                  ({CASE_ROLE_STRING[post.entityRole]})
+                  ({t(CASE_ROLE_KEY[post.entityRole])})
                 </Typography>
               </Stack>
               {/* File */}

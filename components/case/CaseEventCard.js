@@ -8,12 +8,15 @@ import {
 } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE } from 'constants/contracts';
-import { CASE_STAGE_STRING } from 'constants/strings';
+import { CASE_STAGE_KEY } from 'constants/i18n';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A component with a card with case event.
  */
 export default function CaseEventCard({ caseEvent }) {
+  const { t } = useTranslation('common');
+
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 3 }}>
@@ -49,7 +52,7 @@ export default function CaseEventCard({ caseEvent }) {
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
               Case stage changed to &quot;
-              {CASE_STAGE_STRING[caseEvent.data.stage]}
+              {t(CASE_STAGE_KEY[caseEvent.data.stage])}
               &quot;
             </Typography>
           </Stack>

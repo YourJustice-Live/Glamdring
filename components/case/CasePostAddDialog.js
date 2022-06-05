@@ -12,14 +12,15 @@ import CommentPostMetadata from 'classes/metadata/CommentPostMetadata';
 import ConfirmationPostMetadata from 'classes/metadata/ConfirmationPostMetadata';
 import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import { CASE_ROLE } from 'constants/contracts';
+import { CASE_ROLE_KEY } from 'constants/i18n';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
-import { CASE_ROLE_STRING } from 'constants/strings';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import {
   handleAddCaseEvidenceEvent,
@@ -36,6 +37,7 @@ export default function CasePostAddDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
@@ -173,8 +175,8 @@ export default function CasePostAddDialog({
           isAccountHasCaseRole(caseObject, account, caseRole.id),
         )
         .map((caseRole) => caseRole.name);
-      const caseRoleStrings = caseRoleNames.map(
-        (caseRoleName) => CASE_ROLE_STRING[caseRoleName],
+      const caseRoleStrings = caseRoleNames.map((caseRoleName) =>
+        t(CASE_ROLE_KEY[caseRoleName]),
       );
       setCaseRoleNames(caseRoleNames);
       setCaseRoleStrings(caseRoleStrings);
