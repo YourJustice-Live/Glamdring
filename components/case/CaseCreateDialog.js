@@ -462,17 +462,6 @@ export default function CaseCreateDialog({
           role: CASE_ROLE.witness.name,
         });
       }
-      // Add jurisdiction judges to case judges
-      const jurisdictionJudgeRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
-      );
-      const jurisdictionJudgeAccounts = jurisdictionJudgeRole?.accounts || [];
-      for (const jurisdictionJudgeAccount of jurisdictionJudgeAccounts) {
-        caseRoles.push({
-          account: jurisdictionJudgeAccount,
-          role: CASE_ROLE.judge.name,
-        });
-      }
       // Define case posts
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {

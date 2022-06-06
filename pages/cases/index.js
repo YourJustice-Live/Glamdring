@@ -21,6 +21,7 @@ export default function Cases() {
   const { account } = useWeb3Context();
   const {
     accountProfile,
+    accountProfileIsJudgeJurisdictions,
     isAccountProfileHasAwaitingConfirmationCases,
     isAccountProfileHasAwaitingJudgingCases,
   } = useDataContext();
@@ -120,7 +121,10 @@ export default function Cases() {
                 isFilterButtonHidden={true}
                 filters={{
                   stageId: CASE_STAGE.verdict,
-                  judgeProfileAccount: account,
+                  jurisdictionAddresses:
+                    accountProfileIsJudgeJurisdictions?.length > 0
+                      ? accountProfileIsJudgeJurisdictions.map((j) => j.id)
+                      : [],
                 }}
               />
             </TabPanel>

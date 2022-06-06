@@ -75,6 +75,7 @@
 
   "text-judges": "Judges",
   "text-judges-no": "No judges",
+  "text-judge-not-assigned": "A judge has not yet been assigned to the case.",
   "text-witness": "Witness",
   "text-witness-no": "No witness",
   "text-officials": "Officials",
@@ -197,6 +198,7 @@
   "button-case-add-comment": "Add Comment",
   "button-case-add-confirmation": "Add Confirmation",
   "button-case-set-verdict-stage": "Set Verdict Stage",
+  "button-case-become-judge": "Become a Judge",
   "button-case-make-verdict": "Make Verdict",
   "button-case-hide-details": "Hide Details",
   "button-case-view-details": "View Details",

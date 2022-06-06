@@ -51,10 +51,16 @@ export default function CaseListObserver({
 
   useEffect(() => {
     let isComponentActive = true;
+    let paramsJurisdictions;
+    if (params.filters.jurisdictionAddresses) {
+      paramsJurisdictions = params.filters.jurisdictionAddresses;
+    } else if (params.filters.jurisdictionAddress) {
+      paramsJurisdictions = [params.filters.jurisdictionAddress];
+    }
     setCases(null);
     getCases({
       searchQuery: params.filters.description,
-      jurisdiction: params.filters.jurisdictionAddress,
+      jurisdictions: paramsJurisdictions,
       stage: params.filters.stageId,
       admin: params.filters.adminProfileAccount,
       subject: params.filters.subjectProfileAccount,

@@ -2,16 +2,20 @@ import { Construction } from '@mui/icons-material';
 import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
+import { CASE_ROLE, CASE_STAGE, JURISDICTION_ROLE } from 'constants/contracts';
 import { IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED } from 'constants/features';
-import useCaseContract from 'hooks/contracts/useCaseContract';
-import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useCaseContract from 'hooks/contracts/useCaseContract';
+import useCase from 'hooks/useCase';
+import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
+import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
+import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CaseCancelDialog from './CaseCancelDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
-import { useTranslation } from 'next-i18next';
 
 /**
  * A component with a case judges, verdict or cancellation.
@@ -55,7 +59,55 @@ export default function CaseJudging({ caseObject, caseLaws, sx }) {
 }
 
 function CaseJudges({ caseObject, sx }) {
+  const { account } = useWeb3Context();
   const { t } = useTranslation('common');
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
+  const { getJurisdiction, isAccountHasJurisdictionRole } = useJurisdiction();
+  const { isAccountHasCaseRole } = useCase();
+  const { assignRole } = useCaseContract();
+  const [
+    isAccountHasJurisdictionJudgeRole,
+    setIsAccountHasJurisdictionJudgeRole,
+  ] = useState(false);
+  const [isAccountHasCaseJudgeRole, setIsAccountHasCaseJudgeRole] =
+    useState(false);
+
+  function becomeJudge() {
+    assignRole(caseObject.id, account, CASE_ROLE.judge.name)
+      .then(() =>
+        showToastSuccess(t('notification-data-is-successfully-updated')),
+      )
+      .catch((error) => handleError(error));
+  }
+
+  useEffect(() => {
+    setIsAccountHasJurisdictionJudgeRole(false);
+    setIsAccountHasCaseJudgeRole(false);
+    // Define if an account has a judge role in a case and jurisdiction
+    if (account && caseObject?.jurisdiction?.id) {
+      getJurisdiction(caseObject.jurisdiction.id)
+        .then((jurisdiction) => {
+          const isAccountHasJurisdictionJudgeRole =
+            isAccountHasJurisdictionRole(
+              jurisdiction,
+              account,
+              JURISDICTION_ROLE.judge.id,
+            );
+          const isAccountHasCaseJudgeRole = isAccountHasCaseRole(
+            caseObject,
+            account,
+            CASE_ROLE.judge.id,
+          );
+          setIsAccountHasJurisdictionJudgeRole(
+            isAccountHasJurisdictionJudgeRole,
+          );
+          setIsAccountHasCaseJudgeRole(isAccountHasCaseJudgeRole);
+        })
+        .catch((error) => handleError(error));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, caseObject]);
 
   return (
     <Box sx={{ ...sx }}>
@@ -67,7 +119,18 @@ function CaseJudges({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography sx={{ mt: 1 }}>{t('text-judges-no')}</Typography>
+        <Typography sx={{ mt: 1 }}>{t('text-judge-not-assigned')}</Typography>
+      )}
+      {isAccountHasJurisdictionJudgeRole && !isAccountHasCaseJudgeRole && (
+        <Button
+          variant="outlined"
+          onClick={() => {
+            becomeJudge();
+          }}
+          sx={{ mt: 2 }}
+        >
+          {t('button-case-become-judge')}
+        </Button>
       )}
     </Box>
   );

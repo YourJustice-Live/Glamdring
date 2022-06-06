@@ -111,7 +111,7 @@ export default function useJurisdiction() {
    * @param {string} params.admin Account that must an admin in the jurisdiction.
    * @param {number} params.first The number of jurisdictions to getting.
    * @param {number} params.skip The number of jurisdictions to skip.
-   * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
+   * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction objects.
    */
   let getJurisdictions = async function ({
     ids,

@@ -1,9 +1,10 @@
 import LoadingBackdrop from 'components/backdrop/LoadingBackdrop';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import useProfile from 'hooks/useProfile';
 import useCase from 'hooks/useCase';
-import { createContext, useEffect, useRef, useState } from 'react';
 import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
+import useProfile from 'hooks/useProfile';
+import { createContext, useEffect, useRef, useState } from 'react';
 
 export const DataContext = createContext();
 
@@ -11,6 +12,7 @@ export function DataProvider({ children }) {
   const { isReady: isWebContextReady, account } = useWeb3Context();
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
+  const { getJurisdictions } = useJurisdiction();
   const {
     isAccountHasAwaitingConfirmationCases,
     isAccountHasAwaitingJudgingCases,
@@ -23,6 +25,10 @@ export function DataProvider({ children }) {
     setIsAccountProfileHasAwaitingConfirmationCases,
   ] = useState(false);
   const [
+    accountProfileIsJudgeJurisdictions,
+    setAccountProfileIsJudgeJurisdictions,
+  ] = useState(null);
+  const [
     isAccountProfileHasAwaitingJudgingCases,
     setIsAccountProfileHasAwaitingJudgingCases,
   ] = useState(false);
@@ -30,6 +36,7 @@ export function DataProvider({ children }) {
     isAccountProfileHasAwaitingCases,
     setIsAccountProfileHasAwaitingCases,
   ] = useState(false);
+  const jurisdictionsLoadingLimit = 25; // TODO: Find out how to optimally download jurisdictions without limits
 
   async function updateContext() {
     // If account not connected
@@ -44,15 +51,26 @@ export function DataProvider({ children }) {
       try {
         // Define data
         const accountProfile = await getProfile(account);
+        const accountProfileIsJudgeJurisdictions = await getJurisdictions({
+          judge: accountProfile.account,
+          first: jurisdictionsLoadingLimit,
+        });
         const isAccountProfileHasAwaitingConfirmationCases =
           await isAccountHasAwaitingConfirmationCases(account);
         const isAccountProfileHasAwaitingJudgingCases =
-          await isAccountHasAwaitingJudgingCases(account);
+          await isAccountHasAwaitingJudgingCases(
+            accountProfileIsJudgeJurisdictions.map(
+              (jurisdiction) => jurisdiction.id,
+            ),
+          );
         const isAccountProfileHasAwaitingCases =
           isAccountProfileHasAwaitingConfirmationCases ||
           isAccountProfileHasAwaitingJudgingCases;
         // Update states
         setAccountProfile(accountProfile);
+        setAccountProfileIsJudgeJurisdictions(
+          accountProfileIsJudgeJurisdictions,
+        );
         setIsAccountProfileHasAwaitingConfirmationCases(
           isAccountProfileHasAwaitingConfirmationCases,
         );
@@ -107,6 +125,7 @@ export function DataProvider({ children }) {
   const value = {
     state: {
       accountProfile: accountProfile,
+      accountProfileIsJudgeJurisdictions: accountProfileIsJudgeJurisdictions,
       isAccountProfileHasAwaitingConfirmationCases:
         isAccountProfileHasAwaitingConfirmationCases,
       isAccountProfileHasAwaitingJudgingCases:

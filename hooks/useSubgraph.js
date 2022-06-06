@@ -177,7 +177,7 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} searchQuery A part of case name for searching.
-   * @param {string} jurisdiction Jurisdiction address.
+   * @param {Array.<string>} jurisdictions Jurisdiction ids (addresses).
    * @param {number} stage Case stage id.
    * @param {string} participant Account that must a participant in the case.
    * @param {string} admin Account that must an admin in the case.
@@ -194,7 +194,7 @@ export default function useSubgraph() {
   let findCaseEntities = async function (
     ids,
     searchQuery,
-    jurisdiction,
+    jurisdictions,
     stage,
     participant,
     admin,
@@ -208,7 +208,9 @@ export default function useSubgraph() {
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
-    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
+    const fixedJurisdictions = jurisdictions
+      ? jurisdictions.map((jurisdiction) => jurisdiction.toLowerCase())
+      : null;
     const fixedAdmin = admin ? admin.toLowerCase() : null;
     const fixedParticipant = participant ? participant.toLowerCase() : null;
     const fixedSubject = subject ? subject.toLowerCase() : null;
@@ -223,7 +225,7 @@ export default function useSubgraph() {
       getFindCaseEntitiesQuery(
         fixedIds,
         searchQuery,
-        fixedJurisdiction,
+        fixedJurisdictions,
         stage,
         fixedParticipant,
         fixedAdmin,
@@ -530,7 +532,7 @@ function getFindActionEntitiesQuery(guids) {
 function getFindCaseEntitiesQuery(
   ids,
   searchQuery,
-  jurisdiction,
+  jurisdictions,
   stage,
   participant,
   admin,
@@ -547,8 +549,8 @@ function getFindCaseEntitiesQuery(
   let searchQueryFilter = searchQuery
     ? `name_contains_nocase: "${searchQuery}"`
     : '';
-  let jurisdictionFilter = jurisdiction
-    ? `jurisdiction: "${jurisdiction}"`
+  let jurisdictionFilter = jurisdictions
+    ? `jurisdiction_in:  ["${jurisdictions.join('","')}"]`
     : '';
   let participantFilter = participant
     ? `participantAccounts_contains: ["${participant}"]`
