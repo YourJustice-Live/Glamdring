@@ -33,11 +33,15 @@ export function Sidebar() {
   const [accountProfileJurisdictions, setAccountProfileJurisdictions] =
     useState(null);
   const drawerWidth = 320;
+  const jurisdictionsLoadingLimit = 10; // TODO: Find out how to optimally download jurisdictions without limits
 
   useEffect(() => {
     setAccountProfileJurisdictions(null);
     if (accountProfile) {
-      getJurisdictions({ member: accountProfile.account, first: 10 })
+      getJurisdictions({
+        member: accountProfile.account,
+        first: jurisdictionsLoadingLimit,
+      })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
         .catch((error) => handleError(error));
     }
