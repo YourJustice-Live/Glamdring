@@ -1,4 +1,6 @@
 /* eslint-disable import/extensions */
+export { default as IconEdit } from './core/type=Light, icon=Edit, color=accent.svg';
+export { default as IconEditSquare } from './core/type=Light, icon=Edit Square, color=accent.svg';
 export { default as IconArrowDown2 } from './core/type=Bold, icon=Arrow - Down 2, color=accent.svg';
 export { default as IconArrowUp2 } from './core/type=Bold, icon=Arrow - Up 2, color=accent.svg';
 export { default as Icon3User } from './core/type=Light, icon=3 User, color=accent.svg';

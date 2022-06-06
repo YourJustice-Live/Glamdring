@@ -1,14 +1,10 @@
-import {
-  ArrowForwardIosOutlined,
-  LightbulbOutlined,
-} from '@mui/icons-material';
+import { ArrowForwardIosOutlined } from '@mui/icons-material';
 import {
   Button,
   Card,
   CardContent,
   Chip,
   Collapse,
-  Link,
   Paper,
   Stack,
   Typography,
@@ -18,8 +14,10 @@ import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
 import RuleEffects from 'components/law/RuleEffects';
 import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/context/useDialogContext';
+import { IconEdit } from 'icons/core';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import { palette } from 'theme/palette';
 import { getActionIcon } from 'utils/metadata';
 
 /**
@@ -151,47 +149,50 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                     {rule.rule.uriData.description}
                   </Typography>
                 )}
-                {/* Id */}
-                <Chip
-                  label={`ID: ${rule?.ruleId || t('text-none')}`}
-                  size="small"
-                  sx={{ mt: 1 }}
-                />
               </Box>
-              <RuleEffects rule={rule} sx={{ mt: { xs: 2.5, md: 0 } }} />
+              <RuleEffects rule={rule} sx={{ mt: { xs: 2, md: 0 } }} />
             </Box>
-            {/* Button for comment rule */}
-            {isCommentsEnabled && (
-              <Box sx={{ display: 'flex', direction: 'row', mt: 2 }}>
-                <LightbulbOutlined
-                  fontSize="small"
-                  sx={{ mr: 1, color: 'text.secondary' }}
-                />
-                <Typography variant="body2" color="text.secondary">
-                  {t('alert-propost-law-edits-description-1')}
-                  <Link
-                    component="button"
-                    variant="body2"
-                    underline="none"
-                    sx={{ mx: 0.5, pb: 0.3 }}
-                    onClick={() =>
-                      showDialog(
-                        <FeedbackPostDialog
-                          form={FORM.commentLaw}
-                          additionalData={{ rule: rule.id }}
-                          onClose={closeDialog}
-                        />,
-                      )
-                    }
-                  >
-                    <strong>
-                      {t('alert-propose-law-edits-button-propose')}
-                    </strong>
-                  </Link>
-                  {t('alert-propose-law-edits-description-2')}
-                </Typography>
-              </Box>
-            )}
+            {/* Rule id and button to propose edits */}
+            <Box
+              sx={{
+                display: 'flex',
+                direction: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mt: 1,
+              }}
+            >
+              <Chip
+                label={`ID: ${rule?.ruleId || t('text-none')}`}
+                size="small"
+              />
+              {/* Button for comment rule */}
+              {isCommentsEnabled && (
+                <Button
+                  variant="text"
+                  size="small"
+                  startIcon={
+                    <IconEdit
+                      width="18"
+                      height="18"
+                      color={palette.text.secondary}
+                    />
+                  }
+                  sx={{ fontSize: 14, color: palette.text.secondary, ml: 1 }}
+                  onClick={() =>
+                    showDialog(
+                      <FeedbackPostDialog
+                        form={FORM.commentLaw}
+                        additionalData={{ rule: rule.id }}
+                        onClose={closeDialog}
+                      />,
+                    )
+                  }
+                >
+                  {t('button-propose-edits')}
+                </Button>
+              )}
+            </Box>
           </Paper>
         ))}
       </Stack>

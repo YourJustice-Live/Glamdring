@@ -209,9 +209,9 @@
 
   "button-faq-ask-question": "Ask Question",
   "button-sandbox-play": "Play",
-
   "button-feedback-post": "Post Feedback",
   "button-metadata-edit": "Edit Metadata",
+  "button-propose-edits": "Propose Edits",
 
   "notification-data-is-successfully-updated": "Success! Data will be updated soon.",
   "notification-image-is-successfully-uploaded": "Your image uploaded to IPFS!",
@@ -309,10 +309,6 @@
   "alert-propose-law-description-2": "a law that we should add to the jurisdiction.",
   "alert-propose-law-button-look": "Look",
   "alert-propose-law-button-propose": "Propose",
-
-  "alert-propose-law-edits-description-1": "Do you have an idea how to improve the law?",
-  "alert-propose-law-edits-description-2": "edits or additions.",
-  "alert-propost-law-edits-button-propose": "Propose",
 
   "alert-manager-tools-title": "Manager Tools",
   "alert-manager-tools-description": "Features for users with appropriate roles to manage this jurisdiction"
