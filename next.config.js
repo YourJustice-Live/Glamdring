@@ -7,7 +7,6 @@ const nextConfig = {
     domains: ['res.cloudinary.com'],
   },
   i18n,
-  react: { useSuspense: false },
   webpack: (config) => {
     // Fix for rjsf (https://github.com/rjsf-team/react-jsonschema-form/issues/2762)
     config.resolve.fallback = {
