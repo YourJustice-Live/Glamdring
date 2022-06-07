@@ -150,7 +150,7 @@ export function Sidebar() {
         </Stack>
 
         {/* Profile Jurisdictions */}
-        {accountProfileJurisdictions && (
+        {accountProfileJurisdictions?.length > 0 && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
             <Typography variant="h4" sx={{ mt: 3 }}>

@@ -11,16 +11,20 @@ import { useEffect, useState } from 'react';
  * A component with a case header (address, created date, admin, stage).
  */
 export default function CaseHeader({ caseObject, isCaseAddressLinkable, sx }) {
-  return (
-    <Box sx={{ ...sx }}>
-      <CaseAddressJurisdictionCreatedDate
-        caseObject={caseObject}
-        isCaseAddressLinkable={isCaseAddressLinkable}
-      />
-      <Divider sx={{ mt: 1, mb: 1 }} />
-      <CaseAdminStage caseObject={caseObject} />
-    </Box>
-  );
+  if (caseObject) {
+    return (
+      <Box sx={{ ...sx }}>
+        <CaseAddressJurisdictionCreatedDate
+          caseObject={caseObject}
+          isCaseAddressLinkable={isCaseAddressLinkable}
+        />
+        <Divider sx={{ mt: 1, mb: 1 }} />
+        <CaseAdminStage caseObject={caseObject} />
+      </Box>
+    );
+  }
+
+  return <></>;
 }
 
 function CaseAddressJurisdictionCreatedDate({

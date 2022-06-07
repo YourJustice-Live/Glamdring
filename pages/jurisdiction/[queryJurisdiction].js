@@ -19,6 +19,8 @@ import { useEffect, useState } from 'react';
 
 /**
  * Page with jurisdiction data.
+ *
+ * TODO: Show "Not Found" message if jurisdiction is not found.
  */
 export default function Jurisdiction() {
   const router = useRouter();

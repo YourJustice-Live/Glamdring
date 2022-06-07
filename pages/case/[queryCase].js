@@ -16,6 +16,8 @@ import { palette } from 'theme/palette';
 
 /**
  * Page with case data.
+ *
+ * TODO: Show "Not Found" message if case is not found.
  */
 export default function Case() {
   const { t } = useTranslation('common');
@@ -32,9 +34,9 @@ export default function Case() {
   async function loadData() {
     try {
       const caseObject = await getCase(queryCase);
-      const ruleIds = caseObject.rules.map((rule) => rule.id);
-      const rules = await getJurisdictionRules(ruleIds, null, null);
-      const laws = await getLawsByRules(rules);
+      const ruleIds = caseObject?.rules.map((rule) => rule.id);
+      const rules = await getJurisdictionRules(ruleIds || [], null, null);
+      const laws = await getLawsByRules(rules || []);
       setCaseObject(caseObject);
       setCaseLaws(laws);
     } catch (error) {

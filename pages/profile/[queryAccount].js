@@ -17,6 +17,8 @@ import { useEffect, useState } from 'react';
 
 /**
  * Page with profile data.
+ *
+ * TODO: Show "Not Found" message if jurisdiction is not found.
  */
 export default function Profile() {
   const { t } = useTranslation('common');
