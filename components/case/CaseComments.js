@@ -2,11 +2,12 @@ import { Button, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_STAGE } from 'constants/contracts';
+import { CASE_ROLE_KEY } from 'constants/i18n';
 import { POST_TYPE } from 'constants/metadata';
-import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { capitalize } from 'lodash';
+import useCase from 'hooks/useCase';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
@@ -15,6 +16,7 @@ import CasePostAddDialog from './CasePostAddDialog';
  * A component with case comment posts.
  */
 export default function CaseComments({ caseObject, sx }) {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
   const { isAccountHasAnyCaseRole } = useCase();
@@ -43,8 +45,8 @@ export default function CaseComments({ caseObject, sx }) {
               {/* Author */}
               <Stack direction="row" spacing={1} alignItems="center">
                 <ProfileCompactCard account={post.author} />
-                <Typography variant="body2">
-                  ({capitalize(post.entityRole)})
+                <Typography variant="body2" color="text.secondary">
+                  ({t(CASE_ROLE_KEY[post.entityRole])})
                 </Typography>
               </Stack>
               {/* Message */}
@@ -54,7 +56,8 @@ export default function CaseComments({ caseObject, sx }) {
                   sx={{ fontWeight: 'bold' }}
                   gutterBottom
                 >
-                  {hexStringToJson(post.uriData)?.commentMessage || 'Unknown'}
+                  {hexStringToJson(post.uriData)?.commentMessage ||
+                    t('text-unknown')}
                 </Typography>
                 <Typography variant="body2">
                   {new Date(post.createdDate * 1000).toLocaleString()}
@@ -64,9 +67,9 @@ export default function CaseComments({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography>No comments</Typography>
+        <Typography>{t('text-comments-no')}</Typography>
       )}
-      {/* Add comment post form */}
+      {/* Button to add comment */}
       {caseObject?.stage === CASE_STAGE.open &&
         isAccountHasAnyCaseRole(caseObject, account) && (
           <Box sx={{ mt: 2 }}>
@@ -82,7 +85,7 @@ export default function CaseComments({ caseObject, sx }) {
                 )
               }
             >
-              Add Comment
+              {t('button-case-add-comment')}
             </Button>
           </Box>
         )}

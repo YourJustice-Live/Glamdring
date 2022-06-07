@@ -12,14 +12,19 @@ import { JURISDICTION_ROLE } from 'constants/contracts';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 /**
  * Page with jurisdiction data.
+ *
+ * TODO: Show "Not Found" message if jurisdiction is not found.
  */
 export default function Jurisdiction() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { queryJurisdiction } = router.query;
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
@@ -36,20 +41,22 @@ export default function Jurisdiction() {
   async function loadData() {
     try {
       const jurisdiction = await getJurisdiction(queryJurisdiction);
-      const judgeRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
-      );
-      const adminRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.admin.id,
-      );
-      const memberRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.member.id,
-      );
-      setJurisdiction(jurisdiction);
-      setOfficialsCount(
-        (judgeRole?.accountsCount || 0) + (adminRole?.accountsCount || 0),
-      );
-      setCitizensCount(memberRole?.accountsCount);
+      if (jurisdiction) {
+        const judgeRole = jurisdiction.roles.find(
+          (role) => role.roleId === JURISDICTION_ROLE.judge.id,
+        );
+        const adminRole = jurisdiction.roles.find(
+          (role) => role.roleId === JURISDICTION_ROLE.admin.id,
+        );
+        const memberRole = jurisdiction.roles.find(
+          (role) => role.roleId === JURISDICTION_ROLE.member.id,
+        );
+        setJurisdiction(jurisdiction);
+        setOfficialsCount(
+          (judgeRole?.accountsCount || 0) + (adminRole?.accountsCount || 0),
+        );
+        setCitizensCount(memberRole?.accountsCount || 0);
+      }
     } catch (error) {
       handleError(error, true);
     }
@@ -66,77 +73,97 @@ export default function Jurisdiction() {
   }, [queryJurisdiction]);
 
   return (
-    <Layout title={'YourJustice / Jurisdiction'} enableSidebar={!!account}>
+    <Layout
+      title={`${t('page-title-jurisdiction')} ${queryJurisdiction}`}
+      enableSidebar={!!account}
+    >
       {/* Meta */}
       <JurisdictionMeta jurisdiction={jurisdiction} />
       {/* Manager Tools */}
       <JurisdictionManagerTools jurisdiction={jurisdiction} sx={{ mt: 4 }} />
       {/* Tabs */}
-      <Box sx={{ width: '100%', mt: 4 }}>
-        <TabContext value={tabValue}>
-          <TabList
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 1,
-              maxWidth: 'calc(100vw - 32px)',
-            }}
-          >
-            <Tab
-              label={
-                jurisdiction?.casesCount
-                  ? `Cases: ${jurisdiction.casesCount}`
-                  : 'Cases'
-              }
-              value="1"
-            />
-            <Tab
-              label={
-                officialsCount ? `Officials: ${officialsCount}` : 'Officials'
-              }
-              value="2"
-            />
-            <Tab
-              label={citizensCount ? `Citizens: ${citizensCount}` : 'Citizens'}
-              value="3"
-            />
-            <Tab
-              label={
-                jurisdiction?.rulesCount
-                  ? `Laws: ${jurisdiction.rulesCount}`
-                  : 'Laws'
-              }
-              value="4"
-            />
-          </TabList>
-          {/* Cases */}
-          <TabPanel value="1" sx={{ px: 0 }}>
-            {jurisdiction && (
+      {jurisdiction && (
+        <Box sx={{ width: '100%', mt: 4 }}>
+          <TabContext value={tabValue}>
+            <TabList
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                mb: 1,
+                maxWidth: 'calc(100vw - 32px)',
+              }}
+            >
+              <Tab
+                label={
+                  jurisdiction.casesCount
+                    ? `${t('text-cases')}: ${jurisdiction.casesCount}`
+                    : t('text-cases')
+                }
+                value="1"
+              />
+              <Tab
+                label={
+                  officialsCount
+                    ? `${t('text-officials')}: ${officialsCount}`
+                    : t('text-officials')
+                }
+                value="2"
+              />
+              <Tab
+                label={
+                  citizensCount
+                    ? `${t('text-citizens')}: ${citizensCount}`
+                    : t('text-citizens')
+                }
+                value="3"
+              />
+              <Tab
+                label={
+                  jurisdiction.rulesCount
+                    ? `${t('text-laws')}: ${jurisdiction.rulesCount}`
+                    : t('text-laws')
+                }
+                value="4"
+              />
+            </TabList>
+            {/* Cases */}
+            <TabPanel value="1" sx={{ px: 0 }}>
               <CaseListObserver
                 filters={{
-                  jurisdictionAddress: jurisdiction?.id,
+                  jurisdictionAddress: jurisdiction.id,
                 }}
                 isJurisdictionInputDisabled={true}
               />
-            )}
-          </TabPanel>
-          {/* Officials */}
-          <TabPanel value="2" sx={{ px: 0 }}>
-            <JurisdictionOfficials jurisdiction={jurisdiction} />
-          </TabPanel>
-          {/* Members */}
-          <TabPanel value="3" sx={{ px: 0 }}>
-            <JurisdictionMembers jurisdiction={jurisdiction} />
-          </TabPanel>
-          {/* Laws */}
-          <TabPanel value="4" sx={{ px: 0 }}>
-            <JurisdictionLaws jurisdiction={jurisdiction} />
-          </TabPanel>
-        </TabContext>
-      </Box>
+            </TabPanel>
+            {/* Officials */}
+            <TabPanel value="2" sx={{ px: 0 }}>
+              <JurisdictionOfficials jurisdiction={jurisdiction} />
+            </TabPanel>
+            {/* Members */}
+            <TabPanel value="3" sx={{ px: 0 }}>
+              <JurisdictionMembers jurisdiction={jurisdiction} />
+            </TabPanel>
+            {/* Laws */}
+            <TabPanel value="4" sx={{ px: 0 }}>
+              <JurisdictionLaws jurisdiction={jurisdiction} />
+            </TabPanel>
+          </TabContext>
+        </Box>
+      )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts before rendering the page.
+ */
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

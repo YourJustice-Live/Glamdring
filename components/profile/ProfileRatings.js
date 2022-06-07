@@ -1,111 +1,42 @@
-import {
-  AddBoxOutlined,
-  IndeterminateCheckBoxOutlined,
-} from '@mui/icons-material';
-import {
-  Button,
-  LinearProgress,
-  Link,
-  Paper,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { LinearProgress, Link, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import CaseCreateDialog from 'components/case/CaseCreateDialog';
-import useDataContext from 'hooks/context/useDataContext';
-import useDialogContext from 'hooks/context/useDialogContext';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { palette } from 'theme/palette';
 
 /**
- * A component with profile ratings.
- *
- * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
+ * A component with profile ratings (reputations).
  */
 export default function ProfileRatings({ profile, sx }) {
-  const { accountProfile } = useDataContext();
-  const { showDialog, closeDialog } = useDialogContext();
+  const { t } = useTranslation('common');
 
-  return (
-    <Box sx={{ ...sx }}>
-      {profile ? (
-        <Paper sx={{ p: 3 }}>
-          {/* Total Rating */}
+  if (profile) {
+    return (
+      <Paper sx={{ p: 3, ...sx }}>
+        {/* Total Rating */}
+        <Rating
+          domain={t('text-profile-total-reputation')}
+          negativeRating={profile.avatarNftTotalNegativeRating}
+          positiveRating={profile.avatarNftTotalPositiveRating}
+        />
+        {/* Rating by domains */}
+        {profile.avatarNftReputations?.map((reputation, index) => (
           <Rating
-            domain="Total Reputation"
-            negativeRating={profile.avatarNftTotalNegativeRating}
-            positiveRating={profile.avatarNftTotalPositiveRating}
+            key={index}
+            domain={capitalize(reputation.domain)}
+            jurisdiction={reputation.jurisdiction}
+            negativeRating={reputation.negativeRating}
+            positiveRating={reputation.positiveRating}
+            totalNegativeRating={profile.avatarNftTotalNegativeRating}
+            totalPositiveRating={profile.avatarNftTotalPositiveRating}
+            sx={{ mt: 2 }}
           />
-          {/* Rating by domains */}
-          {profile.avatarNftReputations?.map((reputation, index) => (
-            <Rating
-              key={index}
-              domain={capitalize(reputation.domain)}
-              jurisdiction={reputation.jurisdiction}
-              negativeRating={reputation.negativeRating}
-              positiveRating={reputation.positiveRating}
-              totalNegativeRating={profile.avatarNftTotalNegativeRating}
-              totalPositiveRating={profile.avatarNftTotalPositiveRating}
-              sx={{ mt: 2 }}
-            />
-          ))}
-          {/* Actions */}
-          <Box sx={{ display: 'flex', mt: 4 }}>
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<AddBoxOutlined />}
-              sx={{ flex: 1, mr: 1 }}
-              onClick={() =>
-                showDialog(
-                  <CaseCreateDialog
-                    subjectProfile={profile}
-                    affectedProfile={accountProfile}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Add Reputation
-            </Button>
-            <Button
-              variant="contained"
-              color="danger"
-              startIcon={<IndeterminateCheckBoxOutlined />}
-              sx={{ flex: 1 }}
-              onClick={() =>
-                showDialog(
-                  <CaseCreateDialog
-                    subjectProfile={profile}
-                    affectedProfile={accountProfile}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              Add Reputation
-            </Button>
-          </Box>
-        </Paper>
-      ) : (
-        <>
-          <Skeleton
-            variant="rectangular"
-            height={24}
-            width={256}
-            sx={{ mb: 1 }}
-          />
-          <Skeleton
-            variant="rectangular"
-            height={24}
-            width={164}
-            sx={{ mb: 1 }}
-          />
-        </>
-      )}
-    </Box>
-  );
+        ))}
+      </Paper>
+    );
+  }
+
+  return <></>;
 }
 
 function Rating({

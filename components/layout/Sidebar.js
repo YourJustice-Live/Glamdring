@@ -14,16 +14,18 @@ import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
-import { IconJurisdiction, IconMember } from 'icons';
+import { IconJurisdiction, IconMember } from 'icons/entities';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a sidebar (drawer).
  */
 export function Sidebar() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { accountProfile, isAccountProfileHasAwaitingCases } = useDataContext();
   const { handleError } = useErrors();
@@ -31,11 +33,15 @@ export function Sidebar() {
   const [accountProfileJurisdictions, setAccountProfileJurisdictions] =
     useState(null);
   const drawerWidth = 320;
+  const jurisdictionsLoadingLimit = 10; // TODO: Find out how to optimally download jurisdictions without limits
 
   useEffect(() => {
     setAccountProfileJurisdictions(null);
     if (accountProfile) {
-      getJurisdictions({ member: accountProfile.account, first: 10 })
+      getJurisdictions({
+        member: accountProfile.account,
+        first: jurisdictionsLoadingLimit,
+      })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
         .catch((error) => handleError(error));
     }
@@ -85,18 +91,23 @@ export function Sidebar() {
               </Box>
               {/* Profile details */}
               <Box sx={{ flex: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography sx={{ color: 'success.main', mr: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mb: 0.3 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
+                  >
                     {`+${accountProfile.avatarNftTotalPositiveRating}`}
                   </Typography>
-                  <Typography sx={{ color: 'danger.main', mr: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
+                  >
                     {`-${accountProfile.avatarNftTotalNegativeRating}`}
                   </Typography>
                 </Box>
                 <NextLink href={`/profile/${accountProfile.account}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </Link>
                 </NextLink>
                 <Box>
@@ -112,14 +123,14 @@ export function Sidebar() {
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
           {account && !accountProfile && (
             <NextLink href="/profile/create" passHref>
-              <Link underline="none">Create Own Profile</Link>
+              <Link underline="none">{t('button-profile-create-own')}</Link>
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>
-            <Link underline="none">Souls</Link>
+            <Link underline="none">{t('text-profiles')}</Link>
           </NextLink>
           <NextLink href="/jurisdictions" passHref>
-            <Link underline="none">Jurisdictions</Link>
+            <Link underline="none">{t('text-jurisdictions')}</Link>
           </NextLink>
           <NextLink href="/cases" passHref>
             <Link underline="none">
@@ -129,21 +140,21 @@ export function Sidebar() {
                 variant="dot"
                 sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
               >
-                Cases
+                {t('text-cases')}
               </Badge>
             </Link>
           </NextLink>
           <NextLink href="/faq" passHref>
-            <Link underline="none">FAQ</Link>
+            <Link underline="none">{t('text-faq')}</Link>
           </NextLink>
         </Stack>
 
         {/* Profile Jurisdictions */}
-        {accountProfileJurisdictions && (
+        {accountProfileJurisdictions?.length > 0 && (
           <Box sx={{ mx: 2, mt: 3 }}>
             <Divider />
-            <Typography variant="h4" sx={{ mt: 2 }}>
-              My Jurisdictions
+            <Typography variant="h4" sx={{ mt: 3 }}>
+              {t('text-jurisdictions-my')}
             </Typography>
             <Stack sx={{ mt: 3 }} spacing={3}>
               {accountProfileJurisdictions.map((jurisdiction, index) => (
@@ -171,7 +182,7 @@ export function Sidebar() {
                     >
                       <IconJurisdiction width="22" height="22" />
                     </Avatar>
-                    <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {jurisdiction.name}
                     </Typography>
                   </Box>

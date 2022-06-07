@@ -19,7 +19,7 @@ export default function useCaseContract() {
    *
    * @param {string} contractAddress Case contract address.
    * @param {string} account Account address.
-   * @param {string} role Role string. For example, "witness".
+   * @param {string} role Role name. For example, "witness".
    * @returns Transaction.
    */
   async function assignRole(contractAddress, account, role) {
@@ -36,7 +36,7 @@ export default function useCaseContract() {
    * Add a post to specified case contract.
    *
    * @param {string} contractAddress Case contract address.
-   * @param {string} entityRole Entity role.
+   * @param {string} entityRole Case role name.
    * @param {string} uri Uri.
    * @returns Transaction.
    */

@@ -1,20 +1,24 @@
-import { Card, CardContent } from '@mui/material';
+import { Button, Card, CardContent, Collapse } from '@mui/material';
 import LawList from 'components/law/LawList';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useLaw from 'hooks/useLaw';
+import { IconArrowDownCircle, IconArrowRightCircle } from 'icons/core';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import CaseDetails from './CaseDetails';
+import CaseHeader from './CaseHeader';
 import CaseTabs from './CaseTabs';
-import CaseTop from './CaseTop';
 
 /**
  * A component with a card with case.
  */
 export default function CaseCard({ caseObject }) {
+  const { t } = useTranslation('common');
   const { getJurisdictionRules } = useJurisdiction();
   const { getLawsByRules, isLawsPositive } = useLaw();
   const [caseLaws, setCaseLaws] = useState(null);
+  const [isDetailed, setIsDetailed] = useState(false);
 
   async function getLawsByCase(caseObject) {
     let laws;
@@ -51,14 +55,32 @@ export default function CaseCard({ caseObject }) {
       }}
     >
       <CardContent sx={{ p: 4 }}>
-        <CaseTop caseObject={caseObject} />
+        <CaseHeader caseObject={caseObject} isCaseAddressLinkable={true} />
         <LawList laws={caseLaws} sx={{ mt: 3 }} />
         <CaseDetails
           caseObject={caseObject}
           caseLaws={caseLaws}
           sx={{ mt: 3 }}
         />
-        <CaseTabs caseObject={caseObject} caseLaws={caseLaws} sx={{ mt: 3 }} />
+        <Button
+          variant="text"
+          onClick={() => setIsDetailed(!isDetailed)}
+          startIcon={
+            isDetailed ? <IconArrowDownCircle /> : <IconArrowRightCircle />
+          }
+          sx={{ width: 1, mt: 3 }}
+        >
+          {isDetailed
+            ? t('button-case-hide-details')
+            : t('button-case-view-details')}
+        </Button>
+        <Collapse in={isDetailed}>
+          <CaseTabs
+            caseObject={caseObject}
+            caseLaws={caseLaws}
+            sx={{ mt: 3 }}
+          />
+        </Collapse>
       </CardContent>
     </Card>
   );

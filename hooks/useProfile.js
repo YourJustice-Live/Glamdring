@@ -92,5 +92,7 @@ function createProfileObject(avatarNftEntity) {
     avatarNftEntity.reputations,
     avatarNftEntity.totalNegativeRating,
     avatarNftEntity.totalPositiveRating,
+    avatarNftEntity.totalNegativeCases,
+    avatarNftEntity.totalPositiveCases,
   );
 }

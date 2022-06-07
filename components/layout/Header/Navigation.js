@@ -19,22 +19,23 @@ import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import {
   IconHome,
-  IconMember,
   IconNotification,
-  // IconPlus,
   IconProfile,
   IconWallet,
-  Logo,
-} from 'icons';
+} from 'icons/core';
+import { IconMember } from 'icons/entities';
+import { Logo } from 'icons/logo';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React from 'react';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A component with a header navigation.
  */
 export default function Navigation() {
+  const { t } = useTranslation('common');
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { account, connectWallet, disconnectWallet } = useWeb3Context();
   const { accountProfile } = useDataContext();
@@ -108,20 +109,6 @@ export default function Navigation() {
             flexDirection: 'row-reverse',
           }}
         >
-          {/*
-          { account && accountProfile && (
-            <Button
-              variant="secondary"
-              sx={{ display: { xs: 'none', md: 'flex' } }}
-              startIcon={<IconPlus />}
-              onClick={() =>
-                showDialog(<CaseCreateDialog onClose={closeDialog} />)
-              }
-            >
-              Create Case
-            </Button>
-            )}
-          */}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
               <Button
@@ -129,7 +116,7 @@ export default function Navigation() {
                 sx={{ display: { xs: 'none', md: 'flex' } }}
                 startIcon={<IconProfile />}
               >
-                Create Own Profile
+                {t('button-profile-create-own')}
               </Button>
             </Link>
           )}
@@ -139,7 +126,7 @@ export default function Navigation() {
               onClick={connectWallet}
               startIcon={<IconWallet />}
             >
-              Connect Wallet
+              {t('button-wallet-connect')}
             </Button>
           )}
         </Box>
@@ -149,7 +136,7 @@ export default function Navigation() {
           <Box sx={{ flexGrow: 0 }}>
             <Link href="/" passHref>
               <IconButton sx={{ ml: 2 }}>
-                <IconHome />
+                <IconHome color={palette.text.secondary} />
               </IconButton>
             </Link>
           </Box>
@@ -160,7 +147,7 @@ export default function Navigation() {
           <Box sx={{ flexGrow: 0 }}>
             <Link href="/events" passHref>
               <IconButton sx={{ ml: 0.4 }}>
-                <IconNotification />
+                <IconNotification color={palette.text.secondary} />
               </IconButton>
             </Link>
           </Box>
@@ -191,6 +178,9 @@ export default function Navigation() {
               borderRadius: '15px',
               overflow: 'hidden',
             },
+            [`& .MuiBackdrop-root`]: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
           }}
           anchorEl={anchorElUser}
           anchorOrigin={{
@@ -207,8 +197,15 @@ export default function Navigation() {
         >
           {/* Menu items */}
           {!account && (
-            <MenuItem onClick={connectWallet}>
-              <Typography textAlign="center">Connect Wallet</Typography>
+            <MenuItem
+              onClick={() => {
+                handleCloseUserMenu();
+                connectWallet();
+              }}
+            >
+              <Typography textAlign="center">
+                {t('button-wallet-connect')}
+              </Typography>
             </MenuItem>
           )}
           {account && (
@@ -226,8 +223,7 @@ export default function Navigation() {
               {accountProfile && (
                 <Link href={`/profile/${accountProfile.account}`} passHref>
                   <MuiLink underline="none">
-                    {accountProfile.avatarNftUriFirstName || 'Anonymous'}{' '}
-                    {accountProfile.avatarNftUriLastName}
+                    {formatProfileFirstLastName(accountProfile)}
                   </MuiLink>
                 </Link>
               )}
@@ -241,46 +237,48 @@ export default function Navigation() {
                 showDialog(<CaseCreateDialog onClose={closeDialog} />);
               }}
             >
-              <Typography>Create Case</Typography>
+              <Typography>{t('button-case-create')}</Typography>
             </MenuItem>
           )}
           {account && !accountProfile && (
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Link href="/profile/create" passHref>
-                <Typography>Create Own Profile</Typography>
-              </Link>
-            </MenuItem>
+            <Link href="/profile/create" passHref>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography>{t('button-profile-create-own')}</Typography>
+              </MenuItem>
+            </Link>
           )}
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/profiles" passHref>
-              <Typography>Souls</Typography>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/jurisdictions" passHref>
-              <Typography>Jurisdictions</Typography>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/cases" passHref>
+          <Link href="/profiles" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>{t('text-profiles')}</Typography>
+            </MenuItem>
+          </Link>
+          <Link href="/jurisdictions" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>{t('text-jurisdictions')}</Typography>
+            </MenuItem>
+          </Link>
+          <Link href="/cases" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
               <Badge
                 color="danger"
                 badgeContent={isAccountProfileHasAwaitingCases ? 1 : 0}
                 variant="dot"
                 sx={{ '& .MuiBadge-badge': { top: '4px', right: '-10px' } }}
               >
-                <Typography>Cases</Typography>
+                <Typography>{t('text-cases')}</Typography>
               </Badge>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href="/faq" passHref>
-              <Typography>FAQ</Typography>
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
+          <Link href="/faq" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>{t('text-faq')}</Typography>
+            </MenuItem>
+          </Link>
           {account && (
             <MenuItem onClick={disconnectWallet}>
-              <Typography textAlign="center">Disconnect Wallet</Typography>
+              <Typography textAlign="center">
+                {t('button-wallet-disconnect')}
+              </Typography>
             </MenuItem>
           )}
         </Menu>

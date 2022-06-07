@@ -3,8 +3,9 @@ import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { throttle, unionWith } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
+import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
  * A widget to select profile.
@@ -14,9 +15,11 @@ export default function ProfileSelect(props) {
   const propsLabel = props.label;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
+  const propsRequired = props.required;
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -84,11 +87,9 @@ export default function ProfileSelect(props) {
       <Autocomplete
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
-          (option.avatarNftUriFirstName || 'Anonymous') +
+          formatProfileFirstLastName(option) +
           ' ' +
-          option.avatarNftUriLastName +
-          ' ' +
-          `(${formatAddress(option.account)})`
+          formatAddress(option.account)
         }
         filterOptions={(x) => x}
         options={options}
@@ -108,8 +109,9 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || 'Soul Search'}
-            placeholder="Search by name or address"
+            label={propsLabel || t('input-profile-title')}
+            placeholder={t('input-profile-placeholder')}
+            required={propsRequired}
           />
         )}
         renderOption={(props, option) => {
@@ -119,6 +121,7 @@ export default function ProfileSelect(props) {
                 profile={option}
                 disableAddress={false}
                 disableLink={true}
+                disableRating={true}
                 sx={{ my: 0.6 }}
               />
             </li>

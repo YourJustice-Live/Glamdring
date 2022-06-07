@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { REPUTATION_RATING } from 'constants/contracts';
-import { IconChart } from 'icons';
+import { IconChart } from 'icons/core';
 import { capitalize } from 'lodash';
 import { palette } from 'theme/palette';
 
@@ -51,7 +51,7 @@ function RuleEffect({ name, direction, value, sx }) {
         ...sx,
       }}
     >
-      <IconChart hexColor={palette.primary.contrastText} size={14} />
+      <IconChart color={palette.primary.contrastText} width="14" height="14" />
       <Typography variant="body2" sx={{ color: 'primary.contrastText', ml: 1 }}>
         {capitalize(name)}
       </Typography>

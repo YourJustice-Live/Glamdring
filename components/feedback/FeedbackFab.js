@@ -1,11 +1,13 @@
 import { Fab } from '@mui/material';
 import useDialogContext from 'hooks/context/useDialogContext';
 import FeedbackPostDialog from 'components/feedback/FeedbackPostDialog';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A component with a footer feedback floating action button.
  */
 export default function FeedbackFab() {
+  const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
@@ -20,7 +22,7 @@ export default function FeedbackFab() {
       }}
       onClick={() => showDialog(<FeedbackPostDialog onClose={closeDialog} />)}
     >
-      Post Feedback
+      {t('button-feedback-post')}
     </Fab>
   );
 }

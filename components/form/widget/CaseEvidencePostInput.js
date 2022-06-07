@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   Link,
   Paper,
   Stack,
@@ -16,6 +15,7 @@ import { Box } from '@mui/system';
 import EvidencePostMetadata from 'classes/metadata/EvidencePostMetadata';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import Dropzone from 'react-dropzone';
 
@@ -23,11 +23,11 @@ import Dropzone from 'react-dropzone';
  * A widget for input an evidence title and file, generate case post, upload it to IPFS, and get URI.
  */
 export default function CaseEvidencePostInput(props) {
-  const propsLabel = props.label;
-  const propsSubLabel = props.options?.subLabel;
-  const propsRequired = props.required;
+  const propsHeader = props.options?.header;
+  const propsSx = props.sx;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { uploadFileToIPFS, uploadJsonToIPFS } = useIpfs();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -58,9 +58,7 @@ export default function CaseEvidencePostInput(props) {
     try {
       // Check file
       if (!isFileValid(inputEvidenceFile)) {
-        throw new Error(
-          'Only files with size smaller than 10MB are currently supported!',
-        );
+        throw new Error(t('text-error-file-smaller-than-10mb-required'));
       }
       setIsUploadingToIpfs(true);
       // Upload evidence file to ipfs
@@ -103,12 +101,8 @@ export default function CaseEvidencePostInput(props) {
   }
 
   return (
-    <>
-      <Typography sx={{ fontWeight: 'bold' }}>{propsLabel}</Typography>
-      <Typography variant="body2">
-        {propsSubLabel || 'Any file you deem necessary'} {propsRequired && '*'}
-      </Typography>
-      <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+    <Box sx={{ ...propsSx }}>
+      {propsHeader}
       {evidencePost ? (
         <>
           <Paper variant="outlined" sx={{ p: 2 }}>
@@ -129,7 +123,7 @@ export default function CaseEvidencePostInput(props) {
             disabled={propsDisabled}
             onClick={removeEvidence}
           >
-            Remove
+            {t('button-case-remove-evidence')}
           </Button>
         </>
       ) : (
@@ -138,7 +132,7 @@ export default function CaseEvidencePostInput(props) {
           disabled={propsDisabled}
           onClick={openDialog}
         >
-          Add Evidence
+          {t('button-case-add-evidence')}
         </Button>
       )}
       {/* Dialog for input title and file */}
@@ -147,14 +141,11 @@ export default function CaseEvidencePostInput(props) {
         onClose={isUploadingToIpfs ? null : closeDialog}
         fullWidth
       >
-        <DialogTitle>Evidence</DialogTitle>
+        <DialogTitle>{t('dialog-case-add-evidence-title')}</DialogTitle>
         <DialogContent>
-          {/* Sublabel */}
-          <Typography gutterBottom>{propsSubLabel}</Typography>
-          <Divider sx={{ my: 1.5 }} />
           {/* Title */}
           <TextField
-            label="Title"
+            label={t('input-title-title')}
             variant="outlined"
             fullWidth
             sx={{ mt: 1 }}
@@ -176,7 +167,7 @@ export default function CaseEvidencePostInput(props) {
                       <Typography>
                         {inputEvidenceFile
                           ? inputEvidenceFile.name
-                          : 'Drag & Drop Your File Here'}
+                          : t('input-drag-drop-placeholder')}
                       </Typography>
                     </Stack>
                   </div>
@@ -193,7 +184,7 @@ export default function CaseEvidencePostInput(props) {
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Uploading to IPFS
+                {t('text-uploading-to-ipfs')}
               </LoadingButton>
             ) : (
               <>
@@ -202,16 +193,16 @@ export default function CaseEvidencePostInput(props) {
                   onClick={addEvidence}
                   disabled={!inputEvidenceTitle || !inputEvidenceFile}
                 >
-                  Add Evidence
+                  {t('button-case-add-evidence')}
                 </Button>
                 <Button variant="outlined" onClick={closeDialog}>
-                  Close
+                  {t('button-close')}
                 </Button>
               </>
             )}
           </Stack>
         </DialogContent>
       </Dialog>
-    </>
+    </Box>
   );
 }

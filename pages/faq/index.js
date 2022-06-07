@@ -7,6 +7,8 @@ import { QUESTION } from 'constants/faq';
 import { FORM } from 'constants/feedbacks';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
 
@@ -14,17 +16,18 @@ import { palette } from 'theme/palette';
  * A page with a frequently asked questions list.
  */
 export default function Faq() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
 
   return (
-    <Layout title={'YourJustice / FAQ'} enableSidebar={!!account}>
+    <Layout title={t('page-title-faq')} enableSidebar={!!account}>
       <Box sx={{ mb: 3 }}>
         <Typography variant="h1" gutterBottom>
-          FAQ
+          {t('page-faq-headline')}
         </Typography>
         <Typography gutterBottom>
-          Learn answers to frequently asked questions on YourJustice
+          {t('page-faq-supporting-headline')}
         </Typography>
         <Divider />
       </Box>
@@ -46,10 +49,10 @@ export default function Faq() {
         sx={{ mt: 6, p: 3, background: palette.grey[50], boxShadow: 'none' }}
       >
         <Typography variant="h4" gutterBottom>
-          Got another question?
+          {t('page-faq-alert-headline')}
         </Typography>
         <Typography gutterBottom>
-          Please write to us, we will help you
+          {t('page-faq-alert-supporting-headline')}
         </Typography>
         <Button
           variant="outlined"
@@ -63,9 +66,20 @@ export default function Faq() {
             )
           }
         >
-          Ask Question
+          {t('button-faq-ask-question')}
         </Button>
       </Alert>
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

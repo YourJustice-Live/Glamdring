@@ -1,5 +1,8 @@
 import { Backdrop, CircularProgress } from '@mui/material';
 
+/**
+ * A component with a loading backdrop.
+ */
 export default function LoadingBackdrop() {
   return (
     <Backdrop

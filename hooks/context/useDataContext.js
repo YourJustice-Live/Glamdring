@@ -5,6 +5,8 @@ export default function useDataContext() {
   const dataContext = useContext(DataContext);
 
   const accountProfile = dataContext.state.accountProfile;
+  const accountProfileIsJudgeJurisdictions =
+    dataContext.state.accountProfileIsJudgeJurisdictions;
   const isAccountProfileHasAwaitingConfirmationCases =
     dataContext.state.isAccountProfileHasAwaitingConfirmationCases;
   const isAccountProfileHasAwaitingJudgingCases =
@@ -16,6 +18,7 @@ export default function useDataContext() {
 
   return {
     accountProfile,
+    accountProfileIsJudgeJurisdictions,
     isAccountProfileHasAwaitingConfirmationCases,
     isAccountProfileHasAwaitingJudgingCases,
     isAccountProfileHasAwaitingCases,

@@ -16,6 +16,8 @@ import { useState } from 'react';
 
 /**
  * A dialog for adding an action or updating a specified action.
+ *
+ * TODO: Move strings to localization file.
  */
 export default function ActionManageDialog({ action, isClose, onClose }) {
   const { handleError } = useErrors();

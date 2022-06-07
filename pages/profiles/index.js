@@ -7,14 +7,18 @@ import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
-import { IconAddUser, IconUsers } from 'icons';
+import { Icon3User, IconAddUser } from 'icons/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { palette } from 'theme/palette';
 
 /**
  * Page with list of all profiles.
  */
 export default function Profiles() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { handleError } = useErrors();
@@ -57,12 +61,12 @@ export default function Profiles() {
   }, [selectedOrder]);
 
   return (
-    <Layout title={'YourJustice / Profiles'} enableSidebar={!!account}>
+    <Layout title={t('page-title-profiles')} enableSidebar={!!account}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <IconUsers size={24} />
+          <Icon3User color={palette.text.primary} width="24" height="24" />
           <Typography variant="h3" sx={{ ml: 1 }}>
-            Souls
+            {t('text-profiles')}
           </Typography>
         </Box>
         {accountProfile && (
@@ -73,7 +77,7 @@ export default function Profiles() {
               startIcon={<IconAddUser />}
               sx={{ px: 2 }}
             >
-              Invite
+              {t('button-profile-invite')}
             </Button>
           </Link>
         )}
@@ -104,4 +108,15 @@ export default function Profiles() {
       <ProfileList profiles={profiles} sx={{ mt: 2 }} />
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

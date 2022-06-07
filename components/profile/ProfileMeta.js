@@ -17,12 +17,15 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import InteractiveAddress from 'components/address/InteractiveAddress';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconMember, IconProfile } from 'icons';
+import { IconProfile } from 'icons/core';
+import { IconMember } from 'icons/entities';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { palette } from 'theme/palette';
-import { formatAddress } from 'utils/formatters';
+import { formatProfileFirstLastName } from 'utils/formatters';
 import { getTraitValue } from 'utils/metadata';
 
 /**
@@ -60,6 +63,8 @@ export default function ProfileMeta({ profile }) {
 }
 
 function ProfileTop({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box
       sx={{
@@ -69,29 +74,21 @@ function ProfileTop({ profile, sx }) {
         ...sx,
       }}
     >
-      <IconProfile hexColor={palette.text.secondary} size={18} />
+      <IconProfile color={palette.text.secondary} width="18" height="18" />
       <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        HUMAN
+        {t('text-profile').toUpperCase()}
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
-      <Typography variant="body2" sx={{ color: 'text.secondary', ml: 1 }}>
-        {formatAddress(profile?.account) || 'none'}
-      </Typography>
+      <InteractiveAddress
+        address={profile.account}
+        link={`${window.location.origin}/profile/${profile.account}`}
+        sx={{ ml: 1 }}
+      />
     </Box>
   );
 }
 
 function ProfileMain({ profile, sx }) {
-  const firstName =
-    getTraitValue(
-      profile.avatarNftUriData?.attributes,
-      PROFILE_TRAIT_TYPE.firstName,
-    ) || 'None';
-  const lastName =
-    getTraitValue(
-      profile.avatarNftUriData?.attributes,
-      PROFILE_TRAIT_TYPE.lastName,
-    ) || 'None';
   const description = getTraitValue(
     profile.avatarNftUriData?.attributes,
     PROFILE_TRAIT_TYPE.description,
@@ -109,7 +106,7 @@ function ProfileMain({ profile, sx }) {
       <ProfileAvatar profile={profile} />
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
         <Typography variant="h2">
-          {firstName} {lastName}
+          {formatProfileFirstLastName(profile)}
         </Typography>
         {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
         <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />
@@ -199,13 +196,15 @@ function ProfileLinks({ profile, sx }) {
 }
 
 function ProfileEditButton({ profile, sx }) {
+  const { t } = useTranslation('common');
+
   const { account } = useWeb3Context();
   if (profile?.account?.toLowerCase() === account?.toLowerCase()) {
     return (
       <Box sx={{ ...sx }}>
         <NextLink href={`/profile/edit`} passHref>
           <Button size="small" variant="outlined">
-            Edit Profile
+            {t('button-profile-edit')}
           </Button>
         </NextLink>
       </Box>

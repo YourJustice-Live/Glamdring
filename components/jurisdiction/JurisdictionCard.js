@@ -8,8 +8,9 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { JURISDICTION_ROLE } from 'constants/contracts';
-import { IconJurisdiction } from 'icons';
+import { IconJurisdiction } from 'icons/entities';
 import { truncate } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -17,6 +18,7 @@ import { useEffect, useState } from 'react';
  * A component with a card with jurisdiction.
  */
 export default function JurisdictionCard({ jurisdiction }) {
+  const { t } = useTranslation('common');
   const [citizensCount, setCitizensCount] = useState(null);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function JurisdictionCard({ jurisdiction }) {
             <Box>
               <NextLink href={`/jurisdiction/${jurisdiction.id}`} passHref>
                 <Link variant="h4" underline="none">
-                  {jurisdiction.name || 'Unnamed Jurisdiction'}
+                  {jurisdiction.name || t('text-unknown')}
                 </Link>
               </NextLink>
               <Typography variant="body2">
@@ -64,7 +66,7 @@ export default function JurisdictionCard({ jurisdiction }) {
               </Typography>
               {citizensCount && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {citizensCount} citizens
+                  {citizensCount} {t('text-citizens').toLowerCase()}
                 </Typography>
               )}
             </Box>

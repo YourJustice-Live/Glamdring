@@ -10,22 +10,26 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CommentPostMetadata from 'classes/metadata/CommentPostMetadata';
 import ConfirmationPostMetadata from 'classes/metadata/ConfirmationPostMetadata';
+import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput';
 import { CASE_ROLE } from 'constants/contracts';
+import { CASE_ROLE_KEY } from 'constants/i18n';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
+import useWeb3Context from 'hooks/context/useWeb3Context';
 import useCaseContract from 'hooks/contracts/useCaseContract';
+import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
-import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
+import { useEffect, useState } from 'react';
 import {
+  handleAddCaseEvidenceEvent,
   handleCommentCaseEvent,
   handleConfirmCaseEvent,
 } from 'utils/analytics';
 
 /**
  * A component with dialog for add case post (comment, confirmation).
- *
- * TODO: Automatically define account roles
  */
 export default function CasePostAddDialog({
   caseObject,
@@ -33,16 +37,24 @@ export default function CasePostAddDialog({
   isClose,
   onClose,
 }) {
+  const { t } = useTranslation('common');
+  const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
-  const [formData, setFormData] = useState({});
   const { addPost } = useCaseContract();
+  const { isAccountHasCaseRole } = useCase();
+  const [caseRoleNames, setCaseRoleNames] = useState([]);
+  const [caseRoleStrings, setCaseRoleStrings] = useState([]);
+  const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
+    ...(postType === POST_TYPE.evidence && {
+      required: ['role', 'evidencePostUri'],
+    }),
     ...(postType === POST_TYPE.comment && {
       required: ['role', 'message'],
     }),
@@ -50,41 +62,69 @@ export default function CasePostAddDialog({
       required: ['confirmationType'],
     }),
     properties: {
-      ...(postType === POST_TYPE.comment && {
+      // Role input
+      ...((postType === POST_TYPE.evidence ||
+        postType === POST_TYPE.comment) && {
         role: {
           type: 'string',
-          title: 'Your Role',
-          enum: [
-            CASE_ROLE.admin.name,
-            CASE_ROLE.subject.name,
-            CASE_ROLE.plaintiff.name,
-            CASE_ROLE.judge.name,
-            CASE_ROLE.witness.name,
-            CASE_ROLE.affected.name,
-          ],
-          enumNames: [
-            'Admin',
-            'Acted',
-            'Plaintiff',
-            'Judge',
-            'Witness',
-            'Affected',
-          ],
+          title: t('input-role-your-title'),
+          enum: caseRoleNames,
+          enumNames: caseRoleStrings,
+          default: caseRoleNames?.[0],
         },
       }),
-      message: {
-        type: 'string',
-        title: 'Message',
-      },
+      // Evidence input
+      ...(postType === POST_TYPE.evidence && {
+        evidencePostUri: {
+          type: 'string',
+          title: '',
+        },
+      }),
+      // Message input
+      ...((postType === POST_TYPE.comment ||
+        postType === POST_TYPE.confirmation) && {
+        message: {
+          type: 'string',
+          title: t('input-message-title'),
+        },
+      }),
+      // Confirmation type input
       ...(postType === POST_TYPE.confirmation && {
         confirmationType: {
           type: 'string',
-          title: 'Do you confirm this case?',
+          title: t('input-case-confirm-title'),
           enum: [CONFIRMATION_TYPE.confirmation, CONFIRMATION_TYPE.denial],
-          enumNames: ['Yes, I confirm', 'No, I deny'],
+          enumNames: [
+            t('text-confirmation-i-confirm'),
+            t('text-confirmation-i-deny'),
+          ],
         },
       }),
     },
+  };
+
+  const uiSchema = {
+    ...(caseRoleNames?.length === 1 && {
+      role: {
+        'ui:widget': 'hidden',
+      },
+    }),
+    evidencePostUri: {
+      'ui:widget': 'CaseEvidencePostInput',
+      'ui:options': {
+        subLabel: '...',
+      },
+    },
+    message: {
+      'ui:widget': 'textarea',
+      'ui:options': {
+        rows: 5,
+      },
+    },
+  };
+
+  const widgets = {
+    CaseEvidencePostInput: CaseEvidencePostInput,
   };
 
   async function close() {
@@ -98,6 +138,11 @@ export default function CasePostAddDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
+      // If post is evidence
+      if (postType === POST_TYPE.evidence) {
+        await addPost(caseObject.id, formData.role, formData.evidencePostUri);
+        handleAddCaseEvidenceEvent(caseObject.id);
+      }
       // If post is comment
       if (postType === POST_TYPE.comment) {
         const { url } = await uploadJsonToIPFS(
@@ -107,7 +152,7 @@ export default function CasePostAddDialog({
         handleCommentCaseEvent(caseObject.id);
       }
       // If post is confirmation
-      else if (postType === POST_TYPE.confirmation) {
+      if (postType === POST_TYPE.confirmation) {
         const { url } = await uploadJsonToIPFS(
           new ConfirmationPostMetadata(
             formData.confirmationType,
@@ -117,17 +162,30 @@ export default function CasePostAddDialog({
         await addPost(caseObject.id, CASE_ROLE.witness.name, url);
         handleConfirmCaseEvent(caseObject.id);
       }
-      // If post type is not supporter
-      else {
-        throw new Error('Post type is not supported');
-      }
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    // Define which roles the account has
+    if (account && caseObject) {
+      const caseRoleNames = Object.values(CASE_ROLE)
+        .filter((caseRole) =>
+          isAccountHasCaseRole(caseObject, account, caseRole.id),
+        )
+        .map((caseRole) => caseRole.name);
+      const caseRoleStrings = caseRoleNames.map((caseRoleName) =>
+        t(CASE_ROLE_KEY[caseRoleName]),
+      );
+      setCaseRoleNames(caseRoleNames);
+      setCaseRoleStrings(caseRoleStrings);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, caseObject]);
 
   return (
     <Dialog
@@ -137,14 +195,20 @@ export default function CasePostAddDialog({
       fullWidth
     >
       <DialogTitle>
-        {postType === POST_TYPE.comment ? 'Add Comment' : 'Add Confirmation'}
+        {postType === POST_TYPE.evidence && t('dialog-case-add-evidence-title')}
+        {postType === POST_TYPE.comment && t('dialog-case-add-comment-title')}
+        {postType === POST_TYPE.confirmation &&
+          'dialog-case-add-confirmation-title'}
       </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
+          uiSchema={uiSchema}
+          widgets={widgets}
           formData={formData}
           onSubmit={submit}
           disabled={isLoading}
+          showErrorList={false}
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {isLoading ? (
@@ -154,15 +218,15 @@ export default function CasePostAddDialog({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Processing
+                {t('text-processing')}
               </LoadingButton>
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  Add
+                  {t('button-add')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
-                  Cancel
+                  {t('button-cancel')}
                 </Button>
               </>
             )}
