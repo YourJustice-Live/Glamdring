@@ -288,6 +288,8 @@
   "input-case-description-placeholder": "Key word, phrase",
   "input-case-jurisdiction-title": "Jurisdiction",
   "input-case-jurisdiction-description": "A jurisdiction under the laws of which you want to create a case",
+  "input-case-laws-type-title": "Laws type",
+  "input-case-laws-type-description": "The category of laws you want to use for this case",
   "input-case-stage-title": "Stage",
   "input-case-evidence-title": "Evidence",
   "input-case-evidence-description": "Any file you deem necessary",

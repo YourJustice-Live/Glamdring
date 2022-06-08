@@ -23,6 +23,7 @@ import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
 import JurisdictionSelect from 'components/form/widget/JurisdictionSelect';
+import LawsPositivitySelect from 'components/form/widget/LawsPositivitySelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
 import { FORM } from 'constants/feedbacks';
@@ -51,6 +52,7 @@ import { handleCreateCaseEvent } from 'utils/analytics';
  *
  * @param {object} params Params.
  * @param {Jurisdiction} params.jurisdiction Jurisdiction. If not defined then will be used main jurisdiction.
+ * @param {boolean} params.isPositive If false, display negative laws by default, otherwise show positive laws.
  * @param {Profile} params.subjectProfile Subject profile. If not defined then this fild will be empty.
  * @param {Profile} params.affectedProfile Affected profile. If not defined then this fild will be empty.
  * @param {boolean} params.isClose Init status for dialog.
@@ -59,6 +61,7 @@ import { handleCreateCaseEvent } from 'utils/analytics';
  */
 export default function CaseCreateDialog({
   jurisdiction,
+  isPositive,
   subjectProfile,
   affectedProfile,
   isClose,
@@ -89,6 +92,7 @@ export default function CaseCreateDialog({
   const [status, setStatus] = useState(STATUS.isLoading);
   const [formData, setFormData] = useState({
     ...(jurisdiction && { jurisdictionId: jurisdiction.id }),
+    isPositive: isPositive !== undefined ? isPositive : true,
     ...(subjectProfile && { subjectProfileAccount: subjectProfile.account }),
     ...(affectedProfile && {
       affectedProfileAccount: affectedProfile.account,
@@ -112,8 +116,6 @@ export default function CaseCreateDialog({
           isPositive: {
             type: 'boolean',
             title: '',
-            enumNames: [t('text-laws-positive'), t('text-laws-negative')],
-            default: true,
           },
           actionGuid: {
             type: 'string',
@@ -203,9 +205,19 @@ export default function CaseCreateDialog({
       'ui:disabled': jurisdiction,
     },
     isPositive: {
-      'ui:widget': 'radio',
+      'ui:widget': 'LawsPositivitySelect',
       'ui:options': {
-        inline: true,
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-laws-type-title')}
+            </Typography>
+            <Typography variant="body2">
+              {t('input-case-laws-type-description')}
+            </Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
       },
     },
     actionGuid: {
@@ -382,6 +394,7 @@ export default function CaseCreateDialog({
 
   const widgets = {
     JurisdictionSelect: JurisdictionSelect,
+    LawsPositivitySelect: LawsPositivitySelect,
     CaseActionSelect: CaseActionSelect,
     CaseRuleSelect: CaseRuleSelect,
     ProfileSelect: ProfileSelect,
@@ -400,7 +413,6 @@ export default function CaseCreateDialog({
     // If jurisdiction changed
     if (formData.jurisdictionId !== changedFormData.jurisdictionId) {
       // Clear dependent form fields
-      delete changedFormData.isPositive;
       delete changedFormData.actionGuid;
       delete changedFormData.name;
       delete changedFormData.ruleId;

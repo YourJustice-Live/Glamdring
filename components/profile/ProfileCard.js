@@ -208,6 +208,7 @@ function ProfileActions({ profile, jurisdiction }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={true}
                 jurisdiction={jurisdiction}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}
@@ -227,6 +228,7 @@ function ProfileActions({ profile, jurisdiction }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={false}
                 jurisdiction={jurisdiction}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}
