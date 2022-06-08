@@ -5,7 +5,7 @@ export const components = {
         WebkitFontSmoothing: 'auto',
       },
       body: {
-        fontFamily: 'Manrope, monospace',
+        fontFamily: 'Manrope',
         letterSpacing: 'normal',
         color: 'text.primary',
       },
