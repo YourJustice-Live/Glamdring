@@ -9,7 +9,6 @@ import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInpu
 import useDataContext from 'hooks/context/useDataContext';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
 import useErrors from 'hooks/useErrors';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -37,7 +36,6 @@ export default function ProfileManage({
 
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
-  const { showToastSuccessLink } = useToasts();
   const { runProfileUpdater } = useDataContext();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update, add } = useAvatarNftContract();
