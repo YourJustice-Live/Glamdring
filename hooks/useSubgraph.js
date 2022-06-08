@@ -99,6 +99,28 @@ export default function useSubgraph() {
   };
 
   /**
+   * Find the jurisdiction entities by part of address or name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<{object}>>} Some of the jurisdiction entities that match the search query.
+   */
+  let findJurisdictionEntitiesBySearchQuery = async function (searchQuery) {
+    const response = await makeSubgraphQuery(
+      getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery),
+    );
+    const unitedResults = unionWith(
+      response.result1,
+      response.result2,
+      response.result3,
+      (entity1, entity2) => entity1.id === entity2.id,
+    );
+    const sortedResults = unitedResults.sort((a, b) =>
+      Number(a?.memberAccountsCount) < Number(b?.memberAccountsCount) ? 1 : -1,
+    );
+    return sortedResults;
+  };
+
+  /**
    * Find the jurisdiction rule entities.
    *
    * @param {Array.<string>} ids A list with jurisdiction rule ids.
@@ -260,6 +282,7 @@ export default function useSubgraph() {
     findAvatarNftEntities,
     findAvatarNftEntitiesBySearchQuery,
     findJurisdictionEntities,
+    findJurisdictionEntitiesBySearchQuery,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesBySearchQuery,
     findActionEntities,
@@ -397,6 +420,37 @@ function getFindJurisdictionEntitiesQuery(
       }
       rulesCount
       casesCount
+    }
+  }`;
+}
+
+function getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery) {
+  let filterParams1 = `where: {address_contains_nocase: "${searchQuery}"}`;
+  let filterParams2 = `where: {name_contains_nocase: "${searchQuery}"}`;
+  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let paginationParams = `first: 5, skip: 0`;
+  let fields = `
+    id
+    name
+    roles {
+      id
+      roleId
+      accounts
+      accountsCount
+    }
+    rules {
+      id
+    }
+    rulesCount
+    casesCount
+    memberAccountsCount
+  `;
+  return `{
+    result1: jurisdictionEntities(${filterParams1}, ${sortParams}, ${paginationParams}) {
+      ${fields}
+    }
+    result2: jurisdictionEntities(${filterParams2}, ${sortParams}, ${paginationParams}) {
+      ${fields}
     }
   }`;
 }

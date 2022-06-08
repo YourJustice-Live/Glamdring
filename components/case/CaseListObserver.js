@@ -9,6 +9,7 @@ import {
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
+import JurisdictionSelect from 'components/form/widget/JurisdictionSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useCase from 'hooks/useCase';
@@ -178,7 +179,7 @@ function FiltersDialog({
       },
       jurisdictionAddress: {
         type: ['string', 'null'],
-        title: t('input-jurisdiction-address-title'),
+        title: t('input-case-jurisdiction-title'),
       },
       stageId: {
         type: 'number',
@@ -217,10 +218,10 @@ function FiltersDialog({
 
   const uiSchema = {
     description: {
-      'ui:placeholder': 'Key word, phrase',
+      'ui:placeholder': t('input-case-description-placeholder'),
     },
     jurisdictionAddress: {
-      'ui:placeholder': t('input-jurisdiction-address-placeholder'),
+      'ui:widget': 'JurisdictionSelect',
       'ui:disabled': isJurisdictionInputDisabled,
     },
     stageId: {
@@ -251,8 +252,9 @@ function FiltersDialog({
   };
 
   const widgets = {
-    ProfileSelect: ProfileSelect,
+    JurisdictionSelect: JurisdictionSelect,
     CaseStageSelect: CaseStageSelect,
+    ProfileSelect: ProfileSelect,
   };
 
   async function close() {

@@ -154,8 +154,10 @@
   "text-error": "Error",
   "text-error-wrong-network": "You are connected to the wrong network. Please switch to",
   "text-error-file-smaller-than-10mb-required": "Only files with size smaller than 10MB are currently supported!",
-  "text-error-smaller-than-2mb-required": "'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!'",
+  "text-error-file-smaller-than-2mb-required": "'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!'",
   "text-error-invalid-captcha": "Invalid CAPTCHA",
+  "text-error-case-required-more-witnesses": "More witnesses are needed to create a case",
+  "text-error-case-required-joining-jurisdiction": "You need to join this jurisdiction before creating a case",
 
   "text-protector-content-is-not-available": "Content is not available",
   "text-protector-content-requre-connect-wallet": "Please connect wallet to view this content.",
@@ -271,8 +273,8 @@
   "input-profile-contacts-title": "Contacts",
   "input-profile-links-title": "Links",
 
-  "input-jurisdiction-address-title": "Jurisdiction Address",
-  "input-jurisdiction-address-placeholder": "0x8b22...",
+  "input-jurisdiction-title": "Jurisdiction Search",
+  "input-jurisdiction-placeholder": "Search by name or address",
   "input-jurisdiction-name-title": "Jurisdiction Name",
   "input-jurisdiction-name-placeholder": "Key word, phrase",
   "input-jurisdiction-id-title": "ID (Address)",
@@ -282,10 +284,13 @@
   "input-role-title": "Role",
   "input-role-your-title": "Your Role",
 
-  "input-case-stage-title": "Case Stage",
   "input-case-name-title": "Description",
   "input-case-name-description": "Describe what happened",
-  "input-case-description-title": "Case Description",
+  "input-case-description-title": "Description",
+  "input-case-description-placeholder": "Key word, phrase",
+  "input-case-jurisdiction-title": "Jurisdiction",
+  "input-case-jurisdiction-description": "A jurisdiction under the laws of which you want to create a case",
+  "input-case-stage-title": "Stage",
   "input-case-evidence-title": "Evidence",
   "input-case-evidence-description": "Any file you deem necessary",
   "input-case-witnesses-title": "Witnesses",
@@ -303,6 +308,8 @@
 
   "input-action-title": "Action",
   "input-action-placeholder": "Search by action, acted or affected role",
+
+  "alert-case-required-joining-jurisdiction": "You need to join this jurisdiction before creating a case",
 
   "alert-propose-law-title": "Didn't find a suitable law?",
   "alert-propose-law-description-1": "at the list of all laws of the jurisdiction or",

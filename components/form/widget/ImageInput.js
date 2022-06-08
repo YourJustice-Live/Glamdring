@@ -56,11 +56,12 @@ export default function ImageInput(props) {
     try {
       // Check file
       if (!isFileValid(file)) {
-        throw new Error(t('text-error-smaller-than-2mb-required'));
+        throw new Error(t('text-error-file-smaller-than-2mb-required'));
       }
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
+      // TODO: Do not show this notification
       showToastSuccessLink(
         t('notification-image-is-successfully-uploaded'),
         url,

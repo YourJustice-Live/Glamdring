@@ -19,7 +19,7 @@ export default function CaseActionSelect(props) {
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
-  const propsJurisdiction = props.formContext?.jurisdiction;
+  const propsJurisdictionId = props.formContext?.formData?.jurisdictionId;
   const propsIsPositive = props.formContext?.formData?.isPositive;
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
@@ -34,10 +34,10 @@ export default function CaseActionSelect(props) {
    */
   const searchRules = useMemo(
     () =>
-      throttle((jurisdiction, isPositive, searchQuery, callback) => {
+      throttle((jurisdictionId, isPositive, searchQuery, callback) => {
         try {
           getJurisdictionRulesBySearchQuery(
-            jurisdiction.id,
+            jurisdictionId,
             isPositive === true,
             isPositive === false,
             searchQuery,
@@ -83,7 +83,7 @@ export default function CaseActionSelect(props) {
   useEffect(() => {
     let isComponentActive = true;
     // setOptions([]);
-    searchRules(propsJurisdiction, propsIsPositive, inputValue, (rules) => {
+    searchRules(propsJurisdictionId, propsIsPositive, inputValue, (rules) => {
       if (isComponentActive) {
         loadActions(rules.map((rule) => rule.rule.about));
       }
@@ -92,14 +92,14 @@ export default function CaseActionSelect(props) {
       isComponentActive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsJurisdiction, propsIsPositive, inputValue]);
+  }, [propsJurisdictionId, propsIsPositive, inputValue]);
 
   /**
    * Clear options if props changes.
    */
   useEffect(() => {
     setOptions([]);
-  }, [propsJurisdiction, propsIsPositive]);
+  }, [propsJurisdictionId, propsIsPositive]);
 
   /**
    * Clear value if props value cleared.

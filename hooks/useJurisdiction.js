@@ -17,6 +17,7 @@ export default function useJurisdiction() {
   const { handleError } = useErrors();
   const {
     findJurisdictionEntities,
+    findJurisdictionEntitiesBySearchQuery,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesBySearchQuery,
   } = useSubgraph();
@@ -139,6 +140,23 @@ export default function useJurisdiction() {
   };
 
   /**
+   * Get jurisdictions by part of address or name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<Jurisdiction>>} A list with jurisdictions.
+   */
+  let getJurisdictionsBySearchQuery = async function (searchQuery) {
+    const jurisdictions = [];
+    const jurisdictionEntities = await findJurisdictionEntitiesBySearchQuery(
+      searchQuery,
+    );
+    for (const jurisdictionEntity of jurisdictionEntities) {
+      jurisdictions.push(await createJurisdictionObject(jurisdictionEntity));
+    }
+    return jurisdictions;
+  };
+
+  /**
    * Get jurisdiction rule.
    *
    * @param {string} jurisdiction Jurisdiction id (address).
@@ -238,6 +256,7 @@ export default function useJurisdiction() {
   return {
     getJurisdiction,
     getJurisdictions,
+    getJurisdictionsBySearchQuery,
     getJurisdictionRule,
     getJurisdictionRules,
     getJurisdictionRulesBySearchQuery,

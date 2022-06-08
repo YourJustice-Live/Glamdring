@@ -1,17 +1,19 @@
-import { Autocomplete, Box, TextField } from '@mui/material';
-import ProfileCompactCard from 'components/profile/ProfileCompactCard';
+import { Autocomplete, TextField } from '@mui/material';
+import { Box } from '@mui/system';
+import JurisdctionCompactCard from 'components/jurisdiction/JurisdictionCompactCard';
 import useErrors from 'hooks/useErrors';
-import useProfile from 'hooks/useProfile';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { throttle, unionWith } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
+import { formatAddress } from 'utils/formatters';
 
 /**
- * A widget to select profile (account).
+ * A widget to select jurisdiction (id, address).
  */
-export default function ProfileSelect(props) {
+export default function JurisdictionSelect(props) {
   const propsHeader = props.options?.header;
+  const propsFooter = props.options?.footer;
   const propsLabel = props.label;
   const propsSize = props.size;
   const propsDisabled = props.disabled;
@@ -21,20 +23,20 @@ export default function ProfileSelect(props) {
   const propsOnChange = props.onChange;
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
-  const { getProfile, getProfilesBySearchQuery } = useProfile();
+  const { getJurisdiction, getJurisdictionsBySearchQuery } = useJurisdiction();
   const [isDisabled, setIsDisabled] = useState(false);
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
 
   /**
-   * A function to searching profiles by search query that runs once every defined amount of milliseconds.
+   * A function to searching jurisdictions by search query that runs once every defined amount of milliseconds.
    */
-  const searchProfiles = useMemo(
+  const searchJurisdictions = useMemo(
     () =>
       throttle((searchQuery, callback) => {
-        getProfilesBySearchQuery(searchQuery).then((profiles) =>
-          callback(profiles),
+        getJurisdictionsBySearchQuery(searchQuery).then((jurisdictions) =>
+          callback(jurisdictions),
         );
       }, 400),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,23 +44,24 @@ export default function ProfileSelect(props) {
   );
 
   /**
-   * Search profiles if input value is changed.
+   * Search jurisdictions if input value is changed.
    */
   useEffect(() => {
     let isComponentActive = true;
-    searchProfiles(inputValue, (profiles) => {
+    searchJurisdictions(inputValue, (jurisdictions) => {
       if (isComponentActive) {
         let newOptions = [];
         // Add selected value to option list
         if (value) {
           newOptions = [value];
         }
-        // Add found profiles to option list
-        if (profiles) {
+        // Add found jurisdictions to option list
+        if (jurisdictions) {
           newOptions = unionWith(
             newOptions,
-            profiles,
-            (profile1, profile2) => profile1.account === profile2.account,
+            jurisdictions,
+            (jurisdiction1, jurisdiction2) =>
+              jurisdiction1.id === jurisdiction2.id,
           );
         }
         setOptions(newOptions);
@@ -71,14 +74,14 @@ export default function ProfileSelect(props) {
   }, [inputValue, value]);
 
   /**
-   * Init selected value if props value is defined
+   * Init selected value if props value is defined.
    */
   useEffect(() => {
     if (propsValue) {
       setIsDisabled(true);
-      getProfile(propsValue)
-        .then((profile) => {
-          setValue(profile);
+      getJurisdiction(propsValue)
+        .then((jurisdiction) => {
+          setValue(jurisdiction);
           setIsDisabled(false);
         })
         .catch((error) => handleError(error, true));
@@ -92,48 +95,38 @@ export default function ProfileSelect(props) {
       <Autocomplete
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
-          formatProfileFirstLastName(option) +
-          ' (' +
-          formatAddress(option.account) +
-          ')'
+          option.name + ' (' + formatAddress(option.id) + ')'
         }
         filterOptions={(x) => x}
         options={options}
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue?.account);
+          propsOnChange(newValue?.id);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        isOptionEqualToValue={(option, value) =>
-          option.account === value.account
-        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => (
           <TextField
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || t('input-profile-title')}
-            placeholder={t('input-profile-placeholder')}
+            label={propsLabel || t('input-jurisdiction-title')}
+            placeholder={t('input-jurisdiction-placeholder')}
             required={propsRequired}
           />
         )}
         renderOption={(props, option) => {
           return (
             <li {...props}>
-              <ProfileCompactCard
-                profile={option}
-                disableAddress={false}
-                disableLink={true}
-                disableRating={true}
-                sx={{ my: 0.6 }}
-              />
+              <JurisdctionCompactCard jurisdiction={option} />
             </li>
           );
         }}
       />
+      {propsFooter}
     </Box>
   );
 }
