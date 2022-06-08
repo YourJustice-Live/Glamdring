@@ -121,17 +121,19 @@ function CaseJudges({ caseObject, sx }) {
       ) : (
         <Typography sx={{ mt: 1 }}>{t('text-judge-not-assigned')}</Typography>
       )}
-      {isAccountHasJurisdictionJudgeRole && !isAccountHasCaseJudgeRole && (
-        <Button
-          variant="outlined"
-          onClick={() => {
-            becomeJudge();
-          }}
-          sx={{ mt: 2 }}
-        >
-          {t('button-case-become-judge')}
-        </Button>
-      )}
+      {caseObject?.stage < CASE_STAGE.closed &&
+        isAccountHasJurisdictionJudgeRole &&
+        !isAccountHasCaseJudgeRole && (
+          <Button
+            variant="outlined"
+            onClick={() => {
+              becomeJudge();
+            }}
+            sx={{ mt: 2 }}
+          >
+            {t('button-case-become-judge')}
+          </Button>
+        )}
     </Box>
   );
 }
