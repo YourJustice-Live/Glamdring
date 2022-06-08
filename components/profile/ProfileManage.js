@@ -91,11 +91,6 @@ export default function ProfileManage({
       const { url } = await uploadJsonToIPFS(
         new AvatarNftMetadata(formData.image, formData.attributes),
       );
-      // Do not show this notification
-      showToastSuccessLink(
-        t('notification-data-is-successfully-uploaded'),
-        url,
-      );
       // Use contract
       setStatus(STATUS.isUsingContract);
       if (action === 'createOwnProfile') {

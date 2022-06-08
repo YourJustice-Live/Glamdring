@@ -216,8 +216,6 @@
   "button-propose-edits": "Propose Edits",
 
   "notification-data-is-successfully-updated": "Success! Data will be updated soon.",
-  "notification-image-is-successfully-uploaded": "Your image uploaded to IPFS!",
-  "notification-data-is-successfully-uploaded": "Data uploaded to IPFS!",
   "notification-thanks-for-feedback": "Thanks! Together we will create fair and open justice!",
   "notification-address-is-copied": "Address is copied",
   "notification-link-is-copied": "Link is copied",

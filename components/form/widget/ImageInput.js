@@ -61,11 +61,6 @@ export default function ImageInput(props) {
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
-      // TODO: Do not show this notification
-      showToastSuccessLink(
-        t('notification-image-is-successfully-uploaded'),
-        url,
-      );
     } catch (error) {
       handleError(error, true);
     } finally {
