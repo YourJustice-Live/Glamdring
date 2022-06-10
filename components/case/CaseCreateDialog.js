@@ -567,7 +567,7 @@ export default function CaseCreateDialog({
                 close();
               }}
             >
-              Open Jurisdiction
+              Join Jurisdiction
             </Button>
           </>
         )}
