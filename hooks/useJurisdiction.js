@@ -9,6 +9,7 @@ import { hexStringToJson } from 'utils/converters';
 export default function useJurisdiction() {
   const {
     findJurisdictionEntities,
+    findJurisdictionEntitiesBySearchQuery,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesBySearchQuery,
   } = useSubgraph();
@@ -78,7 +79,7 @@ export default function useJurisdiction() {
    * @param {string} params.admin Profile token id that must an admin in the jurisdiction.
    * @param {number} params.first The number of jurisdictions to getting.
    * @param {number} params.skip The number of jurisdictions to skip.
-   * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction entitites.
+   * @returns {Promise.<Array.<Jurisdiction>>} Jurisdiction objects.
    */
   let getJurisdictions = async function ({
     ids,
@@ -98,6 +99,23 @@ export default function useJurisdiction() {
       admin,
       first,
       skip,
+    );
+    for (const jurisdictionEntity of jurisdictionEntities) {
+      jurisdictions.push(await createJurisdictionObject(jurisdictionEntity));
+    }
+    return jurisdictions;
+  };
+
+  /**
+   * Get jurisdictions by part of address or name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<Jurisdiction>>} A list with jurisdictions.
+   */
+  let getJurisdictionsBySearchQuery = async function (searchQuery) {
+    const jurisdictions = [];
+    const jurisdictionEntities = await findJurisdictionEntitiesBySearchQuery(
+      searchQuery,
     );
     for (const jurisdictionEntity of jurisdictionEntities) {
       jurisdictions.push(await createJurisdictionObject(jurisdictionEntity));
@@ -205,6 +223,7 @@ export default function useJurisdiction() {
   return {
     getJurisdiction,
     getJurisdictions,
+    getJurisdictionsBySearchQuery,
     getJurisdictionRule,
     getJurisdictionRules,
     getJurisdictionRulesBySearchQuery,

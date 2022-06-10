@@ -14,6 +14,7 @@ import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { IconFilter3 } from 'icons/core';
 import { isEmpty } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import JurisdictionList from './JurisdictionList';
@@ -26,6 +27,7 @@ export default function JurisdictionListObserver({
   filters,
   sx,
 }) {
+  const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();
   const { handleError } = useErrors();
   const { getJurisdictions } = useJurisdiction();
@@ -120,7 +122,7 @@ export default function JurisdictionListObserver({
               )
             }
           >
-            Filters
+            {t('button-filters')}
           </Button>
         )}
         <Pagination
@@ -137,6 +139,7 @@ export default function JurisdictionListObserver({
 }
 
 function FiltersDialog({ filters, onChange, isClose, onClose }) {
+  const { t } = useTranslation('common');
   const [formData, setFormData] = useState(filters || {});
   const [isOpen, setIsOpen] = useState(!isClose);
 
@@ -145,26 +148,26 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
     properties: {
       name: {
         type: ['string', 'null'],
-        title: 'Jurisdiction Name',
+        title: t('input-jurisdiction-name-title'),
       },
       memberProfileId: {
         type: ['string', 'null'],
-        title: 'Citizen Profile',
+        title: t('input-profile-citizen-title'),
       },
       judgeProfileId: {
         type: ['string', 'null'],
-        title: 'Judge Profile',
+        title: t('input-profile-judge-title'),
       },
       adminProfileId: {
         type: ['string', 'null'],
-        title: 'Admin Profile',
+        title: t('input-profile-admin-title'),
       },
     },
   };
 
   const uiSchema = {
     name: {
-      'ui:placeholder': 'Key word, phrase',
+      'ui:placeholder': t('input-jurisdiction-name-placeholder'),
     },
     memberProfileId: {
       'ui:widget': 'ProfileSelect',
@@ -205,7 +208,9 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ pb: 0 }}>Dialog Filters</DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>
+        {t('dialog-jurisdiction-filters-title')}
+      </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -216,10 +221,10 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
         >
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             <Button variant="contained" type="submit">
-              Apply
+              {t('button-apply')}
             </Button>
             <Button variant="outlined" onClick={onClose}>
-              Close
+              {t('button-close')}
             </Button>
           </Stack>
         </Form>

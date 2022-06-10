@@ -1,9 +1,8 @@
-import { InfoOutlined, Save } from '@mui/icons-material';
+import { InfoOutlined, Save, WarningAmberRounded } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertTitle,
-  Avatar,
   Box,
   Button,
   Dialog,
@@ -23,6 +22,8 @@ import CaseNameInput from 'components/form/widget/CaseNameInput';
 import CaseRuleSelect from 'components/form/widget/CaseRuleSelect';
 import CaseRulingInput from 'components/form/widget/CaseRulingInput';
 import CaseWitnessesSelect from 'components/form/widget/CaseWitnessesSelect';
+import JurisdictionSelect from 'components/form/widget/JurisdictionSelect';
+import LawsPositivitySelect from 'components/form/widget/LawsPositivitySelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE, JURISDICTION_ROLE } from 'constants/contracts';
 import { FORM } from 'constants/feedbacks';
@@ -35,8 +36,8 @@ import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
 import { IconProfile, IconWallet } from 'icons/core';
-import { IconJurisdiction } from 'icons/entities';
 import { capitalize } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -51,6 +52,7 @@ import { handleCreateCaseEvent } from 'utils/analytics';
  *
  * @param {object} params Params.
  * @param {Jurisdiction} params.jurisdiction Jurisdiction. If not defined then will be used main jurisdiction.
+ * @param {boolean} params.isPositive If false, display negative laws by default, otherwise show positive laws.
  * @param {Profile} params.subjectProfile Subject profile. If not defined then this fild will be empty.
  * @param {Profile} params.affectedProfile Affected profile. If not defined then this fild will be empty.
  * @param {boolean} params.isClose Init status for dialog.
@@ -58,7 +60,8 @@ import { handleCreateCaseEvent } from 'utils/analytics';
  * @returns Dialog component.
  */
 export default function CaseCreateDialog({
-  jurisdiction: paramsJurisdiction,
+  jurisdiction,
+  isPositive,
   subjectProfile,
   affectedProfile,
   isClose,
@@ -68,12 +71,12 @@ export default function CaseCreateDialog({
     isLoading: 0,
     isAccountRequired: 1,
     isAccountProfileRequired: 2,
-    isJoiningToJurisdictionRequired: 3,
-    isFormAvailable: 4,
-    isFormSubmitting: 5,
+    isFormAvailable: 3,
+    isFormSubmitting: 4,
   };
 
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { account, connectWallet } = useWeb3Context();
   const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
@@ -84,9 +87,12 @@ export default function CaseCreateDialog({
     useJurisdiction();
   const { getAction } = useAction();
   const [isOpen, setIsOpen] = useState(!isClose);
+  const [isJoiningToJurisdictionRequired, setIsJoiningToJurisdictionRequired] =
+    useState(false);
   const [status, setStatus] = useState(STATUS.isLoading);
-  const [jurisdiction, setJurisdiction] = useState(paramsJurisdiction);
   const [formData, setFormData] = useState({
+    ...(jurisdiction && { jurisdictionId: jurisdiction.id }),
+    isPositive: isPositive !== undefined ? isPositive : true,
     ...(subjectProfile && { subjectProfileId: subjectProfile?.id }),
     ...(affectedProfile && {
       affectedProfileId: affectedProfile?.id,
@@ -98,24 +104,31 @@ export default function CaseCreateDialog({
   const schema = {
     type: 'object',
     properties: {
-      isPositive: {
-        type: 'boolean',
-        title: '',
-        enumNames: ['Positive Laws', 'Negative Laws'],
-        default: true,
-      },
-      actionGuid: {
+      jurisdictionId: {
         type: 'string',
         title: '',
       },
     },
-    required: ['actionGuid'],
+    required: ['jurisdictionId'],
     dependencies: {
+      jurisdictionId: {
+        properties: {
+          isPositive: {
+            type: 'boolean',
+            title: '',
+          },
+          actionGuid: {
+            type: 'string',
+            title: '',
+          },
+        },
+        required: ['actionGuid'],
+      },
       actionGuid: {
         properties: {
           name: {
             type: 'string',
-            title: 'Description',
+            title: t('input-case-name-title'),
           },
           ruleId: {
             type: 'string',
@@ -135,18 +148,18 @@ export default function CaseCreateDialog({
           },
           evidencePostUri: {
             type: 'string',
-            title: 'Evidence',
+            title: '',
           },
           witnessProfileIds: {
             type: 'array',
-            title: 'Witnesses',
+            title: t('input-case-witnesses-title'),
             items: {
               type: 'string',
             },
             default: [],
           },
           ruling: {
-            title: 'Ruling',
+            title: t('input-case-ruling-title'),
             type: 'string',
           },
         },
@@ -160,10 +173,51 @@ export default function CaseCreateDialog({
   };
 
   const uiSchema = {
-    isPositive: {
-      'ui:widget': 'radio',
+    jurisdictionId: {
+      'ui:widget': 'JurisdictionSelect',
       'ui:options': {
-        inline: true,
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-jurisdiction-title')}
+            </Typography>
+            <Typography variant="body2">
+              {t('input-case-jurisdiction-description')}
+            </Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
+        footer: isJoiningToJurisdictionRequired && (
+          <Alert
+            severity="warning"
+            icon={<WarningAmberRounded />}
+            sx={{
+              borderRadius: '8px',
+              boxShadow: 'none',
+              mt: 2,
+              mb: 0,
+            }}
+          >
+            {t('alert-case-required-joining-jurisdiction')}
+          </Alert>
+        ),
+      },
+      'ui:disabled': jurisdiction,
+    },
+    isPositive: {
+      'ui:widget': 'LawsPositivitySelect',
+      'ui:options': {
+        header: (
+          <>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-laws-type-title')}
+            </Typography>
+            <Typography variant="body2">
+              {t('input-case-laws-type-description')}
+            </Typography>
+            <Divider sx={{ mt: 1.5, mb: 2.5 }} />
+          </>
+        ),
       },
     },
     actionGuid: {
@@ -171,9 +225,11 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Action</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-action-title')}
+            </Typography>
             <Typography variant="body2">
-              An action that was done within the law
+              {t('input-case-action-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -186,26 +242,27 @@ export default function CaseCreateDialog({
               borderRadius: '8px',
               background: palette.grey[50],
               boxShadow: 'none',
-              mt: 3,
+              mt: 2,
               mb: 0,
             }}
           >
-            <AlertTitle>Didn&apos;t find a suitable law?</AlertTitle>
+            <AlertTitle>{t('alert-propose-law-title')}</AlertTitle>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body2">
                 <NextLink
-                  href={`/jurisdiction/${jurisdiction?.id || '#'}`}
+                  href={`/jurisdiction/${formData.jurisdictionId}`}
                   passHref
                 >
                   <Link
                     variant="body2"
                     underline="none"
                     sx={{ mr: 0.5, pb: 0.3 }}
+                    onClick={() => closeDialog()}
                   >
-                    <strong>Look</strong>
+                    <strong>{t('alert-propose-law-button-look')}</strong>
                   </Link>
                 </NextLink>
-                at the list of all laws of the jurisdiction or
+                {t('alert-propose-law-description-1')}
                 <Link
                   component="button"
                   variant="body2"
@@ -220,9 +277,11 @@ export default function CaseCreateDialog({
                     )
                   }
                 >
-                  <strong>propose</strong>
+                  <strong>
+                    {t('alert-propose-law-button-propose').toLowerCase()}
+                  </strong>
                 </Link>
-                a law that we should add to the jurisdiction.
+                {t('alert-propose-law-description-2')}
               </Typography>
             </Box>
           </Alert>
@@ -232,7 +291,7 @@ export default function CaseCreateDialog({
     name: {
       'ui:widget': 'CaseNameInput',
       'ui:options': {
-        inputLabel: 'Describe what happened',
+        inputLabel: t('input-case-name-description'),
       },
     },
     ruleId: {
@@ -240,9 +299,11 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Rule</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-rule-title')}
+            </Typography>
             <Typography variant="body2">
-              Consequences of acting within the law
+              {t('input-case-rule-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -255,14 +316,18 @@ export default function CaseCreateDialog({
         header: (
           <>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ fontWeight: 'bold' }}>Acted</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('input-case-subject-title')}
+              </Typography>
               {formAction?.action?.subject && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   ({capitalize(formAction.action.subject)})
                 </Typography>
               )}
             </Stack>
-            <Typography variant="body2">The one who did the action</Typography>
+            <Typography variant="body2">
+              {t('input-case-subject-description')}
+            </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
         ),
@@ -274,7 +339,9 @@ export default function CaseCreateDialog({
         header: (
           <>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ fontWeight: 'bold' }}>Affected</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>
+                {t('input-case-affected-title')}
+              </Typography>
               {formRule?.rule?.affected && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   ({capitalize(formRule.rule.affected)})
@@ -282,7 +349,7 @@ export default function CaseCreateDialog({
               )}
             </Stack>
             <Typography variant="body2">
-              The one who was affected by the action
+              {t('input-case-affected-description')}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
           </>
@@ -294,10 +361,12 @@ export default function CaseCreateDialog({
       'ui:options': {
         header: (
           <>
-            <Typography sx={{ fontWeight: 'bold' }}>Evidence</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {t('input-case-evidence-title')}
+            </Typography>
             <Typography variant="body2">
               {formRule?.rule?.uriData?.evidenceDescription ||
-                'Any file you deem necessary'}{' '}
+                t('input-case-evidence-description')}{' '}
               {formRule?.confirmation?.evidence && '*'}
             </Typography>
             <Divider sx={{ mt: 1.5, mb: 2.5 }} />
@@ -310,7 +379,7 @@ export default function CaseCreateDialog({
       'ui:emptyValue': [],
       'ui:options': {
         subLabel: `
-          Minimal number of witnesses:
+          ${t('input-case-witnesses-description')}:
           ${formRule?.confirmation?.witness || 0}
         `,
       },
@@ -324,6 +393,8 @@ export default function CaseCreateDialog({
   };
 
   const widgets = {
+    JurisdictionSelect: JurisdictionSelect,
+    LawsPositivitySelect: LawsPositivitySelect,
     CaseActionSelect: CaseActionSelect,
     CaseRuleSelect: CaseRuleSelect,
     ProfileSelect: ProfileSelect,
@@ -333,45 +404,21 @@ export default function CaseCreateDialog({
     CaseRulingInput: CaseRulingInput,
   };
 
-  async function loadMainJurisdiction() {
-    try {
-      setJurisdiction(
-        await getJurisdiction(
-          process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS,
-        ),
-      );
-    } catch (error) {
-      handleError(error, true);
-      close();
-    }
-  }
-
-  async function loadData() {
-    try {
-      // Check that account has jurisdiction role
-      if (
-        !isProfileHasJurisdictionRole(
-          jurisdiction,
-          accountProfile?.id,
-          JURISDICTION_ROLE.member.id,
-        )
-      ) {
-        setStatus(STATUS.isJoiningToJurisdictionRequired);
-        return;
-      }
-      setStatus(STATUS.isFormAvailable);
-    } catch (error) {
-      handleError(error, true);
-      close();
-    }
-  }
-
   function close() {
     setIsOpen(false);
     onClose();
   }
 
   function handleChange({ formData: changedFormData }) {
+    // If jurisdiction changed
+    if (formData.jurisdictionId !== changedFormData.jurisdictionId) {
+      // Clear dependent form fields
+      delete changedFormData.actionGuid;
+      delete changedFormData.name;
+      delete changedFormData.ruleId;
+      delete changedFormData.evidencePostUri;
+      delete changedFormData.witnessProfileAccounts;
+    }
     // If positivity changed
     if (formData.isPositive !== changedFormData.isPositive) {
       // Clear dependent form fields
@@ -402,7 +449,10 @@ export default function CaseCreateDialog({
       delete changedFormData.witnessProfileIds;
       // Load action by id
       if (changedFormData.ruleId) {
-        getJurisdictionRule(jurisdiction.id, changedFormData.ruleId)
+        getJurisdictionRule(
+          changedFormData.jurisdictionId,
+          changedFormData.ruleId,
+        )
           .then((rule) => setFormRule(rule))
           .catch((error) => handleError(error));
       }
@@ -415,10 +465,14 @@ export default function CaseCreateDialog({
     try {
       setStatus(STATUS.isFormSubmitting);
       setFormData(submittedFormData);
+      // Check if a user needs to join the jurisdiction
+      if (isJoiningToJurisdictionRequired) {
+        throw new Error(t('text-error-case-required-joining-jurisdiction'));
+      }
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
       if (submittedFormData.witnessProfileIds.length < formRuleWitness) {
-        throw new Error(`Minimal number of witnesses: ${formRuleWitness}`);
+        throw new Error(t('text-error-case-required-more-witnesses'));
       }
       // Define case name
       const caseName = submittedFormData.name;
@@ -427,7 +481,7 @@ export default function CaseCreateDialog({
       // Define case rules
       const caseRules = [];
       caseRules.push({
-        jurisdiction: jurisdiction?.id,
+        jurisdiction: submittedFormData.jurisdictionId,
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
@@ -446,19 +500,6 @@ export default function CaseCreateDialog({
           role: CASE_ROLE.witness.name,
         });
       }
-      // Add jurisdiction judges to case judges
-      const jurisdictionJudgeRole = jurisdiction.roles.find(
-        (role) => role.roleId === JURISDICTION_ROLE.judge.id,
-      );
-      if (jurisdictionJudgeRole?.participants) {
-        for (const jurisdictionJudgeId of jurisdictionJudgeRole.participants) {
-          caseRoles.push({
-            tokenId: jurisdictionJudgeId,
-            role: CASE_ROLE.judge.name,
-          });
-        }
-      }
-      console.log('[Dev] caseRoles`', caseRoles);
       // Define case posts
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {
@@ -469,7 +510,7 @@ export default function CaseCreateDialog({
       }
       // Make case
       await makeCase(
-        jurisdiction?.id,
+        submittedFormData.jurisdictionId,
         caseName,
         caseMetadata,
         caseRules,
@@ -477,7 +518,7 @@ export default function CaseCreateDialog({
         casePosts,
       );
       handleCreateCaseEvent();
-      showToastSuccess('Success! Data will be updated soon.');
+      showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
       handleError(error, true);
@@ -485,22 +526,47 @@ export default function CaseCreateDialog({
     }
   }
 
+  /**
+   * Check that a user hac connected accounts and profile.
+   */
   useEffect(() => {
     if (!account) {
       setStatus(STATUS.isAccountRequired);
     } else if (!accountProfile) {
       setStatus(STATUS.isAccountProfileRequired);
-    } else if (!jurisdiction) {
-      loadMainJurisdiction();
     } else {
-      loadData();
+      setStatus(STATUS.isFormAvailable);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction]);
+  }, [account, accountProfile]);
+
+  /**
+   * Check if a user needs to join the jurisdiction.
+   */
+  useEffect(() => {
+    setIsJoiningToJurisdictionRequired(false);
+    if (accountProfile && formData?.jurisdictionId) {
+      getJurisdiction(formData.jurisdictionId)
+        .then((jurisdiction) => {
+          setIsJoiningToJurisdictionRequired(
+            !isProfileHasJurisdictionRole(
+              jurisdiction,
+              accountProfile.id,
+              JURISDICTION_ROLE.member.id,
+            ),
+          );
+        })
+        .catch((error) => {
+          handleError(error, true);
+          close();
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountProfile, formData?.jurisdictionId]);
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>
-      <DialogTitle>Create New Case</DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>{t('dialog-case-create-title')}</DialogTitle>
       <DialogContent>
         {/* Loading process */}
         {status === STATUS.isLoading && (
@@ -518,10 +584,10 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to connect wallet.
+              {t('text-case-creating-require-connect-wallet')}
             </Typography>
             <Button
-              sx={{ mt: 4 }}
+              sx={{ mt: 2 }}
               variant="contained"
               onClick={() => {
                 connectWallet();
@@ -529,7 +595,7 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconWallet color={palette.primary.contrastText} />}
             >
-              Connect Wallet
+              {t('button-wallet-connect')}
             </Button>
           </>
         )}
@@ -537,11 +603,10 @@ export default function CaseCreateDialog({
         {status === STATUS.isAccountProfileRequired && (
           <>
             <Typography>
-              To create case and add reputation you need to first claim your
-              Soul.
+              {t('text-case-creating-require-create-profile')}
             </Typography>
             <Button
-              sx={{ mt: 4 }}
+              sx={{ mt: 2 }}
               variant="contained"
               onClick={() => {
                 router.push('/profile/create');
@@ -549,84 +614,48 @@ export default function CaseCreateDialog({
               }}
               startIcon={<IconProfile color={palette.primary.contrastText} />}
             >
-              Claim Your Soul
-            </Button>
-          </>
-        )}
-        {/* Message to join to jurisdiction */}
-        {status === STATUS.isJoiningToJurisdictionRequired && (
-          <>
-            <Typography>
-              To create case and add reputation you need to join jurisdiction.
-            </Typography>
-            <Button
-              sx={{ mt: 4 }}
-              variant="contained"
-              onClick={() => {
-                router.push(`/jurisdiction/${jurisdiction?.id}`);
-                close();
-              }}
-            >
-              Join Jurisdiction
+              {t('button-profile-create')}
             </Button>
           </>
         )}
         {/* Form to create case */}
         {status >= STATUS.isFormAvailable && (
-          <>
-            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-              <Typography sx={{ fontWeight: 'bold' }}>Jurisdiction</Typography>
-              <Avatar
-                sx={{
-                  width: 22,
-                  height: 22,
-                  fontSize: 14,
-                }}
-                src={jurisdiction.uriData?.image}
-              >
-                <IconJurisdiction width="22" height="22" />
-              </Avatar>
-              <Typography>{jurisdiction.name}</Typography>
-            </Stack>
-            <Divider sx={{ mt: 1.5, mb: 0 }} />
-            <Form
-              schema={schema}
-              uiSchema={uiSchema}
-              formData={formData}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              widgets={widgets}
-              formContext={{
-                jurisdiction: jurisdiction,
-                formData: formData,
-                formAction: formAction,
-              }}
-              disabled={status === STATUS.isFormSubmitting}
-              showErrorList={false}
-            >
-              {status === STATUS.isFormSubmitting ? (
-                <>
-                  <LoadingButton
-                    loading
-                    loadingPosition="start"
-                    startIcon={<Save />}
-                    variant="outlined"
-                  >
-                    Submitting
-                  </LoadingButton>
-                </>
-              ) : (
-                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                  <Button variant="contained" type="submit">
-                    Create Case
-                  </Button>
-                  <Button variant="outlined" onClick={close}>
-                    Cancel
-                  </Button>
-                </Stack>
-              )}
-            </Form>
-          </>
+          <Form
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={formData}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            widgets={widgets}
+            formContext={{
+              formData: formData,
+              formAction: formAction,
+            }}
+            disabled={status === STATUS.isFormSubmitting}
+            showErrorList={false}
+          >
+            {status === STATUS.isFormSubmitting ? (
+              <>
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<Save />}
+                  variant="outlined"
+                >
+                  {t('text-submitting')}
+                </LoadingButton>
+              </>
+            ) : (
+              <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                <Button variant="contained" type="submit">
+                  {t('button-case-create')}
+                </Button>
+                <Button variant="outlined" onClick={close}>
+                  {t('button-cancel')}
+                </Button>
+              </Stack>
+            )}
+          </Form>
         )}
       </DialogContent>
     </Dialog>

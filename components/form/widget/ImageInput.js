@@ -2,8 +2,8 @@ import { Avatar, CircularProgress, Input } from '@mui/material';
 import { Box } from '@mui/system';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
 import { IconPlus } from 'icons/core';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 
@@ -18,8 +18,8 @@ export default function ImageInput(props) {
   const propsHeader = props.options?.header;
   const propsImage = props.value;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
-  const { showToastSuccessLink } = useToasts();
   const { uploadFileToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
   const size = 164;
@@ -54,14 +54,11 @@ export default function ImageInput(props) {
     try {
       // Check file
       if (!isFileValid(file)) {
-        throw new Error(
-          'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!',
-        );
+        throw new Error(t('text-error-file-smaller-than-2mb-required'));
       }
       setIsLoading(true);
       const { url } = await uploadFileToIPFS(file);
       propsOnChange(url);
-      showToastSuccessLink('Your image uploaded to IPFS!', url);
     } catch (error) {
       handleError(error, true);
     } finally {

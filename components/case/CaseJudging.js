@@ -1,39 +1,115 @@
 import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_ROLE, CASE_STAGE } from 'constants/contracts';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
+import { CASE_ROLE, CASE_STAGE, JURISDICTION_ROLE } from 'constants/contracts';
+import { IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED } from 'constants/features';
+import useWeb3Context from 'hooks/context/useWeb3Context';
+import useErrors from 'hooks/useErrors';
+import useJurisdiction from 'hooks/useJurisdiction';
+import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
+import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CaseCancelDialog from './CaseCancelDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
 import useDataContext from 'hooks/context/useDataContext';
+import { Construction } from '@mui/icons-material';
 
 /**
  * A component with a case judges, verdict or cancellation.
  */
 export default function CaseJudging({ caseObject, caseLaws, sx }) {
-  return (
-    <Box sx={{ ...sx }}>
-      <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
-      {caseObject?.stage < CASE_STAGE.verdict && (
-        <CaseRequireVerdictStage caseObject={caseObject} />
-      )}
-      {caseObject?.stage === CASE_STAGE.verdict && (
-        <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
-      )}
-      {caseObject?.stage === CASE_STAGE.closed && (
-        <CaseVerdict caseObject={caseObject} />
-      )}
-      {caseObject.stage === CASE_STAGE.cancelled && (
-        <CaseCancellation caseObject={caseObject} />
-      )}
-    </Box>
-  );
+  const { t } = useTranslation('common');
+  const isMainJurisdiction =
+    caseObject.jurisdiction?.id?.toLowerCase() ===
+    process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase();
+
+  if (!isMainJurisdiction && IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED) {
+    return (
+      <Box sx={{ ...sx }}>
+        <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
+        <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+          <Construction fontSize="small" />
+          <Typography>{t('text-feature-judging-coming-soon')}</Typography>
+        </Stack>
+      </Box>
+    );
+  } else {
+    return (
+      <Box sx={{ ...sx }}>
+        <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
+        {caseObject?.stage < CASE_STAGE.verdict && (
+          <CaseRequireVerdictStage caseObject={caseObject} />
+        )}
+        {caseObject?.stage === CASE_STAGE.verdict && (
+          <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
+        )}
+        {caseObject?.stage === CASE_STAGE.closed && (
+          <CaseVerdict caseObject={caseObject} />
+        )}
+        {caseObject.stage === CASE_STAGE.cancelled && (
+          <CaseCancellation caseObject={caseObject} />
+        )}
+      </Box>
+    );
+  }
 }
 
 function CaseJudges({ caseObject, sx }) {
+  const { accountProfile } = useDataContext();
+  const { t } = useTranslation('common');
+  const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
+  const { getJurisdiction, isProfileHasJurisdictionRole } = useJurisdiction();
+  const { isProfileHasCaseRole } = useCase();
+  const { assignRole } = useCaseContract();
+  const [
+    isProfileHasJurisdictionJudgeRole,
+    setIsProfileHasJurisdictionJudgeRole,
+  ] = useState(false);
+  const [isProfileHasCaseJudgeRole, setIsProfileHasCaseJudgeRole] =
+    useState(false);
+
+  function becomeJudge() {
+    assignRole(caseObject.id, accountProfile.id, CASE_ROLE.judge.name)
+      .then(() =>
+        showToastSuccess(t('notification-data-is-successfully-updated')),
+      )
+      .catch((error) => handleError(error));
+  }
+
+  useEffect(() => {
+    setIsProfileHasJurisdictionJudgeRole(false);
+    setIsProfileHasCaseJudgeRole(false);
+    // Define if an user has a judge role in a case and jurisdiction
+    if (accountProfile && caseObject?.jurisdiction?.id) {
+      getJurisdiction(caseObject.jurisdiction.id)
+        .then((jurisdiction) => {
+          const isAccountHasJurisdictionJudgeRole =
+            isProfileHasJurisdictionRole(
+              jurisdiction,
+              accountProfile.id,
+              JURISDICTION_ROLE.judge.id,
+            );
+          const isAccountHasCaseJudgeRole = isProfileHasCaseRole(
+            caseObject,
+            accountProfile.id,
+            CASE_ROLE.judge.id,
+          );
+          setIsProfileHasJurisdictionJudgeRole(
+            isAccountHasJurisdictionJudgeRole,
+          );
+          setIsProfileHasCaseJudgeRole(isAccountHasCaseJudgeRole);
+        })
+        .catch((error) => handleError(error));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountProfile, caseObject]);
+
   return (
     <Box sx={{ ...sx }}>
       <Typography sx={{ fontWeight: 'bold' }}>Judges</Typography>
@@ -44,21 +120,34 @@ function CaseJudges({ caseObject, sx }) {
           ))}
         </Stack>
       ) : (
-        <Typography sx={{ mt: 1 }}>No judges</Typography>
+        <Typography sx={{ mt: 1 }}>{t('text-judge-not-assigned')}</Typography>
       )}
+      {caseObject?.stage < CASE_STAGE.closed &&
+        isProfileHasJurisdictionJudgeRole &&
+        !isProfileHasCaseJudgeRole && (
+          <Button
+            variant="outlined"
+            onClick={() => {
+              becomeJudge();
+            }}
+            sx={{ mt: 2 }}
+          >
+            {t('button-case-become-judge')}
+          </Button>
+        )}
     </Box>
   );
 }
 
 function CaseRequireVerdictStage({ caseObject, sx }) {
+  const { t } = useTranslation('common');
   const { setStageVerdict } = useCaseContract();
 
   return (
     <Box sx={{ ...sx }}>
-      <Typography sx={{ fontWeight: 'bold' }}>Verdict</Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
       <Typography sx={{ mt: 1 }}>
-        The verdict can be made by the judge when the case has a
-        &quot;Verdict&quot; stage.
+        {t('text-verdict-stage-required-before-making-verdict')}
       </Typography>
       <Button
         variant="outlined"
@@ -67,7 +156,7 @@ function CaseRequireVerdictStage({ caseObject, sx }) {
         }}
         sx={{ mt: 2 }}
       >
-        Set Verdict Stage
+        {t('button-case-set-verdict-stage')}
       </Button>
     </Box>
   );
@@ -75,6 +164,7 @@ function CaseRequireVerdictStage({ caseObject, sx }) {
 
 function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
   const { accountProfile } = useDataContext();
+  const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();
   const { isProfileHasCaseRole } = useCase();
   const isProfileHasCaseJudgeRole = isProfileHasCaseRole(
@@ -85,10 +175,8 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
 
   return (
     <Box sx={{ ...sx }}>
-      <Typography sx={{ fontWeight: 'bold' }}>Verdict</Typography>
-      <Typography sx={{ mt: 1 }}>
-        The judge&apos;s verdict is awaited.
-      </Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
+      <Typography sx={{ mt: 1 }}>{t('text-verdict-is-awaited')}</Typography>
       {isProfileHasCaseJudgeRole && (
         <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
           <Button
@@ -103,7 +191,7 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
               )
             }
           >
-            Make Verdict
+            {t('button-case-make-verdict')}
           </Button>
           <Button
             variant="outlined"
@@ -116,7 +204,7 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
               )
             }
           >
-            Cancel Case
+            {t('button-case-cancel')}
           </Button>
         </Stack>
       )}
@@ -125,14 +213,16 @@ function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
 }
 
 function CaseVerdict({ caseObject, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box sx={{ ...sx }}>
-      <Typography sx={{ fontWeight: 'bold' }}>Verdict</Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
           <ProfileCompactCard profileId={caseObject?.verdictAuthor} />
-          <Typography variant="body2">(Judge)</Typography>
+          <Typography variant="body2">({t('case-role-judge')})</Typography>
         </Stack>
         {/* Content */}
         <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
@@ -147,9 +237,11 @@ function CaseVerdict({ caseObject, sx }) {
               variant="body2"
               sx={{ fontWeight: 'bold', color: 'success.main', mr: 0.5 }}
             >
-              Judge made verdict
+              {t('text-verdict-is-made')}
             </Typography>
-            <Typography variant="body2">(Confirmed Rules:</Typography>
+            <Typography variant="body2">
+              ({t('text-verdict-confirmed-rules')}:
+            </Typography>
             {caseObject?.verdictConfirmedRules?.length > 0 ? (
               <>
                 {caseObject?.verdictConfirmedRules?.map(
@@ -164,13 +256,13 @@ function CaseVerdict({ caseObject, sx }) {
                 )}
               </>
             ) : (
-              <Typography variant="body2">None</Typography>
+              <Typography variant="body2">{t('text-none')}</Typography>
             )}
             <Typography variant="body2">)</Typography>
           </Box>
           <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 0.5 }}>
             {hexStringToJson(caseObject?.verdictUriData)?.verdictMessage ||
-              'Unknown'}
+              t('text-unknown')}
           </Typography>
         </Paper>
       </Paper>
@@ -179,14 +271,16 @@ function CaseVerdict({ caseObject, sx }) {
 }
 
 function CaseCancellation({ caseObject, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Box sx={{ ...sx }}>
-      <Typography sx={{ fontWeight: 'bold' }}>Verdict</Typography>
+      <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
       <Paper sx={{ mt: 1.5, p: 2 }}>
         {/* Author */}
         <Stack direction="row" spacing={1} alignItems="center">
           <ProfileCompactCard profileId={caseObject?.cancellationAuthor} />
-          <Typography variant="body2">(Judge)</Typography>
+          <Typography variant="body2">({t('case-role-judge')})</Typography>
         </Stack>
         {/* Content */}
         <Paper variant="outlined" sx={{ p: 2, mt: 1 }}>
@@ -194,11 +288,11 @@ function CaseCancellation({ caseObject, sx }) {
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'danger.main', mr: 0.5 }}
           >
-            Judge cancelled case
+            {t('text-cancellation-is-made')}
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold', mt: 0.5 }}>
             {hexStringToJson(caseObject?.cancellationUriData)
-              ?.cancellationMessage || 'Unknown'}
+              ?.cancellationMessage || t('text-unknown')}
           </Typography>
         </Paper>
       </Paper>

@@ -1,10 +1,13 @@
 import { Grid, Typography } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 import JurisdictionCard from './JurisdictionCard';
 
 /**
  * A component with a list of jurisdictions.
  */
 export default function JurisdictionList({ jurisdictions, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Grid container spacing={3} sx={{ ...sx }}>
       {!jurisdictions && (
@@ -20,7 +23,7 @@ export default function JurisdictionList({ jurisdictions, sx }) {
       )}
       {jurisdictions && jurisdictions.length === 0 && (
         <Grid item xs={12} md={4}>
-          <Typography>No jurisdictions</Typography>
+          <Typography>{t('text-jurisdictions-no')}</Typography>
         </Grid>
       )}
       {jurisdictions && jurisdictions.length > 0 && (

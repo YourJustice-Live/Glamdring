@@ -19,6 +19,8 @@ import { useState } from 'react';
 
 /**
  * A dialog for adding a jurisdiction rule or updating a specified rule.
+ *
+ * TODO: Move strings to localization file.
  */
 export default function RuleManageDialog({
   jurisdiction,

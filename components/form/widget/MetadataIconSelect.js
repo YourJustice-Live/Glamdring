@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { ICON } from 'constants/metadata';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
 /**
@@ -17,6 +18,7 @@ export default function MetadataIconSelect(props) {
   const propsValue = props.value;
   const propsRequired = props.required;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -32,12 +34,14 @@ export default function MetadataIconSelect(props) {
   return (
     <Box>
       <FormControl required={propsRequired} fullWidth>
-        <InputLabel id="metadata-icon-select-label">Icon</InputLabel>
+        <InputLabel id="metadata-icon-select-label">
+          {t('input-icon-title')}
+        </InputLabel>
         <Select
           labelId="metadata-icon-select-label"
           id="metadata-icon-select"
           value={value}
-          label="Icon"
+          label={t('input-icon-title')}
           onChange={(event) => {
             setValue(event.target.value);
             propsOnChange(event.target.value);

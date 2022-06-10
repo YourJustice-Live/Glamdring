@@ -7,6 +7,8 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { Icon3User } from 'icons/core';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
@@ -16,6 +18,7 @@ import { palette } from 'theme/palette';
  */
 export default function Index() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { account } = useWeb3Context();
   const [tabValue, setTabValue] = useState(PROFILE_ORDER.byPositiveRating);
@@ -72,11 +75,9 @@ export default function Index() {
     <Layout enableSidebar={!!account}>
       <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
         <Typography variant="h1" gutterBottom>
-          Check or impact reputation of crypto people!
+          {t('page-main-headline')}
         </Typography>
-        <Typography>
-          Who was involved in the activities that made you uncomfortable?
-        </Typography>
+        <Typography>{t('page-main-supporting-headline')}</Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <ProfileSelect
@@ -86,17 +87,27 @@ export default function Index() {
       </Box>
       <Box sx={{ mt: 8 }}>
         <Tabs value={tabValue} onChange={handleTabChange} centered>
-          <Tab value={PROFILE_ORDER.byPositiveRating} label="Light Side" />
-          <Tab value={PROFILE_ORDER.byNegativeRating} label="Dark Side" />
+          <Tab
+            value={PROFILE_ORDER.byPositiveRating}
+            label={t('page-main-text-light-side')}
+          />
+          <Tab
+            value={PROFILE_ORDER.byNegativeRating}
+            label={t('page-main-text-dark-side')}
+          />
         </Tabs>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon3User color={palette.text.primary} width="24" height="24" />
             <Typography variant="h3" sx={{ ml: 1 }}>
-              Souls
+              {t('text-profiles')}
             </Typography>
           </Box>
-          {profilesCount && <Typography>Total: {profilesCount}</Typography>}
+          {profilesCount && (
+            <Typography>
+              {t('text-total')}: {profilesCount}
+            </Typography>
+          )}
         </Box>
         <ProfileList profiles={profiles} sx={{ mt: 0 }} />
         <Pagination
@@ -109,4 +120,15 @@ export default function Index() {
       </Box>
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

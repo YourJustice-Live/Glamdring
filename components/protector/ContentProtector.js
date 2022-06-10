@@ -2,6 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import useDataContext from 'hooks/context/useDataContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 
 /**
@@ -13,6 +14,7 @@ export default function ContentProtector({
   isAccountProfileRequired,
   isNoAccountProfileRequired,
 }) {
+  const { t } = useTranslation('common');
   const { account, connectWallet } = useWeb3Context();
   const { accountProfile } = useDataContext();
 
@@ -21,13 +23,13 @@ export default function ContentProtector({
     return (
       <Box>
         <Typography variant="h4" gutterBottom>
-          Content is not available
+          {t('text-protector-content-is-not-available')}
         </Typography>
         <Typography gutterBottom>
-          Please connect wallet to view this content.
+          {t('text-protector-content-requre-connect-wallet')}
         </Typography>
         <Button variant="contained" onClick={connectWallet} sx={{ mt: 2 }}>
-          Connect Wallet
+          {t('button-wallet-connect')}
         </Button>
       </Box>
     );
@@ -37,14 +39,14 @@ export default function ContentProtector({
     return (
       <Box>
         <Typography variant="h4" gutterBottom>
-          Content is not available
+          {t('text-protector-content-is-not-available')}
         </Typography>
         <Typography gutterBottom>
-          To view this content you must first claim your soul.
+          {t('text-protector-content-requre-create-profile')}
         </Typography>
         <Link href="/profile/create" passHref>
           <Button variant="contained" onClick={connectWallet} sx={{ mt: 2 }}>
-            Claim Your Soul
+            {t('button-profile-create-own')}
           </Button>
         </Link>
       </Box>
@@ -55,14 +57,14 @@ export default function ContentProtector({
     return (
       <Box>
         <Typography variant="h4" gutterBottom>
-          Content is not available
+          {t('text-protector-content-is-not-available')}
         </Typography>
         <Typography gutterBottom>
-          This content is only available to users without profiles.
+          {t('text-protector-content-requre-no-profile')}
         </Typography>
         <Link href="/" passHref>
           <Button variant="contained" onClick={connectWallet} sx={{ mt: 2 }}>
-            Go to Home
+            {t('button-go-home')}
           </Button>
         </Link>
       </Box>

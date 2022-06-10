@@ -3,11 +3,16 @@ import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { throttle, unionWith } from 'lodash';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
+<<<<<<< HEAD
  * A widget to select profile (profile id).
+=======
+ * A widget to select profile (account).
+>>>>>>> dev
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
@@ -18,6 +23,7 @@ export default function ProfileSelect(props) {
   const propsSx = props.sx;
   const propsValue = props.value;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getProfile, getProfilesBySearchQuery } = useProfile();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -39,6 +45,9 @@ export default function ProfileSelect(props) {
     [],
   );
 
+  /**
+   * Search profiles if input value is changed.
+   */
   useEffect(() => {
     let isComponentActive = true;
     searchProfiles(inputValue, (profiles) => {
@@ -65,8 +74,10 @@ export default function ProfileSelect(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue, value]);
 
+  /**
+   * Init selected value if props value is defined
+   */
   useEffect(() => {
-    // Init selected value if props value is defined
     if (propsValue) {
       setIsDisabled(true);
       getProfile({ id: propsValue })
@@ -97,7 +108,7 @@ export default function ProfileSelect(props) {
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue ? newValue.id : null);
+          propsOnChange(newValue?.id);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
@@ -108,8 +119,8 @@ export default function ProfileSelect(props) {
             fullWidth
             {...params}
             size={propsSize}
-            label={propsLabel || 'Soul Search'}
-            placeholder="Search by id, name, address"
+            label={propsLabel || t('input-profile-title')}
+            placeholder={t('input-profile-placeholder')}
             required={propsRequired}
           />
         )}

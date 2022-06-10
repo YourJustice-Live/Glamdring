@@ -102,6 +102,28 @@ export default function useSubgraph() {
   };
 
   /**
+   * Find the jurisdiction entities by part of address or name.
+   *
+   * @param {string} searchQuery Search query.
+   * @returns {Promise.<Array.<{object}>>} Some of the jurisdiction entities that match the search query.
+   */
+  let findJurisdictionEntitiesBySearchQuery = async function (searchQuery) {
+    const response = await makeSubgraphQuery(
+      getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery),
+    );
+    const unitedResults = unionWith(
+      response.result1,
+      response.result2,
+      response.result3,
+      (entity1, entity2) => entity1.id === entity2.id,
+    );
+    const sortedResults = unitedResults.sort((a, b) =>
+      Number(a?.memberAccountsCount) < Number(b?.memberAccountsCount) ? 1 : -1,
+    );
+    return sortedResults;
+  };
+
+  /**
    * Find the jurisdiction rule entities.
    *
    * @param {Array.<string>} ids A list with jurisdiction rule ids.
@@ -180,7 +202,7 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} searchQuery A part of case name for searching.
-   * @param {string} jurisdiction Jurisdiction address.
+   * @param {Array.<string>} jurisdictions Jurisdiction ids (addresses).
    * @param {number} stage Case stage id.
    * @param {string} participant Id of token that must be a participant in the case.
    * @param {string} admin Id of token that must be an admin in the case.
@@ -197,7 +219,7 @@ export default function useSubgraph() {
   let findCaseEntities = async function (
     ids,
     searchQuery,
-    jurisdiction,
+    jurisdictions,
     stage,
     participant,
     admin,
@@ -211,12 +233,14 @@ export default function useSubgraph() {
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
-    const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
+    const fixedJurisdictions = jurisdictions
+      ? jurisdictions.map((jurisdiction) => jurisdiction.toLowerCase())
+      : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
         fixedIds,
         searchQuery,
-        fixedJurisdiction,
+        fixedJurisdictions,
         stage,
         participant,
         admin,
@@ -251,6 +275,7 @@ export default function useSubgraph() {
     findAvatarNftEntities,
     findAvatarNftEntitiesBySearchQuery,
     findJurisdictionEntities,
+    findJurisdictionEntitiesBySearchQuery,
     findJurisdictionRuleEntities,
     findJurisdictionRuleEntitiesBySearchQuery,
     findActionEntities,
@@ -404,6 +429,37 @@ function getFindJurisdictionEntitiesQuery(
   }`;
 }
 
+function getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery) {
+  let filterParams1 = `where: {address_contains_nocase: "${searchQuery}"}`;
+  let filterParams2 = `where: {name_contains_nocase: "${searchQuery}"}`;
+  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let paginationParams = `first: 5, skip: 0`;
+  let fields = `
+    id
+    name
+    roles {
+      id
+      roleId
+      accounts
+      accountsCount
+    }
+    rules {
+      id
+    }
+    rulesCount
+    casesCount
+    memberAccountsCount
+  `;
+  return `{
+    result1: jurisdictionEntities(${filterParams1}, ${sortParams}, ${paginationParams}) {
+      ${fields}
+    }
+    result2: jurisdictionEntities(${filterParams2}, ${sortParams}, ${paginationParams}) {
+      ${fields}
+    }
+  }`;
+}
+
 function getFindJurisdictionRuleEntitiesQuery(
   ids,
   jurisdiction,
@@ -535,7 +591,7 @@ function getFindActionEntitiesQuery(guids) {
 function getFindCaseEntitiesQuery(
   ids,
   searchQuery,
-  jurisdiction,
+  jurisdictions,
   stage,
   participant,
   admin,
@@ -552,8 +608,8 @@ function getFindCaseEntitiesQuery(
   let searchQueryFilter = searchQuery
     ? `name_contains_nocase: "${searchQuery}"`
     : '';
-  let jurisdictionFilter = jurisdiction
-    ? `jurisdiction: "${jurisdiction}"`
+  let jurisdictionFilter = jurisdictions
+    ? `jurisdiction_in:  ["${jurisdictions.join('","')}"]`
     : '';
   let participantFilter = participant
     ? `participants_contains: ["${participant}"]`

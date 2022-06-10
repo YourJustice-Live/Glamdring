@@ -1,10 +1,13 @@
 import { Grid, Typography } from '@mui/material';
 import ProfileCard from 'components/profile/ProfileCard';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A component with a list of profiles.
  */
 export default function ProfileList({ profiles, jurisdiction, sx }) {
+  const { t } = useTranslation('common');
+
   return (
     <Grid container spacing={3} sx={{ ...sx }}>
       {!profiles && (
@@ -20,7 +23,7 @@ export default function ProfileList({ profiles, jurisdiction, sx }) {
       )}
       {profiles && profiles.length === 0 && (
         <Grid item xs={12}>
-          <Typography>No profiles</Typography>
+          <Typography>{t('text-profiles-no')}</Typography>
         </Grid>
       )}
       {profiles && profiles.length > 0 && (

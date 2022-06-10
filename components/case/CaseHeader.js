@@ -1,25 +1,39 @@
 import { Divider, Link, Skeleton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import InteractiveAddress from 'components/address/InteractiveAddress';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
-import { CASE_STAGE_STRING } from 'constants/strings';
+import { CASE_STAGE_KEY } from 'constants/i18n';
+import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
 
 /**
  * A component with a case header (address, created date, admin, stage).
  */
-export default function CaseHeader({ caseObject, sx }) {
-  return (
-    <Box sx={{ ...sx }}>
-      <CaseAdressJurisdictionCreatedDate caseObject={caseObject} />
-      <Divider sx={{ mt: 1, mb: 1 }} />
-      <CaseAdminStage caseObject={caseObject} />
-    </Box>
-  );
+export default function CaseHeader({ caseObject, isCaseAddressLinkable, sx }) {
+  if (caseObject) {
+    return (
+      <Box sx={{ ...sx }}>
+        <CaseAddressJurisdictionCreatedDate
+          caseObject={caseObject}
+          isCaseAddressLinkable={isCaseAddressLinkable}
+        />
+        <Divider sx={{ mt: 1, mb: 1 }} />
+        <CaseAdminStage caseObject={caseObject} />
+      </Box>
+    );
+  }
+
+  return <></>;
 }
 
-function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
+function CaseAddressJurisdictionCreatedDate({
+  caseObject,
+  isCaseAddressLinkable,
+  sx,
+}) {
+  const { t } = useTranslation('common');
+
   return (
     <Box
       sx={{
@@ -34,14 +48,18 @@ function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
         <>
           {/* Address and jurisdiction */}
           <Box
-            sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: 'center',
+            }}
           >
             {/* Address */}
-            <Typography variant="body2">
-              <Link href={`/case/${caseObject.id}`} underline="none">
-                {formatAddress(caseObject.id)}
-              </Link>
-            </Typography>
+            <InteractiveAddress
+              address={caseObject.id}
+              link={`${window.location.origin}/case/${caseObject.id}`}
+              isAddressLinkable={isCaseAddressLinkable}
+            />
             <Divider
               orientation="vertical"
               flexItem
@@ -54,7 +72,7 @@ function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
                 passHref
               >
                 <Link underline="none">
-                  {caseObject?.jurisdiction?.name || 'Unnamed Jurisdiction'}
+                  {caseObject?.jurisdiction?.name || t('text-unknown')}
                 </Link>
               </NextLink>
             </Typography>
@@ -76,12 +94,13 @@ function CaseAdressJurisdictionCreatedDate({ caseObject, sx }) {
 
 function CaseAdminStage({ caseObject, sx }) {
   const [adminProfileId, setAdminProfileId] = useState(null);
+  const { t } = useTranslation('common');
   const [stageName, setStageName] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
       setAdminProfileId(caseObject.admins[0]);
-      setStageName(CASE_STAGE_STRING[caseObject?.stage]);
+      setStageName(t(CASE_STAGE_KEY[caseObject.stage]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
@@ -108,7 +127,7 @@ function CaseAdminStage({ caseObject, sx }) {
         }}
       >
         <Typography variant="body2" sx={{ mt: 0.3, fontWeight: 'bold' }}>
-          {stageName || 'Unknown Case Stage'}
+          {stageName || t('text-unknown')}
         </Typography>
       </Box>
     </Box>

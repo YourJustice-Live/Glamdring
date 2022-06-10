@@ -27,7 +27,7 @@ export default function useCase() {
    * @param {Object} params Params.
    * @param {Array.<string>} params.ids A list with case ids (addresses).
    * @param {string} params.searchQuery A part of case name for searching.
-   * @param {string} params.jurisdiction Jurisdiction address.
+   * @param {Array.<string>} params.jurisdictions Jurisdiction ids (addresses).
    * @param {number} params.stage Case stage id.
    * @param {string} params.participant Id of token that must be a participant in the case.
    * @param {string} params.admin Id of token that must be an admin in the case.
@@ -44,7 +44,7 @@ export default function useCase() {
   let getCases = async function ({
     ids,
     searchQuery,
-    jurisdiction,
+    jurisdictions,
     stage,
     participant,
     admin,
@@ -60,7 +60,7 @@ export default function useCase() {
     const caseEntities = await findCaseEntities(
       ids,
       searchQuery,
-      jurisdiction,
+      jurisdictions,
       stage,
       participant,
       admin,
@@ -183,13 +183,13 @@ export default function useCase() {
   /**
    * Check that the profile has cases that await his judgment.
    *
-   * @param {string} profile Profile id.
+   * @param {string} jurisdictions Ids (addresses) of jurisdictions where account is a judge.
    * @returns {Promise.<boolean>} Result of checking.
    */
-  let isProfileHasAwaitingJudgingCases = async function (profile) {
+  let isProfileHasAwaitingJudgingCases = async function (jurisdictions) {
     const cases = await getCases({
       stage: CASE_STAGE.verdict,
-      judge: profile,
+      jurisdictions: jurisdictions,
       first: 1,
     });
     return cases && cases.length > 0;

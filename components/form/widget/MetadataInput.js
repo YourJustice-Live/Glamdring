@@ -11,6 +11,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import useErrors from 'hooks/useErrors';
 import useIpfs from 'hooks/useIpfs';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import ImageInput from './ImageInput';
 import MetadataIconSelect from './MetadataIconSelect';
@@ -27,6 +28,7 @@ export default function MetadataInput(props) {
   const propsRequiredFields = props.options?.requiredFields || [];
   const propsOnChange = props.onChange;
 
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { loadJsonFromIPFS, uploadJsonToIPFS } = useIpfs();
 
@@ -122,7 +124,7 @@ export default function MetadataInput(props) {
       </Typography>
       <Divider sx={{ mb: 2 }} />
       {isLoading ? (
-        <Typography>Loading...</Typography>
+        <Typography>{t('text-loading')}...</Typography>
       ) : (
         <>
           <Paper variant="outlined" sx={{ p: 2, mb: 2, overflowX: 'scroll' }}>
@@ -130,7 +132,7 @@ export default function MetadataInput(props) {
           </Paper>
           {/* Button for open dialog with form */}
           <Button variant="outlined" onClick={openForm}>
-            Edit Metadata
+            {t('button-metadata-edit')}
           </Button>
           {/* Dialog with form */}
           <Dialog open={isFormOpen} onClose={closeForm} maxWidth="xs" fullWidth>
@@ -148,10 +150,10 @@ export default function MetadataInput(props) {
               >
                 <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                   <Button variant="contained" type="submit">
-                    Edit Metadata
+                    {t('button-metadata-edit')}
                   </Button>
                   <Button variant="outlined" onClick={closeForm}>
-                    Cancel
+                    {t('button-cancel')}
                   </Button>
                 </Stack>
               </Form>

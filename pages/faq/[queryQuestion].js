@@ -3,6 +3,8 @@ import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import { QUESTION } from 'constants/faq';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -14,6 +16,7 @@ import { useEffect, useState } from 'react';
  */
 export default function Question() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { queryQuestion } = router.query;
   const { account } = useWeb3Context();
   const [title, setTitle] = useState(null);
@@ -40,13 +43,16 @@ export default function Question() {
   }, []);
 
   return (
-    <Layout title={`YourJustice / ${title}`} enableSidebar={!!account}>
+    <Layout
+      title={`${t('page-title-faq')} | ${title}`}
+      enableSidebar={!!account}
+    >
       {title && answer && (
         <>
           <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 6 }}>
             <NextLink href={`/faq`} passHref>
               <Link underline="none" color="inherit">
-                FAQ
+                {t('text-faq')}
               </Link>
             </NextLink>
             <Typography color="text.primary">{title}</Typography>
@@ -60,4 +66,15 @@ export default function Question() {
       )}
     </Layout>
   );
+}
+
+/**
+ * Define localized texts before rendering the page.
+ */
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

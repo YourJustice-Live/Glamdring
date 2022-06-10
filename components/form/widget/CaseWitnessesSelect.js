@@ -1,5 +1,6 @@
 import { Button, Divider, Stack, Typography } from '@mui/material';
 import { IconCloseSquare, IconPlus } from 'icons/core';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import ProfileSelect from './ProfileSelect';
 
@@ -11,6 +12,7 @@ export default function CaseWitnessesSelect(props) {
   const propsSubLabel = props.options?.subLabel;
   const propsDisabled = props.disabled;
   const propsOnChange = props.onChange;
+  const { t } = useTranslation('common');
   const [witnesses, setWitnesses] = useState([null]);
 
   function addWitnessSelect() {
@@ -58,7 +60,7 @@ export default function CaseWitnessesSelect(props) {
             disabled={propsDisabled}
             onClick={addWitnessSelect}
           >
-            Add
+            {t('button-add')}
           </Button>
         )}
         {witnesses.length > 1 && (
@@ -67,7 +69,7 @@ export default function CaseWitnessesSelect(props) {
             disabled={propsDisabled}
             onClick={removeWitnessSelect}
           >
-            Remove
+            {t('button-remove')}
           </Button>
         )}
       </Stack>

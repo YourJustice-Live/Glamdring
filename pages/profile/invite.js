@@ -6,15 +6,18 @@ import ProfileManage from 'components/profile/ProfileManage';
 import ContentProtector from 'components/protector/ContentProtector';
 import { IS_PROFILE_INVITING_DISABLED } from 'constants/features';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 /**
  * Page where account can create profile for another person.
  */
 export default function ProfileInvite() {
+  const { t } = useTranslation('common');
   const { account } = useWeb3Context();
 
   return (
-    <Layout title={'YourJustice / Invite Person'} enableSidebar={!!account}>
+    <Layout title={t('page-title-profile-invite')} enableSidebar={!!account}>
       <ContentProtector
         isAccountRequired={true}
         isAccountProfileRequired={true}
@@ -22,7 +25,7 @@ export default function ProfileInvite() {
         {IS_PROFILE_INVITING_DISABLED ? (
           <Box>
             <Typography variant="h1" gutterBottom>
-              Feature is under development
+              {t('text-feature-is-under-development')}
             </Typography>
             <Stack
               direction="row"
@@ -31,9 +34,7 @@ export default function ProfileInvite() {
               sx={{ mt: 1 }}
             >
               <Construction fontSize="small" />
-              <Typography>
-                The ability to invite other people will be available very soon.
-              </Typography>
+              <Typography>{t('text-feature-inviting-coming-soon')}</Typography>
             </Stack>
           </Box>
         ) : (
@@ -42,4 +43,15 @@ export default function ProfileInvite() {
       </ContentProtector>
     </Layout>
   );
+}
+
+/**
+ * Define localized texts at build time.
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 }

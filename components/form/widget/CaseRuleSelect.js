@@ -10,6 +10,7 @@ import {
 import RuleEffects from 'components/law/RuleEffects';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { theme } from 'theme';
 import { getActionIcon } from 'utils/metadata';
@@ -23,21 +24,22 @@ export default function CaseRuleSelect(props) {
   const propsDisabled = props.disabled;
   const propsSx = props.sx;
   const propsOnChange = props.onChange;
-  const propsJurisdiction = props.formContext?.jurisdiction;
+  const propsJurisdictionId = props.formContext?.formData?.jurisdictionId;
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const propsFormAction = props.formContext?.formAction;
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getJurisdictionRules } = useJurisdiction();
   const [rules, setRules] = useState(null);
   const isMediumDevice = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
-    if (propsJurisdiction && propsFormActionGuid) {
+    if (propsJurisdictionId && propsFormActionGuid) {
       setRules(null);
       getJurisdictionRules(
         null,
-        propsJurisdiction.id,
+        propsJurisdictionId,
         propsFormActionGuid,
         propsFormIsPositive === true,
         propsFormIsPositive === false,
@@ -46,7 +48,7 @@ export default function CaseRuleSelect(props) {
         .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsJurisdiction, propsFormIsPositive, propsFormActionGuid]);
+  }, [propsJurisdictionId, propsFormIsPositive, propsFormActionGuid]);
 
   return (
     <Box sx={{ ...propsSx }}>
@@ -98,13 +100,13 @@ export default function CaseRuleSelect(props) {
                         mr: 0.5,
                       }}
                     >
-                      NOT
+                      {t('text-action-negation')}
                     </Typography>
                   )}
                   <Typography
                     sx={{ fontWeight: 'bold', mr: 1, mt: { xs: 0.2, md: 0 } }}
                   >
-                    {rule?.rule?.uriData?.name || 'None Name'}
+                    {rule?.rule?.uriData?.name || t('text-none-name')}
                   </Typography>
                   <Chip
                     label={`ID: ${rule.ruleId}`}

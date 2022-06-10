@@ -9,7 +9,6 @@ import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInpu
 import useDataContext from 'hooks/context/useDataContext';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
 import useIpfs from 'hooks/useIpfs';
-import useToasts from 'hooks/useToasts';
 import useErrors from 'hooks/useErrors';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -17,6 +16,7 @@ import {
   handleCreateOwnProfileEvent,
   handleEditOwnProfileEvent,
 } from 'utils/analytics';
+import { useTranslation } from 'next-i18next';
 
 /**
  * A component for create, edit own profile or create profile for another person (aka invite).
@@ -34,8 +34,8 @@ export default function ProfileManage({
     isUsingContractSuccessed: 'isUsingContractSuccessed',
   };
 
+  const { t } = useTranslation('common');
   const { handleError } = useErrors();
-  const { showToastSuccessLink } = useToasts();
   const { runProfileUpdater } = useDataContext();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update, add } = useAvatarNftContract();
@@ -49,11 +49,11 @@ export default function ProfileManage({
     properties: {
       image: {
         type: 'string',
-        title: 'Profile Picture',
+        title: '',
       },
       attributes: {
         type: 'array',
-        title: 'Profile Attributes',
+        title: '',
         items: [{}],
       },
     },
@@ -65,7 +65,7 @@ export default function ProfileManage({
       'ui:options': {
         header: (
           <Typography variant="h4" sx={{ mb: 3 }}>
-            Profile Picture
+            {t('input-profile-picture-title')}
           </Typography>
         ),
       },
@@ -89,7 +89,6 @@ export default function ProfileManage({
       const { url } = await uploadJsonToIPFS(
         new AvatarNftMetadata(formData.image, formData.attributes),
       );
-      showToastSuccessLink('Data uploaded to IPFS!', url);
       // Use contract
       setStatus(STATUS.isUsingContract);
       if (action === 'createOwnProfile') {
@@ -116,13 +115,15 @@ export default function ProfileManage({
       {formData && status !== STATUS.isUsingContractSuccessed && (
         <>
           <Typography variant="h1" gutterBottom>
-            {action === 'createOwnProfile' && 'Creating Own Profile'}
-            {action === 'editOwnProfile' && 'Editing Own Profile'}
-            {action === 'createAnotherProfile' && 'Invite Person'}
+            {action === 'createOwnProfile' &&
+              t('dialog-profile-create-own-title')}
+            {action === 'editOwnProfile' && t('dialog-profile-edit-own-title')}
+            {action === 'createAnotherProfile' &&
+              t('dialog-profile-invite-title')}
           </Typography>
           <Typography gutterBottom>
             {action === 'createAnotherProfile' &&
-              "Create a Soul for another person who's not yet in the system."}
+              t('dialog-profile-invite-subscription')}
           </Typography>
           <Divider sx={{ mb: 3 }} />
           <Form
@@ -136,8 +137,8 @@ export default function ProfileManage({
             {status === STATUS.isAvailable && (
               <Button variant="contained" type="submit">
                 {action === 'editOwnProfile'
-                  ? 'Edit Soul Detilas'
-                  : 'Claim Your Soul'}
+                  ? t('button-profile-edit')
+                  : t('button-profile-create')}
               </Button>
             )}
             {status === STATUS.isUploadingToIpfs && (
@@ -147,7 +148,7 @@ export default function ProfileManage({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                Uploading to IPFS
+                {t('text-uploading-to-ipfs')}
               </LoadingButton>
             )}
             {status === STATUS.isUsingContract && (
@@ -157,7 +158,9 @@ export default function ProfileManage({
                 startIcon={<Save />}
                 variant="outlined"
               >
-                {action === 'editOwnProfile' ? 'Updating NFT' : 'Minting NFT'}
+                {action === 'editOwnProfile'
+                  ? t('text-nft-updating')
+                  : t('text-nft-minting')}
               </LoadingButton>
             )}
           </Form>
@@ -168,16 +171,16 @@ export default function ProfileManage({
       {formData && status === STATUS.isUsingContractSuccessed && (
         <>
           <Typography variant="h4" gutterBottom>
-            Transaction is created!
+            {t('notification-transaction-is-created')}
           </Typography>
           <Typography gutterBottom>
             {action === 'editOwnProfile'
-              ? 'Your profile will be updated soon.'
-              : 'Your profile will be minted soon.'}
+              ? t('text-profile-will-be-updated-soon')
+              : t('text-profile-will-be-minted-soon')}
           </Typography>
           <Link href="/" passHref>
             <Button variant="contained" type="submit" sx={{ mt: 2 }}>
-              Go to Home
+              {t('button-go-home')}
             </Button>
           </Link>
         </>
