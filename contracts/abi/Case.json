@@ -1213,9 +1213,9 @@
     "name": "uniqueMembers",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256[]",
         "name": "",
-        "type": "address[]"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -1251,9 +1251,9 @@
     "name": "uniqueRoleMembers",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256[]",
         "name": "",
-        "type": "address[]"
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
