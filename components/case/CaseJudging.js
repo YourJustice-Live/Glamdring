@@ -6,7 +6,6 @@ import useCase from 'hooks/useCase';
 import useDialogContext from 'hooks/context/useDialogContext';
 import { CASE_ROLE, CASE_STAGE, JURISDICTION_ROLE } from 'constants/contracts';
 import { IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED } from 'constants/features';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
