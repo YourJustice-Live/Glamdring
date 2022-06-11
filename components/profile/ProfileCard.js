@@ -156,7 +156,6 @@ function ProfileCaseStats({ profile, sx }) {
     const totalCases =
       Number(profile.avatarNftTotalPositiveCases) +
       Number(profile.avatarNftTotalNegativeCases);
-    const newLocal = 'text-profile-positive-cases';
     return (
       <Stack
         direction="row"
@@ -184,7 +183,7 @@ function ProfileCaseStats({ profile, sx }) {
               ).toString() + '%'}
             </span>
           }
-          title={t(newLocal).toUpperCase()}
+          title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Item
