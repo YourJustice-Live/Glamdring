@@ -51,7 +51,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
           </Box>
         </CardContent>
       ) : (
-        <CardContent>
+        <CardContent sx={{ p: '10px !important' }}>
           <Stack direction="row" spacing={2}>
             <Skeleton
               variant="circular"
@@ -156,6 +156,10 @@ function ProfileCaseStats({ profile, sx }) {
     const totalCases =
       Number(profile.avatarNftTotalPositiveCases) +
       Number(profile.avatarNftTotalNegativeCases);
+    const positiveCasesPercent =
+      (Number(profile.avatarNftTotalPositiveCases) / totalCases) * 100;
+    const negativeCasesPercent =
+      (Number(profile.avatarNftTotalNegativeCases) / totalCases) * 100;
     return (
       <Stack
         direction="row"
@@ -177,10 +181,7 @@ function ProfileCaseStats({ profile, sx }) {
                 t('text-profile-cases')
               }
             >
-              {(
-              (profile.avatarNftTotalPositiveCases / totalCases) *
-                100
-              ).toString() + '%'}
+              {(positiveCasesPercent || 0).toString() + '%'}
             </span>
           }
           title={t('text-profile-positive-cases').toUpperCase()}
@@ -195,10 +196,7 @@ function ProfileCaseStats({ profile, sx }) {
                 t('text-profile-cases')
               }
             >
-              {(
-              (profile.avatarNftTotalNegativeCases / totalCases) *
-                100
-              ).toString() + '%'}
+              {(negativeCasesPercent || 0).toString() + '%'}
             </span>
           }
           title={t('text-profile-negative-cases').toUpperCase()}
