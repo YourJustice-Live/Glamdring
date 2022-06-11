@@ -41,7 +41,7 @@ NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjusti
 2. Create a file .env.local with content:
 
 ```
-NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjustice-subgraph
+NEXT_PUBLIC_SUBGRAPH_API=https://api.thegraph.com/subgraphs/name/kiv1n/yourjustice-sandbox
 ```
 
 ## Naming Convention
