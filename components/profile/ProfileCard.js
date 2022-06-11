@@ -156,6 +156,7 @@ function ProfileCaseStats({ profile, sx }) {
     const totalCases =
       Number(profile.avatarNftTotalPositiveCases) +
       Number(profile.avatarNftTotalNegativeCases);
+    const newLocal = 'text-profile-positive-cases';
     return (
       <Stack
         direction="row"
@@ -169,12 +170,38 @@ function ProfileCaseStats({ profile, sx }) {
           title={t('text-profile-cases').toUpperCase()}
         />
         <Item
-          value={profile.avatarNftTotalPositiveCases}
-          title={t('text-profile-positive-cases').toUpperCase()}
+          value={
+            <span
+              title={
+                profile.avatarNftTotalPositiveCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(
+              (profile.avatarNftTotalPositiveCases / totalCases) *
+                100
+              ).toString() + '%'}
+            </span>
+          }
+          title={t(newLocal).toUpperCase()}
           titleColor={palette.success.main}
         />
         <Item
-          value={profile.avatarNftTotalNegativeCases}
+          value={
+            <span
+              title={
+                profile.avatarNftTotalNegativeCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(
+              (profile.avatarNftTotalNegativeCases / totalCases) *
+                100
+              ).toString() + '%'}
+            </span>
+          }
           title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />
