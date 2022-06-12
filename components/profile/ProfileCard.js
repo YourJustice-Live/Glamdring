@@ -51,7 +51,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
           </Box>
         </CardContent>
       ) : (
-        <CardContent>
+        <CardContent sx={{ p: '10px !important' }}>
           <Stack direction="row" spacing={2}>
             <Skeleton
               variant="circular"
@@ -155,6 +155,11 @@ function ProfileCaseStats({ profile, sx }) {
   if (profile) {
     const totalCases =
       Number(profile.totalPositiveCases) + Number(profile.totalNegativeCases);
+    const positiveCasesPercent =
+      (Number(profile.totalPositiveCases) / totalCases) * 100;
+    const negativeCasesPercent =
+      (Number(profile.totalNegativeCases) / totalCases) * 100;
+
     return (
       <Stack
         direction="row"
@@ -168,12 +173,32 @@ function ProfileCaseStats({ profile, sx }) {
           title={t('text-profile-cases').toUpperCase()}
         />
         <Item
-          value={profile.totalPositiveCases}
+          value={
+            <span
+              title={
+                profile.totalPositiveCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(positiveCasesPercent || 0).toString() + '%'}
+            </span>
+          }
           title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Item
-          value={profile.totalNegativeCases}
+          value={
+            <span
+              title={
+                profile.totalNegativeCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(negativeCasesPercent || 0).toString() + '%'}
+            </span>
+          }
           title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />

@@ -106,12 +106,6 @@ export default function ProfileAttributesInput(props) {
               multiline
               rows={4}
             />
-          </Stack>
-          <Divider sx={{ my: 4 }} />
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            {t('input-profile-contacts-title')}
-          </Typography>
-          <Stack spacing={2}>
             <TextField
               variant="outlined"
               onChange={onChange}

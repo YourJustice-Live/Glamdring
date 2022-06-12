@@ -62,13 +62,6 @@ export default function ProfileManage({
   const uiSchema = {
     image: {
       'ui:widget': 'ImageInput',
-      'ui:options': {
-        header: (
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            {t('input-profile-picture-title')}
-          </Typography>
-        ),
-      },
     },
     attributes: {
       'ui:widget': 'ProfileAttributesInput',
@@ -125,7 +118,7 @@ export default function ProfileManage({
             {action === 'createAnotherProfile' &&
               t('dialog-profile-invite-subscription')}
           </Typography>
-          <Divider sx={{ mb: 3 }} />
+          <Divider />
           <Form
             schema={schema}
             uiSchema={uiSchema}
