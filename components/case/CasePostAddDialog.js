@@ -14,7 +14,7 @@ import CaseEvidencePostInput from 'components/form/widget/CaseEvidencePostInput'
 import { CASE_ROLE } from 'constants/contracts';
 import { CASE_ROLE_KEY } from 'constants/i18n';
 import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
-import useWeb3Context from 'hooks/context/useWeb3Context';
+import useDataContext from 'hooks/context/useDataContext';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useCase from 'hooks/useCase';
 import useErrors from 'hooks/useErrors';
@@ -38,12 +38,12 @@ export default function CasePostAddDialog({
   onClose,
 }) {
   const { t } = useTranslation('common');
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { uploadJsonToIPFS } = useIpfs();
   const { addPost } = useCaseContract();
-  const { isAccountHasCaseRole } = useCase();
+  const { isProfileHasCaseRole } = useCase();
   const [caseRoleNames, setCaseRoleNames] = useState([]);
   const [caseRoleStrings, setCaseRoleStrings] = useState([]);
   const [formData, setFormData] = useState({});
@@ -171,11 +171,11 @@ export default function CasePostAddDialog({
   }
 
   useEffect(() => {
-    // Define which roles the account has
-    if (account && caseObject) {
+    // Define which roles the profile has
+    if (accountProfile && caseObject) {
       const caseRoleNames = Object.values(CASE_ROLE)
         .filter((caseRole) =>
-          isAccountHasCaseRole(caseObject, account, caseRole.id),
+          isProfileHasCaseRole(caseObject, accountProfile.id, caseRole.id),
         )
         .map((caseRole) => caseRole.name);
       const caseRoleStrings = caseRoleNames.map((caseRoleName) =>
@@ -185,7 +185,7 @@ export default function CasePostAddDialog({
       setCaseRoleStrings(caseRoleStrings);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, caseObject]);
+  }, [accountProfile, caseObject]);
 
   return (
     <Dialog

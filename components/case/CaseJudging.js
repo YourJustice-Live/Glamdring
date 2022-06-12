@@ -54,7 +54,7 @@ function CaseJudges({ caseObject, sx }) {
     useState(false);
 
   function becomeJudge() {
-    assignRole(caseObject.id, accountProfile.id, CASE_ROLE.judge.name)
+    assignRole(caseObject.id, accountProfile.owner, CASE_ROLE.judge.name)
       .then(() =>
         showToastSuccess(t('notification-data-is-successfully-updated')),
       )
@@ -68,21 +68,21 @@ function CaseJudges({ caseObject, sx }) {
     if (accountProfile && caseObject?.jurisdiction?.id) {
       getJurisdiction(caseObject.jurisdiction.id)
         .then((jurisdiction) => {
-          const isAccountHasJurisdictionJudgeRole =
+          const isProfileHasJurisdictionJudgeRole =
             isProfileHasJurisdictionRole(
               jurisdiction,
               accountProfile.id,
               JURISDICTION_ROLE.judge.id,
             );
-          const isAccountHasCaseJudgeRole = isProfileHasCaseRole(
+          const isProfileHasCaseJudgeRole = isProfileHasCaseRole(
             caseObject,
             accountProfile.id,
             CASE_ROLE.judge.id,
           );
           setIsProfileHasJurisdictionJudgeRole(
-            isAccountHasJurisdictionJudgeRole,
+            isProfileHasJurisdictionJudgeRole,
           );
-          setIsProfileHasCaseJudgeRole(isAccountHasCaseJudgeRole);
+          setIsProfileHasCaseJudgeRole(isProfileHasCaseJudgeRole);
         })
         .catch((error) => handleError(error));
     }

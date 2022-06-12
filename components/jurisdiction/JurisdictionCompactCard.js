@@ -21,7 +21,10 @@ export default function JurisdctionCompactCard({ jurisdiction, sx }) {
     >
       {jurisdiction ? (
         <>
-          <Avatar src={jurisdiction.image} sx={{ width: 24, height: 24 }}>
+          <Avatar
+            src={jurisdiction.uriData?.image}
+            sx={{ width: 24, height: 24 }}
+          >
             <IconJurisdiction width="24" heigth="24" />
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>

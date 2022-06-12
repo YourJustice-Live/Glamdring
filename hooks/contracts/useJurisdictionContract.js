@@ -50,7 +50,7 @@ export default function useJuridictionContract() {
    *
    * @param {string} contractAddress Jurisdiction address.
    * @param {string} token Token (profile id).
-   * @param {string} role Jurisdiction role.
+   * @param {string} role Jurisdiction role name.
    * @returns Transaction.
    */
   async function assignRole(contractAddress, token, role) {

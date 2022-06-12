@@ -207,7 +207,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
+    <Dialog open={isOpen} onClose={close} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ pb: 0 }}>
         {t('dialog-jurisdiction-filters-title')}
       </DialogTitle>

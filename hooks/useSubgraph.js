@@ -118,7 +118,7 @@ export default function useSubgraph() {
       (entity1, entity2) => entity1.id === entity2.id,
     );
     const sortedResults = unitedResults.sort((a, b) =>
-      Number(a?.memberAccountsCount) < Number(b?.memberAccountsCount) ? 1 : -1,
+      Number(a?.membersCount) < Number(b?.membersCount) ? 1 : -1,
     );
     return sortedResults;
   };
@@ -432,23 +432,25 @@ function getFindJurisdictionEntitiesQuery(
 function getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery) {
   let filterParams1 = `where: {address_contains_nocase: "${searchQuery}"}`;
   let filterParams2 = `where: {name_contains_nocase: "${searchQuery}"}`;
-  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let sortParams = `orderBy: membersCount, orderDirection: desc`;
   let paginationParams = `first: 5, skip: 0`;
   let fields = `
     id
     name
+    uri
+    uriData
     roles {
       id
       roleId
-      accounts
-      accountsCount
+      participants
+      participantsCount
     }
     rules {
       id
     }
     rulesCount
     casesCount
-    memberAccountsCount
+    membersCount
   `;
   return `{
     result1: jurisdictionEntities(${filterParams1}, ${sortParams}, ${paginationParams}) {

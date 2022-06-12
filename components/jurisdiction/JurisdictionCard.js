@@ -26,7 +26,7 @@ export default function JurisdictionCard({ jurisdiction }) {
       const memberRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.member.id,
       );
-      setCitizensCount(memberRole?.accountsCount);
+      setCitizensCount(memberRole?.participantsCount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);

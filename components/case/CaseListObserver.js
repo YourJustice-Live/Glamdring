@@ -280,7 +280,7 @@ function FiltersDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
+    <Dialog open={isOpen} onClose={close} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ pb: 0 }}>{t('dialog-case-filters-title')}</DialogTitle>
       <DialogContent>
         <Form
