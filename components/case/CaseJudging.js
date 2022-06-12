@@ -1,11 +1,11 @@
 import { Button, Chip, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
+import { CASE_ROLE, CASE_STAGE, JURISDICTION_ROLE } from 'constants/contracts';
+import useDataContext from 'hooks/context/useDataContext';
+import useDialogContext from 'hooks/context/useDialogContext';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useCase from 'hooks/useCase';
-import useDialogContext from 'hooks/context/useDialogContext';
-import { CASE_ROLE, CASE_STAGE, JURISDICTION_ROLE } from 'constants/contracts';
-import { IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED } from 'constants/features';
 import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import useToasts from 'hooks/useToasts';
@@ -14,48 +14,28 @@ import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CaseCancelDialog from './CaseCancelDialog';
 import CaseVerdictMakeDialog from './CaseVerdictMakeDialog';
-import useDataContext from 'hooks/context/useDataContext';
-import { Construction } from '@mui/icons-material';
 
 /**
  * A component with a case judges, verdict or cancellation.
  */
 export default function CaseJudging({ caseObject, caseLaws, sx }) {
-  const { t } = useTranslation('common');
-  const isMainJurisdiction =
-    caseObject.jurisdiction?.id?.toLowerCase() ===
-    process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS?.toLowerCase();
-
-  if (!isMainJurisdiction && IS_NOT_MAIN_JURISDICTION_CASE_JUDGING_DISABLED) {
-    return (
-      <Box sx={{ ...sx }}>
-        <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
-        <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
-        <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
-          <Construction fontSize="small" />
-          <Typography>{t('text-feature-judging-coming-soon')}</Typography>
-        </Stack>
-      </Box>
-    );
-  } else {
-    return (
-      <Box sx={{ ...sx }}>
-        <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
-        {caseObject?.stage < CASE_STAGE.verdict && (
-          <CaseRequireVerdictStage caseObject={caseObject} />
-        )}
-        {caseObject?.stage === CASE_STAGE.verdict && (
-          <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
-        )}
-        {caseObject?.stage === CASE_STAGE.closed && (
-          <CaseVerdict caseObject={caseObject} />
-        )}
-        {caseObject.stage === CASE_STAGE.cancelled && (
-          <CaseCancellation caseObject={caseObject} />
-        )}
-      </Box>
-    );
-  }
+  return (
+    <Box sx={{ ...sx }}>
+      <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
+      {caseObject?.stage < CASE_STAGE.verdict && (
+        <CaseRequireVerdictStage caseObject={caseObject} />
+      )}
+      {caseObject?.stage === CASE_STAGE.verdict && (
+        <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
+      )}
+      {caseObject?.stage === CASE_STAGE.closed && (
+        <CaseVerdict caseObject={caseObject} />
+      )}
+      {caseObject.stage === CASE_STAGE.cancelled && (
+        <CaseCancellation caseObject={caseObject} />
+      )}
+    </Box>
+  );
 }
 
 function CaseJudges({ caseObject, sx }) {

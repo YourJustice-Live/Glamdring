@@ -8,15 +8,16 @@ import ImageInput from 'components/form/widget/ImageInput';
 import ProfileAttributesInput from 'components/form/widget/ProfileAttributesInput';
 import useDataContext from 'hooks/context/useDataContext';
 import useAvatarNftContract from 'hooks/contracts/useAvatarNftContract';
-import useIpfs from 'hooks/useIpfs';
 import useErrors from 'hooks/useErrors';
-import Link from 'next/link';
+import useIpfs from 'hooks/useIpfs';
+import useToasts from 'hooks/useToasts';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
   handleCreateOwnProfileEvent,
   handleEditOwnProfileEvent,
 } from 'utils/analytics';
-import { useTranslation } from 'next-i18next';
 
 /**
  * A component for create, edit own profile or create profile for another person (aka invite).
@@ -31,11 +32,12 @@ export default function ProfileManage({
     isAvailable: 'isAvailable',
     isUploadingToIpfs: 'isUploadingToIpfs',
     isUsingContract: 'isUsingContract',
-    isUsingContractSuccessed: 'isUsingContractSuccessed',
   };
 
+  const router = useRouter();
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
+  const { showToastSuccess } = useToasts();
   const { runProfileUpdater } = useDataContext();
   const { uploadJsonToIPFS } = useIpfs();
   const { mint, update, add } = useAvatarNftContract();
@@ -86,16 +88,21 @@ export default function ProfileManage({
       setStatus(STATUS.isUsingContract);
       if (action === 'createOwnProfile') {
         await mint(url);
+        showToastSuccess(t('notification-profile-will-be-minted-soon'));
         runProfileUpdater();
         handleCreateOwnProfileEvent();
       } else if (action === 'editOwnProfile') {
         await update(profile.id, url);
+        showToastSuccess(t('notification-profile-will-be-updated-soon'));
         runProfileUpdater();
         handleEditOwnProfileEvent();
       } else if (action === 'createAnotherProfile') {
         await add(url);
+        showToastSuccess(
+          t('notification-profile-for-another-person-will-be-minted-soon'),
+        );
       }
-      setStatus(STATUS.isUsingContractSuccessed);
+      router.push('/');
     } catch (error) {
       handleError(error, true);
       setStatus(STATUS.isAvailable);
@@ -104,80 +111,54 @@ export default function ProfileManage({
 
   return (
     <Box>
-      {/* Form for fill profile */}
-      {formData && status !== STATUS.isUsingContractSuccessed && (
-        <>
-          <Typography variant="h1" gutterBottom>
-            {action === 'createOwnProfile' &&
-              t('dialog-profile-create-own-title')}
-            {action === 'editOwnProfile' && t('dialog-profile-edit-own-title')}
-            {action === 'createAnotherProfile' &&
-              t('dialog-profile-invite-title')}
-          </Typography>
-          <Typography gutterBottom>
-            {action === 'createAnotherProfile' &&
-              t('dialog-profile-invite-subscription')}
-          </Typography>
-          <Divider />
-          <Form
-            schema={schema}
-            uiSchema={uiSchema}
-            formData={formData}
-            onSubmit={submit}
-            widgets={widgets}
-            disabled={status !== STATUS.isAvailable ? true : false}
+      <Typography variant="h1" gutterBottom>
+        {action === 'createOwnProfile' && t('dialog-profile-create-own-title')}
+        {action === 'editOwnProfile' && t('dialog-profile-edit-own-title')}
+        {action === 'createAnotherProfile' && t('dialog-profile-invite-title')}
+      </Typography>
+      <Typography gutterBottom>
+        {action === 'createAnotherProfile' &&
+          t('dialog-profile-invite-description')}
+      </Typography>
+      <Divider />
+      <Form
+        schema={schema}
+        uiSchema={uiSchema}
+        formData={formData}
+        onSubmit={submit}
+        widgets={widgets}
+        disabled={status !== STATUS.isAvailable ? true : false}
+      >
+        {status === STATUS.isAvailable && (
+          <Button variant="contained" type="submit">
+            {action === 'createOwnProfile' && t('button-profile-create')}
+            {action === 'editOwnProfile' && t('button-profile-edit')}
+            {action === 'createAnotherProfile' && t('button-profile-invite')}
+          </Button>
+        )}
+        {status === STATUS.isUploadingToIpfs && (
+          <LoadingButton
+            loading
+            loadingPosition="start"
+            startIcon={<Save />}
+            variant="outlined"
           >
-            {status === STATUS.isAvailable && (
-              <Button variant="contained" type="submit">
-                {action === 'editOwnProfile'
-                  ? t('button-profile-edit')
-                  : t('button-profile-create')}
-              </Button>
-            )}
-            {status === STATUS.isUploadingToIpfs && (
-              <LoadingButton
-                loading
-                loadingPosition="start"
-                startIcon={<Save />}
-                variant="outlined"
-              >
-                {t('text-uploading-to-ipfs')}
-              </LoadingButton>
-            )}
-            {status === STATUS.isUsingContract && (
-              <LoadingButton
-                loading
-                loadingPosition="start"
-                startIcon={<Save />}
-                variant="outlined"
-              >
-                {action === 'editOwnProfile'
-                  ? t('text-nft-updating')
-                  : t('text-nft-minting')}
-              </LoadingButton>
-            )}
-          </Form>
-        </>
-      )}
-
-      {/* Message that form is submitter */}
-      {formData && status === STATUS.isUsingContractSuccessed && (
-        <>
-          <Typography variant="h4" gutterBottom>
-            {t('notification-transaction-is-created')}
-          </Typography>
-          <Typography gutterBottom>
-            {action === 'editOwnProfile'
-              ? t('text-profile-will-be-updated-soon')
-              : t('text-profile-will-be-minted-soon')}
-          </Typography>
-          <Link href="/" passHref>
-            <Button variant="contained" type="submit" sx={{ mt: 2 }}>
-              {t('button-go-home')}
-            </Button>
-          </Link>
-        </>
-      )}
+            {t('text-uploading-to-ipfs')}
+          </LoadingButton>
+        )}
+        {status === STATUS.isUsingContract && (
+          <LoadingButton
+            loading
+            loadingPosition="start"
+            startIcon={<Save />}
+            variant="outlined"
+          >
+            {action === 'createOwnProfile' && t('text-nft-minting')}
+            {action === 'editOwnProfile' && t('text-nft-updating')}
+            {action === 'createAnotherProfile' && t('text-nft-minting')}
+          </LoadingButton>
+        )}
+      </Form>
     </Box>
   );
 }

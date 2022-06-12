@@ -69,8 +69,6 @@
   "text-profile-cases": "Cases",
   "text-profile-positive-cases": "Positive",
   "text-profile-negative-cases": "Negative",
-  "text-profile-will-be-minted-soon": "Your soul will arrive shortly.",
-  "text-profile-will-be-updated-soon": "Your soul will be transformed momentarily.",
   "text-profile-total-reputation": "Total Reputation",
 
   "text-judges": "Judges",
@@ -145,8 +143,6 @@
   "text-order-by-negative-reputation": "Good Guys Last",
 
   "text-feature-is-under-development": "Feature is under development",
-  "text-feature-inviting-coming-soon": "The ability to invite other people will be available very soon.",
-  "text-feature-judging-coming-soon": "Judging feature for this case is under development.",
 
   "text-copy-address-to-clipboard": "Copy address to clipboard",
   "text-copy-link-to-clipboard": "Copy link to clipboard",
@@ -215,16 +211,18 @@
   "button-metadata-edit": "Edit Metadata",
   "button-propose-edits": "Propose Edits",
 
-  "notification-data-is-successfully-updated": "Success! Data will be updated soon.",
+  "notification-data-is-successfully-updated": "Success! Data will be updated soon",
+  "notification-profile-will-be-minted-soon": "Your soul will arrive shortly",
+  "notification-profile-will-be-updated-soon": "Your soul will be transformed momentarily",
+  "notification-profile-for-another-person-will-be-minted-soon": "Soul of another person will arrive shortly",
   "notification-thanks-for-feedback": "Thank you for your feedback!",
   "notification-address-is-copied": "Address copied",
   "notification-link-is-copied": "Link copied",
-  "notification-transaction-is-created": "Transaction created!",
 
   "dialog-profile-create-own-title": "Claim Your Soul",
   "dialog-profile-edit-own-title": "Transform Soul",
   "dialog-profile-invite-title": "Invite Person",
-  "dialog-profile-invite-subscription": "Summon the soul of another person to YourJustice.",
+  "dialog-profile-invite-description": "Summon the soul of another person to YourJustice.",
 
   "dialog-jurisdiction-create-title": "Create Jurisdiction",
   "dialog-jurisdiction-update-title": "Update Jurisdiction",

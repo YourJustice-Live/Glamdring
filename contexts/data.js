@@ -51,6 +51,9 @@ export function DataProvider({ children }) {
       try {
         // Define data
         const accountProfile = await getProfile({ owner: account });
+        if (!accountProfile) {
+          return;
+        }
         const accountProfileIsJudgeJurisdictions = await getJurisdictions({
           judge: accountProfile.id,
           first: jurisdictionsLoadingLimit,
