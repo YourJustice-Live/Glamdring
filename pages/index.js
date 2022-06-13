@@ -79,15 +79,15 @@ export default function Index() {
 
   return (
     <Layout enableSidebar={!!account}>
-      <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
-        <Typography variant="h1" gutterBottom>
+      <Box sx={{ mt: 6, textAlign: 'center' }}>
+        <Typography gutterBottom sx={{ fontSize: '2.2rem', fontWeight: 600 }}>
           {t('page-main-headline')}
         </Typography>
-        <Typography>{t('page-main-supporting-headline')}</Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <ProfileSelect
-          sx={{ width: { xs: 1, md: 580 } }}
+          label={t('page-main-text-search-target')}
+          sx={{ width: { xs: 1, md: 520 } }}
           onChange={(account) => router.push(`/profile/${account}`)}
         />
       </Box>
