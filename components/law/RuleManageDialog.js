@@ -102,7 +102,7 @@ export default function RuleManageDialog({
             value: {
               type: 'integer',
               title: 'Value',
-              default: 2,
+              default: 3,
               minimum: 1,
             },
             direction: {

@@ -1,4 +1,5 @@
-import { Backdrop, CircularProgress } from '@mui/material';
+import { Backdrop } from '@mui/material';
+import { LogoAnimated } from 'icons/logo';
 
 /**
  * A component with a loading backdrop.
@@ -12,7 +13,7 @@ export default function LoadingBackdrop() {
       }}
       open
     >
-      <CircularProgress size={64} />
+      <LogoAnimated width="64px" heigth="64px" />
     </Backdrop>
   );
 }
