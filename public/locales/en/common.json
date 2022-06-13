@@ -180,7 +180,8 @@
 
   "button-profile-create": "Claim Soul",
   "button-profile-create-own": "Claim Your Soul",
-  "button-profile-edit": "Edit Your Soul",
+  "button-profile-edit": "Edit",
+  "button-profile-save": "Save",
   "button-profile-invite": "Invite",
   "button-profile-increase-reputation": "Upvote",
   "button-profile-decrease-reputation": "Downvote",

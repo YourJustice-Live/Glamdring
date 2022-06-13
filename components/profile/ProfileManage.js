@@ -130,7 +130,7 @@ export default function ProfileManage({
             {status === STATUS.isAvailable && (
               <Button variant="contained" type="submit">
                 {action === 'editOwnProfile'
-                  ? t('button-profile-edit')
+                  ? t('button-profile-save')
                   : t('button-profile-create')}
               </Button>
             )}
