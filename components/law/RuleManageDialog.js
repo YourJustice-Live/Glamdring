@@ -102,9 +102,8 @@ export default function RuleManageDialog({
             value: {
               type: 'integer',
               title: 'Value',
-              default: 0,
-              minimum: 0,
-              maximum: 20,
+              default: 3,
+              minimum: 1,
             },
             direction: {
               type: 'boolean',
@@ -176,11 +175,6 @@ export default function RuleManageDialog({
           },
           requiredFields: ['name'],
         },
-      },
-    },
-    effects: {
-      items: {
-        value: { 'ui:widget': 'range' },
       },
     },
     confirmation: {
