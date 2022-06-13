@@ -304,8 +304,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IAssocRepo",
-        "name": "assocRepo",
+        "internalType": "contract IOpenRepo",
+        "name": "openRepo",
         "type": "address"
       },
       {
