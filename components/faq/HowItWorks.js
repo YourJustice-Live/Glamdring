@@ -10,7 +10,9 @@ export default function HowItWorks() {
     <>
       {/* Intro */}
       <Box sx={{ mb: 6 }}>
-        <Typography gutterBottom>Hello, and thank you for joining us!</Typography>
+        <Typography gutterBottom>
+          Hello, and thank you for joining us!
+        </Typography>
         <Typography>
           In the following sections, you will learn how to use the platform.
         </Typography>
@@ -23,13 +25,15 @@ export default function HowItWorks() {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            As you might already know, the easiest and most common crypto-wallet is, of course, Metamask.
+            As you might already know, the easiest and most common crypto-wallet
+            is, of course, Metamask.
           </Typography>
           <Typography gutterBottom>
-            It is an easy to use browser extension for Chrome (and Brave) that allows you to interact with all Ethereum compatible blockchains.
+            It is an easy to use browser extension for Chrome (and Brave) that
+            allows you to interact with all Ethereum compatible blockchains.
           </Typography>
           <Typography gutterBottom>
-            To install Metamask go to {' '}
+            To install Metamask go to{' '}
             <Link
               href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
               underline="none"
@@ -37,8 +41,7 @@ export default function HowItWorks() {
             >
               chrome.google.com/webstore
             </Link>
-            &nbsp;
-            and follow the instructions
+            &nbsp; and follow the instructions
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-1_mduhsz.gif"
@@ -47,14 +50,18 @@ export default function HowItWorks() {
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Once you have installed Metamask, you should see a little fox icon on the top right corner of your browser.
+            Once you have installed Metamask, you should see a little fox icon
+            on the top right corner of your browser.
           </Typography>
           <Typography gutterBottom>
-            We currently run on Rinkeby – an Ethereum Testnet.
-            So, you'd need to click that little fox icon to open your Metamask, go to 'Settings', 'Advanced' and turn on the 'Show Test Netwoks' option.
+            We currently run on Rinkeby – an Ethereum Testnet. So, you&apos;d
+            need to click that little fox icon to open your Metamask, go to
+            &apos;Settings&apos;, &apos;Advanced&apos; and turn on the
+            &apos;Show Test Netwoks&apos; option.
           </Typography>
           <Typography gutterBottom>
-            This will allow your Metamask to connect to test networks, where tokens are free!
+            This will allow your Metamask to connect to test networks, where
+            tokens are free!
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-2_xuyfiv.gif"
@@ -70,13 +77,19 @@ export default function HowItWorks() {
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            dApps need a wallet in order to interact with the blockchain. So, every time you connect to a dApp, you'd need to allow that dApp to use your wallet.
+            dApps need a wallet in order to interact with the blockchain. So,
+            every time you connect to a dApp, you&apos;d need to allow that dApp
+            to use your wallet.
           </Typography>
           <Typography gutterBottom>
-            To connect your shiny new Metamask wallet with our dApp, click the 'Connect Wallet' button on the top right corner and select the cute Metamask fox-head.
+            To connect your shiny new Metamask wallet with our dApp, click the
+            &apos;Connect Wallet&apos; button on the top right corner and select
+            the cute Metamask fox-head.
           </Typography>
           <Typography gutterBottom>
-            Once you've done that, you get a small, or large window showing your available accounts. Select one of them and click the 'Next' and 'Connect' buttons.
+            Once you&apos;ve done that, you get a small, or large window showing
+            your available accounts. Select one of them and click the
+            &apos;Next&apos; and &apos;Connect&apos; buttons.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-3_ilpkpy.gif"
@@ -84,14 +97,14 @@ export default function HowItWorks() {
           />
         </Box>
         <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>Great, you are now connected!</Typography>
           <Typography gutterBottom>
-            Great, you are now connected!
+            Now all you need to do is switch to the Rinkeby test network and
+            you&apos;re all set.
           </Typography>
           <Typography gutterBottom>
-            Now all you need to do is switch to the Rinkeby test network and you're all set.
-          </Typography>
-          <Typography gutterBottom>
-            To switch newtowkrs, click the little fox-head icon again and select the 'Rinkeby Test Network' option.
+            To switch newtowkrs, click the little fox-head icon again and select
+            the &apos;Rinkeby Test Network&apos; option.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-4_xilh9k.gif"
@@ -99,17 +112,18 @@ export default function HowItWorks() {
           />
         </Box>
         <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>Great Job!</Typography>
           <Typography gutterBottom>
-            Great Job!
+            When using a crypto chain you&apos;d need to pay for
+            &apos;Gas&apos;. Gas is the cost of running a transaction on the
+            blockchain.
           </Typography>
           <Typography gutterBottom>
-            When using a crypto chain you'd need to pay for 'Gas'. Gas is the cost of running a transaction on the blockchain.
+            So next, let&apos;s set you up with some free Tokens, so you can pay
+            for your gas fees.
           </Typography>
           <Typography gutterBottom>
-            So next, let's set you up with some free Tokens, so you can pay for your gas fees.
-          </Typography>
-          <Typography gutterBottom>
-            You can get some of those free tokens from the {' '}
+            You can get some of those free tokens from the{' '}
             <Link
               href="https://rinkebyfaucet.com/"
               underline="none"
@@ -117,7 +131,7 @@ export default function HowItWorks() {
             >
               rinkebyfaucet.com
             </Link>{' '}
-            or {' '}
+            or{' '}
             <Link
               href="https://faucets.chain.link/rinkeby"
               underline="none"
@@ -128,11 +142,12 @@ export default function HowItWorks() {
             .
           </Typography>
           <Typography gutterBottom>
-            To do that, you'll need your wallet address.
+            To do that, you&apos;ll need your wallet address.
           </Typography>
           <Typography gutterBottom>
-            You can your wallet address just click the little fox-head and then click your address on the top.
-            It'll be stored in your clipboard automagically.
+            You can your wallet address just click the little fox-head and then
+            click your address on the top. It&apos;ll be stored in your
+            clipboard automagically.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-5_np25qd.gif"
@@ -141,11 +156,10 @@ export default function HowItWorks() {
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Then pase your wallet address in one of these faucets and wait for the free tokens to show up.
+            Then pase your wallet address in one of these faucets and wait for
+            the free tokens to show up.
           </Typography>
-          <Typography gutterBottom>
-            It may take a minute or two...
-          </Typography>
+          <Typography gutterBottom>It may take a minute or two...</Typography>
         </Box>
       </Box>
       {/* Step 2 */}
