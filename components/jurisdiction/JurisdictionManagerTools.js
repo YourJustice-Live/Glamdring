@@ -1,9 +1,12 @@
 import { Alert, Button, Stack, Typography } from '@mui/material';
 import RoleManageDialog from 'components/jurisdiction/JurisdictionRoleManageDialog';
+import { JURISDICTION_ROLE } from 'constants/contracts';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useWeb3Context from 'hooks/context/useWeb3Context';
+import useJurisdiction from 'hooks/useJurisdiction';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
 import JurisdictionManageDialog from './JurisdictionManageDialog';
@@ -13,21 +16,35 @@ import JurisdictionManageDialog from './JurisdictionManageDialog';
  */
 export default function JurisdictionManagerTools({ jurisdiction, sx }) {
   const { t } = useTranslation('common');
+  const router = useRouter();
   const { account } = useWeb3Context();
   const { showDialog, closeDialog } = useDialogContext();
-  const router = useRouter();
-  const [isVisible, setIsVisible] = useState(true);
+  const { isAccountHasJurisdictionRole } = useJurisdiction();
+  const [isAccountAdmin, setIsAccountAdmin] = useState(false);
   const isJurisdictionMain =
     jurisdiction?.id?.toLowerCase() ===
     process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS.toLowerCase();
 
-  if (account && jurisdiction && isVisible) {
+  useEffect(() => {
+    setIsAccountAdmin(false);
+    if (account && jurisdiction) {
+      setIsAccountAdmin(
+        isAccountHasJurisdictionRole(
+          jurisdiction,
+          account,
+          JURISDICTION_ROLE.admin.id,
+        ),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, jurisdiction]);
+
+  if (isAccountAdmin) {
     return (
       <Alert
         severity="info"
         icon={false}
         sx={{ p: 3, background: palette.grey[50], boxShadow: 'none', ...sx }}
-        onClose={() => setIsVisible(false)}
       >
         <Typography variant="h4" gutterBottom>
           {t('alert-manager-tools-title')}

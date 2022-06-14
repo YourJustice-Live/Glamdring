@@ -317,5 +317,5 @@
   "alert-propose-law-button-propose": "Propose",
 
   "alert-manager-tools-title": "Manager Tools",
-  "alert-manager-tools-description": "Features for users with appropriate roles to manage this jurisdiction"
+  "alert-manager-tools-description": "Features for jurisdiction admins."
 }
