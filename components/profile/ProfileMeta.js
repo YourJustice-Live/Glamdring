@@ -21,7 +21,7 @@ import { Box } from '@mui/system';
 import InteractiveAddress from 'components/address/InteractiveAddress';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconProfile } from 'icons/core';
+import { IconEdit, IconProfile } from 'icons/core';
 import { IconMember } from 'icons/entities';
 import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
@@ -205,7 +205,12 @@ function ProfileEditButton({ profile, sx }) {
   if (profile?.owner?.toLowerCase() === account?.toLowerCase()) {
     return (
       <NextLink href={`/profile/edit`} passHref>
-        <Button size="small" variant="outlined" sx={{ ...sx }}>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<IconEdit width="18px" height="18px" />}
+          sx={{ ...sx }}
+        >
           {t('button-profile-edit')}
         </Button>
       </NextLink>

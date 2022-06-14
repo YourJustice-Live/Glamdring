@@ -14,8 +14,8 @@
   "page-title-events": "YourJustice — Events",
   "page-title-sandbox": "YourJustice — Sandbox",
 
-  "page-main-headline": "Check or impact reputation of crypto people, communities, companies and addresses",
-  "page-main-supporting-headline": "Who was involved in the activities that made you uncomfortable?",
+  "page-main-headline": "Check or impact reputation of people, DAOs, communities, companies or addresses",
+  "page-main-text-search-target": "People, DAOs, communities, companies, addresses, etc",
   "page-main-text-light-side": "Light Side",
   "page-main-text-dark-side": "Dark Side",
 
@@ -176,7 +176,8 @@
 
   "button-profile-create": "Claim Soul",
   "button-profile-create-own": "Claim Your Soul",
-  "button-profile-edit": "Edit Your Soul",
+  "button-profile-edit": "Edit",
+  "button-profile-save": "Save",
   "button-profile-invite": "Invite",
   "button-profile-increase-reputation": "Upvote",
   "button-profile-decrease-reputation": "Downvote",
@@ -314,5 +315,5 @@
   "alert-propose-law-button-propose": "Propose",
 
   "alert-manager-tools-title": "Manager Tools",
-  "alert-manager-tools-description": "Features for users with appropriate roles to manage this jurisdiction"
+  "alert-manager-tools-description": "Features for jurisdiction admins."
 }
