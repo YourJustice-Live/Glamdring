@@ -51,7 +51,7 @@ function CaseAddressJurisdictionCreatedDate({
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
-              alignItems: 'center',
+              alignItems: { xs: 'flex-start', md: 'center' },
             }}
           >
             {/* Address */}
@@ -66,7 +66,7 @@ function CaseAddressJurisdictionCreatedDate({
               sx={{ mx: 1.5, display: { xs: 'none', md: 'block' } }}
             />
             {/* Jurisdiction */}
-            <Typography variant="body2" sx={{ mt: { xs: 0.3, md: 0 } }}>
+            <Typography variant="body2">
               <NextLink
                 href={`/jurisdiction/${caseObject?.jurisdiction?.id || '#'}`}
                 passHref
