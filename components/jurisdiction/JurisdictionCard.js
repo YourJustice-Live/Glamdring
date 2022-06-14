@@ -64,7 +64,7 @@ export default function JurisdictionCard({ jurisdiction }) {
               <Typography variant="body2">
                 {truncate(jurisdiction.uriData?.description, { length: 36 })}
               </Typography>
-              {citizensCount && (
+              {citizensCount > 0 && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {citizensCount} {t('text-citizens').toLowerCase()}
                 </Typography>
