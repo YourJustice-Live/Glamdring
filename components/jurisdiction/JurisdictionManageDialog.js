@@ -8,10 +8,12 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import MetadataInput from 'components/form/widget/MetadataInput';
+import JurisdictionMetadata from 'classes/metadata/JurisdictionMetadata';
+import ImageInput from 'components/form/widget/ImageInput';
 import useHubContract from 'hooks/contracts/useHubContract';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
+import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
@@ -33,62 +35,53 @@ export default function JurisdictionManageDialog({
   const { showToastSuccess } = useToasts();
   const { makeJurisdiction } = useHubContract();
   const { setUri } = useJuridictionContract();
+  const { uploadJsonToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
-  const [formData, setFormData] = useState(jurisdiction || {});
+  const [formData, setFormData] = useState({
+    ...(jurisdiction && {
+      image: jurisdiction.image,
+      name: jurisdiction.name,
+      description: jurisdiction.description,
+    }),
+  });
 
   const schema = {
     type: 'object',
     required: ['name'],
     properties: {
-      // Show id scheme only for updating a jurisdiction
-      ...(jurisdiction && {
-        id: {
-          type: 'string',
-          title: t('input-jurisdiction-id-title'),
-        },
-      }),
+      image: {
+        type: 'string',
+        title: '',
+      },
       name: {
         type: 'string',
         title: t('input-name-title'),
-        default: '',
       },
-      uri: {
+      description: {
         type: 'string',
-        title: t('input-jurisdiction-metadata-title'),
-        default: '',
+        title: t('input-description-title'),
       },
     },
   };
 
   const uiSchema = {
-    id: {
-      'ui:disabled': true,
+    image: {
+      'ui:widget': 'ImageInput',
     },
     name: {
       'ui:disabled': jurisdiction ? true : false,
     },
-    uri: {
-      'ui:emptyValue': '',
-      'ui:widget': 'MetadataInput',
+    description: {
+      'ui:widget': 'textarea',
       'ui:options': {
-        subLabel: t('input-jurisdiction-metadata-description'),
-        fields: {
-          image: {
-            type: 'string',
-            title: '',
-          },
-          description: {
-            type: 'string',
-            title: t('input-description-title'),
-          },
-        },
+        rows: 3,
       },
     },
   };
 
   const widgets = {
-    MetadataInput: MetadataInput,
+    ImageInput: ImageInput,
   };
 
   async function close() {
@@ -102,11 +95,14 @@ export default function JurisdictionManageDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
+      const { url: jurisdictionMetadataUri } = await uploadJsonToIPFS(
+        new JurisdictionMetadata(formData.image, formData.description),
+      );
       if (jurisdiction) {
-        await setUri(jurisdiction?.id, formData.uri);
+        await setUri(jurisdiction?.id, jurisdictionMetadataUri);
         handleSetJurisdictionUri(jurisdiction?.id);
       } else {
-        await makeJurisdiction(formData.name, formData.uri);
+        await makeJurisdiction(formData.name, jurisdictionMetadataUri);
         handleMakeJurisdiction();
       }
       showToastSuccess(t('notification-data-is-successfully-updated'));
@@ -119,7 +115,7 @@ export default function JurisdictionManageDialog({
 
   return (
     <Dialog open={isOpen} onClose={isLoading ? null : close}>
-      <DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>
         {jurisdiction
           ? t('dialog-jurisdiction-update-title')
           : t('dialog-jurisdiction-create-title')}
