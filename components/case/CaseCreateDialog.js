@@ -133,7 +133,7 @@ function SchemaDialog({ onLookSchema, isClose, onClose }) {
         >
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <Image
-              src="/images/case-schema-square.svg"
+              src="/images/how-case-works-schema-square.svg"
               layout="responsive"
               loading="lazy"
               width={1080}
@@ -143,7 +143,7 @@ function SchemaDialog({ onLookSchema, isClose, onClose }) {
           </Box>
           <Box sx={{ display: { xs: 'block', md: 'none' } }}>
             <Image
-              src="/images/case-schema.svg"
+              src="/images/how-case-works-schema.svg"
               layout="responsive"
               loading="lazy"
               width={640}
