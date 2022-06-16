@@ -181,7 +181,7 @@ function ProfileCaseStats({ profile, sx }) {
                 t('text-profile-cases')
               }
             >
-              {(positiveCasesPercent || 0).toString() + '%'}
+              {(positiveCasesPercent || 0).toFixed() + '%'}
             </span>
           }
           title={t('text-profile-positive-cases').toUpperCase()}
@@ -196,7 +196,7 @@ function ProfileCaseStats({ profile, sx }) {
                 t('text-profile-cases')
               }
             >
-              {(negativeCasesPercent || 0).toString() + '%'}
+              {(negativeCasesPercent || 0).toFixed() + '%'}
             </span>
           }
           title={t('text-profile-negative-cases').toUpperCase()}
