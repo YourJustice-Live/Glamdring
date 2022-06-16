@@ -137,6 +137,12 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "entRole",
         "type": "string"
@@ -730,6 +736,11 @@
         "internalType": "string",
         "name": "entRole",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
         "internalType": "string",
