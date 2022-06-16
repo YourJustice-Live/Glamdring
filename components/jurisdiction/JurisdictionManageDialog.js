@@ -40,9 +40,9 @@ export default function JurisdictionManageDialog({
   const [isOpen, setIsOpen] = useState(!isClose);
   const [formData, setFormData] = useState({
     ...(jurisdiction && {
-      image: jurisdiction.image,
+      image: jurisdiction.uriData?.image,
       name: jurisdiction.name,
-      description: jurisdiction.description,
+      description: jurisdiction.uriData?.description,
     }),
   });
 
