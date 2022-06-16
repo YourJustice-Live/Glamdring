@@ -194,11 +194,11 @@ export default function CasePostAddDialog({
       maxWidth="xs"
       fullWidth
     >
-      <DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>
         {postType === POST_TYPE.evidence && t('dialog-case-add-evidence-title')}
         {postType === POST_TYPE.comment && t('dialog-case-add-comment-title')}
         {postType === POST_TYPE.confirmation &&
-          'dialog-case-add-confirmation-title'}
+          t('dialog-case-add-confirmation-title')}
       </DialogTitle>
       <DialogContent>
         <Form
