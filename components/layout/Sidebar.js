@@ -39,7 +39,7 @@ export function Sidebar() {
     setAccountProfileJurisdictions(null);
     if (accountProfile) {
       getJurisdictions({
-        member: accountProfile.account,
+        member: accountProfile.id,
         first: jurisdictionsLoadingLimit,
       })
         .then((jurisdictions) => setAccountProfileJurisdictions(jurisdictions))
@@ -84,7 +84,7 @@ export function Sidebar() {
                     height: 82,
                     borderRadius: '16px',
                   }}
-                  src={accountProfile.avatarNftUriImage}
+                  src={accountProfile.uriImage}
                 >
                   <IconMember width="82" height="82" />
                 </Avatar>
@@ -96,23 +96,23 @@ export function Sidebar() {
                     variant="body2"
                     sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
                   >
-                    {`+${accountProfile.avatarNftTotalPositiveRating}`}
+                    {`+${accountProfile.totalPositiveRating}`}
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
                   >
-                    {`-${accountProfile.avatarNftTotalNegativeRating}`}
+                    {`-${accountProfile.totalNegativeRating}`}
                   </Typography>
                 </Box>
-                <NextLink href={`/profile/${accountProfile.account}`} passHref>
+                <NextLink href={`/profile/${accountProfile.id}`} passHref>
                   <Link sx={{ mb: 2 }} underline="none">
                     {formatProfileFirstLastName(accountProfile)}
                   </Link>
                 </NextLink>
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    {formatAddress(accountProfile.account)}
+                    {formatAddress(accountProfile.owner)}
                   </Typography>
                 </Box>
               </Box>
@@ -178,7 +178,7 @@ export function Sidebar() {
                         fontSize: 14,
                         mr: 1,
                       }}
-                      src={jurisdiction.image}
+                      src={jurisdiction.uriData?.image}
                     >
                       <IconJurisdiction width="22" height="22" />
                     </Avatar>

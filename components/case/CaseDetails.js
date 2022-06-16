@@ -57,8 +57,8 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
               )}
             </Stack>
             <Stack spacing={1} sx={{ mt: 1.5 }}>
-              {caseObject.subjectAccounts?.map((account, accountIndex) => (
-                <ProfileCompactCard key={accountIndex} account={account} />
+              {caseObject?.subjects?.map((profileId, index) => (
+                <ProfileCompactCard key={index} profileId={profileId} />
               ))}
             </Stack>
           </Box>
@@ -75,8 +75,8 @@ export default function CaseDetails({ caseObject, caseLaws, sx }) {
               )}
             </Stack>
             <Stack spacing={1} sx={{ mt: 1.5 }}>
-              {caseObject.affectedAccounts?.map((account, accountIndex) => (
-                <ProfileCompactCard key={accountIndex} account={account} />
+              {caseObject?.affecteds?.map((profileId, index) => (
+                <ProfileCompactCard key={index} profileId={profileId} />
               ))}
             </Stack>
           </Box>

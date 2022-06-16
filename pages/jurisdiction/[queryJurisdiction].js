@@ -42,20 +42,20 @@ export default function Jurisdiction() {
     try {
       const jurisdiction = await getJurisdiction(queryJurisdiction);
       if (jurisdiction) {
-        const judgeRole = jurisdiction.roles.find(
+        const judges = jurisdiction.roles.find(
           (role) => role.roleId === JURISDICTION_ROLE.judge.id,
         );
-        const adminRole = jurisdiction.roles.find(
+        const admins = jurisdiction.roles.find(
           (role) => role.roleId === JURISDICTION_ROLE.admin.id,
         );
-        const memberRole = jurisdiction.roles.find(
+        const members = jurisdiction.roles.find(
           (role) => role.roleId === JURISDICTION_ROLE.member.id,
         );
         setJurisdiction(jurisdiction);
         setOfficialsCount(
-          (judgeRole?.accountsCount || 0) + (adminRole?.accountsCount || 0),
+          (judges?.participantsCount || 0) + (admins?.participantsCount || 0),
         );
-        setCitizensCount(memberRole?.accountsCount || 0);
+        setCitizensCount(members?.participantsCount);
       }
     } catch (error) {
       handleError(error, true);

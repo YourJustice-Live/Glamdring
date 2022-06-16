@@ -8,7 +8,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
- * A widget to select profile.
+<<<<<<< HEAD
+ * A widget to select profile (profile id).
+=======
+ * A widget to select profile (account).
+>>>>>>> dev
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
@@ -41,6 +45,9 @@ export default function ProfileSelect(props) {
     [],
   );
 
+  /**
+   * Search profiles if input value is changed.
+   */
   useEffect(() => {
     let isComponentActive = true;
     searchProfiles(inputValue, (profiles) => {
@@ -55,7 +62,7 @@ export default function ProfileSelect(props) {
           newOptions = unionWith(
             newOptions,
             profiles,
-            (profile1, profile2) => profile1.account === profile2.account,
+            (profile1, profile2) => profile1.id === profile2.id,
           );
         }
         setOptions(newOptions);
@@ -67,11 +74,13 @@ export default function ProfileSelect(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue, value]);
 
+  /**
+   * Init selected value if props value is defined
+   */
   useEffect(() => {
-    // Init selected value if props value is defined
     if (propsValue) {
       setIsDisabled(true);
-      getProfile(propsValue)
+      getProfile({ id: propsValue })
         .then((profile) => {
           setValue(profile);
           setIsDisabled(false);
@@ -88,22 +97,23 @@ export default function ProfileSelect(props) {
         disabled={isDisabled || propsDisabled}
         getOptionLabel={(option) =>
           formatProfileFirstLastName(option) +
-          ' ' +
-          formatAddress(option.account)
+          ' (' +
+          option.id +
+          ' , ' +
+          formatAddress(option.owner) +
+          ')'
         }
         filterOptions={(x) => x}
         options={options}
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue ? newValue.account : null);
+          propsOnChange(newValue?.id);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        isOptionEqualToValue={(option, value) =>
-          option.account === value.account
-        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => (
           <TextField
             fullWidth
@@ -119,6 +129,7 @@ export default function ProfileSelect(props) {
             <li {...props}>
               <ProfileCompactCard
                 profile={option}
+                disableId={false}
                 disableAddress={false}
                 disableLink={true}
                 disableRating={true}

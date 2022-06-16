@@ -1,5 +1,5 @@
 export const typography = {
-  fontFamily: ['Manrope', 'monospace'].join(','),
+  fontFamily: ['Manrope', 'sans-serif'].join(','),
   h1: {
     fontSize: '2rem',
     lineHeight: '2.25rem',

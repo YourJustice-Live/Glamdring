@@ -5,10 +5,12 @@ import { DialogProvider } from 'contexts/dialog';
 import { Web3Provider } from 'contexts/web3';
 import { appWithTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import NextNProgress from 'nextjs-progressbar';
 import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
 import 'style/layout.scss';
 import { theme } from 'theme';
+import { palette } from 'theme/palette';
 import { handlePageViewEvent, initAnalytics } from 'utils/analytics';
 
 function App({ Component, pageProps }) {
@@ -43,6 +45,7 @@ function App({ Component, pageProps }) {
         <Web3Provider>
           <DataProvider>
             <DialogProvider>
+              <NextNProgress color={palette.primary.main} height={4} />
               <Component {...pageProps} />
             </DialogProvider>
           </DataProvider>

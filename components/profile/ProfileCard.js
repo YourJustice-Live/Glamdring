@@ -51,7 +51,7 @@ export default function ProfileCard({ profile, jurisdiction }) {
           </Box>
         </CardContent>
       ) : (
-        <CardContent>
+        <CardContent sx={{ p: '10px !important' }}>
           <Stack direction="row" spacing={2}>
             <Skeleton
               variant="circular"
@@ -79,7 +79,7 @@ function ProfileImage({ profile, sx }) {
   if (profile) {
     return (
       <Box sx={{ ...sx }}>
-        <NextLink href={`/profile/${profile.account}`} passHref>
+        <NextLink href={`/profile/${profile.id}`} passHref>
           <Avatar
             sx={{
               cursor: 'pointer',
@@ -87,7 +87,7 @@ function ProfileImage({ profile, sx }) {
               height: 82,
               borderRadius: '16px',
             }}
-            src={profile.avatarNftUriImage}
+            src={profile.uriImage}
           >
             <IconMember width="82" heigth="82" />
           </Avatar>
@@ -108,20 +108,20 @@ function ProfileDetails({ profile, sx }) {
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
           >
-            {`+${profile.avatarNftTotalPositiveRating}`}
+            {`+${profile.totalPositiveRating}`}
           </Typography>
           <Typography
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
           >
-            {`-${profile.avatarNftTotalNegativeRating}`}
+            {`-${profile.totalNegativeRating}`}
           </Typography>
         </Box>
-        <NextLink href={`/profile/${profile.account}`} passHref>
+        <NextLink href={`/profile/${profile.id}`} passHref>
           <Link underline="none">{formatProfileFirstLastName(profile)}</Link>
         </NextLink>
         <Typography variant="body2" color="text.secondary">
-          {formatAddress(profile.account)}
+          {formatAddress(profile.owner)}
         </Typography>
       </Box>
     );
@@ -154,8 +154,12 @@ function ProfileCaseStats({ profile, sx }) {
 
   if (profile) {
     const totalCases =
-      Number(profile.avatarNftTotalPositiveCases) +
-      Number(profile.avatarNftTotalNegativeCases);
+      Number(profile.totalPositiveCases) + Number(profile.totalNegativeCases);
+    const positiveCasesPercent =
+      (Number(profile.totalPositiveCases) / totalCases) * 100;
+    const negativeCasesPercent =
+      (Number(profile.totalNegativeCases) / totalCases) * 100;
+
     return (
       <Stack
         direction="row"
@@ -169,12 +173,32 @@ function ProfileCaseStats({ profile, sx }) {
           title={t('text-profile-cases').toUpperCase()}
         />
         <Item
-          value={profile.avatarNftTotalPositiveCases}
+          value={
+            <span
+              title={
+                profile.totalPositiveCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(positiveCasesPercent || 0).toString() + '%'}
+            </span>
+          }
           title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Item
-          value={profile.avatarNftTotalNegativeCases}
+          value={
+            <span
+              title={
+                profile.totalNegativeCases.toString() +
+                ' ' +
+                t('text-profile-cases')
+              }
+            >
+              {(negativeCasesPercent || 0).toString() + '%'}
+            </span>
+          }
           title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />
@@ -208,6 +232,7 @@ function ProfileActions({ profile, jurisdiction }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={true}
                 jurisdiction={jurisdiction}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}
@@ -227,6 +252,7 @@ function ProfileActions({ profile, jurisdiction }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={false}
                 jurisdiction={jurisdiction}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}

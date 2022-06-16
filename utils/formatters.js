@@ -25,11 +25,9 @@ export function formatAddress(address) {
  */
 export function formatProfileFirstLastName(profile, length = 36) {
   let profileFirstLastName = 'Anonymous';
-  if (profile?.avatarNftUriFirstName || profile?.avatarNftUriLastName) {
+  if (profile?.uriFirstName || profile?.uriLastName) {
     profileFirstLastName =
-      (profile.avatarNftUriFirstName || '') +
-      ' ' +
-      (profile.avatarNftUriLastName || '');
+      (profile.uriFirstName || '') + ' ' + (profile.uriLastName || '');
   }
   return truncate(profileFirstLastName, { length: length });
 }

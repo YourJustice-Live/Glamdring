@@ -9,6 +9,7 @@ import {
 import { Box } from '@mui/system';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import CaseStageSelect from 'components/form/widget/CaseStageSelect';
+import JurisdictionSelect from 'components/form/widget/JurisdictionSelect';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useCase from 'hooks/useCase';
@@ -62,15 +63,15 @@ export default function CaseListObserver({
       searchQuery: params.filters.description,
       jurisdictions: paramsJurisdictions,
       stage: params.filters.stageId,
-      admin: params.filters.adminProfileAccount,
-      subject: params.filters.subjectProfileAccount,
-      plaintiff: params.filters.plaintiffProfileAccount,
-      judge: params.filters.judgeProfileAccount,
-      witness: params.filters.witnessProfileAccount,
-      affected: params.filters.affectedProfileAccount,
-      accountWithoutConfirmationPost:
-        params.filters.accountWithoutConfirmationPost,
-      participant: params.filters.participantProfileAccount,
+      admin: params.filters.adminProfileId,
+      subject: params.filters.subjectProfileId,
+      plaintiff: params.filters.plaintiffProfileId,
+      judge: params.filters.judgeProfileId,
+      witness: params.filters.witnessProfileId,
+      affected: params.filters.affectedProfileId,
+      participantWithoutConfirmationPost:
+        params.filters.participantWithoutConfirmationPostProfileId,
+      participant: params.filters.participantProfileId,
       first: params.pageSize,
       skip: (params.page - 1) * params.pageSize,
     })
@@ -178,37 +179,37 @@ function FiltersDialog({
       },
       jurisdictionAddress: {
         type: ['string', 'null'],
-        title: t('input-jurisdiction-address-title'),
+        title: t('input-case-jurisdiction-title'),
       },
       stageId: {
         type: 'number',
         title: '',
       },
-      subjectProfileAccount: {
+      subjectProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-subject-title'),
       },
-      affectedProfileAccount: {
+      affectedProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-affected-title'),
       },
-      judgeProfileAccount: {
+      judgeProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-judge-title'),
       },
-      witnessProfileAccount: {
+      witnessProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-witness-title'),
       },
-      plaintiffProfileAccount: {
+      plaintiffProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-plaintiff-title'),
       },
-      adminProfileAccount: {
+      adminProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-admin-title'),
       },
-      participantProfileAccount: {
+      participantProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-with-any-role-title'),
       },
@@ -217,42 +218,43 @@ function FiltersDialog({
 
   const uiSchema = {
     description: {
-      'ui:placeholder': 'Key word, phrase',
+      'ui:placeholder': t('input-case-description-placeholder'),
     },
     jurisdictionAddress: {
-      'ui:placeholder': t('input-jurisdiction-address-placeholder'),
+      'ui:widget': 'JurisdictionSelect',
       'ui:disabled': isJurisdictionInputDisabled,
     },
     stageId: {
       'ui:widget': 'CaseStageSelect',
     },
-    subjectProfileAccount: {
+    subjectProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    affectedProfileAccount: {
+    affectedProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    judgeProfileAccount: {
+    judgeProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    witnessProfileAccount: {
+    witnessProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    plaintiffProfileAccount: {
+    plaintiffProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    adminProfileAccount: {
+    adminProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    participantProfileAccount: {
+    participantProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:disabled': isParticipantInputDisabled,
     },
   };
 
   const widgets = {
-    ProfileSelect: ProfileSelect,
+    JurisdictionSelect: JurisdictionSelect,
     CaseStageSelect: CaseStageSelect,
+    ProfileSelect: ProfileSelect,
   };
 
   async function close() {
@@ -278,7 +280,7 @@ function FiltersDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
+    <Dialog open={isOpen} onClose={close} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ pb: 0 }}>{t('dialog-case-filters-title')}</DialogTitle>
       <DialogContent>
         <Form

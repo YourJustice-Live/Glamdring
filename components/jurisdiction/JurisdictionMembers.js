@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
  */
 export default function JurisdictionMembers({ jurisdiction }) {
   const { handleError } = useErrors();
-  const { getJurisdictionRoleAccounts } = useJurisdiction();
+  const { getJurisdictionRoleParticipants } = useJurisdiction();
   const { getProfiles } = useProfile();
   const [memberProfiles, setMemberProfiles] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,17 +30,16 @@ export default function JurisdictionMembers({ jurisdiction }) {
       setCurrentPageCount(pageCount);
       setMemberProfiles(null);
       // Load member profiles for page
-      const memberAccounts = getJurisdictionRoleAccounts(
+      const members = getJurisdictionRoleParticipants(
         jurisdiction,
         JURISDICTION_ROLE.member.id,
       );
-      const memberProfiles = await getProfiles(
-        memberAccounts,
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-        selectedOrder,
-      );
+      const memberProfiles = await getProfiles({
+        ids: members,
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+        order: selectedOrder,
+      });
       setMemberProfiles(memberProfiles);
       // Add next page to pagination if possible
       if (page == pageCount && memberProfiles.length === pageSize) {

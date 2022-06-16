@@ -20,11 +20,11 @@ export default function CaseEventCard({ caseEvent }) {
   return (
     <Card elevation={1}>
       <CardContent sx={{ p: 3 }}>
-        {/* Account got role */}
-        {caseEvent.type === 'accountGotRole' && (
+        {/* Assigned role */}
+        {caseEvent.type === 'assignedRole' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <ProfileCompactCard
-              account={caseEvent.data.account}
+              profileId={caseEvent.data.assignee}
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
@@ -35,11 +35,11 @@ export default function CaseEventCard({ caseEvent }) {
             </Typography>
           </Stack>
         )}
-        {/* Account added post */}
-        {caseEvent.type === 'accountAddedPost' && (
+        {/* Added post */}
+        {caseEvent.type === 'addedPost' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <ProfileCompactCard
-              account={caseEvent.data.account}
+              profileId={caseEvent.data.author}
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
@@ -47,8 +47,8 @@ export default function CaseEventCard({ caseEvent }) {
             </Typography>
           </Stack>
         )}
-        {/* Case stage changed */}
-        {caseEvent.type === 'stageChanged' && (
+        {/* Changed stage */}
+        {caseEvent.type === 'changedStage' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
               {t('text-event-case-stange-changed-to')} &quot;
@@ -57,11 +57,11 @@ export default function CaseEventCard({ caseEvent }) {
             </Typography>
           </Stack>
         )}
-        {/* Account made verdict */}
-        {caseEvent.type === 'accountMadeVerdict' && (
+        {/* Made verdict */}
+        {caseEvent.type === 'madeVerdict' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <ProfileCompactCard
-              account={caseEvent.data.account}
+              profileId={caseEvent.data.judge}
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
@@ -69,11 +69,11 @@ export default function CaseEventCard({ caseEvent }) {
             </Typography>
           </Stack>
         )}
-        {/* Account cancelled case */}
-        {caseEvent.type === 'accountCancelledCase' && (
+        {/* Cancelled case */}
+        {caseEvent.type === 'cancelledCase' && (
           <Stack direction="row" spacing={1} alignItems="center">
             <ProfileCompactCard
-              account={caseEvent.data.account}
+              profileId={caseEvent.data.judge}
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>

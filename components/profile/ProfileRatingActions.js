@@ -9,8 +9,6 @@ import { palette } from 'theme/palette';
 
 /**
  * A component with buttons to add rating (reputation).
- *
- * TODO: Automatically open a dialog for creating a case with negative laws if the user clicks the red button "Add Score"
  */
 export default function ProfileRatingActions({ profile, sx }) {
   const { t } = useTranslation('common');
@@ -28,6 +26,7 @@ export default function ProfileRatingActions({ profile, sx }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={true}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}
                 onClose={closeDialog}
@@ -45,6 +44,7 @@ export default function ProfileRatingActions({ profile, sx }) {
           onClick={() =>
             showDialog(
               <CaseCreateDialog
+                isPositive={false}
                 subjectProfile={profile}
                 affectedProfile={accountProfile}
                 onClose={closeDialog}

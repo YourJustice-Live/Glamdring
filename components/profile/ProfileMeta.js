@@ -10,6 +10,7 @@ import {
 import {
   Avatar,
   Button,
+  Chip,
   Divider,
   Link,
   Skeleton,
@@ -20,7 +21,7 @@ import { Box } from '@mui/system';
 import InteractiveAddress from 'components/address/InteractiveAddress';
 import { PROFILE_TRAIT_TYPE } from 'constants/metadata';
 import useWeb3Context from 'hooks/context/useWeb3Context';
-import { IconProfile } from 'icons/core';
+import { IconEdit, IconProfile } from 'icons/core';
 import { IconMember } from 'icons/entities';
 import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
@@ -53,7 +54,7 @@ export default function ProfileMeta({ profile }) {
           <Skeleton
             variant="rectangular"
             height={24}
-            width={256}
+            width={164}
             sx={{ mb: 1 }}
           />
         </>
@@ -80,8 +81,8 @@ function ProfileTop({ profile, sx }) {
       </Typography>
       <Circle sx={{ color: 'text.secondary', fontSize: 6, ml: 1 }} />
       <InteractiveAddress
-        address={profile.account}
-        link={`${window.location.origin}/profile/${profile.account}`}
+        address={profile.owner}
+        link={`${window.location.origin}/profile/${profile.id}`}
         sx={{ ml: 1 }}
       />
     </Box>
@@ -90,7 +91,7 @@ function ProfileTop({ profile, sx }) {
 
 function ProfileMain({ profile, sx }) {
   const description = getTraitValue(
-    profile.avatarNftUriData?.attributes,
+    profile.uriData?.attributes,
     PROFILE_TRAIT_TYPE.description,
   );
 
@@ -99,18 +100,20 @@ function ProfileMain({ profile, sx }) {
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        alignItems: { md: 'center' },
         ...sx,
       }}
     >
-      <ProfileAvatar profile={profile} />
+      <Box>
+        <ProfileAvatar profile={profile} />
+        <ProfileEditButton profile={profile} sx={{ mt: 2, width: 164 }} />
+      </Box>
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
+        <Chip label={`ID: ${profile?.id}`} sx={{ height: '24px', mb: 1.5 }} />
         <Typography variant="h2">
           {formatProfileFirstLastName(profile)}
         </Typography>
         {description && <Typography sx={{ mt: 1 }}>{description}</Typography>}
         <ProfileLinks profile={profile} sx={{ mt: 1.5 }} />
-        <ProfileEditButton profile={profile} sx={{ mt: 1 }} />
       </Box>
     </Box>
   );
@@ -125,7 +128,7 @@ function ProfileAvatar({ profile, sx }) {
           height: 164,
           borderRadius: '24px',
         }}
-        src={profile?.avatarNftUriData?.image}
+        src={profile?.uriData?.image}
       >
         <IconMember width="164" height="164" />
       </Avatar>
@@ -135,27 +138,27 @@ function ProfileAvatar({ profile, sx }) {
 
 function ProfileLinks({ profile, sx }) {
   const email = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.email,
   );
   const site = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.site,
   );
   const twitter = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.twitter,
   );
   const telegram = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.telegram,
   );
   const facebook = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.facebook,
   );
   const instagram = getTraitValue(
-    profile?.avatarNftUriData?.attributes,
+    profile?.uriData?.attributes,
     PROFILE_TRAIT_TYPE.instagram,
   );
 
@@ -199,15 +202,18 @@ function ProfileEditButton({ profile, sx }) {
   const { t } = useTranslation('common');
 
   const { account } = useWeb3Context();
-  if (profile?.account?.toLowerCase() === account?.toLowerCase()) {
+  if (profile?.owner?.toLowerCase() === account?.toLowerCase()) {
     return (
-      <Box sx={{ ...sx }}>
-        <NextLink href={`/profile/edit`} passHref>
-          <Button size="small" variant="outlined">
-            {t('button-profile-edit')}
-          </Button>
-        </NextLink>
-      </Box>
+      <NextLink href={`/profile/edit`} passHref>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<IconEdit width="18px" height="18px" />}
+          sx={{ ...sx }}
+        >
+          {t('button-profile-edit')}
+        </Button>
+      </NextLink>
     );
   } else {
     return <></>;

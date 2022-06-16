@@ -86,7 +86,7 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       },
       verb: {
         'ui:emptyValue': '',
-        'ui:placeholder': 'breach',
+        'ui:placeholder': 'breached',
       },
       object: {
         'ui:emptyValue': '',

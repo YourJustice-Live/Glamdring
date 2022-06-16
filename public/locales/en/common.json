@@ -14,8 +14,8 @@
   "page-title-events": "YourJustice — Events",
   "page-title-sandbox": "YourJustice — Sandbox",
 
-  "page-main-headline": "Check or impact reputation of crypto people, communities, companies and addresses",
-  "page-main-supporting-headline": "Who was involved in the activities that made you uncomfortable?",
+  "page-main-headline": "Check or impact reputation of people, DAOs, communities, companies or addresses",
+  "page-main-text-search-target": "People, DAOs, communities, companies, addresses, etc",
   "page-main-text-light-side": "Light Side",
   "page-main-text-dark-side": "Dark Side",
 
@@ -64,13 +64,11 @@
   "text-nft-updating": "Updating NFT",
 
   "text-profile": "Soul",
-  "text-profiles": "Soul Search",
+  "text-profiles": "Souls",
   "text-profiles-no": "No souls",
   "text-profile-cases": "Cases",
   "text-profile-positive-cases": "Positive",
   "text-profile-negative-cases": "Negative",
-  "text-profile-will-be-minted-soon": "Your soul will arrive shortly.",
-  "text-profile-will-be-updated-soon": "Your soul will be transformed momentarily.",
   "text-profile-total-reputation": "Total Reputation",
 
   "text-judges": "Judges",
@@ -145,8 +143,8 @@
   "text-order-by-negative-reputation": "Good Guys Last",
 
   "text-feature-is-under-development": "Feature is under development",
-  "text-feature-inviting-coming-soon": "The ability to invite other people will be available very soon.",
-  "text-feature-judging-coming-soon": "Judging feature for this case is under development.",
+
+  "text-do-not-show-me-again": "Don't show me again",
 
   "text-copy-address-to-clipboard": "Copy address to clipboard",
   "text-copy-link-to-clipboard": "Copy link to clipboard",
@@ -154,8 +152,10 @@
   "text-error": "Error",
   "text-error-wrong-network": "You are connected to the wrong network. Please switch to",
   "text-error-file-smaller-than-10mb-required": "Only files with size smaller than 10MB are currently supported!",
-  "text-error-smaller-than-2mb-required": "'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!'",
+  "text-error-file-smaller-than-2mb-required": "'Only JPG/PNG/GIF files with size smaller than 2MB are currently supported!'",
   "text-error-invalid-captcha": "Invalid CAPTCHA",
+  "text-error-case-required-more-witnesses": "More witnesses are needed to create a case",
+  "text-error-case-required-joining-jurisdiction": "You need to join this jurisdiction before creating a case",
 
   "text-protector-content-is-not-available": "Content not available",
   "text-protector-content-requre-connect-wallet": "Please connect wallet to view this content.",
@@ -178,7 +178,8 @@
 
   "button-profile-create": "Claim Soul",
   "button-profile-create-own": "Claim Your Soul",
-  "button-profile-edit": "Save Your Soul",
+  "button-profile-edit": "Edit",
+  "button-profile-save": "Save",
   "button-profile-invite": "Invite",
   "button-profile-increase-reputation": "Upvote",
   "button-profile-decrease-reputation": "Downvote",
@@ -213,18 +214,18 @@
   "button-metadata-edit": "Edit Metadata",
   "button-propose-edits": "Propose Edits",
 
-  "notification-data-is-successfully-updated": "Success! Data will be updated soon.",
-  "notification-image-is-successfully-uploaded": "Your image uploaded to IPFS!",
-  "notification-data-is-successfully-uploaded": "Data uploaded to IPFS!",
-  "notification-thanks-for-feedback": "Thank you for your judgment!",
+  "notification-data-is-successfully-updated": "Success! Data will be updated soon",
+  "notification-profile-will-be-minted-soon": "Your soul will arrive shortly",
+  "notification-profile-will-be-updated-soon": "Your soul will be transformed momentarily",
+  "notification-profile-for-another-person-will-be-minted-soon": "Soul of another person will arrive shortly",
+  "notification-thanks-for-feedback": "Thank you for your feedback!",
   "notification-address-is-copied": "Address copied",
   "notification-link-is-copied": "Link copied",
-  "notification-transaction-is-created": "Transaction created!",
 
   "dialog-profile-create-own-title": "Claim Your Soul",
   "dialog-profile-edit-own-title": "Transform Soul",
   "dialog-profile-invite-title": "Invite Person",
-  "dialog-profile-invite-subscription": "Summon the soul of another person to YourJustice.",
+  "dialog-profile-invite-description": "Summon the soul of another person to YourJustice.",
 
   "dialog-jurisdiction-create-title": "Create Jurisdiction",
   "dialog-jurisdiction-update-title": "Update Jurisdiction",
@@ -266,13 +267,11 @@
   "input-profile-admin-title": "Admin Soul",
   "input-profile-citizen-title": "Citizen Soul",
   "input-profile-with-any-role-title": "Soul with Any Role",
-  "input-profile-picture-title": "",
   "input-profile-public-title": "Public Data",
-  "input-profile-contacts-title": "",
   "input-profile-links-title": "Links",
 
-  "input-jurisdiction-address-title": "Jurisdiction Address",
-  "input-jurisdiction-address-placeholder": "0x8b22...",
+  "input-jurisdiction-title": "Jurisdiction Search",
+  "input-jurisdiction-placeholder": "Search by name or address",
   "input-jurisdiction-name-title": "Jurisdiction Name",
   "input-jurisdiction-name-placeholder": "Key word, phrase",
   "input-jurisdiction-id-title": "ID (Address)",
@@ -282,10 +281,15 @@
   "input-role-title": "Role",
   "input-role-your-title": "Your Role",
 
-  "input-case-stage-title": "Case Stage",
   "input-case-name-title": "Description",
   "input-case-name-description": "Describe what happened",
-  "input-case-description-title": "Case Description",
+  "input-case-description-title": "Description",
+  "input-case-description-placeholder": "Key word, phrase",
+  "input-case-jurisdiction-title": "Jurisdiction",
+  "input-case-jurisdiction-description": "A jurisdiction under the laws of which you want to create a case",
+  "input-case-laws-type-title": "Laws type",
+  "input-case-laws-type-description": "The category of laws you want to use for this case",
+  "input-case-stage-title": "Stage",
   "input-case-evidence-title": "Evidence",
   "input-case-evidence-description": "Any file you deem necessary",
   "input-case-witnesses-title": "Witnesses",
@@ -304,6 +308,8 @@
   "input-action-title": "Action",
   "input-action-placeholder": "Search by action, acted or affected role",
 
+  "alert-case-required-joining-jurisdiction": "You need to join this jurisdiction before creating a case",
+
   "alert-propose-law-title": "Didn't find a suitable law?",
   "alert-propose-law-description-1": "at the list of all laws of the jurisdiction or",
   "alert-propose-law-description-2": "a law that we should add to the jurisdiction.",
@@ -311,5 +317,5 @@
   "alert-propose-law-button-propose": "Propose",
 
   "alert-manager-tools-title": "Manager Tools",
-  "alert-manager-tools-description": "Features for users with appropriate roles to manage this jurisdiction"
+  "alert-manager-tools-description": "Features for jurisdiction admins."
 }

@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react';
 export default function Profile() {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { queryAccount } = router.query;
+  const { queryId } = router.query;
   const { account } = useWeb3Context();
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
@@ -31,22 +31,22 @@ export default function Profile() {
 
   async function loadData() {
     try {
-      setProfile(await getProfile(queryAccount));
+      setProfile(await getProfile({ id: queryId }));
     } catch (error) {
       handleError(error, true);
     }
   }
 
   useEffect(() => {
-    if (queryAccount) {
+    if (queryId) {
       loadData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryAccount]);
+  }, [queryId]);
 
   return (
     <Layout
-      title={`${t('page-title-profile')} ${queryAccount}`}
+      title={`${t('page-title-profile')} ${profile?.owner}`}
       enableSidebar={!!account}
     >
       <ProfileMeta profile={profile} />
@@ -71,7 +71,7 @@ export default function Profile() {
             <TabPanel value="1" sx={{ px: 0 }}>
               <CaseListObserver
                 filters={{
-                  participantProfileAccount: queryAccount,
+                  participantProfileId: profile.id,
                 }}
                 isParticipantInputDisabled={true}
               />

@@ -8,25 +8,10 @@ import useWeb3Context from 'hooks/context/useWeb3Context';
  * Hook for juridiction contract.
  */
 export default function useJuridictionContract() {
-  const { defaultProvider, provider, isNetworkChainIdCorrect } =
-    useWeb3Context();
+  const { provider, isNetworkChainIdCorrect } = useWeb3Context();
 
   function getContract(address, signerOrProvider) {
     return new Contract(address, contractAbi, signerOrProvider);
-  }
-
-  /**
-   * Get jurisdiction contract uri with metadata.
-   *
-   * @param {string} contractAddress Jurisdiction contract address.
-   * @returns Transaction,
-   */
-  async function getUri(contractAddress) {
-    const signerOrProvider =
-      provider?.getSigner() && isNetworkChainIdCorrect
-        ? provider.getSigner()
-        : defaultProvider;
-    return await getContract(contractAddress, signerOrProvider).contractURI();
   }
 
   /**
@@ -60,24 +45,40 @@ export default function useJuridictionContract() {
     return await getContract(contractAddress, provider?.getSigner()).leave();
   }
 
-  async function assignRole(contractAddress, account, role) {
+  /**
+   * Assign a jurisdiction role to the specified token.
+   *
+   * @param {string} contractAddress Jurisdiction address.
+   * @param {string} token Token (profile id).
+   * @param {string} role Jurisdiction role name.
+   * @returns Transaction.
+   */
+  async function assignRole(contractAddress, token, role) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(contractAddress, provider?.getSigner()).roleAssign(
-      account,
-      role,
-    );
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).roleAssignToToken(token, role);
   }
 
-  async function removeRole(contractAddress, account, role) {
+  /**
+   * Remove a jurisdiction role for the specified token.
+   *
+   * @param {string} contractAddress Jurisdiction address.
+   * @param {string} token Token (profile id).
+   * @param {string} role Jurisdiction role.
+   * @returns Transaction.
+   */
+  async function removeRole(contractAddress, token, role) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(contractAddress, provider?.getSigner()).roleRemove(
-      account,
-      role,
-    );
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).roleRemoveFromToken(token, role);
   }
 
   async function addRule(contractAddress, rule, confirmation, effects) {
@@ -107,23 +108,23 @@ export default function useJuridictionContract() {
    *
    * @param {string} contractAddress Jurisdiction contract address.
    * @param {string} name Case name.
+   * @param {string} uri Case metadata.
    * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
-   * @param {Array.<{account : string, role: string}>} roles Case roles.
+   * @param {Array.<{tokenId : string, role: string}>} roles Case roles.
    * @param {Array.<{entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
    */
-  async function makeCase(contractAddress, name, rules, roles, posts) {
+  async function makeCase(contractAddress, name, uri, rules, roles, posts) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(
       contractAddress,
       provider?.getSigner(),
-    ).caseMakeOpen(name, rules, roles, posts);
+    ).caseMakeOpen(name, uri, rules, roles, posts);
   }
 
   return {
-    getUri,
     setUri,
     join,
     leave,

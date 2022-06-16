@@ -10,28 +10,30 @@ export default function HowItWorks() {
     <>
       {/* Intro */}
       <Box sx={{ mb: 6 }}>
-        <Typography gutterBottom>Hi! Thank you for being with us.</Typography>
+        <Typography gutterBottom>
+          Hello, and thank you for joining us!
+        </Typography>
         <Typography>
-          Let&apos;s get to grips with the YJ Prototype interface (
-          <Link href="https://yj.life/" underline="none" target="_blank">
-            yj.life
-          </Link>
-          ).
+          In the following sections, you will learn how to use the platform.
         </Typography>
       </Box>
-      {/* Chapter 0 */}
+      {/* Step 0 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
-          Chapter 0. Choose your crypto-wallet
+          Prerequisits: Get a crypto-wallet
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            We recommend use Metamask. It is easy to use / install.
+            As you might already know, the easiest and most common crypto-wallet
+            is, of course, Metamask.
           </Typography>
           <Typography gutterBottom>
-            Metamask is adapted for use with your browser. To install Metamask
-            go to{' '}
+            It is an easy to use browser extension for Chrome (and Brave) that
+            allows you to interact with all Ethereum compatible blockchains.
+          </Typography>
+          <Typography gutterBottom>
+            To install Metamask go to{' '}
             <Link
               href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn"
               underline="none"
@@ -39,7 +41,7 @@ export default function HowItWorks() {
             >
               chrome.google.com/webstore
             </Link>
-            .
+            &nbsp; and follow the instructions
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-1_mduhsz.gif"
@@ -48,8 +50,18 @@ export default function HowItWorks() {
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            In the Metamask settings, enable the ability to connect to different
-            networks.
+            Once you have installed Metamask, you should see a little fox icon
+            on the top right corner of your browser.
+          </Typography>
+          <Typography gutterBottom>
+            We currently run on Rinkeby – an Ethereum Testnet. So, you&apos;d
+            need to click that little fox icon to open your Metamask, go to
+            &apos;Settings&apos;, &apos;Advanced&apos; and turn on the
+            &apos;Show Test Netwoks&apos; option.
+          </Typography>
+          <Typography gutterBottom>
+            This will allow your Metamask to connect to test networks, where
+            tokens are free!
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-2_xuyfiv.gif"
@@ -57,15 +69,27 @@ export default function HowItWorks() {
           />
         </Box>
       </Box>
-      {/* Chapter 1 */}
+      {/* Step 1 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
-          Chapter 1. Connecting wallet
+          Step 1 – Connecting Your Wallet
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Let connect your cryptocurrency wallet to our site.
+            dApps need a wallet in order to interact with the blockchain. So,
+            every time you connect to a dApp, you&apos;d need to allow that dApp
+            to use your wallet.
+          </Typography>
+          <Typography gutterBottom>
+            To connect your shiny new Metamask wallet with our dApp, click the
+            &apos;Connect Wallet&apos; button on the top right corner and select
+            the cute Metamask fox-head.
+          </Typography>
+          <Typography gutterBottom>
+            Once you&apos;ve done that, you get a small, or large window showing
+            your available accounts. Select one of them and click the
+            &apos;Next&apos; and &apos;Connect&apos; buttons.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-3_ilpkpy.gif"
@@ -73,8 +97,14 @@ export default function HowItWorks() {
           />
         </Box>
         <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>Great, you are now connected!</Typography>
           <Typography gutterBottom>
-            Great, now let&apos;s switch to the Rinkeby test network.
+            Now all you need to do is switch to the Rinkeby test network and
+            you&apos;re all set.
+          </Typography>
+          <Typography gutterBottom>
+            To switch newtowkrs, click the little fox-head icon again and select
+            the &apos;Rinkeby Test Network&apos; option.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-4_xilh9k.gif"
@@ -82,8 +112,18 @@ export default function HowItWorks() {
           />
         </Box>
         <Box sx={{ mb: 4 }}>
+          <Typography gutterBottom>Great Job!</Typography>
           <Typography gutterBottom>
-            Nice! And now let&apos;s get our test ETH from{' '}
+            When using a crypto chain you&apos;d need to pay for
+            &apos;Gas&apos;. Gas is the cost of running a transaction on the
+            blockchain.
+          </Typography>
+          <Typography gutterBottom>
+            So next, let&apos;s set you up with some free Tokens, so you can pay
+            for your gas fees.
+          </Typography>
+          <Typography gutterBottom>
+            You can get some of those free tokens from the{' '}
             <Link
               href="https://rinkebyfaucet.com/"
               underline="none"
@@ -91,7 +131,7 @@ export default function HowItWorks() {
             >
               rinkebyfaucet.com
             </Link>{' '}
-            or you can also use{' '}
+            or{' '}
             <Link
               href="https://faucets.chain.link/rinkeby"
               underline="none"
@@ -102,8 +142,12 @@ export default function HowItWorks() {
             .
           </Typography>
           <Typography gutterBottom>
-            In order to do this, you just need to copy your wallet number and
-            paste it into the line.
+            To do that, you&apos;ll need your wallet address.
+          </Typography>
+          <Typography gutterBottom>
+            You can your wallet address just click the little fox-head and then
+            click your address on the top. It&apos;ll be stored in your
+            clipboard automagically.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-5_np25qd.gif"
@@ -112,20 +156,22 @@ export default function HowItWorks() {
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Test ETH are credited in two minutes.
+            Then pase your wallet address in one of these faucets and wait for
+            the free tokens to show up.
           </Typography>
+          <Typography gutterBottom>It may take a minute or two...</Typography>
         </Box>
       </Box>
-      {/* Chapter 2 */}
+      {/* Step 2 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
-          Chapter 2. Creating profile
+          Step 2 – Creating profile
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
             Now we need to fill in the account information. Click on the button
-            &quot;Create Own Profile&quot;.
+            &quot;Claim Your Soul&quot;.
           </Typography>
           <Typography gutterBottom>
             Upload your avatar and fill in information about yourself.
@@ -146,10 +192,10 @@ export default function HowItWorks() {
           <Typography gutterBottom>Now the fun part begins.</Typography>
         </Box>
       </Box>
-      {/* Chapter 3 */}
+      {/* Step 3 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
-          Chapter 3. Joining a jurisdiction
+          Step 3 – Joining a jurisdiction
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>
@@ -177,10 +223,10 @@ export default function HowItWorks() {
           </Typography>
         </Box>
       </Box>
-      {/* Chapter 4 */}
+      {/* Step 4 */}
       <Box sx={{ mb: 6 }}>
         <Typography variant="h4" gutterBottom>
-          Chapter 4. Creating Case
+          Step 4. Creating Case
         </Typography>
         <Divider sx={{ mb: 2 }} />
         <Box sx={{ mb: 4 }}>

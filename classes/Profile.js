@@ -3,30 +3,30 @@
  */
 export default class Profile {
   constructor(
-    account,
-    avatarNftId,
-    avatarNftUri,
-    avatarNftUriData,
-    avatarNftUriImage,
-    avatarNftUriFirstName,
-    avatarNftUriLastName,
-    avatarNftReputations,
-    avatarNftTotalNegativeRating,
-    avatarNftTotalPositiveRating,
-    avatarNftTotalNegativeCases,
-    avatarNftTotalPositiveCases,
+    id,
+    owner,
+    uri,
+    uriData,
+    uriImage,
+    uriFirstName,
+    uriLastName,
+    reputations,
+    totalNegativeRating,
+    totalPositiveRating,
+    totalNegativeCases,
+    totalPositiveCases,
   ) {
-    this.account = account;
-    this.avatarNftId = avatarNftId;
-    this.avatarNftUri = avatarNftUri;
-    this.avatarNftUriData = avatarNftUriData;
-    this.avatarNftUriImage = avatarNftUriImage;
-    this.avatarNftUriFirstName = avatarNftUriFirstName;
-    this.avatarNftUriLastName = avatarNftUriLastName;
-    this.avatarNftReputations = avatarNftReputations;
-    this.avatarNftTotalNegativeRating = avatarNftTotalNegativeRating;
-    this.avatarNftTotalPositiveRating = avatarNftTotalPositiveRating;
-    this.avatarNftTotalNegativeCases = avatarNftTotalNegativeCases;
-    this.avatarNftTotalPositiveCases = avatarNftTotalPositiveCases;
+    this.id = id;
+    this.owner = owner;
+    this.uri = uri;
+    this.uriData = uriData;
+    this.uriImage = uriImage;
+    this.uriFirstName = uriFirstName;
+    this.uriLastName = uriLastName;
+    this.reputations = reputations;
+    this.totalNegativeRating = totalNegativeRating;
+    this.totalPositiveRating = totalPositiveRating;
+    this.totalNegativeCases = totalNegativeCases;
+    this.totalPositiveCases = totalPositiveCases;
   }
 }

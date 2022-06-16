@@ -16,6 +16,8 @@ import { getActionIcon } from 'utils/metadata';
 
 /**
  * A widget to select action (guid).
+ *
+ * TODO: Replace with "CaseActionSelect" and use name "ActionSelect".
  */
 export default function ActionSelect(props) {
   const propsValue = props.value;

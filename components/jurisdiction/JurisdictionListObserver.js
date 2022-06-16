@@ -51,9 +51,9 @@ export default function JurisdictionListObserver({
     setJurisdictions(null);
     getJurisdictions({
       searchQuery: params.filters.name,
-      member: params.filters.memberProfileAccount,
-      judge: params.filters.judgeProfileAccount,
-      admin: params.filters.adminProfileAccount,
+      member: params.filters.memberProfileId,
+      judge: params.filters.judgeProfileId,
+      admin: params.filters.adminProfileId,
       first: params.pageSize,
       skip: (params.page - 1) * params.pageSize,
     })
@@ -150,15 +150,15 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
         type: ['string', 'null'],
         title: t('input-jurisdiction-name-title'),
       },
-      memberProfileAccount: {
+      memberProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-citizen-title'),
       },
-      judgeProfileAccount: {
+      judgeProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-judge-title'),
       },
-      adminProfileAccount: {
+      adminProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-admin-title'),
       },
@@ -169,13 +169,13 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
     name: {
       'ui:placeholder': t('input-jurisdiction-name-placeholder'),
     },
-    memberProfileAccount: {
+    memberProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    judgeProfileAccount: {
+    judgeProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    adminProfileAccount: {
+    adminProfileId: {
       'ui:widget': 'ProfileSelect',
     },
   };
@@ -207,7 +207,7 @@ function FiltersDialog({ filters, onChange, isClose, onClose }) {
   }
 
   return (
-    <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
+    <Dialog open={isOpen} onClose={close} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ pb: 0 }}>
         {t('dialog-jurisdiction-filters-title')}
       </DialogTitle>

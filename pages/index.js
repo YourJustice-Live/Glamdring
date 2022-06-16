@@ -40,13 +40,11 @@ export default function Index() {
       setCurrentPageCount(pageCount);
       setProfiles(null);
       // Load profiles
-      const profiles = await getProfiles(
-        null,
-        null,
-        pageSize,
-        (page - 1) * pageSize,
-        tabValue,
-      );
+      const profiles = await getProfiles({
+        first: pageSize,
+        skip: (page - 1) * pageSize,
+        order: tabValue,
+      });
       setProfiles(profiles);
       // Add next page to pagination if possible
       if (page == pageCount && profiles.length === pageSize) {
@@ -54,17 +52,13 @@ export default function Index() {
       }
       // Define profiles counts
       if (!profilesCount) {
-        const lastProfiles = await getProfiles(
-          null,
-          null,
-          1,
-          0,
-          PROFILE_ORDER.byTokenId,
-        );
+        const lastProfiles = await getProfiles({
+          first: 1,
+          skip: 0,
+          order: PROFILE_ORDER.byId,
+        });
         setProfilesCount(
-          lastProfiles && lastProfiles.length > 0
-            ? lastProfiles[0].avatarNftId
-            : null,
+          lastProfiles && lastProfiles.length > 0 ? lastProfiles[0].id : null,
         );
       }
     } catch (error) {
@@ -79,16 +73,16 @@ export default function Index() {
 
   return (
     <Layout enableSidebar={!!account}>
-      <Box sx={{ px: 4, mt: 6, textAlign: 'center' }}>
-        <Typography variant="h1" gutterBottom>
+      <Box sx={{ mt: 6, textAlign: 'center' }}>
+        <Typography gutterBottom sx={{ fontSize: '2.2rem', fontWeight: 600 }}>
           {t('page-main-headline')}
         </Typography>
-        <Typography>{t('page-main-supporting-headline')}</Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
         <ProfileSelect
-          sx={{ width: { xs: 1, md: 580 } }}
-          onChange={(account) => router.push(`/profile/${account}`)}
+          label={t('page-main-text-search-target')}
+          sx={{ width: { xs: 1, md: 520 } }}
+          onChange={(id) => router.push(`/profile/${id}`)}
         />
       </Box>
       <Box sx={{ mt: 8 }}>

@@ -24,7 +24,7 @@ export default function CaseRuleSelect(props) {
   const propsDisabled = props.disabled;
   const propsSx = props.sx;
   const propsOnChange = props.onChange;
-  const propsJurisdiction = props.formContext?.jurisdiction;
+  const propsJurisdictionId = props.formContext?.formData?.jurisdictionId;
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
   const propsFormAction = props.formContext?.formAction;
@@ -35,11 +35,11 @@ export default function CaseRuleSelect(props) {
   const isMediumDevice = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
-    if (propsJurisdiction && propsFormActionGuid) {
+    if (propsJurisdictionId && propsFormActionGuid) {
       setRules(null);
       getJurisdictionRules(
         null,
-        propsJurisdiction.id,
+        propsJurisdictionId,
         propsFormActionGuid,
         propsFormIsPositive === true,
         propsFormIsPositive === false,
@@ -48,7 +48,7 @@ export default function CaseRuleSelect(props) {
         .catch((error) => handleError(error, true));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propsJurisdiction, propsFormIsPositive, propsFormActionGuid]);
+  }, [propsJurisdictionId, propsFormIsPositive, propsFormActionGuid]);
 
   return (
     <Box sx={{ ...propsSx }}>
