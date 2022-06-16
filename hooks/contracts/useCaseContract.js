@@ -36,16 +36,18 @@ export default function useCaseContract() {
    * Add a post to specified case contract.
    *
    * @param {string} contractAddress Case contract address.
+   * @param {string} token Token (profile id).
    * @param {string} entityRole Case role name.
    * @param {string} uri Uri.
    * @returns Transaction.
    */
-  async function addPost(contractAddress, entityRole, uri) {
+  async function addPost(contractAddress, token, entityRole, uri) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(contractAddress, provider?.getSigner()).post(
       entityRole,
+      token,
       uri,
     );
   }
