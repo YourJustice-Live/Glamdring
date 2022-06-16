@@ -79,7 +79,7 @@ function ProfileImage({ profile, sx }) {
   if (profile) {
     return (
       <Box sx={{ ...sx }}>
-        <NextLink href={`/profile/${profile.account}`} passHref>
+        <NextLink href={`/profile/${profile.id}`} passHref>
           <Avatar
             sx={{
               cursor: 'pointer',
@@ -87,7 +87,7 @@ function ProfileImage({ profile, sx }) {
               height: 82,
               borderRadius: '16px',
             }}
-            src={profile.avatarNftUriImage}
+            src={profile.uriImage}
           >
             <IconMember width="82" heigth="82" />
           </Avatar>
@@ -108,20 +108,20 @@ function ProfileDetails({ profile, sx }) {
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'success.main', mr: 1 }}
           >
-            {`+${profile.avatarNftTotalPositiveRating}`}
+            {`+${profile.totalPositiveRating}`}
           </Typography>
           <Typography
             variant="body2"
             sx={{ fontWeight: 'bold', color: 'danger.main', mr: 1 }}
           >
-            {`-${profile.avatarNftTotalNegativeRating}`}
+            {`-${profile.totalNegativeRating}`}
           </Typography>
         </Box>
-        <NextLink href={`/profile/${profile.account}`} passHref>
+        <NextLink href={`/profile/${profile.id}`} passHref>
           <Link underline="none">{formatProfileFirstLastName(profile)}</Link>
         </NextLink>
         <Typography variant="body2" color="text.secondary">
-          {formatAddress(profile.account)}
+          {formatAddress(profile.owner)}
         </Typography>
       </Box>
     );
@@ -154,12 +154,12 @@ function ProfileCaseStats({ profile, sx }) {
 
   if (profile) {
     const totalCases =
-      Number(profile.avatarNftTotalPositiveCases) +
-      Number(profile.avatarNftTotalNegativeCases);
+      Number(profile.totalPositiveCases) + Number(profile.totalNegativeCases);
     const positiveCasesPercent =
-      (Number(profile.avatarNftTotalPositiveCases) / totalCases) * 100;
+      (Number(profile.totalPositiveCases) / totalCases) * 100;
     const negativeCasesPercent =
-      (Number(profile.avatarNftTotalNegativeCases) / totalCases) * 100;
+      (Number(profile.totalNegativeCases) / totalCases) * 100;
+
     return (
       <Stack
         direction="row"
@@ -176,7 +176,7 @@ function ProfileCaseStats({ profile, sx }) {
           value={
             <span
               title={
-                profile.avatarNftTotalPositiveCases.toString() +
+                profile.totalPositiveCases.toString() +
                 ' ' +
                 t('text-profile-cases')
               }
@@ -191,7 +191,7 @@ function ProfileCaseStats({ profile, sx }) {
           value={
             <span
               title={
-                profile.avatarNftTotalNegativeCases.toString() +
+                profile.totalNegativeCases.toString() +
                 ' ' +
                 t('text-profile-cases')
               }

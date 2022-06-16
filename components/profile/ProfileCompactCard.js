@@ -1,4 +1,4 @@
-import { Avatar, Box, Link, Skeleton, Typography } from '@mui/material';
+import { Avatar, Box, Chip, Link, Skeleton, Typography } from '@mui/material';
 import useErrors from 'hooks/useErrors';
 import useProfile from 'hooks/useProfile';
 import { IconMember } from 'icons/entities';
@@ -9,8 +9,10 @@ import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
  * A component with a compact card with profile.
  */
 export default function ProfileCompactCard({
-  profile,
-  account,
+  profile: propsProfile,
+  profileId: propsProfileId,
+  account: propsAccount,
+  disableId = true,
   disableAddress = true,
   disableLink = false,
   disableRating = false,
@@ -18,24 +20,38 @@ export default function ProfileCompactCard({
 }) {
   const { handleError } = useErrors();
   const { getProfile } = useProfile();
-  const [accountProfile, setAccountProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     let isComponentActive = true;
-    if (!profile && account) {
-      getProfile(account)
+    setIsLoading(true);
+    setProfile(null);
+    // Set profile if already defined
+    if (propsProfile) {
+      setProfile(propsProfile);
+      setIsLoading(false);
+    }
+    // Else load profile by profile id or account
+    else if (propsProfileId || propsAccount) {
+      getProfile(
+        propsProfileId ? { id: propsProfileId } : { owner: propsAccount },
+      )
         .then((profile) => {
-          if (isComponentActive) {
-            setAccountProfile(profile);
+          if (isComponentActive && profile) {
+            setProfile(profile);
           }
         })
-        .catch((error) => handleError(error, true));
+        .catch((error) => handleError(error, true))
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
     }
     return () => {
       isComponentActive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, account]);
+  }, [propsProfile, propsProfileId, propsAccount]);
 
   return (
     <Box
@@ -46,29 +62,29 @@ export default function ProfileCompactCard({
         ...sx,
       }}
     >
-      {profile || accountProfile ? (
+      {/* If profile is loading */}
+      {isLoading && <Skeleton variant="rectangular" width={128} height={22} />}
+      {/* If profile is loaded successfully */}
+      {!isLoading && profile && (
         <>
-          <Avatar
-            src={(profile || accountProfile).avatarNftUriImage}
-            sx={{ width: 24, height: 24 }}
-          >
+          <Avatar src={profile.uriImage} sx={{ width: 24, height: 24 }}>
             <IconMember width="24" heigth="24" />
           </Avatar>
           <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
             {disableLink ? (
-              <>{formatProfileFirstLastName(profile || accountProfile)}</>
+              <>{formatProfileFirstLastName(profile)}</>
             ) : (
-              <Link
-                href={`/profile/${(profile || accountProfile).account}`}
-                underline="none"
-              >
-                {formatProfileFirstLastName(profile || accountProfile)}
+              <Link href={`/profile/${profile.id}`} underline="none">
+                {formatProfileFirstLastName(profile)}
               </Link>
             )}
           </Typography>
+          {!disableId && (
+            <Chip size="small" label={`ID: ${profile.id}`} sx={{ ml: 1 }} />
+          )}
           {!disableAddress && (
             <Typography sx={{ color: 'text.secondary', ml: 1 }}>
-              ({formatAddress((profile || accountProfile).account)})
+              ({formatAddress(profile.owner)})
             </Typography>
           )}
           {!disableRating && (
@@ -76,18 +92,27 @@ export default function ProfileCompactCard({
               <Typography
                 sx={{ color: 'success.main', fontWeight: 'bold', ml: 1.5 }}
               >
-                {`+${(profile || accountProfile).avatarNftTotalPositiveRating}`}
+                {`+${profile.totalPositiveRating}`}
               </Typography>
               <Typography
                 sx={{ color: 'danger.main', fontWeight: 'bold', ml: 1 }}
               >
-                {`-${(profile || accountProfile).avatarNftTotalNegativeRating}`}
+                {`-${profile.totalNegativeRating}`}
               </Typography>
             </>
           )}
         </>
-      ) : (
-        <Skeleton variant="rectangular" width={128} height={22} />
+      )}
+      {/* If profile loading is failed */}
+      {!isLoading && !profile && (
+        <>
+          <Avatar sx={{ width: 24, height: 24 }}>
+            <IconMember width="24" heigth="24" />
+          </Avatar>
+          <Typography variant="body2" sx={{ fontWeight: 'bold', ml: 1 }}>
+            Profile not found
+          </Typography>
+        </>
       )}
     </Box>
   );

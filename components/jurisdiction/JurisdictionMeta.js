@@ -104,8 +104,10 @@ function JurisdictionMain({ jurisdiction, sx }) {
       <JurisdictionAvatar jurisdiction={jurisdiction} />
       <Box sx={{ mt: { xs: 2, md: 0 }, ml: { md: 4 } }}>
         <Typography variant="h2">{jurisdiction.name}</Typography>
-        {jurisdiction.description && (
-          <Typography sx={{ mt: 1 }}>{jurisdiction.description}</Typography>
+        {jurisdiction?.uriData?.description && (
+          <Typography sx={{ mt: 1 }}>
+            {jurisdiction.uriData.description}
+          </Typography>
         )}
         <JurisdictionActions jurisdiction={jurisdiction} sx={{ mt: 2 }} />
       </Box>
@@ -122,7 +124,7 @@ function JurisdictionAvatar({ jurisdiction, sx }) {
           height: 164,
           borderRadius: '24px',
         }}
-        src={jurisdiction?.image}
+        src={jurisdiction?.uriData?.image}
       >
         <IconJurisdiction width="164" height="164" />
       </Avatar>
@@ -138,7 +140,7 @@ function JurisdictionActions({ jurisdiction, sx }) {
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { join, leave } = useJuridictionContract();
-  const { isAccountHasJurisdictionRole } = useJurisdiction();
+  const { isProfileHasJurisdictionRole } = useJurisdiction();
   const [isMember, setIsMember] = useState(null);
   const [isJoiningOrLeaving, setIsJoiningOrLeaving] = useState(false);
 
@@ -170,17 +172,17 @@ function JurisdictionActions({ jurisdiction, sx }) {
   }
 
   useEffect(() => {
-    if (account && jurisdiction) {
+    if (accountProfile && jurisdiction) {
       setIsMember(
-        isAccountHasJurisdictionRole(
+        isProfileHasJurisdictionRole(
           jurisdiction,
-          account,
+          accountProfile.id,
           JURISDICTION_ROLE.member.id,
         ),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jurisdiction]);
+  }, [accountProfile, jurisdiction]);
 
   return (
     <Stack direction="row" spacing={1} sx={{ ...sx }}>

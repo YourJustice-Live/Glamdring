@@ -14,8 +14,8 @@ export function DataProvider({ children }) {
   const { getProfile } = useProfile();
   const { getJurisdictions } = useJurisdiction();
   const {
-    isAccountHasAwaitingConfirmationCases,
-    isAccountHasAwaitingJudgingCases,
+    isProfileHasAwaitingConfirmationCases,
+    isProfileHasAwaitingJudgingCases,
   } = useCase();
   const profileWorkerRef = useRef();
   const [isReady, setIsReady] = useState(false);
@@ -50,15 +50,18 @@ export function DataProvider({ children }) {
     else {
       try {
         // Define data
-        const accountProfile = await getProfile(account);
+        const accountProfile = await getProfile({ owner: account });
+        if (!accountProfile) {
+          return;
+        }
         const accountProfileIsJudgeJurisdictions = await getJurisdictions({
-          judge: accountProfile.account,
+          judge: accountProfile.id,
           first: jurisdictionsLoadingLimit,
         });
         const isAccountProfileHasAwaitingConfirmationCases =
-          await isAccountHasAwaitingConfirmationCases(account);
+          await isProfileHasAwaitingConfirmationCases(accountProfile?.id);
         const isAccountProfileHasAwaitingJudgingCases =
-          await isAccountHasAwaitingJudgingCases(
+          await isProfileHasAwaitingJudgingCases(
             accountProfileIsJudgeJurisdictions.map(
               (jurisdiction) => jurisdiction.id,
             ),

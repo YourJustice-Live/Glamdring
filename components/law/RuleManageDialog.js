@@ -85,7 +85,7 @@ export default function RuleManageDialog({
             name: {
               type: 'string',
               title: 'Domain',
-              default: REPUTATION_DOMAIN.environment.name,
+              default: REPUTATION_DOMAIN.community.name,
               enum: [
                 REPUTATION_DOMAIN.environment.name,
                 REPUTATION_DOMAIN.personal.name,

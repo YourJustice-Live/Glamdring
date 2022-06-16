@@ -7,27 +7,32 @@ import { unionWith } from 'lodash';
  */
 export default function useSubgraph() {
   /**
-   * Find the Avatar NFTs for all or only for the specified accounts.
+   * Find the Avatar NFT entities.
    *
-   * @param {Array.<string>} accounts If not null, then the function returns the Avatar NFTs for the specified accounts.
+   * @param {Array.<string>} ids Token ids.
+   * @param {Array.<string>} owners Token owner accounts.
    * @param {string} jurisdiction Jurisdiction address.
-   * @param {string} order avatars order.
-   * @returns {Promise.<Array.<{object}>>} Avatar NFTs with token ID, token owner and token URI.
+   * @param {number} first The number of entities to getting.
+   * @param {number} skip The number of entities to skip.
+   * @param {string} order Entities order.
+   * @returns {Promise.<Array.<{object}>>} Avatar NFT entities.
    */
   let findAvatarNftEntities = async function (
-    accounts,
+    ids,
+    owners,
     jurisdiction,
     first = 10,
     skip = 0,
     order = PROFILE_ORDER.byPositiveRating,
   ) {
-    const fixedAccounts = accounts
-      ? accounts.map((account) => account.toLowerCase())
+    const fixedOwners = owners
+      ? owners.map((owner) => owner.toLowerCase())
       : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindAvatarNftEntitiesQuery(
-        fixedAccounts,
+        ids,
+        fixedOwners,
         fixedJurisdiction,
         first,
         skip,
@@ -51,6 +56,7 @@ export default function useSubgraph() {
       response.result1,
       response.result2,
       response.result3,
+      response.result4,
       (entity1, entity2) => entity1.id === entity2.id,
     );
     const sortedResults = unitedResults.sort((a, b) =>
@@ -64,9 +70,9 @@ export default function useSubgraph() {
    *
    * @param {Array.<string>} ids Jurisdction ids (addresses). May be null for get all jurisdictions.
    * @param {string} searchQuery A part of jurisdiction name for searching.
-   * @param {string} member Account that must a member in the jurisdiction.
-   * @param {string} judge Account that must a judge in the jurisdiction.
-   * @param {string} admin Account that must an admin in the jurisdiction.
+   * @param {string} member Id of token that must be a member in the jurisdiction.
+   * @param {string} judge Id of token that must be a judge in the jurisdiction.
+   * @param {string} admin If of token that must be an admin in the jurisdiction.
    * @param {number} first The number of jurisdictions to getting.
    * @param {number} skip The number of jurisdictions to skip.
    * @returns {Promise.<Array.<{object}>>} Jurisdiction entitites.
@@ -81,16 +87,13 @@ export default function useSubgraph() {
     skip = 0,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
-    const fixedMember = member ? member.toLowerCase() : null;
-    const fixedJudge = judge ? judge.toLowerCase() : null;
-    const fixedAdmin = admin ? admin.toLowerCase() : null;
     const response = await makeSubgraphQuery(
       getFindJurisdictionEntitiesQuery(
         fixedIds,
         searchQuery,
-        fixedMember,
-        fixedJudge,
-        fixedAdmin,
+        member,
+        judge,
+        admin,
         first,
         skip,
       ),
@@ -115,7 +118,7 @@ export default function useSubgraph() {
       (entity1, entity2) => entity1.id === entity2.id,
     );
     const sortedResults = unitedResults.sort((a, b) =>
-      Number(a?.memberAccountsCount) < Number(b?.memberAccountsCount) ? 1 : -1,
+      Number(a?.membersCount) < Number(b?.membersCount) ? 1 : -1,
     );
     return sortedResults;
   };
@@ -201,14 +204,14 @@ export default function useSubgraph() {
    * @param {string} searchQuery A part of case name for searching.
    * @param {Array.<string>} jurisdictions Jurisdiction ids (addresses).
    * @param {number} stage Case stage id.
-   * @param {string} participant Account that must a participant in the case.
-   * @param {string} admin Account that must an admin in the case.
-   * @param {string} subject Account that must a subject in the case.
-   * @param {string} plaintiff Account that must a plaintiff in the case.
-   * @param {string} judge Account that must a judge in the case.
-   * @param {string} witness Account that must a witness in the case.
-   * @param {string} affected Account that must an affected in the case.
-   * @param {string} accountWithoutConfirmationPost Account that must not have any post with confirmation.
+   * @param {string} participant Id of token that must be a participant in the case.
+   * @param {string} admin Id of token that must be an admin in the case.
+   * @param {string} subject Id of token that must be a subject in the case.
+   * @param {string} plaintiff Id of token that must be a plaintiff in the case.
+   * @param {string} judge Id of token that must be a judge in the case.
+   * @param {string} witness Id of token that must be a witness in the case.
+   * @param {string} affected Id of token that must be an affected in the case.
+   * @param {string} participantWithoutConfirmationPost Id of token that must not have any post with confirmation.
    * @param {number} first The number of cases to getting.
    * @param {number} skip The number of options to skip.
    * @returns {Promise.<Array.<{object}>>} Array with case entities.
@@ -225,7 +228,7 @@ export default function useSubgraph() {
     judge,
     witness,
     affected,
-    accountWithoutConfirmationPost,
+    participantWithoutConfirmationPost,
     first = 5,
     skip = 0,
   ) {
@@ -233,30 +236,20 @@ export default function useSubgraph() {
     const fixedJurisdictions = jurisdictions
       ? jurisdictions.map((jurisdiction) => jurisdiction.toLowerCase())
       : null;
-    const fixedAdmin = admin ? admin.toLowerCase() : null;
-    const fixedParticipant = participant ? participant.toLowerCase() : null;
-    const fixedSubject = subject ? subject.toLowerCase() : null;
-    const fixedPlaintiff = plaintiff ? plaintiff.toLowerCase() : null;
-    const fixedJudge = judge ? judge.toLowerCase() : null;
-    const fixedWitness = witness ? witness.toLowerCase() : null;
-    const fixedAffected = affected ? affected.toLowerCase() : null;
-    const fixedAccountWithoutConfirmationPost = accountWithoutConfirmationPost
-      ? accountWithoutConfirmationPost.toLowerCase()
-      : null;
     const response = await makeSubgraphQuery(
       getFindCaseEntitiesQuery(
         fixedIds,
         searchQuery,
         fixedJurisdictions,
         stage,
-        fixedParticipant,
-        fixedAdmin,
-        fixedSubject,
-        fixedPlaintiff,
-        fixedJudge,
-        fixedWitness,
-        fixedAffected,
-        fixedAccountWithoutConfirmationPost,
+        participant,
+        admin,
+        subject,
+        plaintiff,
+        judge,
+        witness,
+        affected,
+        participantWithoutConfirmationPost,
         first,
         skip,
       ),
@@ -297,26 +290,32 @@ async function makeSubgraphQuery(query) {
       query: query,
     });
     if (response.data.errors) {
-      throw new Error(`Error making subgraph query: ${response.data.errors}`);
+      throw new Error(
+        `Error making subgraph query: ${JSON.stringify(response.data.errors)}`,
+      );
     }
     return response.data.data;
   } catch (error) {
-    throw new Error(`Could not query the subgraph: ${error.message}`);
+    throw new Error(
+      `Could not query the subgraph: ${JSON.stringify(error.message)}`,
+    );
   }
 }
 
 function getFindAvatarNftEntitiesQuery(
-  accounts,
+  ids,
+  owners,
   jurisdiction,
   first,
   skip,
   order,
 ) {
-  let accountsFilter = accounts ? `owner_in: ["${accounts.join('","')}"]` : '';
+  let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
+  let ownersFilter = owners ? `owner_in: ["${owners.join('","')}"]` : '';
   let jurisdictionFilter = jurisdiction
     ? `jurisdictions_contains: ["${jurisdiction}"]`
     : '';
-  let filterParams = `where: {${accountsFilter}, ${jurisdictionFilter}}`;
+  let filterParams = `where: {${idsFilter}, ${ownersFilter}, ${jurisdictionFilter}}`;
   let sortParams = `orderBy: ${order}, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -350,6 +349,7 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
   let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}"}`;
   let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}"}`;
   let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}"}`;
+  let filterParams4 = `where: {id: "${searchQuery}"}`;
   let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
   let paginationParams = `first: 5, skip: 0`;
   let fields = `
@@ -383,6 +383,9 @@ function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
     result3: avatarNftEntities(${filterParams3}, ${sortParams}, ${paginationParams}) {
       ${fields}
     }
+    result4: avatarNftEntities(${filterParams4}, ${sortParams}, ${paginationParams}) {
+      ${fields}
+    }
   }`;
 }
 
@@ -399,21 +402,23 @@ function getFindJurisdictionEntitiesQuery(
   let searchQueryFilter = searchQuery
     ? `name_contains_nocase: "${searchQuery}"`
     : '';
-  let memberFilter = member ? `memberAccounts_contains: ["${member}"]` : ``;
-  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
-  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
+  let memberFilter = member ? `members_contains: ["${member}"]` : ``;
+  let judgeFilter = judge ? `judges_contains: ["${judge}"]` : ``;
+  let adminFilter = admin ? `admins_contains: ["${admin}"]` : ``;
   let filterParams = `where: {${idsFilter}, ${searchQueryFilter}, ${memberFilter}, ${judgeFilter}, ${adminFilter}}`;
-  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let sortParams = `orderBy: membersCount, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
     jurisdictionEntities(${filterParams}, ${sortParams}, ${paginationParams}) {
       id
       name
+      uri
+      uriData
       roles {
         id
         roleId
-        accounts
-        accountsCount
+        participants
+        participantsCount
       }
       rules {
         id
@@ -427,23 +432,25 @@ function getFindJurisdictionEntitiesQuery(
 function getFindJurisdictionEntitiesBySearchQueryQuery(searchQuery) {
   let filterParams1 = `where: {address_contains_nocase: "${searchQuery}"}`;
   let filterParams2 = `where: {name_contains_nocase: "${searchQuery}"}`;
-  let sortParams = `orderBy: memberAccountsCount, orderDirection: desc`;
+  let sortParams = `orderBy: membersCount, orderDirection: desc`;
   let paginationParams = `first: 5, skip: 0`;
   let fields = `
     id
     name
+    uri
+    uriData
     roles {
       id
       roleId
-      accounts
-      accountsCount
+      participants
+      participantsCount
     }
     rules {
       id
     }
     rulesCount
     casesCount
-    memberAccountsCount
+    membersCount
   `;
   return `{
     result1: jurisdictionEntities(${filterParams1}, ${sortParams}, ${paginationParams}) {
@@ -595,7 +602,7 @@ function getFindCaseEntitiesQuery(
   judge,
   witness,
   affected,
-  accountWithoutConfirmationPost,
+  participantWithoutConfirmationPost,
   first,
   skip,
 ) {
@@ -607,20 +614,18 @@ function getFindCaseEntitiesQuery(
     ? `jurisdiction_in:  ["${jurisdictions.join('","')}"]`
     : '';
   let participantFilter = participant
-    ? `participantAccounts_contains: ["${participant}"]`
+    ? `participants_contains: ["${participant}"]`
     : ``;
-  let adminFilter = admin ? `adminAccounts_contains: ["${admin}"]` : ``;
-  let subjectFilter = subject ? `subjectAccounts_contains: ["${subject}"]` : ``;
+  let adminFilter = admin ? `admins_contains: ["${admin}"]` : ``;
+  let subjectFilter = subject ? `subjects_contains: ["${subject}"]` : ``;
   let plaintiffFilter = plaintiff
-    ? `plaintiffAccounts_contains: ["${plaintiff}"]`
+    ? `plaintiffs_contains: ["${plaintiff}"]`
     : ``;
-  let judgeFilter = judge ? `judgeAccounts_contains: ["${judge}"]` : ``;
-  let witnessFilter = witness ? `witnessAccounts_contains: ["${witness}"]` : ``;
-  let affectedFilter = affected
-    ? `affectedAccounts_contains: ["${affected}"]`
-    : ``;
-  let notFilter = accountWithoutConfirmationPost
-    ? `accountsWithConfirmationPosts_not_contains: ["${accountWithoutConfirmationPost}"]`
+  let judgeFilter = judge ? `judges_contains: ["${judge}"]` : ``;
+  let witnessFilter = witness ? `witnesses_contains: ["${witness}"]` : ``;
+  let affectedFilter = affected ? `affecteds_contains: ["${affected}"]` : ``;
+  let notFilter = participantWithoutConfirmationPost
+    ? `participantsWithConfirmationPosts_not_contains: ["${participantWithoutConfirmationPost}"]`
     : ``;
   let stageFilter =
     stage !== null && stage !== undefined ? `stage: ${stage}` : '';
@@ -660,13 +665,13 @@ function getFindCaseEntitiesQuery(
         uriData
         uriType
       }
-      participantAccounts
-      adminAccounts
-      subjectAccounts
-      plaintiffAccounts
-      judgeAccounts
-      witnessAccounts
-      affectedAccounts
+      participants
+      admins
+      subjects
+      plaintiffs
+      judges
+      witnesses
+      affecteds
     }
   }`;
 }

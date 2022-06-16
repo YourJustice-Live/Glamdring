@@ -9,13 +9,17 @@ export default function useToasts() {
   const { t } = useTranslation('common');
   const { enqueueSnackbar } = useSnackbar();
   const { switchNetwork } = useWeb3Context();
+  const autoHideDuration = 10000;
 
   let showToast = function (message) {
-    enqueueSnackbar(message);
+    enqueueSnackbar(message, { autoHideDuration: autoHideDuration });
   };
 
   let showToastSuccess = function (message) {
-    enqueueSnackbar(message, { variant: 'success' });
+    enqueueSnackbar(message, {
+      variant: 'success',
+      autoHideDuration: autoHideDuration,
+    });
   };
 
   let showToastSuccessLink = function (message, link) {
@@ -29,6 +33,7 @@ export default function useToasts() {
         </Button>
       ),
       variant: 'success',
+      autoHideDuration: autoHideDuration,
     });
   };
 
@@ -49,12 +54,18 @@ export default function useToasts() {
           Switch
         </Button>
       );
-      enqueueSnackbar(message, { action: action });
+      enqueueSnackbar(message, {
+        action: action,
+        autoHideDuration: autoHideDuration,
+      });
     } else {
       const message = truncate(`${t('text-error')}: ${error.message}`, {
         length: 256,
       });
-      enqueueSnackbar(message, { variant: 'error' });
+      enqueueSnackbar(message, {
+        variant: 'error',
+        autoHideDuration: autoHideDuration,
+      });
     }
   };
 

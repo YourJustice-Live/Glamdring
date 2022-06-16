@@ -1,10 +1,6 @@
-import { Construction } from '@mui/icons-material';
-import { Stack, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import Layout from 'components/layout/Layout';
 import ProfileManage from 'components/profile/ProfileManage';
 import ContentProtector from 'components/protector/ContentProtector';
-import { IS_PROFILE_INVITING_DISABLED } from 'constants/features';
 import useWeb3Context from 'hooks/context/useWeb3Context';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -22,24 +18,7 @@ export default function ProfileInvite() {
         isAccountRequired={true}
         isAccountProfileRequired={true}
       >
-        {IS_PROFILE_INVITING_DISABLED ? (
-          <Box>
-            <Typography variant="h1" gutterBottom>
-              {t('text-feature-is-under-development')}
-            </Typography>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ mt: 1 }}
-            >
-              <Construction fontSize="small" />
-              <Typography>{t('text-feature-inviting-coming-soon')}</Typography>
-            </Stack>
-          </Box>
-        ) : (
-          <ProfileManage action="createAnotherProfile" />
-        )}
+        <ProfileManage action="createAnotherProfile" />
       </ContentProtector>
     </Layout>
   );

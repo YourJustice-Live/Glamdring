@@ -8,7 +8,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
+<<<<<<< HEAD
+ * A widget to select profile (profile id).
+=======
  * A widget to select profile (account).
+>>>>>>> dev
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
@@ -58,7 +62,7 @@ export default function ProfileSelect(props) {
           newOptions = unionWith(
             newOptions,
             profiles,
-            (profile1, profile2) => profile1.account === profile2.account,
+            (profile1, profile2) => profile1.id === profile2.id,
           );
         }
         setOptions(newOptions);
@@ -76,7 +80,7 @@ export default function ProfileSelect(props) {
   useEffect(() => {
     if (propsValue) {
       setIsDisabled(true);
-      getProfile(propsValue)
+      getProfile({ id: propsValue })
         .then((profile) => {
           setValue(profile);
           setIsDisabled(false);
@@ -94,7 +98,9 @@ export default function ProfileSelect(props) {
         getOptionLabel={(option) =>
           formatProfileFirstLastName(option) +
           ' (' +
-          formatAddress(option.account) +
+          option.id +
+          ' , ' +
+          formatAddress(option.owner) +
           ')'
         }
         filterOptions={(x) => x}
@@ -102,14 +108,12 @@ export default function ProfileSelect(props) {
         value={value}
         onChange={(_, newValue) => {
           setValue(newValue);
-          propsOnChange(newValue?.account);
+          propsOnChange(newValue?.id);
         }}
         onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
-        isOptionEqualToValue={(option, value) =>
-          option.account === value.account
-        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => (
           <TextField
             fullWidth
@@ -125,6 +129,7 @@ export default function ProfileSelect(props) {
             <li {...props}>
               <ProfileCompactCard
                 profile={option}
+                disableId={false}
                 disableAddress={false}
                 disableLink={true}
                 disableRating={true}

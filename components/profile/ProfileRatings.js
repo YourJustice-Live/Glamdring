@@ -16,19 +16,19 @@ export default function ProfileRatings({ profile, sx }) {
         {/* Total Rating */}
         <Rating
           domain={t('text-profile-total-reputation')}
-          negativeRating={profile.avatarNftTotalNegativeRating}
-          positiveRating={profile.avatarNftTotalPositiveRating}
+          negativeRating={profile.totalNegativeRating}
+          positiveRating={profile.totalPositiveRating}
         />
         {/* Rating by domains */}
-        {profile.avatarNftReputations?.map((reputation, index) => (
+        {profile.reputations?.map((reputation, index) => (
           <Rating
             key={index}
             domain={capitalize(reputation.domain)}
             jurisdiction={reputation.jurisdiction}
             negativeRating={reputation.negativeRating}
             positiveRating={reputation.positiveRating}
-            totalNegativeRating={profile.avatarNftTotalNegativeRating}
-            totalPositiveRating={profile.avatarNftTotalPositiveRating}
+            totalNegativeRating={profile.totalNegativeRating}
+            totalPositiveRating={profile.totalPositiveRating}
             sx={{ mt: 2 }}
           />
         ))}

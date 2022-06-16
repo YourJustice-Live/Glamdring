@@ -111,8 +111,9 @@ export default function Cases() {
                 isFilterButtonHidden={true}
                 filters={{
                   stageId: CASE_STAGE.open,
-                  witnessProfileAccount: account,
-                  accountWithoutConfirmationPost: account,
+                  witnessProfileId: accountProfile.id,
+                  participantWithoutConfirmationPostProfileId:
+                    accountProfile.id,
                 }}
               />
             </TabPanel>

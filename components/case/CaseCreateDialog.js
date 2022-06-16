@@ -254,12 +254,12 @@ function FormDialog({
   onClose,
 }) {
   const { t } = useTranslation('common');
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { makeCase } = useJuridictionContract();
-  const { getJurisdiction, getJurisdictionRule, isAccountHasJurisdictionRole } =
+  const { getJurisdiction, getJurisdictionRule, isProfileHasJurisdictionRole } =
     useJurisdiction();
   const { getAction } = useAction();
   const [isOpen, setIsOpen] = useState(!isClose);
@@ -268,9 +268,9 @@ function FormDialog({
   const [formData, setFormData] = useState({
     ...(jurisdiction && { jurisdictionId: jurisdiction.id }),
     isPositive: isPositive !== undefined ? isPositive : true,
-    ...(subjectProfile && { subjectProfileAccount: subjectProfile.account }),
+    ...(subjectProfile && { subjectProfileId: subjectProfile?.id }),
     ...(affectedProfile && {
-      affectedProfileAccount: affectedProfile.account,
+      affectedProfileId: affectedProfile?.id,
     }),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -314,11 +314,11 @@ function FormDialog({
       },
       ruleId: {
         properties: {
-          subjectProfileAccount: {
+          subjectProfileId: {
             type: 'string',
             title: '',
           },
-          affectedProfileAccount: {
+          affectedProfileId: {
             type: 'string',
             title: '',
           },
@@ -326,7 +326,7 @@ function FormDialog({
             type: 'string',
             title: '',
           },
-          witnessProfileAccounts: {
+          witnessProfileIds: {
             type: 'array',
             title: t('input-case-witnesses-title'),
             items: {
@@ -340,9 +340,9 @@ function FormDialog({
           },
         },
         required: [
-          'subjectProfileAccount',
-          'affectedProfileAccount',
-          formRule?.confirmation?.evidence && 'evidencePostUri',
+          'subjectProfileId',
+          'affectedProfileId',
+          ...(formRule?.confirmation?.evidence ? ['evidencePostUri'] : []),
         ],
       },
     },
@@ -486,7 +486,7 @@ function FormDialog({
         ),
       },
     },
-    subjectProfileAccount: {
+    subjectProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
         header: (
@@ -509,7 +509,7 @@ function FormDialog({
         ),
       },
     },
-    affectedProfileAccount: {
+    affectedProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:options': {
         header: (
@@ -550,7 +550,7 @@ function FormDialog({
         ),
       },
     },
-    witnessProfileAccounts: {
+    witnessProfileIds: {
       'ui:widget': 'CaseWitnessesSelect',
       'ui:emptyValue': [],
       'ui:options': {
@@ -602,7 +602,7 @@ function FormDialog({
       delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
     }
     // If action changed
     if (formData.actionGuid !== changedFormData.actionGuid) {
@@ -610,7 +610,7 @@ function FormDialog({
       delete changedFormData.name;
       delete changedFormData.ruleId;
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
       // Load action by guid
       if (changedFormData.actionGuid) {
         getAction(changedFormData.actionGuid)
@@ -622,7 +622,7 @@ function FormDialog({
     if (formData.ruleId !== changedFormData.ruleId) {
       // Clear dependent form fields
       delete changedFormData.evidencePostUri;
-      delete changedFormData.witnessProfileAccounts;
+      delete changedFormData.witnessProfileIds;
       // Load action by id
       if (changedFormData.ruleId) {
         getJurisdictionRule(
@@ -647,11 +647,13 @@ function FormDialog({
       }
       // Check witness count
       const formRuleWitness = Number(formRule?.confirmation?.witness);
-      if (submittedFormData.witnessProfileAccounts.length < formRuleWitness) {
+      if (submittedFormData.witnessProfileIds.length < formRuleWitness) {
         throw new Error(t('text-error-case-required-more-witnesses'));
       }
       // Define case name
       const caseName = submittedFormData.name;
+      // Define case metadata
+      const caseMetadata = '';
       // Define case rules
       const caseRules = [];
       caseRules.push({
@@ -661,16 +663,16 @@ function FormDialog({
       // Define case roles
       const caseRoles = [];
       caseRoles.push({
-        account: submittedFormData.subjectProfileAccount,
+        tokenId: submittedFormData.subjectProfileId,
         role: CASE_ROLE.subject.name,
       });
       caseRoles.push({
-        account: submittedFormData.affectedProfileAccount,
+        tokenId: submittedFormData.affectedProfileId,
         role: CASE_ROLE.affected.name,
       });
-      for (const witnessProfileAccount of submittedFormData.witnessProfileAccounts) {
+      for (const witnessProfileId of submittedFormData.witnessProfileIds) {
         caseRoles.push({
-          account: witnessProfileAccount,
+          tokenId: witnessProfileId,
           role: CASE_ROLE.witness.name,
         });
       }
@@ -686,6 +688,7 @@ function FormDialog({
       await makeCase(
         submittedFormData.jurisdictionId,
         caseName,
+        caseMetadata,
         caseRules,
         caseRoles,
         casePosts,
@@ -704,13 +707,13 @@ function FormDialog({
    */
   useEffect(() => {
     setIsJoiningToJurisdictionRequired(false);
-    if (account && formData?.jurisdictionId) {
+    if (accountProfile && formData?.jurisdictionId) {
       getJurisdiction(formData.jurisdictionId)
         .then((jurisdiction) => {
           setIsJoiningToJurisdictionRequired(
-            !isAccountHasJurisdictionRole(
+            !isProfileHasJurisdictionRole(
               jurisdiction,
-              account,
+              accountProfile.id,
               JURISDICTION_ROLE.member.id,
             ),
           );
@@ -721,7 +724,7 @@ function FormDialog({
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, formData?.jurisdictionId]);
+  }, [accountProfile, formData?.jurisdictionId]);
 
   return (
     <Dialog open={isOpen} onClose={close} maxWidth="md" fullWidth>

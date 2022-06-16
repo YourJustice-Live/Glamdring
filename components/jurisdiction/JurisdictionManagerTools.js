@@ -1,13 +1,12 @@
 import { Alert, Button, Stack, Typography } from '@mui/material';
 import RoleManageDialog from 'components/jurisdiction/JurisdictionRoleManageDialog';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
-import useWeb3Context from 'hooks/context/useWeb3Context';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { palette } from 'theme/palette';
 import JurisdictionManageDialog from './JurisdictionManageDialog';
 
@@ -17,29 +16,26 @@ import JurisdictionManageDialog from './JurisdictionManageDialog';
 export default function JurisdictionManagerTools({ jurisdiction, sx }) {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { account } = useWeb3Context();
+  const { accountProfile } = useDataContext();
   const { showDialog, closeDialog } = useDialogContext();
-  const { isAccountHasJurisdictionRole } = useJurisdiction();
-  const [isAccountAdmin, setIsAccountAdmin] = useState(false);
-  const isJurisdictionMain =
-    jurisdiction?.id?.toLowerCase() ===
-    process.env.NEXT_PUBLIC_MAIN_JURISDICTION_CONTRACT_ADDRESS.toLowerCase();
+  const { isProfileHasJurisdictionRole } = useJurisdiction();
+  const [isProfileAdmin, setIsProfileAdmin] = useState(false);
 
   useEffect(() => {
-    setIsAccountAdmin(false);
-    if (account && jurisdiction) {
-      setIsAccountAdmin(
-        isAccountHasJurisdictionRole(
+    setIsProfileAdmin(false);
+    if (accountProfile && jurisdiction) {
+      setIsProfileAdmin(
+        isProfileHasJurisdictionRole(
           jurisdiction,
-          account,
+          accountProfile.id,
           JURISDICTION_ROLE.admin.id,
         ),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, jurisdiction]);
+  }, [accountProfile, jurisdiction]);
 
-  if (isAccountAdmin) {
+  if (isProfileAdmin) {
     return (
       <Alert
         severity="info"
@@ -57,22 +53,20 @@ export default function JurisdictionManagerTools({ jurisdiction, sx }) {
           spacing={2}
           sx={{ mt: 2 }}
         >
-          {!isJurisdictionMain && (
-            <Button
-              variant="outlined"
-              type="submit"
-              onClick={() =>
-                showDialog(
-                  <JurisdictionManageDialog
-                    jurisdiction={jurisdiction}
-                    onClose={closeDialog}
-                  />,
-                )
-              }
-            >
-              {t('button-jurisdiction-update')}
-            </Button>
-          )}
+          <Button
+            variant="outlined"
+            type="submit"
+            onClick={() =>
+              showDialog(
+                <JurisdictionManageDialog
+                  jurisdiction={jurisdiction}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            {t('button-jurisdiction-update')}
+          </Button>
           <Button
             variant="outlined"
             type="submit"

@@ -26,7 +26,7 @@ export default function JurisdictionCard({ jurisdiction }) {
       const memberRole = jurisdiction.roles.find(
         (role) => role.roleId === JURISDICTION_ROLE.member.id,
       );
-      setCitizensCount(memberRole?.accountsCount);
+      setCitizensCount(memberRole?.participantsCount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jurisdiction]);
@@ -48,7 +48,7 @@ export default function JurisdictionCard({ jurisdiction }) {
                     height: 82,
                     borderRadius: '16px',
                   }}
-                  src={jurisdiction.image}
+                  src={jurisdiction.uriData?.image}
                 >
                   <IconJurisdiction width="82" height="82" />
                 </Avatar>
@@ -62,7 +62,7 @@ export default function JurisdictionCard({ jurisdiction }) {
                 </Link>
               </NextLink>
               <Typography variant="body2">
-                {truncate(jurisdiction.description, { length: 36 })}
+                {truncate(jurisdiction.uriData?.description, { length: 36 })}
               </Typography>
               {citizensCount > 0 && (
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>

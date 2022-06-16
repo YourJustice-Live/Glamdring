@@ -8,6 +8,7 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { JURISDICTION_ROLE } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
@@ -17,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 /**
- * A dialog for assign or remove jurisdiction role for a specified account.
+ * A dialog for assign or remove jurisdiction role for a specified profile.
  */
 export default function RoleManageDialog({
   jurisdiction,
@@ -35,11 +36,11 @@ export default function RoleManageDialog({
 
   const schema = {
     type: 'object',
-    required: ['account', 'role'],
+    required: ['profileId', 'role'],
     properties: {
-      account: {
+      profileId: {
         type: 'string',
-        title: t('input-account-title'),
+        title: '',
       },
       role: {
         type: 'string',
@@ -60,9 +61,13 @@ export default function RoleManageDialog({
   };
 
   const uiSchema = {
-    account: {
-      'ui:placeholder': t('input-account-placeholder'),
+    profileId: {
+      'ui:widget': 'ProfileSelect',
     },
+  };
+
+  const widgets = {
+    ProfileSelect: ProfileSelect,
   };
 
   async function close() {
@@ -77,9 +82,9 @@ export default function RoleManageDialog({
       setFormData(formData);
       setIsLoading(true);
       if (isAssign) {
-        await assignRole(jurisdiction?.id, formData.account, formData.role);
+        await assignRole(jurisdiction?.id, formData.profileId, formData.role);
       } else {
-        await removeRole(jurisdiction?.id, formData.account, formData.role);
+        await removeRole(jurisdiction?.id, formData.profileId, formData.role);
       }
       showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
@@ -90,7 +95,12 @@ export default function RoleManageDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={isLoading ? null : onClose}>
+    <Dialog
+      open={isOpen}
+      onClose={isLoading ? null : onClose}
+      maxWidth="xs"
+      fullWidth
+    >
       <DialogTitle>
         {isAssign
           ? t('dialog-jurisdiction-assign-role-title')
@@ -99,8 +109,9 @@ export default function RoleManageDialog({
       <DialogContent>
         <Form
           schema={schema}
-          formData={formData}
           uiSchema={uiSchema}
+          widgets={widgets}
+          formData={formData}
           onSubmit={submit}
           disabled={isLoading}
         >

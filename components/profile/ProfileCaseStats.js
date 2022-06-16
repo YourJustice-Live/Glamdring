@@ -11,8 +11,7 @@ export default function ProfileCaseStats({ profile, sx }) {
 
   if (profile) {
     const totalCases =
-      Number(profile.avatarNftTotalPositiveCases) +
-      Number(profile.avatarNftTotalNegativeCases);
+      Number(profile.totalPositiveCases) + Number(profile.totalNegativeCases);
     return (
       <Stack
         direction="row"
@@ -26,12 +25,12 @@ export default function ProfileCaseStats({ profile, sx }) {
           title={t('text-profile-cases').toUpperCase()}
         />
         <Stats
-          value={profile.avatarNftTotalPositiveCases}
+          value={profile.totalPositiveCases}
           title={t('text-profile-positive-cases').toUpperCase()}
           titleColor={palette.success.main}
         />
         <Stats
-          value={profile.avatarNftTotalNegativeCases}
+          value={profile.totalNegativeCases}
           title={t('text-profile-negative-cases').toUpperCase()}
           titleColor={palette.danger.main}
         />

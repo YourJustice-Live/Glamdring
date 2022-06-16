@@ -63,15 +63,15 @@ export default function CaseListObserver({
       searchQuery: params.filters.description,
       jurisdictions: paramsJurisdictions,
       stage: params.filters.stageId,
-      admin: params.filters.adminProfileAccount,
-      subject: params.filters.subjectProfileAccount,
-      plaintiff: params.filters.plaintiffProfileAccount,
-      judge: params.filters.judgeProfileAccount,
-      witness: params.filters.witnessProfileAccount,
-      affected: params.filters.affectedProfileAccount,
-      accountWithoutConfirmationPost:
-        params.filters.accountWithoutConfirmationPost,
-      participant: params.filters.participantProfileAccount,
+      admin: params.filters.adminProfileId,
+      subject: params.filters.subjectProfileId,
+      plaintiff: params.filters.plaintiffProfileId,
+      judge: params.filters.judgeProfileId,
+      witness: params.filters.witnessProfileId,
+      affected: params.filters.affectedProfileId,
+      participantWithoutConfirmationPost:
+        params.filters.participantWithoutConfirmationPostProfileId,
+      participant: params.filters.participantProfileId,
       first: params.pageSize,
       skip: (params.page - 1) * params.pageSize,
     })
@@ -185,31 +185,31 @@ function FiltersDialog({
         type: 'number',
         title: '',
       },
-      subjectProfileAccount: {
+      subjectProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-subject-title'),
       },
-      affectedProfileAccount: {
+      affectedProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-affected-title'),
       },
-      judgeProfileAccount: {
+      judgeProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-judge-title'),
       },
-      witnessProfileAccount: {
+      witnessProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-witness-title'),
       },
-      plaintiffProfileAccount: {
+      plaintiffProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-plaintiff-title'),
       },
-      adminProfileAccount: {
+      adminProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-admin-title'),
       },
-      participantProfileAccount: {
+      participantProfileId: {
         type: ['string', 'null'],
         title: t('input-profile-with-any-role-title'),
       },
@@ -227,25 +227,25 @@ function FiltersDialog({
     stageId: {
       'ui:widget': 'CaseStageSelect',
     },
-    subjectProfileAccount: {
+    subjectProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    affectedProfileAccount: {
+    affectedProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    judgeProfileAccount: {
+    judgeProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    witnessProfileAccount: {
+    witnessProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    plaintiffProfileAccount: {
+    plaintiffProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    adminProfileAccount: {
+    adminProfileId: {
       'ui:widget': 'ProfileSelect',
     },
-    participantProfileAccount: {
+    participantProfileId: {
       'ui:widget': 'ProfileSelect',
       'ui:disabled': isParticipantInputDisabled,
     },
@@ -280,7 +280,7 @@ function FiltersDialog({
   }
 
   return (
-    <Dialog open={isOpen} onClose={close} maxWidth="xs" fullWidth>
+    <Dialog open={isOpen} onClose={close} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ pb: 0 }}>{t('dialog-case-filters-title')}</DialogTitle>
       <DialogContent>
         <Form

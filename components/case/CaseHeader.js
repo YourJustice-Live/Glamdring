@@ -93,13 +93,13 @@ function CaseAddressJurisdictionCreatedDate({
 }
 
 function CaseAdminStage({ caseObject, sx }) {
+  const [adminProfileId, setAdminProfileId] = useState(null);
   const { t } = useTranslation('common');
-  const [adminAccount, setAdminAccount] = useState(null);
   const [stageName, setStageName] = useState(null);
 
   useEffect(() => {
     if (caseObject) {
-      setAdminAccount(caseObject.adminAccounts[0]);
+      setAdminProfileId(caseObject.admins[0]);
       setStageName(t(CASE_STAGE_KEY[caseObject.stage]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,7 +116,7 @@ function CaseAdminStage({ caseObject, sx }) {
       }}
     >
       <ProfileCompactCard
-        account={adminAccount}
+        profileId={adminProfileId}
         sx={{ mt: { xs: 0.8, md: 0 } }}
       />
       <Box
