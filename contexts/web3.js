@@ -51,7 +51,7 @@ export function Web3Provider({ children }) {
       setNetworkChainId(networkChainId);
     } catch (error) {
       console.error(error);
-      handleCatchErrorEvent(error);
+      handleCatchErrorEvent(error, { type: 'web3' });
     } finally {
       setIsReady(true);
     }
@@ -78,7 +78,7 @@ export function Web3Provider({ children }) {
       setIsNetworkChainCorrect(null);
     } catch (error) {
       console.error(error);
-      handleCatchErrorEvent(error);
+      handleCatchErrorEvent(error, { type: 'clear context' });
     } finally {
       setIsReady(true);
     }
@@ -100,7 +100,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
-      handleCatchErrorEvent(error);
+      handleCatchErrorEvent(error, { type: 'change network' });
       if (error?.code === 4902) {
         addNetwork();
       }
@@ -131,7 +131,7 @@ export function Web3Provider({ children }) {
       });
     } catch (error) {
       console.error(error);
-      handleCatchErrorEvent(error);
+      handleCatchErrorEvent(error, { type: 'add chain' });
     }
   }
 

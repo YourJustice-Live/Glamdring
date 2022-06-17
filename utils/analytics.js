@@ -51,11 +51,12 @@ export function handleConnectAccountEvent(account) {
  *
  * @param {Error} error Error object.
  */
-export function handleCatchErrorEvent(error) {
+export function handleCatchErrorEvent(error, _additional = {}) {
   if (isAnalyticsEnabled()) {
     posthog.capture(POST_HOG_EVENT.catchedError, {
       [POST_HOG_PROPERTY.errorMessage]: error?.message,
       [POST_HOG_PROPERTY.errorStack]: error?.stack,
+      ..._additional,
     });
   }
 }
