@@ -1,4 +1,4 @@
-import { Box, Container, Toolbar } from '@mui/material';
+import { Alert, Box, Container, Toolbar } from '@mui/material';
 import Footer from 'components/layout/Footer';
 import Header from 'components/layout/Header';
 import { Sidebar } from 'components/layout/Sidebar';
@@ -26,6 +26,11 @@ export default function Layout({
           {enableSidebar && <Sidebar />}
           <Box sx={{ flexGrow: 1, py: 4 }}>
             <Toolbar />
+            {process.env.NEXT_PUBLIC_GLOBAL_PROBLEM_MESSAGE && (
+              <Alert severity="error" sx={{ mb: 4 }}>
+                {process.env.NEXT_PUBLIC_GLOBAL_PROBLEM_MESSAGE}
+              </Alert>
+            )}
             {children}
           </Box>
         </Box>
