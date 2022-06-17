@@ -1,7 +1,7 @@
 export const POST_HOG_EVENT = {
   pageView: '$pageview',
   connectedAccount: 'connected account',
-  catchedError: 'catched error',
+  catchedError: 'caught exception',
   createdOwnProfile: 'created own profile',
   editedOwnProfile: 'edited own profile',
   createdCase: 'created case',
