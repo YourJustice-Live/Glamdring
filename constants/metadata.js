@@ -22,7 +22,7 @@ import {
 export const PROFILE_TRAIT_TYPE = {
   firstName: 'First Name',
   lastName: 'Last Name',
-  description: 'A little bit about yourself',
+  description: 'Description',
   email: 'Email',
   site: 'Site',
   twitter: 'Twitter',
