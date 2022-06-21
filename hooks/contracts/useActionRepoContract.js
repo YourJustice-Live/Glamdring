@@ -21,7 +21,7 @@ export default function useActionRepoContract() {
   /**
    * Add an action.
    *
-   * @param {object} action Information about subject, verb, object,
+   * @param {{subject: string,  verb: string, object: string, tool: string}} action Action object.
    * @param {string} uri URI.
    * @returns Transaction.
    */

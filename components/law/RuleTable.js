@@ -68,7 +68,7 @@ export default function RuleTable({ jurisdiction, sx }) {
     {
       field: 'action',
       headerName: 'Action',
-      width: 500,
+      width: 320,
       valueGetter: (params) => `${params.row.action.guid}`,
       renderCell: (params) => (
         <Box>
@@ -83,37 +83,37 @@ export default function RuleTable({ jurisdiction, sx }) {
       ),
     },
     {
-      field: 'metadata',
-      headerName: 'Metadata',
-      width: 600,
+      field: 'name',
+      headerName: 'Name to display',
+      width: 320,
+      valueGetter: (params) => `${params.row.rule.rule.uriData?.name || ''}`,
+    },
+    {
+      field: 'description',
+      headerName: 'Description to display',
+      width: 320,
       valueGetter: (params) =>
-        `${params.row.rule.rule.uriData?.name || 'None'}`,
-      renderCell: (params) => (
-        <Box>
-          <Typography>
-            {params.row.rule.rule.uriData?.name || 'None'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            • {params.row.rule.rule.uriData?.description || 'None'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            • {params.row.rule.rule.uriData?.evidenceDescription || 'None'}
-          </Typography>
-        </Box>
-      ),
+        `${params.row.rule.rule.uriData?.description || ''}`,
+    },
+    {
+      field: 'evidenceDescription',
+      headerName: 'Evidence description',
+      width: 320,
+      valueGetter: (params) =>
+        `${params.row.rule.rule.uriData?.evidenceDescription || ''}`,
     },
     {
       field: 'affected',
       headerName: 'Affected',
       width: 200,
-      valueGetter: (params) => `${params.row.rule.rule.affected || 'None'}`,
+      valueGetter: (params) => `${params.row.rule.rule.affected || ''}`,
     },
     {
       field: 'negation',
       headerName: 'Negation',
       width: 100,
       valueGetter: (params) =>
-        `${params.row.rule.rule.negation.toString() || 'None'}`,
+        `${params.row.rule.rule.negation.toString() || ''}`,
     },
     {
       field: 'category',
@@ -168,22 +168,20 @@ export default function RuleTable({ jurisdiction, sx }) {
       field: 'ruling',
       headerName: 'Ruling',
       width: 100,
-      valueGetter: (params) =>
-        `${params.row.rule.confirmation.ruling || 'None'}`,
+      valueGetter: (params) => `${params.row.rule.confirmation.ruling || ''}`,
     },
     {
       field: 'evidence',
       headerName: 'Evidence',
       width: 100,
       valueGetter: (params) =>
-        `${params.row.rule.confirmation.evidence.toString() || 'None'}`,
+        `${params.row.rule.confirmation.evidence.toString() || ''}`,
     },
     {
       field: 'witness',
       headerName: 'Witness',
       width: 100,
-      valueGetter: (params) =>
-        `${params.row.rule.confirmation.witness || 'None'}`,
+      valueGetter: (params) => `${params.row.rule.confirmation.witness || ''}`,
     },
   ];
 

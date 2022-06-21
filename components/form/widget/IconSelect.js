@@ -12,11 +12,12 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
 /**
- * A widget to select icon (name) for metadata.
+ * A widget to select icon (name).
  */
-export default function MetadataIconSelect(props) {
-  const propsValue = props.value;
+export default function IconSelect(props) {
+  const propsLabel = props.label;
   const propsRequired = props.required;
+  const propsValue = props.value;
   const propsOnChange = props.onChange;
   const { t } = useTranslation('common');
   const [value, setValue] = useState('');
@@ -34,14 +35,14 @@ export default function MetadataIconSelect(props) {
   return (
     <Box>
       <FormControl required={propsRequired} fullWidth>
-        <InputLabel id="metadata-icon-select-label">
-          {t('input-icon-title')}
+        <InputLabel id="icon-select-label">
+          {propsLabel || t('input-icon-title')}
         </InputLabel>
         <Select
-          labelId="metadata-icon-select-label"
-          id="metadata-icon-select"
+          labelId="icon-select-label"
+          id="icon-select"
           value={value}
-          label={t('input-icon-title')}
+          label={propsLabel || t('input-icon-title')}
           onChange={(event) => {
             setValue(event.target.value);
             propsOnChange(event.target.value);

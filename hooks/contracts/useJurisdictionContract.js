@@ -81,6 +81,15 @@ export default function useJuridictionContract() {
     ).roleRemoveFromToken(token, role);
   }
 
+  /**
+   * Add rule.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @param {{about: string, affected: string, negation: boolean, uri: string}} rule Rule object.
+   * @param {{ruling: string, evidence: boolean, witness: number}} confirmation Confirmation object.
+   * @param {Array.<{name: string, value: number, direction: boolean}>} effects Effects object.
+   * @returns Transaction.
+   */
   async function addRule(contractAddress, rule, confirmation, effects) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
@@ -92,6 +101,15 @@ export default function useJuridictionContract() {
     );
   }
 
+  /**
+   * Update rule.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @param {string} id Rule id in the jurisdiction contract.
+   * @param {{about: string, affected: string, negation: boolean, uri: string}} rule Rule object.
+   * @param {Array.<{name: string, value: number, direction: boolean}>} effects Effects object.
+   * @returns Transaction.
+   */
   async function updateRule(contractAddress, id, rule, effects) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();

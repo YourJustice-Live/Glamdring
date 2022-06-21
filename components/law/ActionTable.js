@@ -1,14 +1,13 @@
 import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
-import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useAction from 'hooks/useAction';
+import useErrors from 'hooks/useErrors';
 import { useEffect, useState } from 'react';
 import { getActionIcon } from 'utils/metadata';
 import ActionManageDialog from './ActionManageDialog';
-import useErrors from 'hooks/useErrors';
 
 /**
  * A component with a table with actions.
@@ -64,39 +63,41 @@ export default function ActionTable({ sx }) {
       valueGetter: (params) => `${params.row.guid}`,
     },
     {
-      field: 'metadata',
-      headerName: 'Metadata',
-      width: 600,
-      valueGetter: (params) => `${params.row.uriData?.name || 'None'}`,
-      renderCell: (params) => (
-        <Box>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {getActionIcon(params.row, 28)}
-            <Typography>{params.row.uriData?.name || 'None'}</Typography>
-          </Stack>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {params.row.uriData?.description || 'None'}
-          </Typography>
-        </Box>
-      ),
+      field: 'icon',
+      headerName: 'Icon to display',
+      width: 120,
+      valueGetter: (params) => `${params.row.uriData?.icon || ''}`,
+      renderCell: (params) => getActionIcon(params.row, 28),
+    },
+    {
+      field: 'name',
+      headerName: 'Name to display',
+      width: 320,
+      valueGetter: (params) => `${params.row.uriData?.name || ''}`,
+    },
+    {
+      field: 'description',
+      headerName: 'Description to display',
+      width: 320,
+      valueGetter: (params) => `${params.row.uriData?.description || ''}`,
     },
     {
       field: 'subject',
       headerName: 'Acted',
       width: 200,
-      valueGetter: (params) => `${params.row.action.subject || 'None'}`,
+      valueGetter: (params) => `${params.row.action.subject || ''}`,
     },
     {
       field: 'verb',
       headerName: 'Verb',
       width: 400,
-      valueGetter: (params) => `${params.row.action.verb || 'None'}`,
+      valueGetter: (params) => `${params.row.action.verb || ''}`,
     },
     {
       field: 'object',
       headerName: 'Object',
       width: 100,
-      valueGetter: (params) => `${params.row.action.object || 'None'}`,
+      valueGetter: (params) => `${params.row.action.object || ''}`,
     },
   ];
 
