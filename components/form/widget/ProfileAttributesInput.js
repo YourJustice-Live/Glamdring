@@ -6,7 +6,9 @@ import {
   Twitter,
 } from '@mui/icons-material';
 import {
+  Checkbox,
   Divider,
+  FormControlLabel,
   InputAdornment,
   Stack,
   TextField,
@@ -30,14 +32,17 @@ export default function ProfileAttributesInput(props) {
 
   function onChange(event) {
     const eventTargetName = event.target.name;
-    const eventTargetValue = event.target.value;
+    const eventTargetValue =
+      event.target.type === 'checkbox'
+        ? event.target.checked
+        : event.target.value;
     // Update state of attributes
     setAttributes(
       attributes.map((attribute) => {
         if (attribute.trait_type === eventTargetName) {
           return {
             trait_type: attribute.trait_type,
-            value: eventTargetValue || '',
+            value: eventTargetValue !== null ? eventTargetValue : '',
           };
         } else {
           return attribute;
@@ -125,6 +130,25 @@ export default function ProfileAttributesInput(props) {
               value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) || ''}
               placeholder="email@site.com"
             />
+            {getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name={PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled}
+                    checked={
+                      getTraitValue(
+                        attributes,
+                        PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled,
+                      ) || false
+                    }
+                    onChange={onChange}
+                  />
+                }
+                label={t(
+                  'input-profile-trait-is-email-notifications-enabled-title',
+                )}
+              />
+            )}
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>

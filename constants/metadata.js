@@ -29,6 +29,7 @@ export const PROFILE_TRAIT_TYPE = {
   telegram: 'Telegram',
   facebook: 'Facebook',
   instagram: 'Instagram',
+  isEmailNotificationsEnabled: 'Is Email Notifications Enabled',
 };
 
 export const POST_TYPE = {
