@@ -74,6 +74,9 @@ export default function ProfileManage({
               ? t('input-profile-trait-description-for-another-person-title')
               : t('input-profile-trait-description-for-yourself-title'),
         },
+        hiddenAttributes: {
+          isEmailNotificationsEnabled: action === 'createAnotherProfile',
+        },
       },
     },
   };

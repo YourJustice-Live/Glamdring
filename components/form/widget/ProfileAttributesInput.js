@@ -25,6 +25,7 @@ import { getTraitValue } from 'utils/metadata';
 export default function ProfileAttributesInput(props) {
   const propsDisabled = props.disabled;
   const propsLabels = props.options?.labels;
+  const propsHiddenAttributes = props.options?.hiddenAttributes;
   const propsAttributes = props.value;
   const propsOnChange = props.onChange;
   const { t } = useTranslation('common');
@@ -130,25 +131,26 @@ export default function ProfileAttributesInput(props) {
               value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) || ''}
               placeholder="email@site.com"
             />
-            {getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name={PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled}
-                    checked={
-                      getTraitValue(
-                        attributes,
-                        PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled,
-                      ) || false
-                    }
-                    onChange={onChange}
-                  />
-                }
-                label={t(
-                  'input-profile-trait-is-email-notifications-enabled-title',
-                )}
-              />
-            )}
+            {!propsHiddenAttributes.isEmailNotificationsEnabled &&
+              getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name={PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled}
+                      checked={
+                        getTraitValue(
+                          attributes,
+                          PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled,
+                        ) || false
+                      }
+                      onChange={onChange}
+                    />
+                  }
+                  label={t(
+                    'input-profile-trait-is-email-notifications-enabled-title',
+                  )}
+                />
+              )}
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
