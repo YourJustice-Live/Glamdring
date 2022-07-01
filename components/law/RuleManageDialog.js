@@ -8,11 +8,12 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
+import RuleMetadata from 'classes/metadata/RuleMetadata';
 import ActionSelect from 'components/form/widget/ActionSelect';
-import MetadataInput from 'components/form/widget/MetadataInput';
 import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
+import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { capitalize } from 'lodash';
 import { useState } from 'react';
@@ -32,47 +33,53 @@ export default function RuleManageDialog({
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { addRule, updateRule } = useJuridictionContract();
-  const [formData, setFormData] = useState(rule || {});
+  const { uploadJsonToIPFS } = useIpfs();
+  const [formData, setFormData] = useState({
+    ...(rule && {
+      about: rule.rule.about,
+      affected: rule.rule.affected,
+      negation: rule.rule.negation,
+      name: rule.rule.uriData.name,
+      description: rule.rule.uriData.description,
+      evidenceDescription: rule.rule.uriData.evidenceDescription,
+      effects: rule.effects,
+    }),
+  });
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
 
   const schema = {
     type: 'object',
-    required: [...(rule ? ['ruleId'] : [])],
+    required: ['about', 'affected', 'name'],
     properties: {
-      // Show id scheme only for updating a rule
-      ...(rule && {
-        ruleId: {
-          type: 'string',
-          title: 'Rule ID',
-        },
-      }),
-      rule: {
-        type: 'object',
-        title: 'Rule',
-        required: ['about', 'affected', 'uri'],
-        properties: {
-          about: {
-            type: 'string',
-            title: 'Action',
-            ...(about && {
-              default: about,
-            }),
-          },
-          affected: {
-            type: 'string',
-            title: 'Affected',
-          },
-          negation: {
-            type: 'boolean',
-            title: 'Negation',
-            default: false,
-          },
-          uri: {
-            type: 'string',
-            title: 'Metadata',
-          },
-        },
+      // Properties for creating or updating a rule
+      about: {
+        type: 'string',
+        title: 'Action',
+        ...(about && {
+          default: about,
+        }),
+      },
+      affected: {
+        type: 'string',
+        title: 'Affected',
+      },
+      negation: {
+        type: 'boolean',
+        title: 'Negation',
+        default: false,
+      },
+      name: {
+        type: 'string',
+        title: 'Name to display',
+      },
+      description: {
+        type: 'string',
+        title: 'Description to display',
+      },
+      evidenceDescription: {
+        type: 'string',
+        title: 'Evidence description, examples, requirements',
       },
       effects: {
         type: 'array',
@@ -113,83 +120,53 @@ export default function RuleManageDialog({
           },
         },
       },
-      // Show confirmation scheme only for adding a rule
+      // Properties only for creating a rule
       ...(!rule && {
-        confirmation: {
-          type: 'object',
-          title: 'Confirmation',
-          properties: {
-            ruling: {
-              type: 'string',
-              title: 'Ruling',
-              default: 'judge',
-            },
-            evidence: {
-              type: 'boolean',
-              title: 'Evidence',
-              default: true,
-            },
-            witness: {
-              type: 'integer',
-              title: 'Witness',
-              default: 1,
-            },
-          },
+        ruling: {
+          type: 'string',
+          title: 'Ruling',
+          default: 'judge',
+        },
+        evidence: {
+          type: 'boolean',
+          title: 'Evidence',
+          default: true,
+        },
+        witness: {
+          type: 'integer',
+          title: 'Witness',
+          default: 1,
         },
       }),
     },
   };
 
   const uiSchema = {
-    ruleId: {
+    about: {
+      'ui:widget': 'ActionSelect',
+    },
+    affected: {
+      'ui:placeholder': 'investor',
+    },
+    negation: {
+      'ui:disabled': false,
+    },
+    name: {
+      'ui:placeholder': 'Investor lost all investments',
+    },
+    evidenceDescription: {
+      'ui:placeholder': 'Copy of contract',
+    },
+    ruling: {
       'ui:disabled': true,
     },
-    rule: {
-      about: {
-        'ui:widget': 'ActionSelect',
-      },
-      affected: {
-        'ui:placeholder': 'investor',
-      },
-      negation: {
-        'ui:disabled': false,
-      },
-      uri: {
-        'ui:widget': 'MetadataInput',
-        'ui:options': {
-          subLabel:
-            'Rule name, description, evidence description, examples, requirements',
-          fields: {
-            name: {
-              type: 'string',
-              title: 'Name',
-            },
-            description: {
-              type: 'string',
-              title: 'Description',
-            },
-            evidenceDescription: {
-              type: 'string',
-              title: 'Evidence description, examples, requirements',
-            },
-          },
-          requiredFields: ['name'],
-        },
-      },
-    },
-    confirmation: {
-      ruling: {
-        'ui:disabled': true,
-      },
-      witness: {
-        'ui:widget': 'updown',
-      },
+    witness: {
+      'ui:widget': 'updown',
     },
   };
 
   const widgets = {
     ActionSelect: ActionSelect,
-    MetadataInput: MetadataInput,
   };
 
   function close() {
@@ -203,18 +180,39 @@ export default function RuleManageDialog({
     try {
       setFormData(formData);
       setIsLoading(true);
+      const { url: ruleMetadataUri } = await uploadJsonToIPFS(
+        new RuleMetadata(
+          formData.name,
+          formData.description,
+          formData.evidenceDescription,
+        ),
+      );
       if (rule) {
         await updateRule(
           jurisdiction?.id,
-          formData.ruleId,
-          formData.rule,
+          rule.ruleId,
+          {
+            about: formData.about,
+            affected: formData.affected,
+            negation: formData.negation,
+            uri: ruleMetadataUri,
+          },
           formData.effects,
         );
       } else {
         await addRule(
           jurisdiction?.id,
-          formData.rule,
-          formData.confirmation,
+          {
+            about: formData.about,
+            affected: formData.affected,
+            negation: formData.negation,
+            uri: ruleMetadataUri,
+          },
+          {
+            ruling: formData.ruling,
+            evidence: formData.evidence,
+            witness: formData.witness,
+          },
           formData.effects,
         );
       }

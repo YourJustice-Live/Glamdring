@@ -6,7 +6,9 @@ import {
   Twitter,
 } from '@mui/icons-material';
 import {
+  Checkbox,
   Divider,
+  FormControlLabel,
   InputAdornment,
   Stack,
   TextField,
@@ -22,6 +24,8 @@ import { getTraitValue } from 'utils/metadata';
  */
 export default function ProfileAttributesInput(props) {
   const propsDisabled = props.disabled;
+  const propsLabels = props.options?.labels;
+  const propsHiddenAttributes = props.options?.hiddenAttributes;
   const propsAttributes = props.value;
   const propsOnChange = props.onChange;
   const { t } = useTranslation('common');
@@ -29,14 +33,17 @@ export default function ProfileAttributesInput(props) {
 
   function onChange(event) {
     const eventTargetName = event.target.name;
-    const eventTargetValue = event.target.value;
+    const eventTargetValue =
+      event.target.type === 'checkbox'
+        ? event.target.checked
+        : event.target.value;
     // Update state of attributes
     setAttributes(
       attributes.map((attribute) => {
         if (attribute.trait_type === eventTargetName) {
           return {
             trait_type: attribute.trait_type,
-            value: eventTargetValue || '',
+            value: eventTargetValue !== null ? eventTargetValue : '',
           };
         } else {
           return attribute;
@@ -75,7 +82,10 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.firstName}
+              label={
+                propsLabels?.firstName ||
+                t('input-profile-trait-first-name-title')
+              }
               name={PROFILE_TRAIT_TYPE.firstName}
               disabled={propsDisabled}
               value={
@@ -86,7 +96,10 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.lastName}
+              label={
+                propsLabels?.lastName ||
+                t('input-profile-trait-last-name-title')
+              }
               name={PROFILE_TRAIT_TYPE.lastName}
               disabled={propsDisabled}
               value={
@@ -97,7 +110,10 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.description}
+              label={
+                propsLabels?.description ||
+                t('input-profile-trait-description-title')
+              }
               name={PROFILE_TRAIT_TYPE.description}
               disabled={propsDisabled}
               value={
@@ -109,12 +125,32 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.email}
+              label={propsLabels?.email || t('input-profile-trait-email-title')}
               name={PROFILE_TRAIT_TYPE.email}
               disabled={propsDisabled}
               value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) || ''}
               placeholder="email@site.com"
             />
+            {!propsHiddenAttributes.isEmailNotificationsEnabled &&
+              getTraitValue(attributes, PROFILE_TRAIT_TYPE.email) && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name={PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled}
+                      checked={
+                        getTraitValue(
+                          attributes,
+                          PROFILE_TRAIT_TYPE.isEmailNotificationsEnabled,
+                        ) || false
+                      }
+                      onChange={onChange}
+                    />
+                  }
+                  label={t(
+                    'input-profile-trait-is-email-notifications-enabled-title',
+                  )}
+                />
+              )}
           </Stack>
           <Divider sx={{ my: 4 }} />
           <Typography variant="h4" sx={{ mb: 3 }}>
@@ -124,7 +160,7 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.site}
+              label={propsLabels?.site || t('input-profile-trait-site-title')}
               name={PROFILE_TRAIT_TYPE.site}
               disabled={propsDisabled}
               value={getTraitValue(attributes, PROFILE_TRAIT_TYPE.site) || ''}
@@ -141,7 +177,9 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.twitter}
+              label={
+                propsLabels?.twitter || t('input-profile-trait-twitter-title')
+              }
               name={PROFILE_TRAIT_TYPE.twitter}
               disabled={propsDisabled}
               value={
@@ -159,7 +197,9 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.telegram}
+              label={
+                propsLabels?.telegram || t('input-profile-trait-telegram-title')
+              }
               name={PROFILE_TRAIT_TYPE.telegram}
               disabled={propsDisabled}
               value={
@@ -177,7 +217,9 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.facebook}
+              label={
+                propsLabels?.facebook || t('input-profile-trait-facebook-title')
+              }
               name={PROFILE_TRAIT_TYPE.facebook}
               disabled={propsDisabled}
               value={
@@ -195,7 +237,10 @@ export default function ProfileAttributesInput(props) {
             <TextField
               variant="outlined"
               onChange={onChange}
-              label={PROFILE_TRAIT_TYPE.instagram}
+              label={
+                propsLabels?.instagram ||
+                t('input-profile-trait-instagram-title')
+              }
               name={PROFILE_TRAIT_TYPE.instagram}
               disabled={propsDisabled}
               value={

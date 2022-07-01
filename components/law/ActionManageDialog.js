@@ -8,9 +8,11 @@ import {
   Stack,
 } from '@mui/material';
 import { MuiForm5 as Form } from '@rjsf/material-ui';
-import MetadataInput from 'components/form/widget/MetadataInput';
+import ActionMetadata from 'classes/metadata/ActionMetadata';
+import IconSelect from 'components/form/widget/IconSelect';
 import useActionRepoContract from 'hooks/contracts/useActionRepoContract';
 import useErrors from 'hooks/useErrors';
+import useIpfs from 'hooks/useIpfs';
 import useToasts from 'hooks/useToasts';
 import { useState } from 'react';
 
@@ -23,105 +25,87 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
   const { addAction, updateActionUri } = useActionRepoContract();
-  const [formData, setFormData] = useState(action || {});
+  const { uploadJsonToIPFS } = useIpfs();
+  const [formData, setFormData] = useState({
+    ...(action && {
+      name: action.uriData.name,
+      description: action.uriData.description,
+      icon: action.uriData.icon,
+    }),
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: [...(action ? ['guid'] : []), 'uri'],
+    required: [...(!action ? ['subject', 'verb'] : []), 'name', 'icon'],
     properties: {
-      // Show guid scheme only for updating a guid
-      ...(action && {
-        guid: {
-          type: 'string',
-          title: 'GUID (ID)',
-        },
-      }),
-      // Show action scheme only for adding a action
+      // Properties only for creating an action
       ...(!action && {
-        action: {
-          type: 'object',
-          title: 'Action',
-          required: ['subject', 'verb'],
-          properties: {
-            subject: {
-              type: 'string',
-              title: 'Acted',
-              default: '',
-            },
-            verb: {
-              type: 'string',
-              title: 'Verb',
-              default: '',
-            },
-            object: {
-              type: 'string',
-              title: 'Object',
-              default: '',
-            },
-            tool: {
-              type: 'string',
-              title: 'Tool',
-              default: '',
-            },
-          },
+        subject: {
+          type: 'string',
+          title: 'Acted',
+          default: '',
+        },
+        verb: {
+          type: 'string',
+          title: 'Verb',
+          default: '',
+        },
+        object: {
+          type: 'string',
+          title: 'Object',
+          default: '',
+        },
+        tool: {
+          type: 'string',
+          title: 'Tool',
+          default: '',
         },
       }),
-      uri: {
+      // Properties for creating or updating an action
+      name: {
         type: 'string',
-        title: 'Metadata',
+        title: 'Name to display',
+      },
+      description: {
+        type: 'string',
+        title: 'Description to display',
+      },
+      icon: {
+        type: 'string',
+        title: 'Icon to display',
       },
     },
   };
 
   const uiSchema = {
-    guid: {
-      'ui:disabled': true,
+    subject: {
+      'ui:emptyValue': '',
+      'ui:placeholder': 'founder',
     },
-    action: {
-      subject: {
-        'ui:emptyValue': '',
-        'ui:placeholder': 'founder',
-      },
-      verb: {
-        'ui:emptyValue': '',
-        'ui:placeholder': 'breached',
-      },
-      object: {
-        'ui:emptyValue': '',
-        'ui:placeholder': 'contract',
-      },
-      tool: {
-        'ui:emptyValue': '',
-        'ui:widget': 'hidden',
-      },
+    verb: {
+      'ui:emptyValue': '',
+      'ui:placeholder': 'breached',
     },
-    uri: {
-      'ui:widget': 'MetadataInput',
-      'ui:options': {
-        subLabel: 'Action name, description, icon',
-        fields: {
-          name: {
-            type: 'string',
-            title: 'Name',
-          },
-          description: {
-            type: 'string',
-            title: 'Description',
-          },
-          icon: {
-            type: 'string',
-            title: 'Icon',
-          },
-        },
-        requiredFields: ['name', 'icon'],
-      },
+    object: {
+      'ui:emptyValue': '',
+      'ui:placeholder': 'contract',
+    },
+    tool: {
+      'ui:emptyValue': '',
+      'ui:widget': 'hidden',
+    },
+    name: {
+      'ui:placeholder': 'Founder breached contract',
+    },
+    icon: {
+      'ui:widget': 'IconSelect',
     },
   };
 
   const widgets = {
-    MetadataInput: MetadataInput,
+    IconSelect: IconSelect,
   };
 
   async function close() {
@@ -135,10 +119,21 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
+      const { url: actionMetadataUri } = await uploadJsonToIPFS(
+        new ActionMetadata(formData.name, formData.description, formData.icon),
+      );
       if (action) {
-        await updateActionUri(formData.guid, formData.uri);
+        await updateActionUri(action.guid, actionMetadataUri);
       } else {
-        await addAction(formData.action, formData.uri);
+        await addAction(
+          {
+            subject: formData.subject,
+            verb: formData.verb,
+            object: formData.object,
+            tool: formData.tool,
+          },
+          actionMetadataUri,
+        );
       }
       showToastSuccess('Success! Data will be updated soon.');
       close();
@@ -155,7 +150,9 @@ export default function ActionManageDialog({ action, isClose, onClose }) {
       maxWidth="md"
       fullWidth
     >
-      <DialogTitle>{action ? 'Update Action' : 'Add Action'}</DialogTitle>
+      <DialogTitle sx={{ pb: 0 }}>
+        {action ? 'Update Action' : 'Add Action'}
+      </DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
