@@ -22,6 +22,7 @@ export default function Cases() {
   const {
     accountProfile,
     accountProfileIsJudgeJurisdictions,
+    isAccountProfileHasOpenCasesAgainstHim,
     isAccountProfileHasAwaitingConfirmationCases,
     isAccountProfileHasAwaitingJudgingCases,
   } = useDataContext();
@@ -69,7 +70,26 @@ export default function Cases() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
+              {/* All */}
               <Tab label={t('text-all')} value="1" />
+              {/* Open against me */}
+              <Tab
+                label={
+                  <Badge
+                    color="danger"
+                    badgeContent={
+                      isAccountProfileHasOpenCasesAgainstHim ? 1 : 0
+                    }
+                    variant="dot"
+                    sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
+                  >
+                    {t('text-open-against-me')}
+                  </Badge>
+                }
+                sx={{ px: 4 }}
+                value="2"
+              />
+              {/* Awaiting my confirmation */}
               <Tab
                 label={
                   <Badge
@@ -84,8 +104,9 @@ export default function Cases() {
                   </Badge>
                 }
                 sx={{ px: 4 }}
-                value="2"
+                value="3"
               />
+              {/* Awaiting my judging */}
               <Tab
                 label={
                   <Badge
@@ -100,7 +121,7 @@ export default function Cases() {
                   </Badge>
                 }
                 sx={{ px: 4 }}
-                value="3"
+                value="4"
               />
             </TabList>
             <TabPanel value="1" sx={{ px: 0 }}>
@@ -111,13 +132,22 @@ export default function Cases() {
                 isFilterButtonHidden={true}
                 filters={{
                   stageId: CASE_STAGE.open,
+                  subjectProfileId: accountProfile.id,
+                }}
+              />
+            </TabPanel>
+            <TabPanel value="3" sx={{ px: 0 }}>
+              <CaseListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  stageId: CASE_STAGE.open,
                   witnessProfileId: accountProfile.id,
                   participantWithoutConfirmationPostProfileId:
                     accountProfile.id,
                 }}
               />
             </TabPanel>
-            <TabPanel value="3" sx={{ px: 0 }}>
+            <TabPanel value="4" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
                 filters={{

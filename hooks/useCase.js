@@ -165,6 +165,21 @@ export default function useCase() {
   };
 
   /**
+   * Check that the profile has open cases where he is a subject.
+   *
+   * @param {string} profile Profile id.
+   * @returns {Promise.<boolean>} Result of checking.
+   */
+  let isProfileHasHasOpenCasesAgainstHim = async function (profile) {
+    const cases = await getCases({
+      stage: CASE_STAGE.open,
+      subject: profile,
+      first: 1,
+    });
+    return cases && cases.length > 0;
+  };
+
+  /**
    * Check that the profile has cases that await his confirmation.
    *
    * @param {string} profile Profile id.
@@ -201,6 +216,7 @@ export default function useCase() {
     getCaseEvents,
     isProfileHasAnyCaseRole,
     isProfileHasCaseRole,
+    isProfileHasHasOpenCasesAgainstHim,
     isProfileHasAwaitingConfirmationCases,
     isProfileHasAwaitingJudgingCases,
   };

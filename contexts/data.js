@@ -14,12 +14,17 @@ export function DataProvider({ children }) {
   const { getProfile } = useProfile();
   const { getJurisdictions } = useJurisdiction();
   const {
+    isProfileHasHasOpenCasesAgainstHim,
     isProfileHasAwaitingConfirmationCases,
     isProfileHasAwaitingJudgingCases,
   } = useCase();
   const profileWorkerRef = useRef();
   const [isReady, setIsReady] = useState(false);
   const [accountProfile, setAccountProfile] = useState(null);
+  const [
+    isAccountProfileHasOpenCasesAgainstHim,
+    setIsAccountProfileHasOpenCasesAgainstHim,
+  ] = useState(false);
   const [
     isAccountProfileHasAwaitingConfirmationCases,
     setIsAccountProfileHasAwaitingConfirmationCases,
@@ -58,6 +63,8 @@ export function DataProvider({ children }) {
           judge: accountProfile.id,
           first: jurisdictionsLoadingLimit,
         });
+        const isAccountProfileHasOpenCasesAgainstHim =
+          await isProfileHasHasOpenCasesAgainstHim(accountProfile?.id);
         const isAccountProfileHasAwaitingConfirmationCases =
           await isProfileHasAwaitingConfirmationCases(accountProfile?.id);
         const isAccountProfileHasAwaitingJudgingCases =
@@ -67,12 +74,16 @@ export function DataProvider({ children }) {
             ),
           );
         const isAccountProfileHasAwaitingCases =
+          isAccountProfileHasOpenCasesAgainstHim ||
           isAccountProfileHasAwaitingConfirmationCases ||
           isAccountProfileHasAwaitingJudgingCases;
         // Update states
         setAccountProfile(accountProfile);
         setAccountProfileIsJudgeJurisdictions(
           accountProfileIsJudgeJurisdictions,
+        );
+        setIsAccountProfileHasOpenCasesAgainstHim(
+          isAccountProfileHasOpenCasesAgainstHim,
         );
         setIsAccountProfileHasAwaitingConfirmationCases(
           isAccountProfileHasAwaitingConfirmationCases,
@@ -129,6 +140,8 @@ export function DataProvider({ children }) {
     state: {
       accountProfile: accountProfile,
       accountProfileIsJudgeJurisdictions: accountProfileIsJudgeJurisdictions,
+      isAccountProfileHasOpenCasesAgainstHim:
+        isAccountProfileHasOpenCasesAgainstHim,
       isAccountProfileHasAwaitingConfirmationCases:
         isAccountProfileHasAwaitingConfirmationCases,
       isAccountProfileHasAwaitingJudgingCases:
