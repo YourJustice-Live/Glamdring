@@ -20,6 +20,12 @@ export default function CaseConfirmations({ caseObject, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { isProfileHasCaseRole } = useCase();
   const [confirmationPosts, setConfirmationPosts] = useState(null);
+  const [isAccountProfileCanAddWitness, setIsAccountProfileCanAddWitness] =
+    useState(true);
+  const [
+    isAccountProfileCanAddConfirmation,
+    setIsAccountProfileCanAddConfirmation,
+  ] = useState(false);
 
   useEffect(() => {
     if (caseObject) {
@@ -29,7 +35,16 @@ export default function CaseConfirmations({ caseObject, sx }) {
       const sortedConfirmationPosts = confirmationPosts.sort((a, b) =>
         a?.createdDate?.localeCompare(b?.createdDate),
       );
+      // TODO: Use real implementation for next constant
+      const isAccountProfileCanAddWitness = false;
+      const isAccountProfileCanAddConfirmation = isProfileHasCaseRole(
+        caseObject,
+        accountProfile?.id,
+        CASE_ROLE.witness.id,
+      );
       setConfirmationPosts(sortedConfirmationPosts);
+      setIsAccountProfileCanAddWitness(isAccountProfileCanAddWitness);
+      setIsAccountProfileCanAddConfirmation(isAccountProfileCanAddConfirmation);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseObject]);
@@ -48,6 +63,26 @@ export default function CaseConfirmations({ caseObject, sx }) {
         ) : (
           <Typography sx={{ mt: 1 }}>{t('text-witness-no')}</Typography>
         )}
+        {/* Button to add witness */}
+        {caseObject?.stage === CASE_STAGE.open &&
+          isAccountProfileCanAddWitness && (
+            <Box sx={{ mt: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  showDialog(
+                    <CasePostAddDialog
+                      caseObject={caseObject}
+                      postType={POST_TYPE.comment}
+                      onClose={closeDialog}
+                    />,
+                  )
+                }
+              >
+                {t('button-case-add-witness')}
+              </Button>
+            </Box>
+          )}
       </Box>
       {/* Confirmations */}
       {caseObject?.witnesses?.length > 0 && (
@@ -103,11 +138,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
           )}
           {/* Button to add confirmation */}
           {caseObject?.stage === CASE_STAGE.open &&
-            isProfileHasCaseRole(
-              caseObject,
-              accountProfile?.id,
-              CASE_ROLE.witness.id,
-            ) && (
+            isAccountProfileCanAddConfirmation && (
               <Box sx={{ mt: 2 }}>
                 <Button
                   variant="outlined"
