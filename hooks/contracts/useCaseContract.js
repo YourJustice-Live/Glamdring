@@ -37,15 +37,17 @@ export default function useCaseContract() {
    *
    * @param {string} contractAddress Case contract address.
    * @param {string} entityRole Case role name.
+   * @param {string} tokenId Token id of post author.
    * @param {string} uri Uri.
    * @returns Transaction.
    */
-  async function addPost(contractAddress, entityRole, uri) {
+  async function addPost(contractAddress, entityRole, tokenId, uri) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
     return await getContract(contractAddress, provider?.getSigner()).post(
       entityRole,
+      tokenId,
       uri,
     );
   }

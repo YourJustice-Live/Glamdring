@@ -304,7 +304,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IOpenRepo",
+        "internalType": "address",
         "name": "openRepo",
         "type": "address"
       },
@@ -417,6 +417,19 @@
     "name": "repAdd",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "repoAddr",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

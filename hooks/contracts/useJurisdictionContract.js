@@ -129,7 +129,7 @@ export default function useJuridictionContract() {
    * @param {string} uri Case metadata.
    * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
    * @param {Array.<{tokenId : string, role: string}>} roles Case roles.
-   * @param {Array.<{entRole : string, uri: string}>} posts Case posts.
+   * @param {Array.<{tokenId : string, entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
    */
   async function makeCase(contractAddress, name, uri, rules, roles, posts) {
