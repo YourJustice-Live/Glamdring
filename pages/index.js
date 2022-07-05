@@ -73,8 +73,11 @@ export default function Index() {
 
   return (
     <Layout enableSidebar={!!account}>
-      <Box sx={{ mt: 6, textAlign: 'center' }}>
-        <Typography gutterBottom sx={{ fontSize: '2.2rem', fontWeight: 600 }}>
+      <Box sx={{ mt: 6, textAlign: 'center', px: { xs: 0, md: 4 } }}>
+        <Typography
+          gutterBottom
+          sx={{ fontSize: { xs: '2.6rem', md: '3.6rem' }, fontWeight: 600 }}
+        >
           {t('page-main-headline')}
         </Typography>
       </Box>
