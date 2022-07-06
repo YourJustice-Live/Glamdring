@@ -6,10 +6,11 @@ import { CONFIRMATION_TYPE, POST_TYPE } from 'constants/metadata';
 import useDataContext from 'hooks/context/useDataContext';
 import useDialogContext from 'hooks/context/useDialogContext';
 import useCase from 'hooks/useCase';
+import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { hexStringToJson } from 'utils/converters';
 import CasePostAddDialog from './CasePostAddDialog';
-import { useTranslation } from 'next-i18next';
+import CaseWitnessAddDialog from './CaseWitnessAddDialog';
 
 /**
  * A component with case witness and confirmation posts.
@@ -35,8 +36,17 @@ export default function CaseConfirmations({ caseObject, sx }) {
       const sortedConfirmationPosts = confirmationPosts.sort((a, b) =>
         a?.createdDate?.localeCompare(b?.createdDate),
       );
-      // TODO: Use real implementation for next constant
-      const isAccountProfileCanAddWitness = false;
+      const isAccountProfileCanAddWitness =
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.admin.id,
+        ) ||
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.subject.id,
+        );
       const isAccountProfileCanAddConfirmation = isProfileHasCaseRole(
         caseObject,
         accountProfile?.id,
@@ -47,7 +57,7 @@ export default function CaseConfirmations({ caseObject, sx }) {
       setIsAccountProfileCanAddConfirmation(isAccountProfileCanAddConfirmation);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caseObject]);
+  }, [caseObject, accountProfile]);
 
   return (
     <Box sx={{ ...sx }}>
@@ -71,9 +81,8 @@ export default function CaseConfirmations({ caseObject, sx }) {
                 variant="outlined"
                 onClick={() =>
                   showDialog(
-                    <CasePostAddDialog
+                    <CaseWitnessAddDialog
                       caseObject={caseObject}
-                      postType={POST_TYPE.comment}
                       onClose={closeDialog}
                     />,
                   )

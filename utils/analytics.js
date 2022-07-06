@@ -89,6 +89,19 @@ export function handleCreateCaseEvent() {
 }
 
 /**
+ * Handle add case witness event.
+ *
+ * @param {string} caseId Case id (address).
+ */
+export function handleAddCaseWitnessEvent(caseId) {
+  if (isAnalyticsEnabled()) {
+    posthog.capture(POST_HOG_EVENT.addedWitness, {
+      [POST_HOG_PROPERTY.case]: caseId,
+    });
+  }
+}
+
+/**
  * Handle add case evidence event.
  *
  * @param {string} caseId Case id (address).

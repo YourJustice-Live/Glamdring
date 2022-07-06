@@ -238,6 +238,7 @@
   "dialog-jurisdiction-filters-title": "Jurisdiction Filters",
 
   "dialog-case-create-title": "Create New Case",
+  "dialog-case-add-witness-title": "Add Witness",
   "dialog-case-add-evidence-title": "Add Evidence",
   "dialog-case-add-comment-title": "Add Comment",
   "dialog-case-add-confirmation-title": "Add Confirmation",
