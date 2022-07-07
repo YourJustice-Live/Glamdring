@@ -76,7 +76,7 @@ export default function Index() {
       <Box sx={{ mt: 6, textAlign: 'center', px: { xs: 0, md: 4 } }}>
         <Typography
           gutterBottom
-          sx={{ fontSize: { xs: '2.6rem', md: '3.6rem' }, fontWeight: 600 }}
+          sx={{ fontSize: { xs: '2.2rem', md: '2.8rem' }, fontWeight: 600 }}
         >
           {t('page-main-headline')}
         </Typography>
