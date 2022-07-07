@@ -642,6 +642,7 @@ function getFindCaseEntitiesQuery(
         name
       }
       stage
+      judgeAssignmentDate
       verdictAuthor
       verdictUri
       verdictUriData

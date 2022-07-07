@@ -8,6 +8,7 @@ export default class Case {
     createdDate,
     jurisdiction,
     stage,
+    judgeAssignmentDate,
     verdictAuthor,
     verdictUri,
     verdictUriData,
@@ -24,6 +25,7 @@ export default class Case {
     this.createdDate = createdDate;
     this.jurisdiction = jurisdiction;
     this.stage = stage;
+    this.judgeAssignmentDate = judgeAssignmentDate;
     this.verdictAuthor = verdictAuthor;
     this.verdictUri = verdictUri;
     this.verdictUriData = verdictUriData;

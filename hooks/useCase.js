@@ -81,6 +81,7 @@ export default function useCase() {
         caseEntity.createdDate,
         caseEntity.jurisdiction,
         caseEntity.stage,
+        caseEntity.judgeAssignmentDate,
         caseEntity.verdictAuthor,
         caseEntity.verdictUri,
         caseEntity.verdictUriData,
