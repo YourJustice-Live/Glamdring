@@ -119,7 +119,7 @@ export default function RuleManageDialog({
             },
             direction: {
               type: 'boolean',
-              title: 'Is Positive',
+              title: 'Is positive',
               default: REPUTATION_RATING.negative.direction,
             },
           },
@@ -134,12 +134,12 @@ export default function RuleManageDialog({
         },
         evidence: {
           type: 'boolean',
-          title: 'Evidence',
+          title: 'Evidence required',
           default: true,
         },
         witness: {
           type: 'integer',
-          title: 'Witness',
+          title: 'Witnesses',
           default: 1,
         },
       }),
@@ -154,7 +154,8 @@ export default function RuleManageDialog({
       'ui:placeholder': 'investor',
     },
     negation: {
-      'ui:disabled': false,
+      'ui:disabled': true,
+      'ui:widget': 'hidden',
     },
     name: {
       'ui:placeholder': 'Investor lost all investments',
@@ -167,6 +168,7 @@ export default function RuleManageDialog({
     },
     ruling: {
       'ui:disabled': true,
+      'ui:widget': 'hidden',
     },
     witness: {
       'ui:widget': 'updown',
