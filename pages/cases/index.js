@@ -70,9 +70,9 @@ export default function Cases() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
-              {/* All */}
+              {/* Tab for All */}
               <Tab label={t('text-all')} value="1" />
-              {/* Open against me */}
+              {/* Tab for Open against me */}
               <Tab
                 label={
                   <Badge
@@ -89,7 +89,7 @@ export default function Cases() {
                 sx={{ px: 4 }}
                 value="2"
               />
-              {/* Awaiting my confirmation */}
+              {/* Tab for Awaiting my confirmation */}
               <Tab
                 label={
                   <Badge
@@ -106,7 +106,7 @@ export default function Cases() {
                 sx={{ px: 4 }}
                 value="3"
               />
-              {/* Awaiting my judging */}
+              {/* Tab for Awaiting my judging */}
               <Tab
                 label={
                   <Badge
@@ -124,9 +124,11 @@ export default function Cases() {
                 value="4"
               />
             </TabList>
+            {/* Tab panel for All */}
             <TabPanel value="1" sx={{ px: 0 }}>
               <CaseListObserver />
             </TabPanel>
+            {/* Tab panel for Awaiting my confirmation */}
             <TabPanel value="2" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
@@ -136,6 +138,7 @@ export default function Cases() {
                 }}
               />
             </TabPanel>
+            {/* Tab for Awaiting my confirmation */}
             <TabPanel value="3" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
@@ -147,11 +150,12 @@ export default function Cases() {
                 }}
               />
             </TabPanel>
+            {/* Tab for Awaiting my judging */}
             <TabPanel value="4" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
                 filters={{
-                  stageId: CASE_STAGE.verdict,
+                  stageIds: [CASE_STAGE.open, CASE_STAGE.verdict],
                   jurisdictionAddresses:
                     accountProfileIsJudgeJurisdictions?.length > 0
                       ? accountProfileIsJudgeJurisdictions.map((j) => j.id)

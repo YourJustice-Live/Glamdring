@@ -203,7 +203,7 @@ export default function useSubgraph() {
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} searchQuery A part of case name for searching.
    * @param {Array.<string>} jurisdictions Jurisdiction ids (addresses).
-   * @param {number} stage Case stage id.
+   * @param {Array.<number>} stages A list with case stage ids.
    * @param {string} participant Id of token that must be a participant in the case.
    * @param {string} admin Id of token that must be an admin in the case.
    * @param {string} subject Id of token that must be a subject in the case.
@@ -220,7 +220,7 @@ export default function useSubgraph() {
     ids,
     searchQuery,
     jurisdictions,
-    stage,
+    stages,
     participant,
     admin,
     subject,
@@ -241,7 +241,7 @@ export default function useSubgraph() {
         fixedIds,
         searchQuery,
         fixedJurisdictions,
-        stage,
+        stages,
         participant,
         admin,
         subject,
@@ -594,7 +594,7 @@ function getFindCaseEntitiesQuery(
   ids,
   searchQuery,
   jurisdictions,
-  stage,
+  stages,
   participant,
   admin,
   subject,
@@ -627,9 +627,8 @@ function getFindCaseEntitiesQuery(
   let notFilter = participantWithoutConfirmationPost
     ? `participantsWithConfirmationPosts_not_contains: ["${participantWithoutConfirmationPost}"]`
     : ``;
-  let stageFilter =
-    stage !== null && stage !== undefined ? `stage: ${stage}` : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${searchQueryFilter}, ${participantFilter}, ${adminFilter}, ${subjectFilter}, ${plaintiffFilter}, ${judgeFilter}, ${witnessFilter}, ${affectedFilter},  ${notFilter}, ${stageFilter}}`;
+  let stagesFilter = stages ? `stage_in: [${stages.join(',')}]` : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${searchQueryFilter}, ${participantFilter}, ${adminFilter}, ${subjectFilter}, ${plaintiffFilter}, ${judgeFilter}, ${witnessFilter}, ${affectedFilter},  ${notFilter}, ${stagesFilter}}`;
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{

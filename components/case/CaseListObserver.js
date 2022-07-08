@@ -43,6 +43,9 @@ export default function CaseListObserver({
     pageSize: 5,
   });
 
+  /**
+   * Add filters from props to params filters.
+   */
   useEffect(() => {
     if (filters) {
       setParams({ ...params, filters: filters });
@@ -50,19 +53,28 @@ export default function CaseListObserver({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
+  /**
+   * Reload cases if params are changed.
+   */
   useEffect(() => {
     let isComponentActive = true;
     let paramsJurisdictions;
+    let paramsStages;
     if (params.filters.jurisdictionAddresses) {
       paramsJurisdictions = params.filters.jurisdictionAddresses;
     } else if (params.filters.jurisdictionAddress) {
       paramsJurisdictions = [params.filters.jurisdictionAddress];
     }
+    if (params.filters.stageIds) {
+      paramsStages = params.filters.stageIds;
+    } else if (params.filters.stageId) {
+      paramsStages = [params.filters.stageId];
+    }
     setCases(null);
     getCases({
       searchQuery: params.filters.description,
       jurisdictions: paramsJurisdictions,
-      stage: params.filters.stageId,
+      stages: paramsStages,
       admin: params.filters.adminProfileId,
       subject: params.filters.subjectProfileId,
       plaintiff: params.filters.plaintiffProfileId,

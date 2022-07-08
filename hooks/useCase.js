@@ -28,7 +28,7 @@ export default function useCase() {
    * @param {Array.<string>} params.ids A list with case ids (addresses).
    * @param {string} params.searchQuery A part of case name for searching.
    * @param {Array.<string>} params.jurisdictions Jurisdiction ids (addresses).
-   * @param {number} params.stage Case stage id.
+   * @param {Array.<number>} stages A list with case stage ids.
    * @param {string} params.participant Id of token that must be a participant in the case.
    * @param {string} params.admin Id of token that must be an admin in the case.
    * @param {string} params.subject Id of token that must be a subject in the case.
@@ -45,7 +45,7 @@ export default function useCase() {
     ids,
     searchQuery,
     jurisdictions,
-    stage,
+    stages,
     participant,
     admin,
     subject,
@@ -61,7 +61,7 @@ export default function useCase() {
       ids,
       searchQuery,
       jurisdictions,
-      stage,
+      stages,
       participant,
       admin,
       subject,
@@ -173,7 +173,7 @@ export default function useCase() {
    */
   let isProfileHasHasOpenCasesAgainstHim = async function (profile) {
     const cases = await getCases({
-      stage: CASE_STAGE.open,
+      stages: [CASE_STAGE.open],
       subject: profile,
       first: 1,
     });
@@ -188,7 +188,7 @@ export default function useCase() {
    */
   let isProfileHasAwaitingConfirmationCases = async function (profile) {
     const cases = await getCases({
-      stage: CASE_STAGE.open,
+      stages: [CASE_STAGE.open],
       witness: profile,
       participanttWithoutConfirmationPost: profile,
       first: 1,
@@ -204,7 +204,7 @@ export default function useCase() {
    */
   let isProfileHasAwaitingJudgingCases = async function (jurisdictions) {
     const cases = await getCases({
-      stage: CASE_STAGE.verdict,
+      stages: [CASE_STAGE.verdict],
       jurisdictions: jurisdictions,
       first: 1,
     });
