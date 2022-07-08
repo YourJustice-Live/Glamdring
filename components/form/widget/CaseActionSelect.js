@@ -5,7 +5,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
 import { throttle, unionWith } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
-import { getActionIcon } from 'utils/metadata';
+import { formatActionName } from 'utils/formatters';
 
 /**
  * A widget to select case action (guid).
@@ -115,7 +115,7 @@ export default function CaseActionSelect(props) {
       {propsHeader}
       <Autocomplete
         disabled={propsDisabled}
-        getOptionLabel={(option) => option.uriData?.name || t('text-none-name')}
+        getOptionLabel={(option) => formatActionName(option)}
         filterOptions={(x) => x}
         options={options}
         value={value}
@@ -139,30 +139,8 @@ export default function CaseActionSelect(props) {
         renderOption={(props, option) => {
           return (
             <li {...props}>
-              <Box
-                sx={{
-                  my: 0.5,
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  alignItems: { xs: 'flex-start', md: 'center' },
-                }}
-              >
-                {getActionIcon(option, 36)}
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    mt: { xs: 1, md: 0 },
-                    ml: { xs: 0, md: 2 },
-                  }}
-                >
-                  <Typography sx={{ fontWeight: 'bold' }} gutterBottom>
-                    {option.uriData?.name || t('text-none-name')}
-                  </Typography>
-                  <Typography variant="body2">
-                    {option.uriData?.description}
-                  </Typography>
-                </Box>
+              <Box sx={{ my: 0.5 }}>
+                <Typography>{formatActionName(option)}</Typography>
               </Box>
             </li>
           );

@@ -1,4 +1,4 @@
-import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
+import { DataObjectOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
 import JsonViewDialog from 'components/json/JsonViewDialog';
@@ -6,8 +6,6 @@ import useDialogContext from 'hooks/context/useDialogContext';
 import useAction from 'hooks/useAction';
 import useErrors from 'hooks/useErrors';
 import { useEffect, useState } from 'react';
-import { getActionIcon } from 'utils/metadata';
-import ActionManageDialog from './ActionManageDialog';
 
 /**
  * A component with a table with actions.
@@ -26,7 +24,7 @@ export default function ActionTable({ sx }) {
       field: 'actions',
       type: 'actions',
       headerName: '',
-      width: 100,
+      width: 60,
       getActions: (params) => {
         const actions = [
           <GridActionsCellItem
@@ -36,19 +34,6 @@ export default function ActionTable({ sx }) {
             onClick={() =>
               showDialog(
                 <JsonViewDialog json={params.row} onClose={closeDialog} />,
-              )
-            }
-          />,
-          <GridActionsCellItem
-            key="updateAction"
-            icon={<ModeEditOutline />}
-            label="Update Action"
-            onClick={() =>
-              showDialog(
-                <ActionManageDialog
-                  action={params.row}
-                  onClose={closeDialog}
-                />,
               )
             }
           />,
@@ -63,28 +48,9 @@ export default function ActionTable({ sx }) {
       valueGetter: (params) => `${params.row.guid}`,
     },
     {
-      field: 'icon',
-      headerName: 'Icon to display',
-      width: 120,
-      valueGetter: (params) => `${params.row.uriData?.icon || ''}`,
-      renderCell: (params) => getActionIcon(params.row, 28),
-    },
-    {
-      field: 'name',
-      headerName: 'Name to display',
-      width: 320,
-      valueGetter: (params) => `${params.row.uriData?.name || ''}`,
-    },
-    {
-      field: 'description',
-      headerName: 'Description to display',
-      width: 320,
-      valueGetter: (params) => `${params.row.uriData?.description || ''}`,
-    },
-    {
       field: 'subject',
       headerName: 'Acted',
-      width: 200,
+      width: 400,
       valueGetter: (params) => `${params.row.action.subject || ''}`,
     },
     {
@@ -96,7 +62,7 @@ export default function ActionTable({ sx }) {
     {
       field: 'object',
       headerName: 'Object',
-      width: 100,
+      width: 400,
       valueGetter: (params) => `${params.row.action.object || ''}`,
     },
   ];
@@ -105,7 +71,10 @@ export default function ActionTable({ sx }) {
     try {
       setRows([]);
       setIsLoading(true);
-      const actions = await getActions();
+      let actions = await getActions();
+      actions = actions.sort((a, b) =>
+        a.action?.subject?.localeCompare(b.action?.subject),
+      );
       setRows(actions);
     } catch (error) {
       handleError(error, true);

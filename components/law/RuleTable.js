@@ -10,7 +10,8 @@ import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
-import { getActionIcon } from 'utils/metadata';
+import { formatActionName } from 'utils/formatters';
+import { getRuleIcon } from 'utils/metadata';
 import RuleManageDialog from './RuleManageDialog';
 
 /**
@@ -73,8 +74,7 @@ export default function RuleTable({ jurisdiction, sx }) {
       renderCell: (params) => (
         <Box>
           <Stack direction="row" alignItems="center" spacing={1}>
-            {getActionIcon(params.row.action, 28)}
-            <Typography>{params.row.action.uriData?.name}</Typography>
+            <Typography>{formatActionName(params.row.action)}</Typography>
           </Stack>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             {params.row.action.guid}
@@ -94,6 +94,13 @@ export default function RuleTable({ jurisdiction, sx }) {
       width: 320,
       valueGetter: (params) =>
         `${params.row.rule.rule.uriData?.description || ''}`,
+    },
+    {
+      field: 'icon',
+      headerName: 'Icon to display',
+      width: 120,
+      valueGetter: (params) => `${params.row.rule.rule.uriData?.icon || ''}`,
+      renderCell: (params) => getRuleIcon(params.row.rule, 28),
     },
     {
       field: 'evidenceDescription',

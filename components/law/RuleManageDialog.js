@@ -10,6 +10,7 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import RuleMetadata from 'classes/metadata/RuleMetadata';
 import ActionSelect from 'components/form/widget/ActionSelect';
+import IconSelect from 'components/form/widget/IconSelect';
 import { REPUTATION_DOMAIN, REPUTATION_RATING } from 'constants/contracts';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
@@ -76,6 +77,10 @@ export default function RuleManageDialog({
       description: {
         type: 'string',
         title: 'Description to display',
+      },
+      icon: {
+        type: 'string',
+        title: 'Icon to display',
       },
       evidenceDescription: {
         type: 'string',
@@ -154,6 +159,9 @@ export default function RuleManageDialog({
     name: {
       'ui:placeholder': 'Investor lost all investments',
     },
+    icon: {
+      'ui:widget': 'IconSelect',
+    },
     evidenceDescription: {
       'ui:placeholder': 'Copy of contract',
     },
@@ -167,6 +175,7 @@ export default function RuleManageDialog({
 
   const widgets = {
     ActionSelect: ActionSelect,
+    IconSelect: IconSelect,
   };
 
   function close() {
@@ -184,6 +193,7 @@ export default function RuleManageDialog({
         new RuleMetadata(
           formData.name,
           formData.description,
+          formData.icon,
           formData.evidenceDescription,
         ),
       );

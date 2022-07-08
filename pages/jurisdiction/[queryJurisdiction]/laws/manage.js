@@ -6,7 +6,7 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import ActionManageDialog from 'components/law/ActionManageDialog';
+import ActionAddDialog from 'components/law/ActionAddDialog';
 import ActionTable from 'components/law/ActionTable';
 import RuleManageDialog from 'components/law/RuleManageDialog';
 import RuleTable from 'components/law/RuleTable';
@@ -98,7 +98,7 @@ export default function JurisdictionLawsManage() {
             <Button
               variant="outlined"
               onClick={() =>
-                showDialog(<ActionManageDialog onClose={closeDialog} />)
+                showDialog(<ActionAddDialog onClose={closeDialog} />)
               }
               sx={{ mt: 2.5 }}
             >

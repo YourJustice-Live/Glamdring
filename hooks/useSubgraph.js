@@ -514,11 +514,9 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
   let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
   let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
   let searchQueryFilter1 = `aboutSubject_contains_nocase: "${searchQuery}"`;
-  let searchQueryFilter2 = `aboutUriName_contains_nocase: "${searchQuery}"`;
-  let searchQueryFilter3 = `affected_contains_nocase: "${searchQuery}"`;
+  let searchQueryFilter2 = `affected_contains_nocase: "${searchQuery}"`;
   let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${searchQueryFilter1}}`;
   let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter2}}`;
-  let filterParams3 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter3}}`;
   let paginationParams = `first: 20`;
   let fields = `
     id
@@ -544,9 +542,6 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
       ${fields}
     }
     result2: jurisdictionRuleEntities(${filterParams2}, ${paginationParams}) {
-      ${fields}
-    }
-    result3: jurisdictionRuleEntities(${filterParams3}, ${paginationParams}) {
       ${fields}
     }
   }`;

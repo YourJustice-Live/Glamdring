@@ -1,4 +1,4 @@
-import { truncate } from 'lodash';
+import { capitalize, truncate } from 'lodash';
 
 /**
  * Convert "0x4306D7a79265D2cb85Db0c5a55ea5F4f6F73C4B1" to "0x430...c4b1".
@@ -30,4 +30,23 @@ export function formatProfileFirstLastName(profile, length = 36) {
       (profile.uriFirstName || '') + ' ' + (profile.uriLastName || '');
   }
   return truncate(profileFirstLastName, { length: length });
+}
+
+/**
+ * Format action subject, verb, tool to string.
+ *
+ * @param {Action} action Action.
+ * @returns Formatted string with action name or "Unknown action";
+ */
+export function formatActionName(action) {
+  if (action?.action) {
+    return (
+      capitalize(action.action.subject || '') +
+      ' ' +
+      (action.action.verb || '') +
+      ' ' +
+      (action.action.object || '')
+    );
+  }
+  return 'Unknown action';
 }
