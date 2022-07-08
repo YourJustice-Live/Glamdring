@@ -195,19 +195,30 @@ export default function Navigation() {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          {/* Menu items */}
+          {/* Connect wallet button */}
           {!account && (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                connectWallet();
+            <Box
+              sx={{
+                pt: '12px',
+                pb: '6px',
+                px: '16px',
+                display: 'flex',
               }}
             >
-              <Typography textAlign="center">
+              <Button
+                sx={{ flex: 1 }}
+                variant="outlined"
+                size="small"
+                onClick={() => {
+                  handleCloseUserMenu();
+                  connectWallet();
+                }}
+              >
                 {t('button-wallet-connect')}
-              </Typography>
-            </MenuItem>
+              </Button>
+            </Box>
           )}
+          {/* Account info */}
           {account && (
             <Box
               sx={{
@@ -230,33 +241,66 @@ export default function Navigation() {
               <Typography variant="body2">{formatAddress(account)}</Typography>
             </Box>
           )}
+          {/* Create case button */}
           {account && accountProfile && (
-            <MenuItem
-              onClick={() => {
-                handleCloseUserMenu();
-                showDialog(<CaseCreateDialog onClose={closeDialog} />);
+            <Box
+              sx={{
+                pt: '6px',
+                pb: '12px',
+                px: '16px',
+                display: 'flex',
               }}
             >
-              <Typography>{t('button-case-create')}</Typography>
-            </MenuItem>
+              <Button
+                sx={{ flex: 1 }}
+                variant="outlined"
+                size="small"
+                onClick={() => {
+                  handleCloseUserMenu();
+                  showDialog(<CaseCreateDialog onClose={closeDialog} />);
+                }}
+              >
+                {t('button-case-create')}
+              </Button>
+            </Box>
           )}
+          {/* Create own profile link */}
           {account && !accountProfile && (
             <Link href="/profile/create" passHref>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography>{t('button-profile-create-own')}</Typography>
-              </MenuItem>
+              <Box
+                sx={{
+                  pt: '6px',
+                  pb: '12px',
+                  px: '16px',
+                  display: 'flex',
+                }}
+              >
+                <Button
+                  sx={{ flex: 1 }}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    handleCloseUserMenu();
+                  }}
+                >
+                  {t('button-profile-create-own')}
+                </Button>
+              </Box>
             </Link>
           )}
+          {/* Profiles link */}
           <Link href="/profiles" passHref>
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography>{t('text-profiles')}</Typography>
             </MenuItem>
           </Link>
+          {/* Jurisdictions link */}
           <Link href="/jurisdictions" passHref>
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography>{t('text-jurisdictions')}</Typography>
             </MenuItem>
           </Link>
+          {/* Cases link */}
           <Link href="/cases" passHref>
             <MenuItem onClick={handleCloseUserMenu}>
               <Badge
@@ -269,17 +313,31 @@ export default function Navigation() {
               </Badge>
             </MenuItem>
           </Link>
+          {/* Faq link */}
           <Link href="/faq" passHref>
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography>{t('text-faq')}</Typography>
             </MenuItem>
           </Link>
+          {/* Disconnect wallet button */}
           {account && (
-            <MenuItem onClick={disconnectWallet}>
-              <Typography textAlign="center">
+            <Box
+              sx={{
+                pt: '12px',
+                pb: '6px',
+                px: '16px',
+                display: 'flex',
+              }}
+            >
+              <Button
+                sx={{ flex: 1 }}
+                variant="outlined"
+                size="small"
+                onClick={disconnectWallet}
+              >
                 {t('button-wallet-disconnect')}
-              </Typography>
-            </MenuItem>
+              </Button>
+            </Box>
           )}
         </Menu>
       </Toolbar>
