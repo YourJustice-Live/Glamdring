@@ -680,6 +680,7 @@ function FormDialog({
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {
         casePosts.push({
+          tokenId: accountProfile.id,
           entRole: CASE_ROLE.admin.name,
           uri: submittedFormData.evidencePostUri,
         });

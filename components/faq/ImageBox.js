@@ -4,15 +4,15 @@ import Image from 'next/image';
 /**
  * A component with image.
  */
-export default function ImageBox({ url, sx }) {
+export default function ImageBox({ url, sx, width, height }) {
   return (
     <Box sx={{ ...sx }}>
       <Image
         src={url}
         layout="responsive"
         loading="lazy"
-        width={1080}
-        height={675}
+        width={width || 1080}
+        height={height || 675}
         alt="Image"
       />
     </Box>

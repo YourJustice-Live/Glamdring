@@ -140,7 +140,12 @@ export default function CasePostAddDialog({
       setIsLoading(true);
       // If post is evidence
       if (postType === POST_TYPE.evidence) {
-        await addPost(caseObject.id, formData.role, formData.evidencePostUri);
+        await addPost(
+          caseObject.id,
+          formData.role,
+          accountProfile.id,
+          formData.evidencePostUri,
+        );
         handleAddCaseEvidenceEvent(caseObject.id);
       }
       // If post is comment
@@ -148,7 +153,7 @@ export default function CasePostAddDialog({
         const { url } = await uploadJsonToIPFS(
           new CommentPostMetadata(formData.message),
         );
-        await addPost(caseObject.id, formData.role, url);
+        await addPost(caseObject.id, formData.role, accountProfile.id, url);
         handleCommentCaseEvent(caseObject.id);
       }
       // If post is confirmation
@@ -159,7 +164,12 @@ export default function CasePostAddDialog({
             formData.message,
           ),
         );
-        await addPost(caseObject.id, CASE_ROLE.witness.name, url);
+        await addPost(
+          caseObject.id,
+          CASE_ROLE.witness.name,
+          accountProfile.id,
+          url,
+        );
         handleConfirmCaseEvent(caseObject.id);
       }
       showToastSuccess(t('notification-data-is-successfully-updated'));
