@@ -150,6 +150,9 @@ export function Sidebar() {
           <NextLink href="/faq" passHref>
             <Link underline="none">{t('text-faq')}</Link>
           </NextLink>
+          <NextLink href="/contacts" passHref>
+            <Link underline="none">{t('text-contacts')}</Link>
+          </NextLink>
         </Stack>
 
         {/* Profile Jurisdictions */}

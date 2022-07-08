@@ -319,6 +319,12 @@ export default function Navigation() {
               <Typography>{t('text-faq')}</Typography>
             </MenuItem>
           </Link>
+          {/* Contacts link */}
+          <Link href="/contacts" passHref>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography>{t('text-contacts')}</Typography>
+            </MenuItem>
+          </Link>
           {/* Disconnect wallet button */}
           {account && (
             <Box

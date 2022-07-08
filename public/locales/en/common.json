@@ -11,6 +11,7 @@
   "page-title-case": "YourJustice — Case",
   "page-title-cases": "YourJustice — Cases",
   "page-title-faq": "YourJustice — FAQ",
+  "page-title-contacts": "YourJustice — Contacts",
   "page-title-events": "YourJustice — Events",
   "page-title-sandbox": "YourJustice — Sandbox",
 
@@ -31,6 +32,8 @@
   "page-faq-supporting-headline": "Learn answers to frequently asked questions on YourJustice",
   "page-faq-alert-headline": "Got another question?",
   "page-faq-alert-supporting-headline": "Please write to us, we will help you",
+
+  "page-contacts-headline": "Contacts",
 
   "page-sandbox-headline": "Welcome to Sandbox!",
 
@@ -133,6 +136,7 @@
   "text-event-cancelled-case": "Cancelled case",
 
   "text-faq": "FAQ",
+  "text-contacts": "Contacts",
 
   "text-open-against-me": "Open Against Me",
   "text-my-awaiting-confirmation": "Awaiting My Confirmation",
