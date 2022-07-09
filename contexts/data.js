@@ -14,6 +14,7 @@ export function DataProvider({ children }) {
   const { getProfile } = useProfile();
   const { getJurisdictions } = useJurisdiction();
   const {
+    isProfileHasHasOpenCasesCreatedByHim,
     isProfileHasHasOpenCasesAgainstHim,
     isProfileHasAwaitingConfirmationCases,
     isProfileHasAwaitingJudgingCases,
@@ -21,6 +22,10 @@ export function DataProvider({ children }) {
   const profileWorkerRef = useRef();
   const [isReady, setIsReady] = useState(false);
   const [accountProfile, setAccountProfile] = useState(null);
+  const [
+    isAccountProfileHasOpenCasesCreatedByHim,
+    setIsAccountProfileHasOpenCasesCreatedByHim,
+  ] = useState(false);
   const [
     isAccountProfileHasOpenCasesAgainstHim,
     setIsAccountProfileHasOpenCasesAgainstHim,
@@ -47,6 +52,8 @@ export function DataProvider({ children }) {
     // If account not connected
     if (!account) {
       setAccountProfile(null);
+      setIsAccountProfileHasOpenCasesCreatedByHim(false);
+      setIsAccountProfileHasOpenCasesAgainstHim(false);
       setIsAccountProfileHasAwaitingConfirmationCases(false);
       setIsAccountProfileHasAwaitingJudgingCases(false);
       setIsAccountProfileHasAwaitingCases(false);
@@ -63,6 +70,8 @@ export function DataProvider({ children }) {
           judge: accountProfile.id,
           first: jurisdictionsLoadingLimit,
         });
+        const isAccountProfileHasOpenCasesCreatedByHim =
+          await isProfileHasHasOpenCasesCreatedByHim(accountProfile?.id);
         const isAccountProfileHasOpenCasesAgainstHim =
           await isProfileHasHasOpenCasesAgainstHim(accountProfile?.id);
         const isAccountProfileHasAwaitingConfirmationCases =
@@ -74,6 +83,7 @@ export function DataProvider({ children }) {
             ),
           );
         const isAccountProfileHasAwaitingCases =
+          isAccountProfileHasOpenCasesCreatedByHim ||
           isAccountProfileHasOpenCasesAgainstHim ||
           isAccountProfileHasAwaitingConfirmationCases ||
           isAccountProfileHasAwaitingJudgingCases;
@@ -81,6 +91,9 @@ export function DataProvider({ children }) {
         setAccountProfile(accountProfile);
         setAccountProfileIsJudgeJurisdictions(
           accountProfileIsJudgeJurisdictions,
+        );
+        setIsAccountProfileHasOpenCasesCreatedByHim(
+          isAccountProfileHasOpenCasesCreatedByHim,
         );
         setIsAccountProfileHasOpenCasesAgainstHim(
           isAccountProfileHasOpenCasesAgainstHim,
@@ -140,6 +153,8 @@ export function DataProvider({ children }) {
     state: {
       accountProfile: accountProfile,
       accountProfileIsJudgeJurisdictions: accountProfileIsJudgeJurisdictions,
+      isAccountProfileHasOpenCasesCreatedByHim:
+        isAccountProfileHasOpenCasesCreatedByHim,
       isAccountProfileHasOpenCasesAgainstHim:
         isAccountProfileHasOpenCasesAgainstHim,
       isAccountProfileHasAwaitingConfirmationCases:
