@@ -92,6 +92,7 @@ export default function useCase() {
         caseEntity.rules,
         caseEntity.roles,
         caseEntity.posts,
+        caseEntity.nominates,
       );
       cases.push(caseObject);
     }

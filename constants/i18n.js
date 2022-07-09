@@ -7,6 +7,12 @@ export const CASE_STAGE_KEY = {
 };
 
 export const CASE_ROLE_KEY = {
+  1: 'case-role-admin',
+  2: 'case-role-subject',
+  3: 'case-role-plaintiff',
+  4: 'case-role-judge',
+  5: 'case-role-witness',
+  6: 'case-role-affected',
   admin: 'case-role-admin',
   subject: 'case-role-subject',
   plaintiff: 'case-role-plaintiff',

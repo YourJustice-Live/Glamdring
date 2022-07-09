@@ -10,41 +10,59 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { CASE_ROLE } from 'constants/contracts';
+import { CASE_ROLE_KEY } from 'constants/i18n';
 import useCaseContract from 'hooks/contracts/useCaseContract';
 import useErrors from 'hooks/useErrors';
-import useProfile from 'hooks/useProfile';
 import useToasts from 'hooks/useToasts';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import { handleAddCaseWitnessEvent } from 'utils/analytics';
 
 /**
- * A component with dialog for add case witness.
+ * A component with dialog for assign a case role.
  */
-export default function CaseWitnessAddDialog({ caseObject, isClose, onClose }) {
+export default function CaseRoleAssignDialog({
+  caseObject,
+  profileId,
+  roleName,
+  isClose,
+  onClose,
+}) {
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
-  const { assignRole } = useCaseContract();
-  const { getProfile } = useProfile();
-  const [formData, setFormData] = useState({});
+  const { assignRoleToToken } = useCaseContract();
+  const [formData, setFormData] = useState({
+    ...(profileId && { profileId: profileId }),
+    ...(roleName && { roleName: roleName }),
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(!isClose);
 
   const schema = {
     type: 'object',
-    required: ['witnessProfileId'],
+    required: ['profileId', 'roleName'],
     properties: {
-      witnessProfileId: {
+      profileId: {
         type: 'string',
-        title: '',
+        title: t('text-profile'),
+      },
+      roleName: {
+        type: 'string',
+        title: t('input-role-title'),
+        default: CASE_ROLE.witness.name,
+        enum: [CASE_ROLE.witness.name],
+        enumNames: [t(CASE_ROLE_KEY[CASE_ROLE.witness.id])],
       },
     },
   };
 
   const uiSchema = {
-    witnessProfileId: {
+    profileId: {
       'ui:widget': 'ProfileSelect',
+      'ui:disabled': profileId,
+    },
+    roleName: {
+      'ui:disabled': roleName,
     },
   };
 
@@ -63,15 +81,11 @@ export default function CaseWitnessAddDialog({ caseObject, isClose, onClose }) {
     try {
       setFormData(formData);
       setIsLoading(true);
-      const witnessProfile = await getProfile({
-        id: formData.witnessProfileId,
-      });
-      await assignRole(
+      await assignRoleToToken(
         caseObject.id,
-        witnessProfile.owner,
-        CASE_ROLE.witness.name,
+        formData.profileId,
+        formData.roleName,
       );
-      handleAddCaseWitnessEvent(caseObject.id);
       showToastSuccess(t('notification-data-is-successfully-updated'));
       close();
     } catch (error) {
@@ -88,7 +102,7 @@ export default function CaseWitnessAddDialog({ caseObject, isClose, onClose }) {
       fullWidth
     >
       <DialogTitle sx={{ pb: 0 }}>
-        {t('dialog-case-add-witness-title')}
+        {t('dialog-case-assign-role-title')}
       </DialogTitle>
       <DialogContent>
         <Form
@@ -113,7 +127,7 @@ export default function CaseWitnessAddDialog({ caseObject, isClose, onClose }) {
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {t('button-add')}
+                  {t('button-assign')}
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   {t('button-cancel')}

@@ -667,6 +667,18 @@ function getFindCaseEntitiesQuery(
       judges
       witnesses
       affecteds
+      nominates {
+        id
+        createdDate
+        nominator {
+          id
+        }
+        nominated {
+          id
+        }
+        uri
+        uriData
+      }
     }
   }`;
 }

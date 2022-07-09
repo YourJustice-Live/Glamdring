@@ -15,7 +15,25 @@ export default function useCaseContract() {
   }
 
   /**
-   * Assign a role to a specified account.
+   * Nominate a something for a specified token.
+   *
+   * @param {*} contractAddress Case contract address.
+   * @param {*} tokenId Token for nominate (profile id).
+   * @param {*} uri Data with details. For example, role and cause for nominate.
+   * @returns Transaction.
+   */
+  async function nominate(contractAddress, tokenId, uri) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(contractAddress, provider?.getSigner()).nominate(
+      tokenId,
+      uri,
+    );
+  }
+
+  /**
+   * Assign a case role to the specified account.
    *
    * @param {string} contractAddress Case contract address.
    * @param {string} account Account address.
@@ -30,6 +48,24 @@ export default function useCaseContract() {
       account,
       role,
     );
+  }
+
+  /**
+   * Assign a case role to the specified token.
+   *
+   * @param {string} contractAddress Case contract address.
+   * @param {string} token Token (profile id).
+   * @param {string} role Case role name.
+   * @returns Transaction.
+   */
+  async function assignRoleToToken(contractAddress, token, role) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).roleAssignToToken(token, role);
   }
 
   /**
@@ -120,7 +156,9 @@ export default function useCaseContract() {
   }
 
   return {
+    nominate,
     assignRole,
+    assignRoleToToken,
     addPost,
     setStageOpen,
     setStageVerdict,

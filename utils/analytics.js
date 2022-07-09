@@ -89,14 +89,14 @@ export function handleCreateCaseEvent() {
 }
 
 /**
- * Handle add case witness event.
- *
- * @param {string} caseId Case id (address).
+ * Handle nominate to case event.
  */
-export function handleAddCaseWitnessEvent(caseId) {
+export function handleNominateToCaseEvent(caseId, nominated, role) {
   if (isAnalyticsEnabled()) {
-    posthog.capture(POST_HOG_EVENT.addedWitness, {
+    posthog.capture(POST_HOG_EVENT.nominatedToCase, {
       [POST_HOG_PROPERTY.case]: caseId,
+      [POST_HOG_PROPERTY.nominated]: nominated,
+      [POST_HOG_PROPERTY.role]: role,
     });
   }
 }

@@ -19,6 +19,7 @@ export default class Case {
     rules,
     roles,
     posts,
+    nominates,
   ) {
     this.id = id;
     this.name = name;
@@ -36,5 +37,6 @@ export default class Case {
     this.rules = rules;
     this.roles = roles;
     this.posts = posts;
+    this.nominates = nominates;
   }
 }
