@@ -136,7 +136,7 @@ export default function RuleTable({ jurisdiction, sx }) {
     {
       field: 'effects',
       headerName: 'Effects',
-      width: 320,
+      width: 360,
       valueGetter: (params) => JSON.stringify(params.row.rule.effects),
       renderCell: (params) => (
         <Stack>
@@ -165,21 +165,15 @@ export default function RuleTable({ jurisdiction, sx }) {
       ),
     },
     {
-      field: 'ruling',
-      headerName: 'Ruling',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule.confirmation.ruling || ''}`,
-    },
-    {
       field: 'evidence',
-      headerName: 'Evidence',
-      width: 100,
+      headerName: 'Evidence Required',
+      width: 160,
       valueGetter: (params) =>
         `${params.row.rule.confirmation.evidence.toString() || ''}`,
     },
     {
       field: 'witness',
-      headerName: 'Witness',
+      headerName: 'Witnesses',
       width: 100,
       valueGetter: (params) => `${params.row.rule.confirmation.witness || ''}`,
     },
