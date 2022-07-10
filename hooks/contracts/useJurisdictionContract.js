@@ -102,26 +102,6 @@ export default function useJuridictionContract() {
   }
 
   /**
-   * Update rule.
-   *
-   * @param {string} contractAddress Jurisdiction contract address.
-   * @param {string} id Rule id in the jurisdiction contract.
-   * @param {{about: string, affected: string, negation: boolean, uri: string}} rule Rule object.
-   * @param {Array.<{name: string, value: number, direction: boolean}>} effects Effects object.
-   * @returns Transaction.
-   */
-  async function updateRule(contractAddress, id, rule, effects) {
-    if (!isNetworkChainIdCorrect) {
-      throw new WrongNetworkError();
-    }
-    return await getContract(contractAddress, provider?.getSigner()).ruleUpdate(
-      id,
-      rule,
-      effects,
-    );
-  }
-
-  /**
    * Make a case in the jurisdiction.
    *
    * @param {string} contractAddress Jurisdiction contract address.
@@ -149,7 +129,6 @@ export default function useJuridictionContract() {
     assignRole,
     removeRole,
     addRule,
-    updateRule,
     makeCase,
   };
 }

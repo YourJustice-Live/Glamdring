@@ -20,32 +20,16 @@ import { capitalize } from 'lodash';
 import { useState } from 'react';
 
 /**
- * A dialog for adding a jurisdiction rule or updating a specified rule.
+ * A dialog for adding a jurisdiction rule.
  *
  * TODO: Move strings to localization file.
  */
-export default function RuleManageDialog({
-  jurisdiction,
-  about,
-  rule,
-  isClose,
-  onClose,
-}) {
+export default function RuleAddDialog({ jurisdiction, isClose, onClose }) {
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
-  const { addRule, updateRule } = useJuridictionContract();
+  const { addRule } = useJuridictionContract();
   const { uploadJsonToIPFS } = useIpfs();
-  const [formData, setFormData] = useState({
-    ...(rule && {
-      about: rule.rule.about,
-      affected: rule.rule.affected,
-      negation: rule.rule.negation,
-      name: rule.rule.uriData.name,
-      description: rule.rule.uriData.description,
-      evidenceDescription: rule.rule.uriData.evidenceDescription,
-      effects: rule.effects,
-    }),
-  });
+  const [formData, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(!isClose);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,13 +37,9 @@ export default function RuleManageDialog({
     type: 'object',
     required: ['about', 'affected', 'name'],
     properties: {
-      // Properties for creating or updating a rule
       about: {
         type: 'string',
         title: 'Action',
-        ...(about && {
-          default: about,
-        }),
       },
       affected: {
         type: 'string',
@@ -125,24 +105,21 @@ export default function RuleManageDialog({
           },
         },
       },
-      // Properties only for creating a rule
-      ...(!rule && {
-        ruling: {
-          type: 'string',
-          title: 'Ruling',
-          default: 'judge',
-        },
-        evidence: {
-          type: 'boolean',
-          title: 'Evidence required',
-          default: true,
-        },
-        witness: {
-          type: 'integer',
-          title: 'Witnesses',
-          default: 1,
-        },
-      }),
+      ruling: {
+        type: 'string',
+        title: 'Ruling',
+        default: 'judge',
+      },
+      evidence: {
+        type: 'boolean',
+        title: 'Evidence required',
+        default: true,
+      },
+      witness: {
+        type: 'integer',
+        title: 'Witnesses',
+        default: 1,
+      },
     },
   };
 
@@ -199,35 +176,21 @@ export default function RuleManageDialog({
           formData.evidenceDescription,
         ),
       );
-      if (rule) {
-        await updateRule(
-          jurisdiction?.id,
-          rule.ruleId,
-          {
-            about: formData.about,
-            affected: formData.affected,
-            negation: formData.negation,
-            uri: ruleMetadataUri,
-          },
-          formData.effects,
-        );
-      } else {
-        await addRule(
-          jurisdiction?.id,
-          {
-            about: formData.about,
-            affected: formData.affected,
-            negation: formData.negation,
-            uri: ruleMetadataUri,
-          },
-          {
-            ruling: formData.ruling,
-            evidence: formData.evidence,
-            witness: formData.witness,
-          },
-          formData.effects,
-        );
-      }
+      await addRule(
+        jurisdiction?.id,
+        {
+          about: formData.about,
+          affected: formData.affected,
+          negation: formData.negation,
+          uri: ruleMetadataUri,
+        },
+        {
+          ruling: formData.ruling,
+          evidence: formData.evidence,
+          witness: formData.witness,
+        },
+        formData.effects,
+      );
       showToastSuccess('Success! Data will be updated soon.');
       close();
     } catch (error) {
@@ -243,7 +206,7 @@ export default function RuleManageDialog({
       maxWidth="md"
       fullWidth
     >
-      <DialogTitle>{rule ? 'Update Rule' : 'Add Rule'}</DialogTitle>
+      <DialogTitle>Add Rule</DialogTitle>
       <DialogContent>
         <Form
           schema={schema}
@@ -267,7 +230,7 @@ export default function RuleManageDialog({
             ) : (
               <>
                 <Button variant="contained" type="submit">
-                  {rule ? 'Update Rule' : 'Add Rule'}
+                  Add
                 </Button>
                 <Button variant="outlined" onClick={onClose}>
                   Cancel

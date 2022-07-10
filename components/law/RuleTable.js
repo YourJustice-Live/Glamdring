@@ -1,4 +1,4 @@
-import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
+import { DataObjectOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
@@ -12,7 +12,6 @@ import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatActionName } from 'utils/formatters';
 import { getRuleIcon } from 'utils/metadata';
-import RuleManageDialog from './RuleManageDialog';
 
 /**
  * A component with a table with jurisdiction rules.
@@ -41,20 +40,6 @@ export default function RuleTable({ jurisdiction, sx }) {
           onClick={() =>
             showDialog(
               <JsonViewDialog json={params.row} onClose={closeDialog} />,
-            )
-          }
-        />,
-        <GridActionsCellItem
-          key="updateRule"
-          icon={<ModeEditOutline />}
-          label="Update Rule"
-          onClick={() =>
-            showDialog(
-              <RuleManageDialog
-                jurisdiction={jurisdiction}
-                rule={params.row.rule}
-                onClose={closeDialog}
-              />,
             )
           }
         />,

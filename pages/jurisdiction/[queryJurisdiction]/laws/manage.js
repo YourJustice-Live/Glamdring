@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import ActionAddDialog from 'components/law/ActionAddDialog';
 import ActionTable from 'components/law/ActionTable';
-import RuleManageDialog from 'components/law/RuleManageDialog';
+import RuleAddDialog from 'components/law/RuleAddDialog';
 import RuleTable from 'components/law/RuleTable';
 import Layout from 'components/layout/Layout';
 import useDialogContext from 'hooks/context/useDialogContext';
@@ -74,7 +74,7 @@ export default function JurisdictionLawsManage() {
               variant="outlined"
               onClick={() =>
                 showDialog(
-                  <RuleManageDialog
+                  <RuleAddDialog
                     jurisdiction={jurisdiction}
                     onClose={closeDialog}
                   />,
