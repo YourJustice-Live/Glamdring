@@ -116,13 +116,6 @@ export default function RuleTable({ jurisdiction, sx }) {
       valueGetter: (params) => `${params.row.rule.rule.affected || ''}`,
     },
     {
-      field: 'negation',
-      headerName: 'Negation',
-      width: 100,
-      valueGetter: (params) =>
-        `${params.row.rule.rule.negation.toString() || ''}`,
-    },
-    {
       field: 'category',
       headerName: 'Category',
       width: 140,
