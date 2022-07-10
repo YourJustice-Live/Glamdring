@@ -1,4 +1,4 @@
-import { DataObjectOutlined } from '@mui/icons-material';
+import { BlockOutlined, DataObjectOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
@@ -12,6 +12,7 @@ import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { formatActionName } from 'utils/formatters';
 import { getRuleIcon } from 'utils/metadata';
+import RuleDisableDialog from './RuleDisableDialog';
 
 /**
  * A component with a table with jurisdiction rules.
@@ -32,24 +33,54 @@ export default function RuleTable({ jurisdiction, sx }) {
       type: 'actions',
       headerName: '',
       width: 100,
-      getActions: (params) => [
-        <GridActionsCellItem
-          key="viewJson"
-          icon={<DataObjectOutlined />}
-          label="View as JSON"
-          onClick={() =>
-            showDialog(
-              <JsonViewDialog json={params.row} onClose={closeDialog} />,
-            )
-          }
-        />,
-      ],
+      getActions: (params) => {
+        const viewAsJsonAction = (
+          <GridActionsCellItem
+            key="viewJson"
+            icon={<DataObjectOutlined />}
+            label="View as JSON"
+            title="View as JSON"
+            onClick={() =>
+              showDialog(
+                <JsonViewDialog json={params.row} onClose={closeDialog} />,
+              )
+            }
+          />
+        );
+        const disableAction = (
+          <GridActionsCellItem
+            key="disable"
+            icon={<BlockOutlined />}
+            label="Mark as Obsolete"
+            title="Mark as Obsolete"
+            onClick={() =>
+              showDialog(
+                <RuleDisableDialog
+                  jurisdiction={jurisdiction}
+                  rule={params.row.rule}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          />
+        );
+        return [
+          viewAsJsonAction,
+          ...(params.row.rule.isDisabled ? [] : [disableAction]),
+        ];
+      },
     },
     {
       field: 'id',
       headerName: 'ID',
-      width: 100,
+      width: 60,
       valueGetter: (params) => `${params.row.rule.ruleId}`,
+    },
+    {
+      field: 'disabled',
+      headerName: 'Obsolete',
+      width: 100,
+      valueGetter: (params) => (params.row.rule.isDisabled ? 'Yes' : 'No'),
     },
     {
       field: 'action',

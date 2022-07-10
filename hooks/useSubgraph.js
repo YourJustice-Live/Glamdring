@@ -131,6 +131,7 @@ export default function useSubgraph() {
    * @param {string} actionGuid Action id (guid).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
   let findJurisdictionRuleEntities = async function (
@@ -139,6 +140,7 @@ export default function useSubgraph() {
     actionGuid,
     isPositive,
     isNegative,
+    isEnabled,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
@@ -149,6 +151,7 @@ export default function useSubgraph() {
         actionGuid,
         isPositive,
         isNegative,
+        isEnabled,
       ),
     );
     return response.jurisdictionRuleEntities;
@@ -160,6 +163,7 @@ export default function useSubgraph() {
    * @param {string} jurisdiction Jurisdiction id (address).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
@@ -167,6 +171,7 @@ export default function useSubgraph() {
     jurisdiction,
     isPositive,
     isNegative,
+    isEnabled,
     searchQuery,
   ) {
     const response = await makeSubgraphQuery(
@@ -174,6 +179,7 @@ export default function useSubgraph() {
         jurisdiction,
         isPositive,
         isNegative,
+        isEnabled,
         searchQuery,
       ),
     );
@@ -468,6 +474,7 @@ function getFindJurisdictionRuleEntitiesQuery(
   actionGuid,
   isPositive,
   isNegative,
+  isEnabled,
 ) {
   let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
   let jurisdictionFilter = jurisdiction
@@ -476,7 +483,8 @@ function getFindJurisdictionRuleEntitiesQuery(
   let actionGuidFilter = actionGuid ? `about: "${actionGuid}"` : '';
   let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
   let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}, ${isPositiveFilter}, ${isNegativeFilter}}`;
+  let isEnabledFilter = isEnabled === true ? 'isDisabled: false' : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}, ${isPositiveFilter}, ${isNegativeFilter}, ${isEnabledFilter}}`;
   let paginationParams = `first: 100`;
   return `{
     jurisdictionRuleEntities(${filterParams}, ${paginationParams}) {
@@ -498,6 +506,7 @@ function getFindJurisdictionRuleEntitiesQuery(
         value
       }
       isPositive
+      isDisabled
     }
   }`;
 }
@@ -506,6 +515,7 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
   jurisdiction,
   isPositive,
   isNegative,
+  isEnabled,
   searchQuery,
 ) {
   let jurisdictionFilter = jurisdiction
@@ -513,10 +523,11 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
     : '';
   let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
   let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
+  let isEnabledFilter = isEnabled === true ? 'isDisabled: false' : '';
   let searchQueryFilter1 = `aboutSubject_contains_nocase: "${searchQuery}"`;
   let searchQueryFilter2 = `affected_contains_nocase: "${searchQuery}"`;
-  let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${searchQueryFilter1}}`;
-  let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter2}}`;
+  let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${isEnabledFilter}, ${searchQueryFilter1}}`;
+  let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter}, ${isEnabledFilter},  ${searchQueryFilter2}}`;
   let paginationParams = `first: 20`;
   let fields = `
     id

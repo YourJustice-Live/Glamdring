@@ -31,6 +31,7 @@ export default function ActionTable({ sx }) {
             key="viewJson"
             icon={<DataObjectOutlined />}
             label="View as JSON"
+            title="View as JSON"
             onClick={() =>
               showDialog(
                 <JsonViewDialog json={params.row} onClose={closeDialog} />,

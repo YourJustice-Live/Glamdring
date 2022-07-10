@@ -42,6 +42,7 @@ export default function CaseRuleSelect(props) {
         propsFormActionGuid,
         propsFormIsPositive === true,
         propsFormIsPositive === false,
+        true,
       )
         .then((rules) => setRules(rules))
         .catch((error) => handleError(error, true));

@@ -40,6 +40,7 @@ export default function CaseActionSelect(props) {
             jurisdictionId,
             isPositive === true,
             isPositive === false,
+            true,
             searchQuery,
           ).then((rules) => callback(rules));
         } catch (error) {

@@ -102,6 +102,24 @@ export default function useJuridictionContract() {
   }
 
   /**
+   * Disable or enable rule.
+   *
+   * @param {string} contractAddress Jurisdiction contract address.
+   * @param {string} ruleId Rule id.
+   * @param {boolean} disableStatus Desired status.
+   * @returns Transaction.
+   */
+  async function setRuleDisableStatus(contractAddress, ruleId, disableStatus) {
+    if (!isNetworkChainIdCorrect) {
+      throw new WrongNetworkError();
+    }
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).ruleDisable(ruleId, disableStatus);
+  }
+
+  /**
    * Make a case in the jurisdiction.
    *
    * @param {string} contractAddress Jurisdiction contract address.
@@ -129,6 +147,7 @@ export default function useJuridictionContract() {
     assignRole,
     removeRole,
     addRule,
+    setRuleDisableStatus,
     makeCase,
   };
 }

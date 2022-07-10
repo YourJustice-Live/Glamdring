@@ -54,6 +54,7 @@ export default function useJurisdiction() {
       jurisdictionRuleEntity.confirmationWitness,
       jurisdictionRuleEntity.effects,
       jurisdictionRuleEntity.isPositive,
+      jurisdictionRuleEntity.isDisabled,
     );
   }
 
@@ -143,6 +144,7 @@ export default function useJurisdiction() {
    * @param {string} actionGuid Action id (guid).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @returns {Promise.<Array.<{JurisdictionRule}>>} Array with rules.
    */
   let getJurisdictionRules = async function (
@@ -151,6 +153,7 @@ export default function useJurisdiction() {
     actionGuid,
     isPositive,
     isNegative,
+    isEnabled,
   ) {
     const jurisdictionRuleEntities = await findJurisdictionRuleEntities(
       ids,
@@ -158,6 +161,7 @@ export default function useJurisdiction() {
       actionGuid,
       isPositive,
       isNegative,
+      isEnabled,
     );
     return jurisdictionRuleEntities.map((ruleEntity) =>
       createJurisdictionRuleObject(ruleEntity),
@@ -170,6 +174,7 @@ export default function useJurisdiction() {
    * @param {string} jurisdiction Jurisdiction id (address).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<{JurisdictionRule}>>} Array with rules.
    */
@@ -177,6 +182,7 @@ export default function useJurisdiction() {
     jurisdiction,
     isPositive,
     isNegative,
+    isEnabled,
     searchQuery,
   ) {
     const jurisdictionRuleEntities =
@@ -184,6 +190,7 @@ export default function useJurisdiction() {
         jurisdiction,
         isPositive,
         isNegative,
+        isEnabled,
         searchQuery,
       );
     return jurisdictionRuleEntities.map((ruleEntity) =>

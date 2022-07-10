@@ -152,7 +152,7 @@ function LawRules({ law, isCommentsEnabled, sx }) {
               </Box>
               <RuleEffects rule={rule} sx={{ mt: { xs: 2, md: 0 } }} />
             </Box>
-            {/* Rule id and button to propose edits */}
+            {/* Rule id, disabled status, button to propose edits */}
             <Box
               sx={{
                 display: 'flex',
@@ -162,10 +162,20 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                 mt: 1,
               }}
             >
-              <Chip
-                label={`ID: ${rule?.ruleId || t('text-none')}`}
-                size="small"
-              />
+              {/* Rule id, disabled status */}
+              <Stack direction="row" spacing={1}>
+                <Chip
+                  label={`ID: ${rule?.ruleId || t('text-none')}`}
+                  size="small"
+                />
+                {rule?.isDisabled && (
+                  <Chip
+                    label={t('text-rule-disabled')}
+                    color="primary"
+                    size="small"
+                  />
+                )}
+              </Stack>
               {/* Button for comment rule */}
               {isCommentsEnabled && (
                 <Button
