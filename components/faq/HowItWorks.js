@@ -65,10 +65,17 @@ export default function HowItWorks() {
             >
               chainlist.org/chain/80001
             </Link>{' '}
-            and follow the instructions.
+            .
+          </Typography>
+          <Typography gutterBottom>
+            Click the button &quot;Connect Wallet&quot; next to the link
+            <b>&quot;https://rpc-mumbai.maticvigil.com&quot;</b>.
+          </Typography>
+          <Typography gutterBottom>
+            After that click the button &quot;Add to Metamask&quot;
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1657013173/FAQ/how-it-works/animation-small-2-v2_bgfxi7.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1657543009/FAQ/how-it-works/chainlist_bm3spt.gif"
             sx={{ maxWidth: 1, mt: 2 }}
             width={1920}
             height={1020}
