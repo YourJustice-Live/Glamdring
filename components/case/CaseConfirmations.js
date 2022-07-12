@@ -39,11 +39,22 @@ function CaseWitnesses({ caseObject, sx }) {
   useEffect(() => {
     setIsAccountProfileCanNominateWitness(false);
     if (caseObject) {
-      const isAccountProfileCanNominateWitness = isProfileHasCaseRole(
-        caseObject,
-        accountProfile?.id,
-        CASE_ROLE.subject.id,
-      );
+      const isAccountProfileCanNominateWitness =
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.subject.id,
+        ) ||
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.affected.id,
+        ) ||
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.judge.id,
+        );
       setIsAccountProfileCanNominateWitness(isAccountProfileCanNominateWitness);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
