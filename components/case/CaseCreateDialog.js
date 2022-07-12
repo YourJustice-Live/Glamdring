@@ -657,7 +657,7 @@ function FormDialog({
       // Define case rules
       const caseRules = [];
       caseRules.push({
-        jurisdiction: submittedFormData.jurisdictionId,
+        game: submittedFormData.jurisdictionId,
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
