@@ -37,6 +37,10 @@
 
   "page-sandbox-headline": "Welcome to Sandbox!",
 
+  "jurisdiction-role-admin": "Admin",
+  "jurisdiction-role-member": "Member",
+  "jurisdiction-role-judge": "Judge",
+
   "case-stage-any": "Any Stage",
   "case-stage-draft": "Draft Case",
   "case-stage-open": "Case Open for Discussion",

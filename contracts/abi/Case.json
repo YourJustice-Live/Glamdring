@@ -226,7 +226,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "jurisdiction",
+        "name": "game",
         "type": "address"
       },
       {
@@ -257,7 +257,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "enum DataTypes.CaseStage",
+        "internalType": "enum DataTypes.ReactionStage",
         "name": "stage",
         "type": "uint8"
       }
@@ -688,7 +688,7 @@
         "components": [
           {
             "internalType": "address",
-            "name": "jurisdiction",
+            "name": "game",
             "type": "address"
           },
           {
@@ -1008,7 +1008,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "jurisdiction_",
+        "name": "game_",
         "type": "address"
       },
       {
@@ -1207,7 +1207,7 @@
     "name": "stage",
     "outputs": [
       {
-        "internalType": "enum DataTypes.CaseStage",
+        "internalType": "enum DataTypes.ReactionStage",
         "name": "",
         "type": "uint8"
       }

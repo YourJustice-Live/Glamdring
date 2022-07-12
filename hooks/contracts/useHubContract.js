@@ -19,20 +19,20 @@ export default function useHubContract() {
   }
 
   /**
-   * Create jurisdiction contract.
+   * Create a game contract.
    *
-   * @param {string} name Jurisdiction name.
-   * @param {string} uri Jurisdiction metadata.
+   * @param {string} name Game name.
+   * @param {string} uri Game metadata.
    * @returns Transaction.
    */
-  async function makeJurisdiction(name, uri) {
+  async function makeGame(name, uri) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(provider?.getSigner()).jurisdictionMake(name, uri);
+    return await getContract(provider?.getSigner()).gameMake(name, uri);
   }
 
   return {
-    makeJurisdiction,
+    makeGame,
   };
 }

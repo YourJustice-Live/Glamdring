@@ -1,2 +1,3 @@
 export const IS_LOCALHOST_ANALYTICS_DISABLED = true;
 export const IS_DEFAULT_PROVIDER_DISABLED = false;
+export const IS_SOULS_CREATED_BY_CONTRACTS_DISABLED = true;

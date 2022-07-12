@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IS_SOULS_CREATED_BY_CONTRACTS_DISABLED } from 'constants/features';
 import { PROFILE_ORDER } from 'constants/subgraph';
 import { unionWith } from 'lodash';
 
@@ -321,7 +322,8 @@ function getFindAvatarNftEntitiesQuery(
   let jurisdictionFilter = jurisdiction
     ? `jurisdictions_contains: ["${jurisdiction}"]`
     : '';
-  let filterParams = `where: {${idsFilter}, ${ownersFilter}, ${jurisdictionFilter}}`;
+  let typeFilter = IS_SOULS_CREATED_BY_CONTRACTS_DISABLED ? 'type: ""' : '';
+  let filterParams = `where: {${idsFilter}, ${ownersFilter}, ${jurisdictionFilter}, ${typeFilter}}`;
   let sortParams = `orderBy: ${order}, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -352,10 +354,11 @@ function getFindAvatarNftEntitiesQuery(
 }
 
 function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
-  let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}"}`;
-  let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}"}`;
-  let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}"}`;
-  let filterParams4 = `where: {id: "${searchQuery}"}`;
+  let typeFilter = IS_SOULS_CREATED_BY_CONTRACTS_DISABLED ? 'type: ""' : '';
+  let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams4 = `where: {id: "${searchQuery}", ${typeFilter}}`;
   let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
   let paginationParams = `first: 5, skip: 0`;
   let fields = `

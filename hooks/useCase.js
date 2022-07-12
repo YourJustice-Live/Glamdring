@@ -220,7 +220,7 @@ export default function useCase() {
    */
   let isProfileHasAwaitingJudgingCases = async function (jurisdictions) {
     const cases = await getCases({
-      stages: [CASE_STAGE.verdict],
+      stages: [CASE_STAGE.open, CASE_STAGE.verdict],
       jurisdictions: jurisdictions,
       first: 1,
     });

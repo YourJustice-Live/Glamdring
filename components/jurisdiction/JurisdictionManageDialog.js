@@ -33,7 +33,7 @@ export default function JurisdictionManageDialog({
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { showToastSuccess } = useToasts();
-  const { makeJurisdiction } = useHubContract();
+  const { makeGame } = useHubContract();
   const { setUri } = useJuridictionContract();
   const { uploadJsonToIPFS } = useIpfs();
   const [isLoading, setIsLoading] = useState(false);
@@ -102,7 +102,7 @@ export default function JurisdictionManageDialog({
         await setUri(jurisdiction?.id, jurisdictionMetadataUri);
         handleSetJurisdictionUri(jurisdiction?.id);
       } else {
-        await makeJurisdiction(formData.name, jurisdictionMetadataUri);
+        await makeGame(formData.name, jurisdictionMetadataUri);
         handleMakeJurisdiction();
       }
       showToastSuccess(t('notification-data-is-successfully-updated'));

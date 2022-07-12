@@ -125,7 +125,7 @@ export default function useJuridictionContract() {
    * @param {string} contractAddress Jurisdiction contract address.
    * @param {string} name Case name.
    * @param {string} uri Case metadata.
-   * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
+   * @param {Array.<{game : string, ruleId: number}>} rules Case rules.
    * @param {Array.<{tokenId : string, role: string}>} roles Case roles.
    * @param {Array.<{tokenId : string, entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
@@ -137,7 +137,7 @@ export default function useJuridictionContract() {
     return await getContract(
       contractAddress,
       provider?.getSigner(),
-    ).caseMakeOpen(name, uri, rules, roles, posts);
+    ).reactionMakeOpen(name, uri, rules, roles, posts);
   }
 
   return {
