@@ -101,7 +101,10 @@ export function Web3Provider({ children }) {
     } catch (error) {
       console.error(error);
       handleCatchErrorEvent(error, { type: 'change network' });
-      if (error?.code === 4902) {
+      if (
+        error?.code === 4902 ||
+        error?.message?.toLowerCase()?.includes('unrecognized chain id')
+      ) {
         addNetwork();
       }
     }
