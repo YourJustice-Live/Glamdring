@@ -242,6 +242,9 @@ function CaseWitnessNominates({ caseObject, sx }) {
         <Typography sx={{ fontWeight: 'bold' }}>
           {t('text-witnesses-nominated')}
         </Typography>
+        <Typography sx={{ mt: 1 }}>
+          {t('text-witnesses-can-be-added-by-admin')}
+        </Typography>
         <Stack spacing={1} sx={{ mt: 1.5 }}>
           {witnessNominates.map((nominate, index) => {
             return (
