@@ -189,7 +189,7 @@ export default function RuleTable({ jurisdiction, sx }) {
     },
     {
       field: 'witness',
-      headerName: 'Witnesseses required',
+      headerName: 'Witnesses required',
       width: 180,
       valueGetter: (params) => `${params.row.rule.confirmation.witness || ''}`,
     },
