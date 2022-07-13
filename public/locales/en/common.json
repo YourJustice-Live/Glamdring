@@ -118,6 +118,7 @@
   "text-verdict-required-judge": "The verdict can be made by the judge after assignment.",
   "text-verdict-required-waiting": "The judge will able to make a verdict after",
   "text-verdict-stage-required-before-making-verdict": "Set the stage \"Awaiting Verdict\" so that the judge can be able to make a verdict.",
+  "text-verdict-stage-can-set-only-admin-and-judge": "This stage can be set only by case creator or judge of this case.",
   "text-verdict-is-awaited": "The judge's verdict is awaited.",
   "text-verdict-is-made": "Judge made verdict",
   "text-verdict-confirmed-rules": "Confirmed Rules",

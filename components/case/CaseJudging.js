@@ -119,13 +119,38 @@ function CaseJudges({ caseObject, sx }) {
 }
 
 function CaseAwatingVerdictStage({ caseObject, sx }) {
+  const { accountProfile } = useDataContext();
   const { t } = useTranslation('common');
+  const { isProfileHasCaseRole } = useCase();
   const { setStageVerdict } = useCaseContract();
+  const [
+    isAccountProfileCanSetVerdictStage,
+    setIsAccountProfileCanSetVerdictStage,
+  ] = useState(false);
   const verdictDate =
     (Number(caseObject.judgeAssignmentDate) +
       Number(process.env.NEXT_PUBLIC_SECONDS_BEFORE_VERDICT)) *
     1000;
   const currentDate = new Date().getTime();
+
+  useEffect(() => {
+    setIsAccountProfileCanSetVerdictStage(false);
+    if (caseObject) {
+      const isAccountProfileCanSetVerdictStage =
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.admin.id,
+        ) ||
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.judge.id,
+        );
+      setIsAccountProfileCanSetVerdictStage(isAccountProfileCanSetVerdictStage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseObject, accountProfile]);
 
   return (
     <Box sx={{ ...sx }}>
@@ -143,21 +168,26 @@ function CaseAwatingVerdictStage({ caseObject, sx }) {
           <b>{new Date(verdictDate).toLocaleString()}</b>.
         </Typography>
       )}
-      {/* If anyone can set verdict stage */}
+      {/* If feature to set verdict stage is available */}
       {caseObject?.judges?.length > 0 && currentDate >= verdictDate && (
         <>
           <Typography sx={{ mt: 1 }}>
             {t('text-verdict-stage-required-before-making-verdict')}
           </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setStageVerdict(caseObject?.id);
-            }}
-            sx={{ mt: 2 }}
-          >
-            {t('button-case-set-verdict-stage')}
-          </Button>
+          <Typography sx={{ mt: 1 }}>
+            {t('text-verdict-stage-can-set-only-admin-and-judge')}
+          </Typography>
+          {isAccountProfileCanSetVerdictStage && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setStageVerdict(caseObject?.id);
+              }}
+              sx={{ mt: 2 }}
+            >
+              {t('button-case-set-verdict-stage')}
+            </Button>
+          )}
         </>
       )}
     </Box>
