@@ -31,14 +31,22 @@ function CaseWitnesses({ caseObject, sx }) {
   const { showDialog, closeDialog } = useDialogContext();
   const { t } = useTranslation('common');
   const { isProfileHasCaseRole } = useCase();
+  const [isAccountProfileCanAddWitness, setIsAccountProfileCanAddWitness] =
+    useState(false);
   const [
     isAccountProfileCanNominateWitness,
     setIsAccountProfileCanNominateWitness,
   ] = useState(false);
 
   useEffect(() => {
+    setIsAccountProfileCanAddWitness(false);
     setIsAccountProfileCanNominateWitness(false);
     if (caseObject) {
+      const isAccountProfileCanAddWitness = isProfileHasCaseRole(
+        caseObject,
+        accountProfile?.id,
+        CASE_ROLE.admin.id,
+      );
       const isAccountProfileCanNominateWitness =
         isProfileHasCaseRole(
           caseObject,
@@ -55,6 +63,7 @@ function CaseWitnesses({ caseObject, sx }) {
           accountProfile?.id,
           CASE_ROLE.judge.id,
         );
+      setIsAccountProfileCanAddWitness(isAccountProfileCanAddWitness);
       setIsAccountProfileCanNominateWitness(isAccountProfileCanNominateWitness);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,9 +82,29 @@ function CaseWitnesses({ caseObject, sx }) {
       ) : (
         <Typography sx={{ mt: 1 }}>{t('text-witnesses-no')}</Typography>
       )}
+      {/* Button to add witness */}
+      {caseObject?.stage === CASE_STAGE.open && isAccountProfileCanAddWitness && (
+        <Box sx={{ mt: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              showDialog(
+                <CaseRoleAssignDialog
+                  caseObject={caseObject}
+                  roleName={CASE_ROLE.witness.name}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          >
+            {t('button-case-add-witness')}
+          </Button>
+        </Box>
+      )}
       {/* Button to nominate witness */}
       {caseObject?.stage === CASE_STAGE.open &&
-        isAccountProfileCanNominateWitness && (
+        isAccountProfileCanNominateWitness &&
+        !isAccountProfileCanAddWitness && (
           <Box sx={{ mt: 2 }}>
             <Button
               variant="outlined"
