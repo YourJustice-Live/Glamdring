@@ -117,7 +117,7 @@ export default function RuleAddDialog({ jurisdiction, isClose, onClose }) {
       },
       witness: {
         type: 'integer',
-        title: 'Witnesses',
+        title: 'Witnesses required',
         default: 1,
       },
     },

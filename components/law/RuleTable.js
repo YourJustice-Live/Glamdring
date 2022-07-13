@@ -182,15 +182,15 @@ export default function RuleTable({ jurisdiction, sx }) {
     },
     {
       field: 'evidence',
-      headerName: 'Evidence Required',
+      headerName: 'Evidence required',
       width: 160,
       valueGetter: (params) =>
         `${params.row.rule.confirmation.evidence.toString() || ''}`,
     },
     {
       field: 'witness',
-      headerName: 'Witnesses',
-      width: 100,
+      headerName: 'Witnesseses required',
+      width: 180,
       valueGetter: (params) => `${params.row.rule.confirmation.witness || ''}`,
     },
   ];
