@@ -49,21 +49,18 @@ export function DataProvider({ children }) {
   const jurisdictionsLoadingLimit = 25; // TODO: Find out how to optimally download jurisdictions without limits
 
   async function updateContext() {
-    // If account not connected
+    // Clear context if account not connected
     if (!account) {
-      setAccountProfile(null);
-      setIsAccountProfileHasOpenCasesCreatedByHim(false);
-      setIsAccountProfileHasOpenCasesAgainstHim(false);
-      setIsAccountProfileHasAwaitingConfirmationCases(false);
-      setIsAccountProfileHasAwaitingJudgingCases(false);
-      setIsAccountProfileHasAwaitingCases(false);
+      clearContext();
     }
     // Load data if account connected
     else {
       try {
         // Define data
         const accountProfile = await getProfile({ owner: account });
+        // Clear context if account does not have profile
         if (!accountProfile) {
+          clearContext();
           return;
         }
         const accountProfileIsJudgeJurisdictions = await getJurisdictions({
@@ -109,6 +106,15 @@ export function DataProvider({ children }) {
         handleError(error);
       }
     }
+  }
+
+  async function clearContext() {
+    setAccountProfile(null);
+    setIsAccountProfileHasOpenCasesCreatedByHim(false);
+    setIsAccountProfileHasOpenCasesAgainstHim(false);
+    setIsAccountProfileHasAwaitingConfirmationCases(false);
+    setIsAccountProfileHasAwaitingJudgingCases(false);
+    setIsAccountProfileHasAwaitingCases(false);
   }
 
   /**
