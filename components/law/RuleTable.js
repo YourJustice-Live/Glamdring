@@ -1,4 +1,4 @@
-import { DataObjectOutlined, ModeEditOutline } from '@mui/icons-material';
+import { BlockOutlined, DataObjectOutlined } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridActionsCellItem, GridToolbar } from '@mui/x-data-grid';
@@ -10,8 +10,9 @@ import useErrors from 'hooks/useErrors';
 import useJurisdiction from 'hooks/useJurisdiction';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
-import { getActionIcon } from 'utils/metadata';
-import RuleManageDialog from './RuleManageDialog';
+import { formatActionName } from 'utils/formatters';
+import { getRuleIcon } from 'utils/metadata';
+import RuleDisableDialog from './RuleDisableDialog';
 
 /**
  * A component with a table with jurisdiction rules.
@@ -32,38 +33,54 @@ export default function RuleTable({ jurisdiction, sx }) {
       type: 'actions',
       headerName: '',
       width: 100,
-      getActions: (params) => [
-        <GridActionsCellItem
-          key="viewJson"
-          icon={<DataObjectOutlined />}
-          label="View as JSON"
-          onClick={() =>
-            showDialog(
-              <JsonViewDialog json={params.row} onClose={closeDialog} />,
-            )
-          }
-        />,
-        <GridActionsCellItem
-          key="updateRule"
-          icon={<ModeEditOutline />}
-          label="Update Rule"
-          onClick={() =>
-            showDialog(
-              <RuleManageDialog
-                jurisdiction={jurisdiction}
-                rule={params.row.rule}
-                onClose={closeDialog}
-              />,
-            )
-          }
-        />,
-      ],
+      getActions: (params) => {
+        const viewAsJsonAction = (
+          <GridActionsCellItem
+            key="viewJson"
+            icon={<DataObjectOutlined />}
+            label="View as JSON"
+            title="View as JSON"
+            onClick={() =>
+              showDialog(
+                <JsonViewDialog json={params.row} onClose={closeDialog} />,
+              )
+            }
+          />
+        );
+        const disableAction = (
+          <GridActionsCellItem
+            key="disable"
+            icon={<BlockOutlined />}
+            label="Mark as Obsolete"
+            title="Mark as Obsolete"
+            onClick={() =>
+              showDialog(
+                <RuleDisableDialog
+                  jurisdiction={jurisdiction}
+                  rule={params.row.rule}
+                  onClose={closeDialog}
+                />,
+              )
+            }
+          />
+        );
+        return [
+          viewAsJsonAction,
+          ...(params.row.rule.isDisabled ? [] : [disableAction]),
+        ];
+      },
     },
     {
       field: 'id',
       headerName: 'ID',
-      width: 100,
+      width: 60,
       valueGetter: (params) => `${params.row.rule.ruleId}`,
+    },
+    {
+      field: 'disabled',
+      headerName: 'Obsolete',
+      width: 100,
+      valueGetter: (params) => (params.row.rule.isDisabled ? 'Yes' : 'No'),
     },
     {
       field: 'action',
@@ -73,8 +90,7 @@ export default function RuleTable({ jurisdiction, sx }) {
       renderCell: (params) => (
         <Box>
           <Stack direction="row" alignItems="center" spacing={1}>
-            {getActionIcon(params.row.action, 28)}
-            <Typography>{params.row.action.uriData?.name}</Typography>
+            <Typography>{formatActionName(params.row.action)}</Typography>
           </Stack>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             {params.row.action.guid}
@@ -96,6 +112,13 @@ export default function RuleTable({ jurisdiction, sx }) {
         `${params.row.rule.rule.uriData?.description || ''}`,
     },
     {
+      field: 'icon',
+      headerName: 'Icon to display',
+      width: 120,
+      valueGetter: (params) => `${params.row.rule.rule.uriData?.icon || ''}`,
+      renderCell: (params) => getRuleIcon(params.row.rule, 28),
+    },
+    {
       field: 'evidenceDescription',
       headerName: 'Evidence description',
       width: 320,
@@ -107,13 +130,6 @@ export default function RuleTable({ jurisdiction, sx }) {
       headerName: 'Affected',
       width: 200,
       valueGetter: (params) => `${params.row.rule.rule.affected || ''}`,
-    },
-    {
-      field: 'negation',
-      headerName: 'Negation',
-      width: 100,
-      valueGetter: (params) =>
-        `${params.row.rule.rule.negation.toString() || ''}`,
     },
     {
       field: 'category',
@@ -136,7 +152,7 @@ export default function RuleTable({ jurisdiction, sx }) {
     {
       field: 'effects',
       headerName: 'Effects',
-      width: 320,
+      width: 360,
       valueGetter: (params) => JSON.stringify(params.row.rule.effects),
       renderCell: (params) => (
         <Stack>
@@ -165,22 +181,16 @@ export default function RuleTable({ jurisdiction, sx }) {
       ),
     },
     {
-      field: 'ruling',
-      headerName: 'Ruling',
-      width: 100,
-      valueGetter: (params) => `${params.row.rule.confirmation.ruling || ''}`,
-    },
-    {
       field: 'evidence',
-      headerName: 'Evidence',
-      width: 100,
+      headerName: 'Evidence required',
+      width: 160,
       valueGetter: (params) =>
         `${params.row.rule.confirmation.evidence.toString() || ''}`,
     },
     {
       field: 'witness',
-      headerName: 'Witness',
-      width: 100,
+      headerName: 'Witnesses required',
+      width: 180,
       valueGetter: (params) => `${params.row.rule.confirmation.witness || ''}`,
     },
   ];

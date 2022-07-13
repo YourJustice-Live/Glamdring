@@ -8,6 +8,7 @@ export default class Case {
     createdDate,
     jurisdiction,
     stage,
+    judgeAssignmentDate,
     verdictAuthor,
     verdictUri,
     verdictUriData,
@@ -18,12 +19,14 @@ export default class Case {
     rules,
     roles,
     posts,
+    nominates,
   ) {
     this.id = id;
     this.name = name;
     this.createdDate = createdDate;
     this.jurisdiction = jurisdiction;
     this.stage = stage;
+    this.judgeAssignmentDate = judgeAssignmentDate;
     this.verdictAuthor = verdictAuthor;
     this.verdictUri = verdictUri;
     this.verdictUriData = verdictUriData;
@@ -34,5 +37,6 @@ export default class Case {
     this.rules = rules;
     this.roles = roles;
     this.posts = posts;
+    this.nominates = nominates;
   }
 }

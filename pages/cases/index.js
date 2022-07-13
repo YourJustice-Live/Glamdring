@@ -22,6 +22,8 @@ export default function Cases() {
   const {
     accountProfile,
     accountProfileIsJudgeJurisdictions,
+    isAccountProfileHasOpenCasesCreatedByHim,
+    isAccountProfileHasOpenCasesAgainstHim,
     isAccountProfileHasAwaitingConfirmationCases,
     isAccountProfileHasAwaitingJudgingCases,
   } = useDataContext();
@@ -69,7 +71,43 @@ export default function Cases() {
                 maxWidth: 'calc(100vw - 32px)',
               }}
             >
+              {/* Tab for All */}
               <Tab label={t('text-all')} value="1" />
+              {/* Tab for Created by me */}
+              <Tab
+                label={
+                  <Badge
+                    color="danger"
+                    badgeContent={
+                      isAccountProfileHasOpenCasesCreatedByHim ? 1 : 0
+                    }
+                    variant="dot"
+                    sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
+                  >
+                    {t('text-created-by-me')}
+                  </Badge>
+                }
+                sx={{ px: 3 }}
+                value="2"
+              />
+              {/* Tab for Against me */}
+              <Tab
+                label={
+                  <Badge
+                    color="danger"
+                    badgeContent={
+                      isAccountProfileHasOpenCasesAgainstHim ? 1 : 0
+                    }
+                    variant="dot"
+                    sx={{ '& .MuiBadge-badge': { top: '0px', right: '-10px' } }}
+                  >
+                    {t('text-against-me')}
+                  </Badge>
+                }
+                sx={{ px: 3 }}
+                value="3"
+              />
+              {/* Tab for Awaiting my confirmation */}
               <Tab
                 label={
                   <Badge
@@ -83,9 +121,10 @@ export default function Cases() {
                     {t('text-my-awaiting-confirmation')}
                   </Badge>
                 }
-                sx={{ px: 4 }}
-                value="2"
+                sx={{ px: 3 }}
+                value="4"
               />
+              {/* Tab for Awaiting my judging */}
               <Tab
                 label={
                   <Badge
@@ -99,14 +138,36 @@ export default function Cases() {
                     {t('text-my-awaiting-judging')}
                   </Badge>
                 }
-                sx={{ px: 4 }}
-                value="3"
+                sx={{ px: 3 }}
+                value="5"
               />
             </TabList>
+            {/* Tab panel for All */}
             <TabPanel value="1" sx={{ px: 0 }}>
               <CaseListObserver />
             </TabPanel>
+            {/* Tab panel for Created by me */}
             <TabPanel value="2" sx={{ px: 0 }}>
+              <CaseListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  stageId: CASE_STAGE.open,
+                  adminProfileId: accountProfile.id,
+                }}
+              />
+            </TabPanel>
+            {/* Tab panel for Against me */}
+            <TabPanel value="3" sx={{ px: 0 }}>
+              <CaseListObserver
+                isFilterButtonHidden={true}
+                filters={{
+                  stageId: CASE_STAGE.open,
+                  subjectProfileId: accountProfile.id,
+                }}
+              />
+            </TabPanel>
+            {/* Tab for Awaiting my confirmation */}
+            <TabPanel value="4" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
                 filters={{
@@ -117,11 +178,12 @@ export default function Cases() {
                 }}
               />
             </TabPanel>
-            <TabPanel value="3" sx={{ px: 0 }}>
+            {/* Tab for Awaiting my judging */}
+            <TabPanel value="5" sx={{ px: 0 }}>
               <CaseListObserver
                 isFilterButtonHidden={true}
                 filters={{
-                  stageId: CASE_STAGE.verdict,
+                  stageIds: [CASE_STAGE.open, CASE_STAGE.verdict],
                   jurisdictionAddresses:
                     accountProfileIsJudgeJurisdictions?.length > 0
                       ? accountProfileIsJudgeJurisdictions.map((j) => j.id)

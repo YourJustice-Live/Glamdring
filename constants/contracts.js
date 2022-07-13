@@ -35,7 +35,7 @@ export const JURISDICTION_ROLE = {
   },
   judge: {
     id: '3',
-    name: 'judge',
+    name: 'authority',
   },
 };
 
@@ -52,17 +52,17 @@ export const CASE_ROLE = {
     id: '1',
     name: 'admin',
   },
-  subject: {
-    id: '2',
-    name: 'subject',
-  },
   plaintiff: {
+    id: '2',
+    name: 'creator',
+  },
+  subject: {
     id: '3',
-    name: 'plaintiff',
+    name: 'subject',
   },
   judge: {
     id: '4',
-    name: 'judge',
+    name: 'authority',
   },
   witness: {
     id: '5',

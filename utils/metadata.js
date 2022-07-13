@@ -15,15 +15,15 @@ export function getTraitValue(attributes, traitType) {
 }
 
 /**
- * Get a icon component by action metadata.
+ * Get a icon component by rule metadata.
  *
- * @param {Action} action Action.
+ * @param {Rule} action Rule.
  * @param {number} size Width and height of icon.
  * @returns Icon Component.
  */
-export function getActionIcon(action, size = 36) {
+export function getRuleIcon(rule, size = 36) {
   const icon = Object.values(ICON).find(
-    (icon) => icon.name === action?.uriData?.icon,
+    (icon) => icon.name === rule?.rule?.uriData?.icon,
   );
   return icon?.icon(size) || ICON.default.icon(size);
 }

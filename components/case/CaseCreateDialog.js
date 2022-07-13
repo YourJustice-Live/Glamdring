@@ -657,7 +657,7 @@ function FormDialog({
       // Define case rules
       const caseRules = [];
       caseRules.push({
-        jurisdiction: submittedFormData.jurisdictionId,
+        game: submittedFormData.jurisdictionId,
         ruleId: submittedFormData.ruleId,
       });
       // Define case roles
@@ -680,6 +680,7 @@ function FormDialog({
       const casePosts = [];
       if (submittedFormData.evidencePostUri) {
         casePosts.push({
+          tokenId: accountProfile.id,
           entRole: CASE_ROLE.admin.name,
           uri: submittedFormData.evidencePostUri,
         });

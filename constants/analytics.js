@@ -5,6 +5,7 @@ export const POST_HOG_EVENT = {
   createdOwnProfile: 'created own profile',
   editedOwnProfile: 'edited own profile',
   createdCase: 'created case',
+  nominatedToCase: 'nominated to case',
   addedCaseEvidence: 'added case evidence',
   commentedCase: 'commented case',
   confirmedCase: 'confirmed case',
@@ -22,4 +23,6 @@ export const POST_HOG_PROPERTY = {
   errorStack: 'error stack',
   jurisdiction: 'jurisdiction',
   case: 'case',
+  nominated: 'nominated',
+  role: 'role',
 };

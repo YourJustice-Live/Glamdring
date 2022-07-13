@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import ProfileCompactCard from 'components/profile/ProfileCompactCard';
 import { CASE_ROLE } from 'constants/contracts';
-import { CASE_STAGE_KEY } from 'constants/i18n';
+import { CASE_ROLE_KEY, CASE_STAGE_KEY } from 'constants/i18n';
 import { useTranslation } from 'next-i18next';
 
 /**
@@ -65,7 +65,7 @@ export default function CaseEventCard({ caseEvent }) {
               disableRating={true}
             />
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {t('text-event-made-verdict').toLowerCase}
+              {t('text-event-made-verdict').toLowerCase()}
             </Typography>
           </Stack>
         )}
@@ -79,6 +79,29 @@ export default function CaseEventCard({ caseEvent }) {
             <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
               {t('text-event-cancelled-case').toLowerCase()}
             </Typography>
+          </Stack>
+        )}
+        {/* Nominate */}
+        {caseEvent.type === 'nominated' && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ProfileCompactCard
+              profileId={caseEvent.data.nominator}
+              disableRating={true}
+            />
+            {caseEvent.data.role?.length > 0 ? (
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {t('text-event-nominate-a').toLowerCase()}{' '}
+                {t(CASE_ROLE_KEY[caseEvent.data.role]).toLowerCase()}
+              </Typography>
+            ) : (
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {t('text-event-nominate').toLowerCase()}
+              </Typography>
+            )}
+            <ProfileCompactCard
+              profileId={caseEvent.data.nominated}
+              disableRating={true}
+            />
           </Stack>
         )}
         <Divider sx={{ mt: 1, mb: 1 }} />

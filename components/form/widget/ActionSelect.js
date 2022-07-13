@@ -11,8 +11,7 @@ import useAction from 'hooks/useAction';
 import useErrors from 'hooks/useErrors';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import { formatAddress } from 'utils/formatters';
-import { getActionIcon } from 'utils/metadata';
+import { formatActionName, formatAddress } from 'utils/formatters';
 
 /**
  * A widget to select action (guid).
@@ -31,7 +30,12 @@ export default function ActionSelect(props) {
 
   useEffect(() => {
     getActions()
-      .then((actions) => setActions(actions))
+      .then((actions) => {
+        actions = actions.sort((a, b) =>
+          a.action?.subject?.localeCompare(b.action?.subject),
+        );
+        setActions(actions);
+      })
       .catch((error) => handleError(error, true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,8 +74,7 @@ export default function ActionSelect(props) {
           {actions.map((action, index) => (
             <MenuItem key={index} value={action.guid}>
               <Stack direction="row" alignItems="center" spacing={1.5}>
-                {getActionIcon(action, 28)}
-                <Typography>{action.uriData?.name}</Typography>
+                <Typography>{formatActionName(action)}</Typography>
                 <Typography sx={{ color: 'text.secondary' }}>
                   ({formatAddress(action.guid)})
                 </Typography>

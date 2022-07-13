@@ -14,12 +14,22 @@ export function DataProvider({ children }) {
   const { getProfile } = useProfile();
   const { getJurisdictions } = useJurisdiction();
   const {
+    isProfileHasHasOpenCasesCreatedByHim,
+    isProfileHasHasOpenCasesAgainstHim,
     isProfileHasAwaitingConfirmationCases,
     isProfileHasAwaitingJudgingCases,
   } = useCase();
   const profileWorkerRef = useRef();
   const [isReady, setIsReady] = useState(false);
   const [accountProfile, setAccountProfile] = useState(null);
+  const [
+    isAccountProfileHasOpenCasesCreatedByHim,
+    setIsAccountProfileHasOpenCasesCreatedByHim,
+  ] = useState(false);
+  const [
+    isAccountProfileHasOpenCasesAgainstHim,
+    setIsAccountProfileHasOpenCasesAgainstHim,
+  ] = useState(false);
   const [
     isAccountProfileHasAwaitingConfirmationCases,
     setIsAccountProfileHasAwaitingConfirmationCases,
@@ -39,25 +49,28 @@ export function DataProvider({ children }) {
   const jurisdictionsLoadingLimit = 25; // TODO: Find out how to optimally download jurisdictions without limits
 
   async function updateContext() {
-    // If account not connected
+    // Clear context if account not connected
     if (!account) {
-      setAccountProfile(null);
-      setIsAccountProfileHasAwaitingConfirmationCases(false);
-      setIsAccountProfileHasAwaitingJudgingCases(false);
-      setIsAccountProfileHasAwaitingCases(false);
+      clearContext();
     }
     // Load data if account connected
     else {
       try {
         // Define data
         const accountProfile = await getProfile({ owner: account });
+        // Clear context if account does not have profile
         if (!accountProfile) {
+          clearContext();
           return;
         }
         const accountProfileIsJudgeJurisdictions = await getJurisdictions({
           judge: accountProfile.id,
           first: jurisdictionsLoadingLimit,
         });
+        const isAccountProfileHasOpenCasesCreatedByHim =
+          await isProfileHasHasOpenCasesCreatedByHim(accountProfile?.id);
+        const isAccountProfileHasOpenCasesAgainstHim =
+          await isProfileHasHasOpenCasesAgainstHim(accountProfile?.id);
         const isAccountProfileHasAwaitingConfirmationCases =
           await isProfileHasAwaitingConfirmationCases(accountProfile?.id);
         const isAccountProfileHasAwaitingJudgingCases =
@@ -67,12 +80,20 @@ export function DataProvider({ children }) {
             ),
           );
         const isAccountProfileHasAwaitingCases =
+          isAccountProfileHasOpenCasesCreatedByHim ||
+          isAccountProfileHasOpenCasesAgainstHim ||
           isAccountProfileHasAwaitingConfirmationCases ||
           isAccountProfileHasAwaitingJudgingCases;
         // Update states
         setAccountProfile(accountProfile);
         setAccountProfileIsJudgeJurisdictions(
           accountProfileIsJudgeJurisdictions,
+        );
+        setIsAccountProfileHasOpenCasesCreatedByHim(
+          isAccountProfileHasOpenCasesCreatedByHim,
+        );
+        setIsAccountProfileHasOpenCasesAgainstHim(
+          isAccountProfileHasOpenCasesAgainstHim,
         );
         setIsAccountProfileHasAwaitingConfirmationCases(
           isAccountProfileHasAwaitingConfirmationCases,
@@ -85,6 +106,15 @@ export function DataProvider({ children }) {
         handleError(error);
       }
     }
+  }
+
+  async function clearContext() {
+    setAccountProfile(null);
+    setIsAccountProfileHasOpenCasesCreatedByHim(false);
+    setIsAccountProfileHasOpenCasesAgainstHim(false);
+    setIsAccountProfileHasAwaitingConfirmationCases(false);
+    setIsAccountProfileHasAwaitingJudgingCases(false);
+    setIsAccountProfileHasAwaitingCases(false);
   }
 
   /**
@@ -129,6 +159,10 @@ export function DataProvider({ children }) {
     state: {
       accountProfile: accountProfile,
       accountProfileIsJudgeJurisdictions: accountProfileIsJudgeJurisdictions,
+      isAccountProfileHasOpenCasesCreatedByHim:
+        isAccountProfileHasOpenCasesCreatedByHim,
+      isAccountProfileHasOpenCasesAgainstHim:
+        isAccountProfileHasOpenCasesAgainstHim,
       isAccountProfileHasAwaitingConfirmationCases:
         isAccountProfileHasAwaitingConfirmationCases,
       isAccountProfileHasAwaitingJudgingCases:

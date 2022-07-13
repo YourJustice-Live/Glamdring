@@ -23,10 +23,10 @@ export default function CaseJudging({ caseObject, caseLaws, sx }) {
     <Box sx={{ ...sx }}>
       <CaseJudges caseObject={caseObject} sx={{ mb: 4 }} />
       {caseObject?.stage < CASE_STAGE.verdict && (
-        <CaseRequireVerdictStage caseObject={caseObject} />
+        <CaseAwatingVerdictStage caseObject={caseObject} />
       )}
       {caseObject?.stage === CASE_STAGE.verdict && (
-        <CaseAwaitingJudge caseObject={caseObject} caseLaws={caseLaws} />
+        <CaseAwaitingVerdict caseObject={caseObject} caseLaws={caseLaws} />
       )}
       {caseObject?.stage === CASE_STAGE.closed && (
         <CaseVerdict caseObject={caseObject} />
@@ -118,30 +118,83 @@ function CaseJudges({ caseObject, sx }) {
   );
 }
 
-function CaseRequireVerdictStage({ caseObject, sx }) {
+function CaseAwatingVerdictStage({ caseObject, sx }) {
+  const { accountProfile } = useDataContext();
   const { t } = useTranslation('common');
+  const { isProfileHasCaseRole } = useCase();
   const { setStageVerdict } = useCaseContract();
+  const [
+    isAccountProfileCanSetVerdictStage,
+    setIsAccountProfileCanSetVerdictStage,
+  ] = useState(false);
+  const verdictDate =
+    (Number(caseObject.judgeAssignmentDate) +
+      Number(process.env.NEXT_PUBLIC_SECONDS_BEFORE_VERDICT)) *
+    1000;
+  const currentDate = new Date().getTime();
+
+  useEffect(() => {
+    setIsAccountProfileCanSetVerdictStage(false);
+    if (caseObject) {
+      const isAccountProfileCanSetVerdictStage =
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.admin.id,
+        ) ||
+        isProfileHasCaseRole(
+          caseObject,
+          accountProfile?.id,
+          CASE_ROLE.judge.id,
+        );
+      setIsAccountProfileCanSetVerdictStage(isAccountProfileCanSetVerdictStage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseObject, accountProfile]);
 
   return (
     <Box sx={{ ...sx }}>
       <Typography sx={{ fontWeight: 'bold' }}>{t('text-verdict')}</Typography>
-      <Typography sx={{ mt: 1 }}>
-        {t('text-verdict-stage-required-before-making-verdict')}
-      </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          setStageVerdict(caseObject?.id);
-        }}
-        sx={{ mt: 2 }}
-      >
-        {t('button-case-set-verdict-stage')}
-      </Button>
+      {/* If no judges */}
+      {caseObject?.judges?.length === 0 && (
+        <Typography sx={{ mt: 1 }}>
+          {t('text-verdict-required-judge')}
+        </Typography>
+      )}
+      {/* If there is time before verdict */}
+      {caseObject?.judges?.length > 0 && currentDate < verdictDate && (
+        <Typography sx={{ mt: 1 }}>
+          {t('text-verdict-required-waiting')}{' '}
+          <b>{new Date(verdictDate).toLocaleString()}</b>.
+        </Typography>
+      )}
+      {/* If feature to set verdict stage is available */}
+      {caseObject?.judges?.length > 0 && currentDate >= verdictDate && (
+        <>
+          <Typography sx={{ mt: 1 }}>
+            {t('text-verdict-stage-required-before-making-verdict')}
+          </Typography>
+          <Typography sx={{ mt: 1 }}>
+            {t('text-verdict-stage-can-set-only-admin-and-judge')}
+          </Typography>
+          {isAccountProfileCanSetVerdictStage && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setStageVerdict(caseObject?.id);
+              }}
+              sx={{ mt: 2 }}
+            >
+              {t('button-case-set-verdict-stage')}
+            </Button>
+          )}
+        </>
+      )}
     </Box>
   );
 }
 
-function CaseAwaitingJudge({ caseObject, caseLaws, sx }) {
+function CaseAwaitingVerdict({ caseObject, caseLaws, sx }) {
   const { accountProfile } = useDataContext();
   const { t } = useTranslation('common');
   const { showDialog, closeDialog } = useDialogContext();

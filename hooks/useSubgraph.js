@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IS_SOULS_CREATED_BY_CONTRACTS_DISABLED } from 'constants/features';
 import { PROFILE_ORDER } from 'constants/subgraph';
 import { unionWith } from 'lodash';
 
@@ -131,6 +132,7 @@ export default function useSubgraph() {
    * @param {string} actionGuid Action id (guid).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
   let findJurisdictionRuleEntities = async function (
@@ -139,6 +141,7 @@ export default function useSubgraph() {
     actionGuid,
     isPositive,
     isNegative,
+    isEnabled,
   ) {
     const fixedIds = ids ? ids.map((id) => id.toLowerCase()) : null;
     const fixedJurisdiction = jurisdiction ? jurisdiction.toLowerCase() : null;
@@ -149,6 +152,7 @@ export default function useSubgraph() {
         actionGuid,
         isPositive,
         isNegative,
+        isEnabled,
       ),
     );
     return response.jurisdictionRuleEntities;
@@ -160,6 +164,7 @@ export default function useSubgraph() {
    * @param {string} jurisdiction Jurisdiction id (address).
    * @param {bool} isPositive If required to get only positive rules.
    * @param {bool} isNegative If required to get only negative rules.
+   * @param {bool} isEnabled If required to get only enabled rules.
    * @param {string} searchQuery Search query.
    * @returns {Promise.<Array.<{object}>>} Array with rule entities.
    */
@@ -167,6 +172,7 @@ export default function useSubgraph() {
     jurisdiction,
     isPositive,
     isNegative,
+    isEnabled,
     searchQuery,
   ) {
     const response = await makeSubgraphQuery(
@@ -174,6 +180,7 @@ export default function useSubgraph() {
         jurisdiction,
         isPositive,
         isNegative,
+        isEnabled,
         searchQuery,
       ),
     );
@@ -203,7 +210,7 @@ export default function useSubgraph() {
    * @param {Array.<string>} ids A list with case ids (addresses).
    * @param {string} searchQuery A part of case name for searching.
    * @param {Array.<string>} jurisdictions Jurisdiction ids (addresses).
-   * @param {number} stage Case stage id.
+   * @param {Array.<number>} stages A list with case stage ids.
    * @param {string} participant Id of token that must be a participant in the case.
    * @param {string} admin Id of token that must be an admin in the case.
    * @param {string} subject Id of token that must be a subject in the case.
@@ -220,7 +227,7 @@ export default function useSubgraph() {
     ids,
     searchQuery,
     jurisdictions,
-    stage,
+    stages,
     participant,
     admin,
     subject,
@@ -241,7 +248,7 @@ export default function useSubgraph() {
         fixedIds,
         searchQuery,
         fixedJurisdictions,
-        stage,
+        stages,
         participant,
         admin,
         subject,
@@ -315,7 +322,8 @@ function getFindAvatarNftEntitiesQuery(
   let jurisdictionFilter = jurisdiction
     ? `jurisdictions_contains: ["${jurisdiction}"]`
     : '';
-  let filterParams = `where: {${idsFilter}, ${ownersFilter}, ${jurisdictionFilter}}`;
+  let typeFilter = IS_SOULS_CREATED_BY_CONTRACTS_DISABLED ? 'type: ""' : '';
+  let filterParams = `where: {${idsFilter}, ${ownersFilter}, ${jurisdictionFilter}, ${typeFilter}}`;
   let sortParams = `orderBy: ${order}, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -346,10 +354,11 @@ function getFindAvatarNftEntitiesQuery(
 }
 
 function getFindAvatarNftEntitiesBySearchQueryQuery(searchQuery) {
-  let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}"}`;
-  let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}"}`;
-  let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}"}`;
-  let filterParams4 = `where: {id: "${searchQuery}"}`;
+  let typeFilter = IS_SOULS_CREATED_BY_CONTRACTS_DISABLED ? 'type: ""' : '';
+  let filterParams1 = `where: {owner_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams2 = `where: {uriFirstName_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams3 = `where: {uriLastName_contains_nocase: "${searchQuery}", ${typeFilter}}`;
+  let filterParams4 = `where: {id: "${searchQuery}", ${typeFilter}}`;
   let sortParams = `orderBy: totalPositiveRating, orderDirection: desc`;
   let paginationParams = `first: 5, skip: 0`;
   let fields = `
@@ -468,6 +477,7 @@ function getFindJurisdictionRuleEntitiesQuery(
   actionGuid,
   isPositive,
   isNegative,
+  isEnabled,
 ) {
   let idsFilter = ids ? `id_in: ["${ids.join('","')}"]` : '';
   let jurisdictionFilter = jurisdiction
@@ -476,7 +486,8 @@ function getFindJurisdictionRuleEntitiesQuery(
   let actionGuidFilter = actionGuid ? `about: "${actionGuid}"` : '';
   let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
   let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}, ${isPositiveFilter}, ${isNegativeFilter}}`;
+  let isEnabledFilter = isEnabled === true ? 'isDisabled: false' : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${actionGuidFilter}, ${isPositiveFilter}, ${isNegativeFilter}, ${isEnabledFilter}}`;
   let paginationParams = `first: 100`;
   return `{
     jurisdictionRuleEntities(${filterParams}, ${paginationParams}) {
@@ -498,6 +509,7 @@ function getFindJurisdictionRuleEntitiesQuery(
         value
       }
       isPositive
+      isDisabled
     }
   }`;
 }
@@ -506,6 +518,7 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
   jurisdiction,
   isPositive,
   isNegative,
+  isEnabled,
   searchQuery,
 ) {
   let jurisdictionFilter = jurisdiction
@@ -513,12 +526,11 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
     : '';
   let isPositiveFilter = isPositive === true ? 'isPositive: true' : '';
   let isNegativeFilter = isNegative === true ? 'isPositive: false' : '';
+  let isEnabledFilter = isEnabled === true ? 'isDisabled: false' : '';
   let searchQueryFilter1 = `aboutSubject_contains_nocase: "${searchQuery}"`;
-  let searchQueryFilter2 = `aboutUriName_contains_nocase: "${searchQuery}"`;
-  let searchQueryFilter3 = `affected_contains_nocase: "${searchQuery}"`;
-  let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${searchQueryFilter1}}`;
-  let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter2}}`;
-  let filterParams3 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter},  ${searchQueryFilter3}}`;
+  let searchQueryFilter2 = `affected_contains_nocase: "${searchQuery}"`;
+  let filterParams1 = `where: {${jurisdictionFilter}, ${isPositiveFilter},  ${isNegativeFilter}, ${isEnabledFilter}, ${searchQueryFilter1}}`;
+  let filterParams2 = `where: {${jurisdictionFilter}, ${isPositiveFilter}, ${isNegativeFilter}, ${isEnabledFilter},  ${searchQueryFilter2}}`;
   let paginationParams = `first: 20`;
   let fields = `
     id
@@ -544,9 +556,6 @@ function getFindJurisdictionRuleEntitiesBySearchQueryQuery(
       ${fields}
     }
     result2: jurisdictionRuleEntities(${filterParams2}, ${paginationParams}) {
-      ${fields}
-    }
-    result3: jurisdictionRuleEntities(${filterParams3}, ${paginationParams}) {
       ${fields}
     }
   }`;
@@ -594,7 +603,7 @@ function getFindCaseEntitiesQuery(
   ids,
   searchQuery,
   jurisdictions,
-  stage,
+  stages,
   participant,
   admin,
   subject,
@@ -627,9 +636,8 @@ function getFindCaseEntitiesQuery(
   let notFilter = participantWithoutConfirmationPost
     ? `participantsWithConfirmationPosts_not_contains: ["${participantWithoutConfirmationPost}"]`
     : ``;
-  let stageFilter =
-    stage !== null && stage !== undefined ? `stage: ${stage}` : '';
-  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${searchQueryFilter}, ${participantFilter}, ${adminFilter}, ${subjectFilter}, ${plaintiffFilter}, ${judgeFilter}, ${witnessFilter}, ${affectedFilter},  ${notFilter}, ${stageFilter}}`;
+  let stagesFilter = stages ? `stage_in: [${stages.join(',')}]` : '';
+  let filterParams = `where: {${idsFilter}, ${jurisdictionFilter}, ${searchQueryFilter}, ${participantFilter}, ${adminFilter}, ${subjectFilter}, ${plaintiffFilter}, ${judgeFilter}, ${witnessFilter}, ${affectedFilter},  ${notFilter}, ${stagesFilter}}`;
   let sortParams = `orderBy: createdDate, orderDirection: desc`;
   let paginationParams = `first: ${first}, skip: ${skip}`;
   return `{
@@ -642,6 +650,7 @@ function getFindCaseEntitiesQuery(
         name
       }
       stage
+      judgeAssignmentDate
       verdictAuthor
       verdictUri
       verdictUriData
@@ -672,6 +681,18 @@ function getFindCaseEntitiesQuery(
       judges
       witnesses
       affecteds
+      nominates {
+        id
+        createdDate
+        nominator {
+          id
+        }
+        nominated {
+          id
+        }
+        uri
+        uriData
+      }
     }
   }`;
 }

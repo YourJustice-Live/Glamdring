@@ -41,7 +41,7 @@ export default function HowItWorks() {
             >
               chrome.google.com/webstore
             </Link>
-            &nbsp; and follow the instructions
+            &nbsp; and follow the instructions.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-1_mduhsz.gif"
@@ -54,18 +54,31 @@ export default function HowItWorks() {
             on the top right corner of your browser.
           </Typography>
           <Typography gutterBottom>
-            We currently run on Rinkeby – an Ethereum Testnet. So, you&apos;d
-            need to click that little fox icon to open your Metamask, go to
-            &apos;Settings&apos;, &apos;Advanced&apos; and turn on the
-            &apos;Show Test Netwoks&apos; option.
+            We currently run on Mumbai – a Polygon Testnet.
           </Typography>
           <Typography gutterBottom>
-            This will allow your Metamask to connect to test networks, where
-            tokens are free!
+            To add this testnet to Metamask go to{' '}
+            <Link
+              href="https://chainlist.org/chain/80001"
+              underline="none"
+              target="_blank"
+            >
+              chainlist.org/chain/80001
+            </Link>{' '}
+            .
+          </Typography>
+          <Typography gutterBottom>
+            Click the button &quot;Connect Wallet&quot; next to the link
+            <b>&quot;https://rpc-mumbai.maticvigil.com&quot;</b>.
+          </Typography>
+          <Typography gutterBottom>
+            After that click the button &quot;Add to Metamask&quot;
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370346/FAQ/how-it-works/animation-small-2_xuyfiv.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1657543009/FAQ/how-it-works/chainlist_bm3spt.gif"
             sx={{ maxWidth: 1, mt: 2 }}
+            width={1920}
+            height={1020}
           />
         </Box>
       </Box>
@@ -97,21 +110,6 @@ export default function HowItWorks() {
           />
         </Box>
         <Box sx={{ mb: 4 }}>
-          <Typography gutterBottom>Great, you are now connected!</Typography>
-          <Typography gutterBottom>
-            Now all you need to do is switch to the Rinkeby test network and
-            you&apos;re all set.
-          </Typography>
-          <Typography gutterBottom>
-            To switch newtowkrs, click the little fox-head icon again and select
-            the &apos;Rinkeby Test Network&apos; option.
-          </Typography>
-          <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-4_xilh9k.gif"
-            sx={{ maxWidth: 1, mt: 2 }}
-          />
-        </Box>
-        <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>Great Job!</Typography>
           <Typography gutterBottom>
             When using a crypto chain you&apos;d need to pay for
@@ -125,20 +123,12 @@ export default function HowItWorks() {
           <Typography gutterBottom>
             You can get some of those free tokens from the{' '}
             <Link
-              href="https://rinkebyfaucet.com/"
+              href="https://faucet.polygon.technology/"
               underline="none"
               target="_blank"
             >
-              rinkebyfaucet.com
+              faucet.polygon.technology
             </Link>{' '}
-            or{' '}
-            <Link
-              href="https://faucets.chain.link/rinkeby"
-              underline="none"
-              target="_blank"
-            >
-              faucets.chain.link
-            </Link>
             .
           </Typography>
           <Typography gutterBottom>
@@ -150,14 +140,16 @@ export default function HowItWorks() {
             clipboard automagically.
           </Typography>
           <ImageBox
-            url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-5_np25qd.gif"
+            url="https://res.cloudinary.com/yourjustice/image/upload/v1657013542/FAQ/how-it-works/animation-small-5-v2_hcpl2e.gif"
             sx={{ maxWidth: 1, mt: 2 }}
+            width={1920}
+            height={1020}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
           <Typography gutterBottom>
-            Then pase your wallet address in one of these faucets and wait for
-            the free tokens to show up.
+            Then paste your wallet address and wait for the free tokens to show
+            up.
           </Typography>
           <Typography gutterBottom>It may take a minute or two...</Typography>
         </Box>
@@ -178,7 +170,7 @@ export default function HowItWorks() {
           </Typography>
           <Typography gutterBottom>
             Once you&apos;re done, click &quot;Create Profile&quot; and sign a
-            test contract on the Rinkeby network.
+            test contract on the Mumbai network.
           </Typography>
           <ImageBox
             url="https://res.cloudinary.com/yourjustice/image/upload/v1652370347/FAQ/how-it-works/animation-small-6_oxvyaj.gif"

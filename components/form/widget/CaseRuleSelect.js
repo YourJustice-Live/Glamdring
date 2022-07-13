@@ -13,7 +13,7 @@ import useJurisdiction from 'hooks/useJurisdiction';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { theme } from 'theme';
-import { getActionIcon } from 'utils/metadata';
+import { getRuleIcon } from 'utils/metadata';
 
 /**
  * A widget to select case rule (ruleId).
@@ -27,7 +27,6 @@ export default function CaseRuleSelect(props) {
   const propsJurisdictionId = props.formContext?.formData?.jurisdictionId;
   const propsFormIsPositive = props.formContext?.formData?.isPositive;
   const propsFormActionGuid = props.formContext?.formData?.actionGuid;
-  const propsFormAction = props.formContext?.formAction;
   const { t } = useTranslation('common');
   const { handleError } = useErrors();
   const { getJurisdictionRules } = useJurisdiction();
@@ -43,6 +42,7 @@ export default function CaseRuleSelect(props) {
         propsFormActionGuid,
         propsFormIsPositive === true,
         propsFormIsPositive === false,
+        true,
       )
         .then((rules) => setRules(rules))
         .catch((error) => handleError(error, true));
@@ -73,8 +73,8 @@ export default function CaseRuleSelect(props) {
                 propsOnChange(rule.ruleId);
               }}
             >
-              {/* Action icon */}
-              {getActionIcon(propsFormAction, 36)}
+              {/* Rule icon */}
+              {getRuleIcon(rule, 36)}
               {/* Rule details */}
               <Box
                 sx={{

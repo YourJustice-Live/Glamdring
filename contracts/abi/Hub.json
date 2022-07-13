@@ -22,25 +22,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "key",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "contractAddr",
-        "type": "address"
-      }
-    ],
-    "name": "Assoc",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "beacon",
@@ -160,8 +141,44 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      }
+    ],
+    "name": "assocAdd",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "contractAddr",
+        "type": "address"
+      }
+    ],
+    "name": "assocRemove",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "beaconCase",
+    "name": "beaconGame",
     "outputs": [
       {
         "internalType": "address",
@@ -174,12 +191,25 @@
   },
   {
     "inputs": [],
-    "name": "beaconJurisdiction",
+    "name": "beaconReaction",
     "outputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -196,43 +226,9 @@
         "internalType": "string",
         "name": "uri_",
         "type": "string"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "jurisdiction",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "ruleId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct DataTypes.RuleRef[]",
-        "name": "addRules",
-        "type": "tuple[]"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "role",
-            "type": "string"
-          }
-        ],
-        "internalType": "struct DataTypes.InputRoleToken[]",
-        "name": "assignRoles",
-        "type": "tuple[]"
       }
     ],
-    "name": "caseMake",
+    "name": "gameMake",
     "outputs": [
       {
         "internalType": "address",
@@ -241,19 +237,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "contractURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -304,7 +287,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IOpenRepo",
+        "internalType": "address",
         "name": "openRepo",
         "type": "address"
       },
@@ -315,41 +298,17 @@
       },
       {
         "internalType": "address",
-        "name": "jurisdictionContract",
+        "name": "gameContract",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "caseContract",
+        "name": "reactionContract",
         "type": "address"
       }
     ],
     "name": "initialize",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "uri_",
-        "type": "string"
-      }
-    ],
-    "name": "jurisdictionMake",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -377,6 +336,64 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name_",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "uri_",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "game",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ruleId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.RuleRef[]",
+        "name": "addRules",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "role",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct DataTypes.InputRoleToken[]",
+        "name": "assignRoles",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "reactionMake",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -417,6 +434,19 @@
     "name": "repAdd",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "repoAddr",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -516,7 +546,7 @@
         "type": "address"
       }
     ],
-    "name": "upgradeCaseImplementation",
+    "name": "upgradeGameImplementation",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -529,7 +559,7 @@
         "type": "address"
       }
     ],
-    "name": "upgradeJurisdictionImplementation",
+    "name": "upgradeReactionImplementation",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

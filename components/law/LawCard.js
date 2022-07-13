@@ -18,7 +18,8 @@ import { IconEdit } from 'icons/core';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { palette } from 'theme/palette';
-import { getActionIcon } from 'utils/metadata';
+import { formatActionName } from 'utils/formatters';
+import { getRuleIcon } from 'utils/metadata';
 
 /**
  * A component with a card with law (action + rules).
@@ -29,20 +30,18 @@ export default function LawCard({
   isCommentsEnabled = false,
   sx,
 }) {
-  const { t } = useTranslation('common');
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <Card elevation={1} sx={{ ...sx }}>
       <CardContent sx={{ p: 2.5 }}>
-        <LawAction law={law} />
         {isCollapseEnabled ? (
           <>
             <Button
               variant="text"
               onClick={() => setIsCollapsed(!isCollapsed)}
               sx={{
-                mt: 1,
+                textAlign: 'left',
                 color: 'text.primary',
               }}
               endIcon={
@@ -54,9 +53,7 @@ export default function LawCard({
                 />
               }
             >
-              <Typography sx={{ fontWeight: 'bold' }}>
-                {t('text-rules')}
-              </Typography>
+              <LawAction law={law} />
             </Button>
             <Collapse in={!isCollapsed}>
               <LawRules
@@ -67,11 +64,14 @@ export default function LawCard({
             </Collapse>
           </>
         ) : (
-          <LawRules
-            law={law}
-            isCommentsEnabled={isCommentsEnabled}
-            sx={{ mt: 2 }}
-          />
+          <>
+            <LawAction law={law} />
+            <LawRules
+              law={law}
+              isCommentsEnabled={isCommentsEnabled}
+              sx={{ mt: 2 }}
+            />
+          </>
         )}
       </CardContent>
     </Card>
@@ -79,23 +79,11 @@ export default function LawCard({
 }
 
 function LawAction({ law }) {
-  const { t } = useTranslation('common');
-
   if (law?.action) {
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-        {getActionIcon(law.action, 36)}
-        <Box sx={{ ml: 1.5 }}>
-          <Typography sx={{ fontWeight: 'bold' }}>
-            {law.action.uriData?.name || t('text-none-name')}
-          </Typography>
-          {law.action.uriData?.description && (
-            <Typography variant="body2" sx={{ mt: 0.3 }}>
-              {law.action.uriData.description}
-            </Typography>
-          )}
-        </Box>
-      </Box>
+      <Typography variant="h4" sx={{ fontWeight: 600 }}>
+        {formatActionName(law.action)}
+      </Typography>
     );
   }
 
@@ -118,41 +106,53 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                 flexDirection: { xs: 'column', md: 'row' },
               }}
             >
-              {/* Negation, name, description, id */}
-              <Box sx={{ flex: 1, mr: 4 }}>
-                {/* Negation, name */}
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  {rule?.rule?.negation && (
-                    <Typography
-                      sx={{
-                        fontWeight: 'bold',
-                        color: 'danger.primary',
-                        mr: 0.5,
-                      }}
-                    >
-                      {t('text-action-negation').toUpperCase()}
+              {/* Icon, negation, name, description */}
+              <Box
+                sx={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  mr: { xs: 0, md: 4 },
+                }}
+              >
+                {/* Icon */}
+                {getRuleIcon(rule, 32)}
+                <Box sx={{ ml: 1.5 }}>
+                  {/* Negation, name */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {rule?.rule?.negation && (
+                      <Typography
+                        sx={{
+                          fontWeight: 'bold',
+                          color: 'danger.primary',
+                          mr: 0.5,
+                        }}
+                      >
+                        {t('text-action-negation').toUpperCase()}
+                      </Typography>
+                    )}
+                    <Typography sx={{ fontWeight: 'bold', mr: 1 }}>
+                      {rule?.rule?.uriData?.name || t('text-none-name')}
+                    </Typography>
+                  </Box>
+                  {/* Description */}
+                  {rule?.rule?.uriData?.description && (
+                    <Typography variant="body2" sx={{ mt: 0.3 }}>
+                      {rule.rule.uriData.description}
                     </Typography>
                   )}
-                  <Typography sx={{ fontWeight: 'bold', mr: 1 }}>
-                    {rule?.rule?.uriData?.name || t('text-none-name')}
-                  </Typography>
                 </Box>
-                {/* Description */}
-                {rule?.rule?.uriData?.description && (
-                  <Typography variant="body2" sx={{ mt: 0.3 }}>
-                    {rule.rule.uriData.description}
-                  </Typography>
-                )}
               </Box>
               <RuleEffects rule={rule} sx={{ mt: { xs: 2, md: 0 } }} />
             </Box>
-            {/* Rule id and button to propose edits */}
+            {/* Rule id, disabled status, button to propose edits */}
             <Box
               sx={{
                 display: 'flex',
@@ -162,10 +162,20 @@ function LawRules({ law, isCommentsEnabled, sx }) {
                 mt: 1,
               }}
             >
-              <Chip
-                label={`ID: ${rule?.ruleId || t('text-none')}`}
-                size="small"
-              />
+              {/* Rule id, disabled status */}
+              <Stack direction="row" spacing={1}>
+                <Chip
+                  label={`ID: ${rule?.ruleId || t('text-none')}`}
+                  size="small"
+                />
+                {rule?.isDisabled && (
+                  <Chip
+                    label={t('text-rule-disabled')}
+                    color="primary"
+                    size="small"
+                  />
+                )}
+              </Stack>
               {/* Button for comment rule */}
               {isCommentsEnabled && (
                 <Button

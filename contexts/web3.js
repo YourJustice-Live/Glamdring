@@ -101,7 +101,10 @@ export function Web3Provider({ children }) {
     } catch (error) {
       console.error(error);
       handleCatchErrorEvent(error, { type: 'change network' });
-      if (error?.code === 4902) {
+      if (
+        error?.code === 4902 ||
+        error?.message?.toLowerCase()?.includes('unrecognized chain id')
+      ) {
         addNetwork();
       }
     }
@@ -137,6 +140,7 @@ export function Web3Provider({ children }) {
 
   useEffect(() => {
     // Init default provider
+    // TODO: Can we use public RPC instead of Infura?
     if (!defaultProvider && !IS_DEFAULT_PROVIDER_DISABLED) {
       const infuraProvider = new ethers.providers.InfuraWebSocketProvider(
         process.env.NEXT_PUBLIC_INFURA_NETWORK,
@@ -151,7 +155,9 @@ export function Web3Provider({ children }) {
         walletconnect: {
           package: WalletConnect,
           options: {
-            infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+            rpc: {
+              80001: 'https://rpc-mumbai.maticvigil.com', // TODO: Move to .env
+            },
           },
         },
       };

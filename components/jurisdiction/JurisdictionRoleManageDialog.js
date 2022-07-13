@@ -10,10 +10,10 @@ import {
 import { MuiForm5 as Form } from '@rjsf/material-ui';
 import ProfileSelect from 'components/form/widget/ProfileSelect';
 import { JURISDICTION_ROLE } from 'constants/contracts';
+import { JURISDICTION_ROLE_KEY } from 'constants/i18n';
 import useJuridictionContract from 'hooks/contracts/useJurisdictionContract';
 import useErrors from 'hooks/useErrors';
 import useToasts from 'hooks/useToasts';
-import { capitalize } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -52,9 +52,9 @@ export default function RoleManageDialog({
           JURISDICTION_ROLE.admin.name,
         ],
         enumNames: [
-          capitalize(JURISDICTION_ROLE.member.name),
-          capitalize(JURISDICTION_ROLE.judge.name),
-          capitalize(JURISDICTION_ROLE.admin.name),
+          t(JURISDICTION_ROLE_KEY[JURISDICTION_ROLE.member.name]),
+          t(JURISDICTION_ROLE_KEY[JURISDICTION_ROLE.judge.name]),
+          t(JURISDICTION_ROLE_KEY[JURISDICTION_ROLE.admin.name]),
         ],
       },
     },

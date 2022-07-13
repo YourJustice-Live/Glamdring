@@ -111,6 +111,31 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "Nominate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -134,6 +159,12 @@
         "internalType": "address",
         "name": "account",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -195,7 +226,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "jurisdiction",
+        "name": "game",
         "type": "address"
       },
       {
@@ -226,7 +257,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "enum DataTypes.CaseStage",
+        "internalType": "enum DataTypes.ReactionStage",
         "name": "stage",
         "type": "uint8"
       }
@@ -447,6 +478,30 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "soulToken",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "guid",
+        "type": "bytes32"
+      }
+    ],
+    "name": "GUIDHasByToken",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "guid",
         "type": "bytes32"
@@ -633,7 +688,7 @@
         "components": [
           {
             "internalType": "address",
-            "name": "jurisdiction",
+            "name": "game",
             "type": "address"
           },
           {
@@ -712,6 +767,24 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "soulToken",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "uri_",
+        "type": "string"
+      }
+    ],
+    "name": "nominate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "owner",
     "outputs": [
@@ -732,6 +805,11 @@
         "type": "string"
       },
       {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "uri_",
         "type": "string"
@@ -747,6 +825,19 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "repoAddr",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -832,6 +923,30 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "soulToken",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "role",
+        "type": "string"
+      }
+    ],
+    "name": "roleHasByToken",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "ownerToken",
         "type": "uint256"
       },
@@ -893,7 +1008,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "jurisdiction_",
+        "name": "game_",
         "type": "address"
       },
       {
@@ -1092,7 +1207,7 @@
     "name": "stage",
     "outputs": [
       {
-        "internalType": "enum DataTypes.CaseStage",
+        "internalType": "enum DataTypes.ReactionStage",
         "name": "",
         "type": "uint8"
       }

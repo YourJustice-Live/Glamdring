@@ -11,11 +11,12 @@
   "page-title-case": "YourJustice — Case",
   "page-title-cases": "YourJustice — Cases",
   "page-title-faq": "YourJustice — FAQ",
+  "page-title-contacts": "YourJustice — Contacts",
   "page-title-events": "YourJustice — Events",
   "page-title-sandbox": "YourJustice — Sandbox",
 
-  "page-main-headline": "Check or impact reputation of people, DAOs, communities, companies or addresses",
-  "page-main-text-search-target": "People, DAOs, communities, companies, addresses, etc",
+  "page-main-headline": "Check or impact reputation of Souls",
+  "page-main-text-search-target": "Search soul by name or address",
   "page-main-text-light-side": "Light Side",
   "page-main-text-dark-side": "Dark Side",
 
@@ -32,7 +33,13 @@
   "page-faq-alert-headline": "Got another question?",
   "page-faq-alert-supporting-headline": "Please write to us, we will help you",
 
+  "page-contacts-headline": "Contacts",
+
   "page-sandbox-headline": "Welcome to Sandbox!",
+
+  "jurisdiction-role-admin": "Admin",
+  "jurisdiction-role-member": "Member",
+  "jurisdiction-role-judge": "Judge",
 
   "case-stage-any": "Any Stage",
   "case-stage-draft": "Draft Case",
@@ -75,7 +82,11 @@
   "text-judges-no": "No judges",
   "text-judge-not-assigned": "A judge has not yet been assigned to the case.",
   "text-witness": "Witness",
+  "text-witnesses": "Witnesses",
   "text-witness-no": "No witness",
+  "text-witnesses-no": "No witnesses",
+  "text-witnesses-nominated": "Proposed witnesses",
+  "text-witnesses-can-be-added-by-admin": "Witnesses can be added to the case only by case creator.",
   "text-officials": "Officials",
   "text-citizens": "Citizens",
   "text-admins": "Admins",
@@ -96,6 +107,7 @@
   "text-evidence-no": "No evidence",
   "text-comments": "Comments",
   "text-comments-no": "No comments",
+  "text-nominated-witness": "Proposed a witness",
   "text-confirmations": "Confirmations",
   "text-confirmations-no": "No confirmations",
   "text-confirmation-confirmed": "Confirmed",
@@ -104,7 +116,10 @@
   "text-confirmation-i-deny": "No, I deny",
   "text-judging": "Judging",
   "text-verdict": "Verdict",
-  "text-verdict-stage-required-before-making-verdict": "The verdict can be made by the judge when the case has a \"Verdict\" stage.",
+  "text-verdict-required-judge": "The verdict can be made by the judge after assignment.",
+  "text-verdict-required-waiting": "The judge will able to make a verdict after",
+  "text-verdict-stage-required-before-making-verdict": "Set the stage \"Awaiting Verdict\" so that the judge can be able to make a verdict.",
+  "text-verdict-stage-can-set-only-admin-and-judge": "This stage can be set only by case creator or judge of this case.",
   "text-verdict-is-awaited": "The judge's verdict is awaited.",
   "text-verdict-is-made": "Judge made verdict",
   "text-verdict-confirmed-rules": "Confirmed Rules",
@@ -121,7 +136,8 @@
 
   "text-rules": "Rules",
   "text-rule-ruling-type-is": "Ruling type is",
-  "text-rule-ruling-judge-description": "Judge will be selected randomly. To avoid bias and corruption.",
+  "text-rule-ruling-judge-description": "Verdict in the case will be made by a judge of the jurisdiction.",
+  "text-rule-disabled": "Obsolete",
 
   "text-events-no": "No Events",
   "text-event-become-a": "Become a",
@@ -129,9 +145,14 @@
   "text-event-case-stange-changed-to": "Case stage changed to",
   "text-event-made-verdict": "Made verdict",
   "text-event-cancelled-case": "Cancelled case",
+  "text-event-nominate": "Proposed",
+  "text-event-nominate-a": "Proposed a",
 
   "text-faq": "FAQ",
+  "text-contacts": "Contacts",
 
+  "text-created-by-me": "Created By Me",
+  "text-against-me": "Against Me",
   "text-my-awaiting-confirmation": "Awaiting My Confirmation",
   "text-my-awaiting-judging": "Awaiting My Judging",
   "text-my-citizenship": "My Citizenship",
@@ -171,6 +192,7 @@
   "button-filters": "Filters",
   "button-apply": "Apply",
   "button-post": "Post",
+  "button-assign": "Assign",
   "button-go-home": "Back Home",
 
   "button-wallet-connect": "Connect Wallet",
@@ -194,11 +216,14 @@
 
   "button-case-create": "Create Case",
   "button-case-cancel": "Cancel Case",
+  "button-case-nominate": "Propose",
+  "button-case-nominate-witness": "Propose Witness",
   "button-case-add-evidence": "Add Evidence",
   "button-case-remove-evidence": "Remove Evidence",
   "button-case-add-comment": "Add Comment",
+  "button-case-add-witness": "Add Witness",
   "button-case-add-confirmation": "Add Confirmation",
-  "button-case-set-verdict-stage": "Set Verdict Stage",
+  "button-case-set-verdict-stage": "Set \"Awaiting Verdict\" Stage",
   "button-case-become-judge": "Become a Judge",
   "button-case-make-verdict": "Make Verdict",
   "button-case-hide-details": "Hide Details",
@@ -236,6 +261,8 @@
   "dialog-jurisdiction-filters-title": "Jurisdiction Filters",
 
   "dialog-case-create-title": "Create New Case",
+  "dialog-case-nominate-title": "Propose",
+  "dialog-case-add-witness-title": "Add Witness",
   "dialog-case-add-evidence-title": "Add Evidence",
   "dialog-case-add-comment-title": "Add Comment",
   "dialog-case-add-confirmation-title": "Add Confirmation",
@@ -244,6 +271,7 @@
   "dialog-case-cancel-title": "Cancel Case",
   "dialog-case-cancel-description": "Describe the reason why you want to cancel the case.",
   "dialog-case-filters-title": "Case Filters",
+  "dialog-case-assign-role-title": "Assign Role",
 
   "dialog-view-json-title": "JSON View",
 
@@ -317,6 +345,8 @@
   "input-case-affected-title": "Affected",
   "input-case-affected-description": "The one who was affected by the action",
   "input-case-confirm-title": "Do you confirm this case?",
+  "input-case-nominate-comment-title-1": "Why this",
+  "input-case-nominate-comment-title-2": "should be added?",
 
   "input-action-title": "Action",
   "input-action-placeholder": "Search by action, acted or affected role",

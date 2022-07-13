@@ -89,6 +89,19 @@ export function handleCreateCaseEvent() {
 }
 
 /**
+ * Handle nominate to case event.
+ */
+export function handleNominateToCaseEvent(caseId, nominated, role) {
+  if (isAnalyticsEnabled()) {
+    posthog.capture(POST_HOG_EVENT.nominatedToCase, {
+      [POST_HOG_PROPERTY.case]: caseId,
+      [POST_HOG_PROPERTY.nominated]: nominated,
+      [POST_HOG_PROPERTY.role]: role,
+    });
+  }
+}
+
+/**
  * Handle add case evidence event.
  *
  * @param {string} caseId Case id (address).

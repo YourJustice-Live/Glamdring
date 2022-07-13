@@ -102,23 +102,21 @@ export default function useJuridictionContract() {
   }
 
   /**
-   * Update rule.
+   * Disable or enable rule.
    *
    * @param {string} contractAddress Jurisdiction contract address.
-   * @param {string} id Rule id in the jurisdiction contract.
-   * @param {{about: string, affected: string, negation: boolean, uri: string}} rule Rule object.
-   * @param {Array.<{name: string, value: number, direction: boolean}>} effects Effects object.
+   * @param {string} ruleId Rule id.
+   * @param {boolean} disableStatus Desired status.
    * @returns Transaction.
    */
-  async function updateRule(contractAddress, id, rule, effects) {
+  async function setRuleDisableStatus(contractAddress, ruleId, disableStatus) {
     if (!isNetworkChainIdCorrect) {
       throw new WrongNetworkError();
     }
-    return await getContract(contractAddress, provider?.getSigner()).ruleUpdate(
-      id,
-      rule,
-      effects,
-    );
+    return await getContract(
+      contractAddress,
+      provider?.getSigner(),
+    ).ruleDisable(ruleId, disableStatus);
   }
 
   /**
@@ -127,9 +125,9 @@ export default function useJuridictionContract() {
    * @param {string} contractAddress Jurisdiction contract address.
    * @param {string} name Case name.
    * @param {string} uri Case metadata.
-   * @param {Array.<{jurisdiction : string, ruleId: number}>} rules Case rules.
+   * @param {Array.<{game : string, ruleId: number}>} rules Case rules.
    * @param {Array.<{tokenId : string, role: string}>} roles Case roles.
-   * @param {Array.<{entRole : string, uri: string}>} posts Case posts.
+   * @param {Array.<{tokenId : string, entRole : string, uri: string}>} posts Case posts.
    * @returns Transaction.
    */
   async function makeCase(contractAddress, name, uri, rules, roles, posts) {
@@ -139,7 +137,7 @@ export default function useJuridictionContract() {
     return await getContract(
       contractAddress,
       provider?.getSigner(),
-    ).caseMakeOpen(name, uri, rules, roles, posts);
+    ).reactionMakeOpen(name, uri, rules, roles, posts);
   }
 
   return {
@@ -149,7 +147,7 @@ export default function useJuridictionContract() {
     assignRole,
     removeRole,
     addRule,
-    updateRule,
+    setRuleDisableStatus,
     makeCase,
   };
 }

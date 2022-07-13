@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Button,
   Divider,
   Drawer,
   Link,
@@ -119,11 +120,13 @@ export function Sidebar() {
             </Box>
           </Paper>
         )}
-        {/* Links */}
+        {/* Links and buttons */}
         <Stack spacing={2} direction="column" sx={{ mx: 2 }}>
           {account && !accountProfile && (
             <NextLink href="/profile/create" passHref>
-              <Link underline="none">{t('button-profile-create-own')}</Link>
+              <Button variant="outlined">
+                {t('button-profile-create-own')}
+              </Button>
             </NextLink>
           )}
           <NextLink href="/profiles" passHref>
@@ -146,6 +149,9 @@ export function Sidebar() {
           </NextLink>
           <NextLink href="/faq" passHref>
             <Link underline="none">{t('text-faq')}</Link>
+          </NextLink>
+          <NextLink href="/contacts" passHref>
+            <Link underline="none">{t('text-contacts')}</Link>
           </NextLink>
         </Stack>
 
