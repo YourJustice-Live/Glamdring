@@ -151,7 +151,9 @@ export function Web3Provider({ children }) {
         walletconnect: {
           package: WalletConnect,
           options: {
-            infuraId: process.env.NEXT_PUBLIC_INFURA_KEY,
+            rpc: {
+              80001: 'https://rpc-mumbai.maticvigil.com', // TODO: Move to .env
+            },
           },
         },
       };
