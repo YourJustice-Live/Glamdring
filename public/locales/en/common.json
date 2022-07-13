@@ -222,7 +222,7 @@
   "button-case-add-comment": "Add Comment",
   "button-case-add-witness": "Add Witness",
   "button-case-add-confirmation": "Add Confirmation",
-  "button-case-set-verdict-stage": "Set Awaiting Verdict Stage",
+  "button-case-set-verdict-stage": "Set \"Awaiting Verdict\" Stage",
   "button-case-become-judge": "Become a Judge",
   "button-case-make-verdict": "Make Verdict",
   "button-case-hide-details": "Hide Details",
