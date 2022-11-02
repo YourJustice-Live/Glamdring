@@ -1,3 +1,5 @@
+import { resolveLink } from 'utils/ipfs';
+
 /**
  * Class for the profile.
  */
@@ -20,7 +22,8 @@ export default class Profile {
     this.owner = owner;
     this.uri = uri;
     this.uriData = uriData;
-    this.uriImage = uriImage;
+    this.uriData.image = resolveLink(uriData.image);
+    this.uriImage = resolveLink(uriImage);
     this.uriFirstName = uriFirstName;
     this.uriLastName = uriLastName;
     this.reputations = reputations;

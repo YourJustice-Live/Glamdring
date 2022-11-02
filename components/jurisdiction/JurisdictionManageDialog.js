@@ -21,6 +21,7 @@ import {
   handleMakeJurisdiction,
   handleSetJurisdictionUri,
 } from 'utils/analytics';
+import { resolveLink } from 'utils/ipfs';
 
 /**
  * A dialog for adding a jurisdiction or updating a specified jurisdiction.
@@ -40,7 +41,7 @@ export default function JurisdictionManageDialog({
   const [isOpen, setIsOpen] = useState(!isClose);
   const [formData, setFormData] = useState({
     ...(jurisdiction && {
-      image: jurisdiction.uriData?.image,
+      image: resolveLink(jurisdiction.uriData?.image),
       name: jurisdiction.name,
       description: jurisdiction.uriData?.description,
     }),
