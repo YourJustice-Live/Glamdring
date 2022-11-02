@@ -10,8 +10,6 @@ const gateway = {
 export const resolveLink = (url) => {
   // [FIX] Remove Hardcoded Infura gateway
   if (url) url = url.replace('https://ipfs.infura.io/ipfs/', 'ipfs://');
-  console.log('Running resolveLink()', url);
-
   return !url || !url.includes('ipfs://')
     ? url
     : url.replace('ipfs://', gateway.cloudflare);
