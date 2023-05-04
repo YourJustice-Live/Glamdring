@@ -1,27 +1,23 @@
 import axios from 'axios';
 import { create } from 'ipfs-http-client';
 
-const infuraClient = create(process.env.NEXT_PUBLIC_INFURA_IPFS_API);
 const theGraphClient = create(process.env.NEXT_PUBLIC_THE_GRAPH_IPFS_API);
 
 export default function useIpfs() {
   let uploadFileToIPFS = async function (file) {
-    const created = await infuraClient.add({
+    const created = await theGraphClient.add({
       path: '',
       content: file,
     });
     const cid = created.path;
-    const url = `https://ipfs.infura.io/ipfs/${cid}`;
+    const url = `https://gateway.ipfs.io/ipfs/${cid}`;
     return { cid, url };
   };
 
   let uploadJsonToIPFS = async function (json) {
-    // Upload to the graph for usage in graph queries
-    await theGraphClient.add(JSON.stringify(json));
-    // Upload to infura
-    const created = await infuraClient.add(JSON.stringify(json));
+    const created = await theGraphClient.add(JSON.stringify(json));
     const cid = created.path;
-    const url = `https://ipfs.infura.io/ipfs/${cid}`;
+    const url = `https://gateway.ipfs.io/ipfs/${cid}`;
     return { cid, url };
   };
 
