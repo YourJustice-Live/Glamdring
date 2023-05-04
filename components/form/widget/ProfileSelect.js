@@ -8,11 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { formatAddress, formatProfileFirstLastName } from 'utils/formatters';
 
 /**
-<<<<<<< HEAD
  * A widget to select profile (profile id).
-=======
- * A widget to select profile (account).
->>>>>>> dev
  */
 export default function ProfileSelect(props) {
   const propsHeader = props.options?.header;
